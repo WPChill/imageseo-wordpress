@@ -1,0 +1,7 @@
+#wrap-seoimage .tags {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+  #wrap-seoimage .tags .tags__item {
+    margin-right: 5px; }

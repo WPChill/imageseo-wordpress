@@ -1,0 +1,20 @@
+{
+	"name": "seoimage",
+	"type": "project",
+	"license": "GPL",
+	"authors": [
+		{
+			"name": "Thomas DENEULIN",
+			"email": "contact@seoimage.io"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"SeoImageWP\\": "src/"
+		}
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"phpunit/phpunit": "^4"
+	}
+}
