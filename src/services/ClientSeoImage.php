@@ -21,7 +21,7 @@ class ClientSeoImage
 
         $options = [];
         if (SEOIMAGE_API_LOCAL) {
-            $options['host'] = 'http://localhost:3001';
+            $options['host'] = 'https://api-staging.seoimage.io';
         }
 
         $client = new Client($apiKey, $options);

@@ -6,3 +6,31 @@
 		}
 	}
 }
+
+.media-column-seoimage {
+	&--actions {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 15px;
+		.button {
+			margin-right: 5px;
+			margin-bottom: 5px;
+		}
+	}
+}
+
+.seoimage-table {
+	&-item {
+		display: flex;
+		margin: 5px;
+		border: 1px solid #eee;
+		&-meta {
+			border-right: 1px solid #eee;
+			&:last-child {
+				border-right: none;
+			}
+			padding: 5px;
+			flex: 1;
+		}
+	}
+}

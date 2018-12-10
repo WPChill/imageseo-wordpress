@@ -6,6 +6,7 @@ const env = process.env.NODE_ENV || 'development'
 
 module.exports = {
 	entry: {
+		'admin-js': './app/javascripts/admin.js',
 		'admin-css': './app/styles/admin.scss'
 	},
 	output: {
@@ -49,16 +50,9 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new webpack.DefinePlugin({
-			NODE_ENV: env
-		}),
 		new ExtractTextPlugin({
 			filename: 'css/[name].css'
 		}),
-		new CopyWebpackPlugin([
-			{ from: 'app/images', to: 'images' },
-			{ from: 'app/static', to: 'images' },
-			{ from: 'app/javascripts/selectize.js', to: 'selectize.js' }
-		])
+		new CopyWebpackPlugin([{ from: 'app/images', to: 'images' }])
 	]
 }

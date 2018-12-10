@@ -30,7 +30,7 @@ define('SEOIMAGE_DIR', __DIR__);
 define('SEOIMAGE_DIR_LANGUAGES', SEOIMAGE_DIR . '/languages');
 define('SEOIMAGE_DIR_DIST', SEOIMAGE_DIR . '/dist');
 define('SEOIMAGE_DEBUG', false);
-define('SEOIMAGE_API_LOCAL', false);
+define('SEOIMAGE_API_LOCAL', true);
 
 define('SEOIMAGE_DIRURL', plugin_dir_url(__FILE__));
 define('SEOIMAGE_URL_DIST', SEOIMAGE_DIRURL . 'dist');
@@ -39,6 +39,7 @@ define('SEOIMAGE_TEMPLATES', SEOIMAGE_DIR . '/templates');
 define('SEOIMAGE_TEMPLATES_ADMIN', SEOIMAGE_TEMPLATES . '/admin');
 define('SEOIMAGE_TEMPLATES_ADMIN_NOTICES', SEOIMAGE_TEMPLATES_ADMIN . '/notices');
 define('SEOIMAGE_TEMPLATES_ADMIN_PAGES', SEOIMAGE_TEMPLATES_ADMIN . '/pages');
+define('SEOIMAGE_TEMPLATES_ADMIN_METABOXES', SEOIMAGE_TEMPLATES_ADMIN . '/metaboxes');
 
 
 /**

@@ -5,6 +5,7 @@ if (! defined('ABSPATH')) {
 }
 
 use SeoImageWP\Helpers\TabsAdminSeoImage;
+use SeoImageWP\Helpers\AltTagsSeoImage;
 
 $options_available = [
     'active_alt_rewrite' => [
@@ -16,8 +17,15 @@ $options_available = [
         'key'         => 'alt_value',
         'label'       => __('Alt attribute value', 'seoimage'),
         'description' => '',
+    ],
+    'alt_auto_percent' => [
+        'key'         => 'alt_auto_percent',
+        'label'       => __('Alt auto percent', 'seoimage'),
+        'description' => '',
     ]
 ];
+
+$tags = AltTagsSeoImage::getTags();
 
 ?>
 
@@ -31,17 +39,17 @@ $options_available = [
                     <?php echo esc_html($options_available['active_alt_rewrite']['label']); ?>
                 </label>
                 <p class="sub-label"><?php echo $options_available['active_alt_rewrite']['description']; //phpcs:ignore?></p>
-			</th>
-			<td>
-				<fieldset>
-					<input
-						name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
-						type="checkbox"
-						id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
-						<?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
-					>
-				</fieldset>
-			</td>
+        </th>
+        <td>
+            <fieldset>
+                <input
+                name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
+                type="checkbox"
+                id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
+                <?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
+                >
+            </fieldset>
+        </td>
         </tr>
         <tr valign="top">
             <th scope="row" class="titledesc">
@@ -61,25 +69,36 @@ $options_available = [
                     value="<?php echo esc_attr($this->options[ $options_available['alt_value']['key'] ]); ?>"
                 >
                 <div class="available-structure-tags hide-if-no-js">
-                    <p>Available tags:</p>
+                    <p><?php esc_html_e('Available tags :', 'seoimage'); ?></p>
                     <ul class="tags">
-                        <li class="tags__item">
-                            <button type="button" data-tag="%alt_auto%" class="button button-secondary button-tags">
-                                %alt_auto%
-                            </button>
-                        </li>
-                        <li class="tags__item">
-                            <button type="button" data-tag="%site_title%" class="button button-secondary button-tags">
-                                %site_title%
-                            </button>
-                        </li>
-                        <li class="tags__item">
-                            <button type="button" data-tag="%post_title%" class="button button-secondary button-tags">
-                                %post_title%
-                            </button>
-                        </li>
+                        <?php foreach ($tags as $tag) : ?>
+                            <li class="tags__item">
+                                <button type="button" data-tag="<?php echo esc_attr($tag); ?>" class="button button-secondary button-tags">
+                                    <?php echo esc_html($tag); ?>
+                                </button>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
+            </td>
+        </tr>
+        <tr valign="top">
+            <th scope="row" class="titledesc">
+                <label for="<?php echo esc_attr($options_available['alt_auto_percent']['key']); ?>">
+                    <?php echo esc_html($options_available['alt_auto_percent']['label']); ?>
+                </label>
+                <p class="sub-label"><?php echo $options_available['alt_auto_percent']['description']; //phpcs:ignore?></p>
+            </th>
+            <td class="forminp forminp-text">
+                <input
+                    name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['alt_auto_percent']['key'])); ?>"
+                    id="<?php echo esc_attr($options_available['alt_auto_percent']['key']); ?>"
+                    type="number"
+                    class="regular-text"
+                    required
+                    placeholder="<?php esc_html_e('Your attribute value', 'seoimage'); ?>"
+                    value="<?php echo esc_attr($this->options[ $options_available['alt_auto_percent']['key'] ]); ?>"
+                >
             </td>
         </tr>
     </tbody>

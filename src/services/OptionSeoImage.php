@@ -16,7 +16,8 @@ class OptionSeoImage
     protected $optionsDefault = [
         'api_key' => '',
         'active_alt_rewrite' => 1,
-        'alt_value' => AltTagsSeoImage::ALT_AUTO
+        'alt_auto_percent' => 80,
+        'alt_value' => AltTagsSeoImage::SITE_TITLE . ' - ' . AltTagsSeoImage::ALT_AUTO_CONTEXT
     ];
 
     /**
