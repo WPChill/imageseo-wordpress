@@ -6,7 +6,9 @@ const env = process.env.NODE_ENV || 'development'
 
 module.exports = {
 	entry: {
-		'admin-js': './app/javascripts/admin.js',
+		'media-upload': './app/javascripts/media-upload.js',
+		'bulk-optimization': './app/javascripts/bulk-optimization.js',
+		'admin-bar': './app/javascripts/admin-bar.js',
 		'admin-css': './app/styles/admin.scss'
 	},
 	output: {

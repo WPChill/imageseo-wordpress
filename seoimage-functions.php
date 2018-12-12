@@ -26,7 +26,7 @@ function seoimage_get_service($service)
  */
 function seoimage_get_options()
 {
-    return ContextSeoImage::getContext()->getService('OptionSeoImage')->get_options();
+    return ContextSeoImage::getContext()->getService('Option')->getOptions();
 }
 
 /**
@@ -37,5 +37,13 @@ function seoimage_get_options()
  */
 function seoimage_get_option($key)
 {
-    return ContextSeoImage::getContext()->getService('OptionSeoImage')->get_option($key);
+    return ContextSeoImage::getContext()->getService('Option')->getOption($key);
+}
+
+/**
+ * @return bool
+ */
+function seoimage_allowed()
+{
+    return seoimage_get_option('allowed');
 }

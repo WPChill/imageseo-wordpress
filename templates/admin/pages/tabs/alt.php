@@ -79,6 +79,17 @@ $tags = AltTagsSeoImage::getTags();
                             </li>
                         <?php endforeach; ?>
                     </ul>
+                    <ul>
+                        <li>
+                            <strong><?php echo AltTagsSeoImage::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'seoimage'); ?>
+                        </li>
+                        <li>
+                            <strong><?php echo AltTagsSeoImage::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('Keywords representative of the context in which Google analyzes your image.', 'seoimage'); ?>
+                        </li>
+                        <li>
+                            <strong><?php echo AltTagsSeoImage::ALT_AUTO_REPRESENTATION; ?></strong> : <?php _e('Keyword proposals corresponding to the analysis of the image content. We use machine learning for these results.', 'seoimage'); ?>
+                        </li>
+                    </ul>
                 </div>
             </td>
         </tr>
@@ -99,6 +110,9 @@ $tags = AltTagsSeoImage::getTags();
                     placeholder="<?php esc_html_e('Your attribute value', 'seoimage'); ?>"
                     value="<?php echo esc_attr($this->options[ $options_available['alt_auto_percent']['key'] ]); ?>"
                 >
+                <p>
+                    <?php _e('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text', 'seoimage'); ?>
+                </p>
             </td>
         </tr>
     </tbody>

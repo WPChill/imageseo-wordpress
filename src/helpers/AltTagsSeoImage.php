@@ -39,8 +39,8 @@ abstract class AltTagsSeoImage
         return [
             self::SITE_TITLE,
             self::ALT_AUTO_CONTEXT,
-            self::ALT_AUTO_REPRESENTATION,
-            self::POST_TITLE
+            self::ALT_AUTO_REPRESENTATION
+            // self::POST_TITLE
         ];
     }
 }

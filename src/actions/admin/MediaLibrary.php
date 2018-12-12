@@ -18,7 +18,7 @@ class MediaLibrary
      */
     public function __construct()
     {
-        $this->reportImageServices   = seoimage_get_service('ReportImageSeoImage');
+        $this->reportImageServices   = seoimage_get_service('ReportImage');
     }
 
     /**
@@ -26,16 +26,16 @@ class MediaLibrary
      */
     public function hooks()
     {
+        if (!seoimage_allowed()) {
+            return;
+        }
+
         add_filter('manage_media_columns', [$this, 'manageMediaColumns']);
         add_filter('attachment_fields_to_edit', [$this, 'fieldsEdit'], 999, 2);
         add_action('manage_media_custom_column', [$this, 'manageMediaCustomColumn'], 10, 2);
 
-        add_action('admin_post_seoimage_report_attachment', [$this, 'ajaxReportAttachment']);
-        add_action('wp_ajax_seoimage_report_attachment', [$this, 'ajaxReportAttachment']);
-
         add_filter('image_send_to_editor', [$this, 'sendToEditor'], 10, 2);
         add_action('wp_ajax_seoimage_media_alt_update', [$this, 'ajaxAltUpdate']);
-        add_action('wp_ajax_nopriv_seoimage_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
     }
@@ -113,11 +113,21 @@ class MediaLibrary
             return;
         }
 
+        $alt = wp_strip_all_tags(__(get_post_meta($attachmentId, '_wp_attachment_image_alt', true)));
+
         $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId); ?>
         <div class="media-column-seoimage">
             <?php
-            if ($haveAlreadyReport) {
+            if (empty($alt)) {
                 ?>
+                <div class="media-column-seoimage--no_alt">
+                    <span class="dashicons dashicons-dismiss"></span>
+                    <span class="text"><?php esc_html_e('This image has not alt attribute !', 'seoimage'); ?>
+                </div>
+                <?php
+            }
+        if ($haveAlreadyReport) {
+            ?>
                 <p><?php esc_html_e('The media file already has a report', 'seoimage'); ?></p>
                 <div class="media-column-seoimage--actions">
                     <a id="seoimage-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
@@ -128,40 +138,30 @@ class MediaLibrary
                     </a>
                 </div>
                 <?php
-            } else {
-                ?>
+        } else {
+            ?>
                 <div class="media-column-seoimage--actions">
                     <a id="seoimage-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=seoimage_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
                         <?php echo __('Analyze', 'seoimage'); ?>
                     </a>
                 </div>
             <?php
-            } ?>
+        } ?>
             <div id="wrapper-<?php echo $attachmentId; ?>">
-                <input type="text" name="seoimage-alt" data-id="<?php echo $attachmentId; ?>" class="seoimage-alt-ajax large-text" id="seoimage-alt-<?php echo $attachmentId; ?>" value="<?php echo wp_strip_all_tags(__(get_post_meta($attachmentId, '_wp_attachment_image_alt', true))); ?>" />
+                <input
+                    type="text"
+                    name="seoimage-alt"
+                    data-id="<?php echo $attachmentId; ?>"
+                    class="seoimage-alt-ajax large-text"
+                    id="seoimage-alt-<?php echo $attachmentId; ?>"
+                    value="<?php echo $alt; ?>"
+                    placeholder="<?php echo esc_html('Enter alt attribute', 'seoimage'); ?>"
+                />
             </div>
         </div>
         <?php
     }
 
-    public function ajaxReportAttachment()
-    {
-        if (!isset($_GET['attachment_id'])) {
-            return;
-        }
-
-        $attachmentId = (int) $_GET['attachment_id'];
-
-        $result = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
-
-        if ($result['success']) {
-            wp_redirect(get_edit_post_link($attachmentId));
-            exit;
-        }
-
-        wp_redirect(admin_url('upload.php'));
-        exit;
-    }
 
     public function sendToEditor($html, $attachmentId)
     {

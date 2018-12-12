@@ -11,11 +11,11 @@ use SeoImageWP\Helpers\TabsAdminSeoImage;
 /**
  * @since 1.0.0
  */
-class PageAdminSeoImage
+class PageAdmin
 {
     public function __construct()
     {
-        $this->optionServices     = seoimage_get_service('OptionSeoImage');
+        $this->optionServices     = seoimage_get_service('Option');
     }
 
     /**

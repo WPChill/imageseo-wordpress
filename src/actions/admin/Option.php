@@ -6,11 +6,12 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+use SeoImageWP\Helpers\TabsAdminSeoImage;
+
 /**
- *
  * @since 1.0.0
  */
-class OptionSeoImage
+class Option
 {
 
     /**
@@ -18,7 +19,8 @@ class OptionSeoImage
      */
     public function __construct()
     {
-        $this->optionServices   = seoimage_get_service('OptionSeoImage');
+        $this->optionServices   = seoimage_get_service('Option');
+        $this->clientServices   = seoimage_get_service('ClientApi');
     }
 
     /**
@@ -37,16 +39,15 @@ class OptionSeoImage
     public function activate()
     {
         update_option('seoimage_version', SEOIMAGE_VERSION);
-        $options = $this->optionServices->get_options();
+        $options = $this->optionServices->getOptions();
 
-        $this->optionServices->set_options($options);
+        $this->optionServices->setOptions($options);
     }
 
     /**
      * Register setting options
      *
      * @see admin_init
-     * @since 2.0
      *
      * @return void
      */
@@ -58,17 +59,36 @@ class OptionSeoImage
     /**
      * Callback register_setting for sanitize options
      *
-     * @since 2.0
-     *
      * @param array $options
      * @return array
      */
     public function sanitizeOptions($options)
     {
+        $tab         = (isset($_POST['tab'])) ? $_POST['tab'] : null;
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
 
-        $newOptions['active_alt_rewrite'] = isset($options['active_alt_rewrite']) ? 1 : 0;
+
+        switch ($tab) {
+            case TabsAdminSeoImage::SETTINGS:
+                if (! empty($options['api_key'])) {
+                    $result = $this->clientServices->getApiKeyOwner($options['api_key']);
+                    $newOptions['allowed'] = $result['success'];
+                } else {
+                    $newOptions['allowed'] = false;
+                }
+
+                break;
+            case TabsAdminSeoImage::SETTINGS_ALT:
+                $newOptions['active_alt_rewrite'] = isset($options['active_alt_rewrite']) ? 1 : 0;
+                break;
+        }
+
+
+
+
+
+
 
         return $newOptions;
     }

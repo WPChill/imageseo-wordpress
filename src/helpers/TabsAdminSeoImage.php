@@ -19,8 +19,6 @@ abstract class TabsAdminSeoImage
 
     /**
      * Get tabs constant
-     *
-     * @since 2.0
      * @static
      * @return array
      */

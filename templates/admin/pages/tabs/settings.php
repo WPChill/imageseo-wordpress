@@ -14,7 +14,17 @@ $options_available = [
     ],
 ];
 
+$allowed = seoimage_allowed();
+$class = ($allowed) ? 'seoimage-account-info--success' : 'seoimage-account-info--error';
 ?>
+
+<div class="seoimage-account-info <?php echo $class; ?>">
+    <?php if ($allowed): ?>
+        <p><?php _e('Your account is not connected to our SeoImage application', 'seoimage'); ?></p>
+    <?php else: ?>
+        <p><?php _e('Your account is well connected to our SeoImage application', 'seoimage'); ?></p>
+    <?php endif; ?>
+</div>
 
 <table class="form-table">
     <tbody>
@@ -35,6 +45,9 @@ $options_available = [
                     placeholder="xxx"
                     value="<?php echo esc_attr($this->options[ $options_available['api_key']['key'] ]); ?>"
                 >
+                <p>
+                    <?php _e('Register and log in to <a target="_blank" href="https://app.seoimage.io/register">SeoImage</a> to get your API key.', 'seoimage'); ?>
+                </p>
             </td>
         </tr>
     </tbody>

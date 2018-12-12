@@ -8,13 +8,14 @@ if (! defined('ABSPATH')) {
 
 use SeoImageWP\Helpers\AltTagsSeoImage;
 
-class OptionSeoImage
+class Option
 {
     /**
      * @var array
      */
     protected $optionsDefault = [
         'api_key' => '',
+        'allowed' => false,
         'active_alt_rewrite' => 1,
         'alt_auto_percent' => 80,
         'alt_value' => AltTagsSeoImage::SITE_TITLE . ' - ' . AltTagsSeoImage::ALT_AUTO_CONTEXT
@@ -41,7 +42,6 @@ class OptionSeoImage
     }
 
     /**
-     * @since 2.0
      * @param string $name
      * @return array
      */

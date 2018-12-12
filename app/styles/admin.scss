@@ -17,6 +17,14 @@
 			margin-bottom: 5px;
 		}
 	}
+	&--no_alt {
+		margin-bottom: 5px;
+		.text {
+		}
+	}
+	.dashicons-dismiss {
+		color: #e81111;
+	}
 }
 
 .seoimage-table {
@@ -32,5 +40,37 @@
 			padding: 5px;
 			flex: 1;
 		}
+	}
+}
+
+.seoimage-percent {
+	color: #000 !important;
+	background-color: #fff !important;
+	border-radius: 16px;
+	display: none;
+	max-width: 90%;
+	&--item {
+		color: #fff !important;
+		background-color: #2196f3 !important;
+		padding: 10px 16px;
+		border-radius: 16px;
+		width: 0%;
+	}
+}
+
+.seoimage-account-info {
+	padding: 5px;
+	border: 1px solid #fff;
+	margin: 10px 0px;
+	&--success {
+		background-color: #209c20;
+		color: #fff;
+	}
+	&--error {
+		background-color: #da0b0b;
+		color: #fff;
+	}
+	p {
+		margin: 0;
 	}
 }

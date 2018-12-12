@@ -11,12 +11,12 @@ use SeoImage\Client\Client;
 use SeoImageWP\Helpers\AttachmentMeta;
 use SeoImageWP\Helpers\AltTagsSeoImage;
 
-class ReportImageSeoImage
+class ReportImage
 {
     public function __construct()
     {
-        $this->clientService = seoimage_get_service('ClientSeoImage');
-        $this->optionService = seoimage_get_service('OptionSeoImage');
+        $this->clientService = seoimage_get_service('ClientApi');
+        $this->optionService = seoimage_get_service('Option');
     }
 
     /**
@@ -68,13 +68,23 @@ class ReportImageSeoImage
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
+        $alt = $this->getAltAttachmentWithReport($report);
+        update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
+    }
+
+    /**
+     * @param array $report
+     * @return string
+     */
+    public function getAltAttachmentWithReport($report)
+    {
         $altValue = $this->optionService->getOption('alt_value');
 
         $alt = str_replace(AltTagsSeoImage::SITE_TITLE, get_bloginfo('title'), $altValue);
         $alt = str_replace(AltTagsSeoImage::ALT_AUTO_CONTEXT, $this->getAltAutoContextFromReport($report), $alt);
         $alt = str_replace(AltTagsSeoImage::ALT_AUTO_REPRESENTATION, $this->getAltAutoRepresentationFromReport($report), $alt);
 
-        update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
+        return $alt;
     }
 
     /**
