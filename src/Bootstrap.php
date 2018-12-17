@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP;
+namespace ImageSeoWP;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class BootstrapSeoImage
+class Bootstrap
 {
     /**
      * List actions WordPress
@@ -32,7 +32,7 @@ class BootstrapSeoImage
      *
      * @since 1.0.0
      * @param array $actions
-     * @return BootstrapSeoImage
+     * @return Bootstrap
      */
     public function setActions($actions)
     {
@@ -60,7 +60,7 @@ class BootstrapSeoImage
      * Set services
      * @since 1.0.0
      * @param array $services
-     * @return BootstrapSeoImage
+     * @return Bootstrap
      */
     public function setServices($services)
     {
@@ -74,7 +74,7 @@ class BootstrapSeoImage
      * Set a service
      * @since 1.0.0
      * @param string $service
-     * @return BootstrapSeoImage
+     * @return Bootstrap
      */
     public function setService($service)
     {

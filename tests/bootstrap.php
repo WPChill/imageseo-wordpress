@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package SeoImage
+ * @package ImageSeo
  */
 
 use Symfony\Component\Dotenv\Dotenv;
@@ -31,7 +31,7 @@ require_once $_tests_dir . '/includes/functions.php';
  */
 function _manually_load_plugin()
 {
-    require dirname(dirname(__FILE__)) . '/seoimage.php';
+    require dirname(dirname(__FILE__)) . '/imageseo.php';
 }
 tests_add_filter('muplugins_loaded', '_manually_load_plugin');
 

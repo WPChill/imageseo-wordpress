@@ -1,4 +1,4 @@
-#wrap-seoimage {
+#wrap-imageseo {
 	.tags {
 		display: flex;
 		.tags__item {
@@ -7,7 +7,7 @@
 	}
 }
 
-.media-column-seoimage {
+.media-column-imageseo {
 	&--actions {
 		display: flex;
 		flex-wrap: wrap;
@@ -27,7 +27,7 @@
 	}
 }
 
-.seoimage-table {
+.imageseo-table {
 	&-item {
 		display: flex;
 		margin: 5px;
@@ -43,7 +43,7 @@
 	}
 }
 
-.seoimage-percent {
+.imageseo-percent {
 	color: #000 !important;
 	background-color: #fff !important;
 	border-radius: 16px;
@@ -58,7 +58,7 @@
 	}
 }
 
-.seoimage-account-info {
+.imageseo-account-info {
 	padding: 5px;
 	border: 1px solid #fff;
 	margin: 10px 0px;

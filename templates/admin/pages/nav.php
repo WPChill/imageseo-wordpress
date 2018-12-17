@@ -1,6 +1,6 @@
 <?php
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
 
 if (! defined('ABSPATH')) {
     exit;

@@ -5,7 +5,7 @@ $finder = PhpCsFixer\Finder::create()
             ->in(__DIR__)
             ->exclude('vendor')
             ->notName("*.txt")
-            ->notPath("seoimage.php")
+            ->notPath("imageseo.php")
             ->ignoreDotFiles(true)
             ->ignoreVCS(true);
 ;

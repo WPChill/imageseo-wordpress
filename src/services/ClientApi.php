@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Services;
+namespace ImageSeoWP\Services;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImage\Client\Client;
+use ImageSeo\Client\Client;
 
 class ClientApi
 {
@@ -14,11 +14,11 @@ class ClientApi
 
     public function __construct()
     {
-        $this->optionService = seoimage_get_service('Option');
+        $this->optionService = imageseo_get_service('Option');
     }
 
     /**
-     * @return SeoImage\Client\Client
+     * @return ImageSeo\Client\Client
      */
     public function getClient($apiKey = null)
     {
@@ -27,8 +27,8 @@ class ClientApi
         }
 
         $options = [];
-        if (SEOIMAGE_API_LOCAL) {
-            $options['host'] = 'https://api-staging.seoimage.io';
+        if (defined('IMAGESEO_API_URL')) {
+            $options['host'] = IMAGESEO_API_URL;
         }
 
         if ($this->client) {

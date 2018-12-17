@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Actions\Front;
+namespace ImageSeoWP\Actions\Front;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -10,7 +10,7 @@ class Content
 {
     public function __construct()
     {
-        $this->reportImageServices = seoimage_get_service('ReportImage');
+        $this->reportImageServices = imageseo_get_service('ReportImage');
     }
 
     /**
@@ -18,7 +18,7 @@ class Content
      */
     public function hooks()
     {
-        if (!seoimage_allowed()) {
+        if (!imageseo_allowed()) {
             return;
         }
 
@@ -62,6 +62,6 @@ class Content
             $contentFilter = str_replace($replaceContent, $imgReplace, $contentFilter);
         }
 
-        return apply_filters('seoimage_the_content_alt', $contentFilter);
+        return apply_filters('imageseo_the_content_alt', $contentFilter);
     }
 }

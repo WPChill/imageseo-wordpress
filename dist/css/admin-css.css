@@ -1,12 +1,12 @@
-#wrap-seoimage .tags {
+#wrap-imageseo .tags {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex; }
-  #wrap-seoimage .tags .tags__item {
+  #wrap-imageseo .tags .tags__item {
     margin-right: 5px; }
 
-.media-column-seoimage--actions {
+.media-column-imageseo--actions {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -15,55 +15,55 @@
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin-bottom: 15px; }
-  .media-column-seoimage--actions .button {
+  .media-column-imageseo--actions .button {
     margin-right: 5px;
     margin-bottom: 5px; }
 
-.media-column-seoimage--no_alt {
+.media-column-imageseo--no_alt {
   margin-bottom: 5px; }
 
-.media-column-seoimage .dashicons-dismiss {
+.media-column-imageseo .dashicons-dismiss {
   color: #e81111; }
 
-.seoimage-table-item {
+.imageseo-table-item {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   margin: 5px;
   border: 1px solid #eee; }
-  .seoimage-table-item-meta {
+  .imageseo-table-item-meta {
     border-right: 1px solid #eee;
     padding: 5px;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1; }
-    .seoimage-table-item-meta:last-child {
+    .imageseo-table-item-meta:last-child {
       border-right: none; }
 
-.seoimage-percent {
+.imageseo-percent {
   color: #000 !important;
   background-color: #fff !important;
   border-radius: 16px;
   display: none;
   max-width: 90%; }
-  .seoimage-percent--item {
+  .imageseo-percent--item {
     color: #fff !important;
     background-color: #2196f3 !important;
     padding: 10px 16px;
     border-radius: 16px;
     width: 0%; }
 
-.seoimage-account-info {
+.imageseo-account-info {
   padding: 5px;
   border: 1px solid #fff;
   margin: 10px 0px; }
-  .seoimage-account-info--success {
+  .imageseo-account-info--success {
     background-color: #209c20;
     color: #fff; }
-  .seoimage-account-info--error {
+  .imageseo-account-info--error {
     background-color: #da0b0b;
     color: #fff; }
-  .seoimage-account-info p {
+  .imageseo-account-info p {
     margin: 0; }

@@ -4,9 +4,9 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\AttachmentMeta;
+use ImageSeoWP\Helpers\AttachmentMeta;
 
-$queryAlreadyAttachmentsOptimization = apply_filters('seoimage_query_already_attachments_optimization', [
+$queryAlreadyAttachmentsOptimization = apply_filters('imageseo_query_already_attachments_optimization', [
     'post_type' => 'attachment',
     'post_status' => 'inherit',
     'posts_per_page' => -1,
@@ -19,7 +19,7 @@ $queryAlreadyAttachmentsOptimization = apply_filters('seoimage_query_already_att
 $attachmentsAlreadyReport = new WP_Query($queryAlreadyAttachmentsOptimization);
 
 
-$queryAttachmentsOptimization = apply_filters('seoimage_query_attachments_optimization', [
+$queryAttachmentsOptimization = apply_filters('imageseo_query_attachments_optimization', [
     'post_type' => 'attachment',
     'post_status' => 'inherit',
     'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
@@ -34,26 +34,26 @@ $totalAlreadyReport = count($attachmentsAlreadyReport->posts);
 ?>
 
 <script>
-    var SEOIMAGE_ATTACHMENTS_ALREADY_REPORT_IDS =<?php echo wp_json_encode($attachmentsAlreadyReport->posts); ?>;
-    var SEOIMAGE_ATTACHMENTS = <?php echo wp_json_encode($attachments->posts); ?>;
+    var IMAGESEO_ATTACHMENTS_ALREADY_REPORT_IDS =<?php echo wp_json_encode($attachmentsAlreadyReport->posts); ?>;
+    var IMAGESEO_ATTACHMENTS = <?php echo wp_json_encode($attachments->posts); ?>;
 </script>
 
-<div id="wrap-seoimage">
+<div id="wrap-imageseo">
     <div class="wrap">
-        <h3><?php esc_html_e('SeoImage - Bulk Optimization', 'seoimage'); ?></h3>
+        <h3><?php esc_html_e('ImageSeo - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
         <p>
-            <strong><?php esc_html_e('Total attachment(s) : ', 'seoimage'); ?></strong> <?php echo $total; ?>
+            <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
         <p>
-            <strong><?php esc_html_e('Total report(s) : ', 'seoimage'); ?></strong> <?php echo $totalAlreadyReport; ?>
+            <strong><?php esc_html_e('Total report(s) : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
         </p>
-        <button class="button button-primary button-hero" id="seoimage-bulk-reports">
-            <?php esc_html_e('Regenerate all reports', 'seoimage'); ?>
+        <button class="button button-primary button-hero" id="imageseo-bulk-reports">
+            <?php esc_html_e('Regenerate all reports', 'imageseo'); ?>
         </button>
         <hr>
-        <div id="seoimage-percent-bulk" class="seoimage-percent">
-            <div class="seoimage-percent--item">0%</div>
+        <div id="imageseo-percent-bulk" class="imageseo-percent">
+            <div class="imageseo-percent--item">0%</div>
         </div>
     </div>
 </div>

@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
 
 class Enqueue
 {
@@ -31,18 +31,18 @@ class Enqueue
      */
     public function adminEnqueueScripts($page)
     {
-        if (! in_array($page, [ 'toplevel_page_' . TabsAdminSeoImage::SETTINGS, 'seoimage_page_seoimage-optimization', 'upload.php', 'post.php' ], true)) {
+        if (! in_array($page, [ 'toplevel_page_' . TabsAdmin::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options' ], true)) {
             return;
         }
 
-        wp_enqueue_style('seoimage-admin-css', SEOIMAGE_URL_DIST . '/css/admin-css.css', [], SEOIMAGE_VERSION);
+        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin-css.css', [], IMAGESEO_VERSION);
 
         if (in_array($page, [ 'upload.php' ], true)) {
-            wp_enqueue_script('seoimage-admin-js', SEOIMAGE_URL_DIST . '/media-upload.js', ['jquery']);
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
         }
 
-        if (in_array($page, [ 'seoimage_page_seoimage-optimization' ], true)) {
-            wp_enqueue_script('seoimage-admin-js', SEOIMAGE_URL_DIST . '/bulk-optimization.js', ['jquery']);
+        if (in_array($page, [ 'imageseo_page_imageseo-optimization' ], true)) {
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk-optimization.js', ['jquery']);
         }
     }
 }

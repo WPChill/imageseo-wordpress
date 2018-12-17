@@ -4,28 +4,28 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
-use SeoImageWP\Helpers\AltTagsSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
+use ImageSeoWP\Helpers\AltTags;
 
 $options_available = [
     'active_alt_rewrite' => [
         'key'         => 'active_alt_rewrite',
-        'label'       => __('Active Alt Rewrite', 'seoimage'),
+        'label'       => __('Active Alt Rewrite', 'imageseo'),
         'description' => '',
     ],
     'alt_value' => [
         'key'         => 'alt_value',
-        'label'       => __('Alt attribute value', 'seoimage'),
+        'label'       => __('Alt attribute value', 'imageseo'),
         'description' => '',
     ],
     'alt_auto_percent' => [
         'key'         => 'alt_auto_percent',
-        'label'       => __('Alt auto percent', 'seoimage'),
+        'label'       => __('Alt auto percent', 'imageseo'),
         'description' => '',
     ]
 ];
 
-$tags = AltTagsSeoImage::getTags();
+$tags = AltTags::getTags();
 
 ?>
 
@@ -43,7 +43,7 @@ $tags = AltTagsSeoImage::getTags();
         <td>
             <fieldset>
                 <input
-                name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
+                name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
                 type="checkbox"
                 id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
                 <?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
@@ -60,16 +60,16 @@ $tags = AltTagsSeoImage::getTags();
             </th>
             <td class="forminp forminp-text">
                 <input
-                    name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['alt_value']['key'])); ?>"
+                    name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['alt_value']['key'])); ?>"
                     id="<?php echo esc_attr($options_available['alt_value']['key']); ?>"
                     type="text"
                     class="regular-text"
                     required
-                    placeholder="<?php esc_html_e('Your attribute value', 'seoimage'); ?>"
+                    placeholder="<?php esc_html_e('Your attribute value', 'imageseo'); ?>"
                     value="<?php echo esc_attr($this->options[ $options_available['alt_value']['key'] ]); ?>"
                 >
                 <div class="available-structure-tags hide-if-no-js">
-                    <p><?php esc_html_e('Available tags :', 'seoimage'); ?></p>
+                    <p><?php esc_html_e('Available tags :', 'imageseo'); ?></p>
                     <ul class="tags">
                         <?php foreach ($tags as $tag) : ?>
                             <li class="tags__item">
@@ -81,13 +81,13 @@ $tags = AltTagsSeoImage::getTags();
                     </ul>
                     <ul>
                         <li>
-                            <strong><?php echo AltTagsSeoImage::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'seoimage'); ?>
+                            <strong><?php echo AltTags::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'imageseo'); ?>
                         </li>
                         <li>
-                            <strong><?php echo AltTagsSeoImage::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('Keywords representative of the context in which Google analyzes your image.', 'seoimage'); ?>
+                            <strong><?php echo AltTags::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('Keywords representative of the context in which Google analyzes your image.', 'imageseo'); ?>
                         </li>
                         <li>
-                            <strong><?php echo AltTagsSeoImage::ALT_AUTO_REPRESENTATION; ?></strong> : <?php _e('Keyword proposals corresponding to the analysis of the image content. We use machine learning for these results.', 'seoimage'); ?>
+                            <strong><?php echo AltTags::ALT_AUTO_REPRESENTATION; ?></strong> : <?php _e('Keyword proposals corresponding to the analysis of the image content. We use machine learning for these results.', 'imageseo'); ?>
                         </li>
                     </ul>
                 </div>
@@ -102,16 +102,16 @@ $tags = AltTagsSeoImage::getTags();
             </th>
             <td class="forminp forminp-text">
                 <input
-                    name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['alt_auto_percent']['key'])); ?>"
+                    name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['alt_auto_percent']['key'])); ?>"
                     id="<?php echo esc_attr($options_available['alt_auto_percent']['key']); ?>"
                     type="number"
                     class="regular-text"
                     required
-                    placeholder="<?php esc_html_e('Your attribute value', 'seoimage'); ?>"
+                    placeholder="<?php esc_html_e('Your attribute value', 'imageseo'); ?>"
                     value="<?php echo esc_attr($this->options[ $options_available['alt_auto_percent']['key'] ]); ?>"
                 >
                 <p>
-                    <?php _e('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text', 'seoimage'); ?>
+                    <?php _e('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text', 'imageseo'); ?>
                 </p>
             </td>
         </tr>

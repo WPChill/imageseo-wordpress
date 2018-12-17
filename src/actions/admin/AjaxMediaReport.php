@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -17,7 +17,7 @@ class AjaxMediaReport
      */
     public function __construct()
     {
-        $this->reportImageServices   = seoimage_get_service('ReportImage');
+        $this->reportImageServices   = imageseo_get_service('ReportImage');
     }
 
     /**
@@ -25,12 +25,12 @@ class AjaxMediaReport
      */
     public function hooks()
     {
-        if (!seoimage_allowed()) {
+        if (!imageseo_allowed()) {
             return;
         }
 
-        add_action('admin_post_seoimage_report_attachment', [$this, 'adminPostReportAttachment']);
-        add_action('wp_ajax_seoimage_report_attachment', [$this, 'ajaxReportAttachment']);
+        add_action('admin_post_imageseo_report_attachment', [$this, 'adminPostReportAttachment']);
+        add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReportAttachment']);
     }
 
     protected function getAttachmentId()

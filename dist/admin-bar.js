@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("document.addEventListener('DOMContentLoaded', function() {\n\tconst $ = jQuery\n\n\tlet totalAlts = 0\n\tlet totalImages = $('img').length\n\n\t$('body img').each((i, el) => {\n\t\tif ($(el).attr('alt') && $(el).attr('alt').length > 0) {\n\t\t\ttotalAlts++\n\t\t}\n\t})\n\n\tconst percent = Math.round((totalAlts * 100) / totalImages)\n\tlet color = 'red'\n\tif (percent > 40 && percent < 70) {\n\t\tcolor = 'orange'\n\t} else if (percent >= 70) {\n\t\tcolor = 'green'\n\t}\n\n\t$('#wp-admin-bar-seoimage-loading-alts').html(\n\t\t`${\n\t\t\ti18nSeoImage.alternative_text\n\t\t} : ${totalAlts} / ${totalImages} ( <span style='color:${color}'>${percent}% </span>)`\n\t)\n})\n\n\n//# sourceURL=webpack:///./app/javascripts/admin-bar.js?");
+eval("document.addEventListener('DOMContentLoaded', function() {\n\tconst $ = jQuery\n\n\tlet totalAlts = 0\n\tlet totalImages = $('img').length\n\n\t$('body img').each((i, el) => {\n\t\tif ($(el).attr('alt') && $(el).attr('alt').length > 0) {\n\t\t\ttotalAlts++\n\t\t}\n\t})\n\n\tconst percent = Math.round((totalAlts * 100) / totalImages)\n\tlet color = 'red'\n\tif (percent > 40 && percent < 70) {\n\t\tcolor = 'orange'\n\t} else if (percent >= 70) {\n\t\tcolor = 'green'\n\t}\n\n\t$('#wp-admin-bar-imageseo-loading-alts').html(\n\t\t`${\n\t\t\ti18nImageSeo.alternative_text\n\t\t} : ${totalAlts} / ${totalImages} ( <span style='color:${color}'>${percent}% </span>)`\n\t)\n})\n\n\n//# sourceURL=webpack:///./app/javascripts/admin-bar.js?");
 
 /***/ })
 

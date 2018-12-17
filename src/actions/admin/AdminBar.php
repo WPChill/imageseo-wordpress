@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -17,7 +17,7 @@ class AdminBar
      */
     public function __construct()
     {
-        $this->reportImageServices   = seoimage_get_service('ReportImage');
+        $this->reportImageServices   = imageseo_get_service('ReportImage');
     }
 
     /**
@@ -25,7 +25,7 @@ class AdminBar
      */
     public function hooks()
     {
-        if (!seoimage_allowed()) {
+        if (!imageseo_allowed()) {
             return;
         }
         add_action('admin_bar_menu', [$this, 'adminBarMenu'], 99);
@@ -35,7 +35,7 @@ class AdminBar
 
     public function getInfoUser()
     {
-        $html             = 'SeoImage - User';
+        $html             = 'ImageSEO - User';
         // Call API
 
         wp_send_json_success($html);
@@ -53,24 +53,24 @@ class AdminBar
 
         $wp_admin_bar->add_menu(array(
             'parent'    => false,
-            'id'    => 'seoimage',
-            'title' => 'SeoImage',
-            'href'  => admin_url('admin.php?page=seoimage-settings'),
+            'id'    => 'imageseo',
+            'title' => 'ImageSEO',
+            'href'  => admin_url('admin.php?page=imageseo-settings'),
         ));
 
         if (! is_admin()) {
             $wp_admin_bar->add_menu(array(
-                'parent'    => 'seoimage',
-                'id'    => 'seoimage-alts',
-                'title'  => '<div id="wp-admin-bar-seoimage-loading-alts" class="hide-if-no-js">' . __('Loading count alts...', 'seoimage') . '</div><div id="wp-admin-bar-seoimage-content" class="hide-if-no-js"></div>',
+                'parent'    => 'imageseo',
+                'id'    => 'imageseo-alts',
+                'title'  => '<div id="wp-admin-bar-imageseo-loading-alts" class="hide-if-no-js">' . __('Loading count alts...', 'imageseo') . '</div><div id="wp-admin-bar-imageseo-content" class="hide-if-no-js"></div>',
             ));
         }
 
 
         // $wp_admin_bar->add_menu(array(
-        //     'parent' => 'seoimage',
-        //     'id'     => 'seoimage-profile',
-        //     'title'  => '<div id="wp-admin-bar-seoimage-loading-profile" class="hide-if-no-js">' . __('Loading...', 'seoimage') . '</div><div id="wp-admin-bar-seoimage-content" class="hide-if-no-js"></div>',
+        //     'parent' => 'imageseo',
+        //     'id'     => 'imageseo-profile',
+        //     'title'  => '<div id="wp-admin-bar-imageseo-loading-profile" class="hide-if-no-js">' . __('Loading...', 'imageseo') . '</div><div id="wp-admin-bar-imageseo-content" class="hide-if-no-js"></div>',
         // ));
     }
 }

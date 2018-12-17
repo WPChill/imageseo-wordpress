@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Actions\Front;
+namespace ImageSeoWP\Actions\Front;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -15,7 +15,7 @@ class Enqueue
      */
     public function hooks()
     {
-        if (!seoimage_allowed()) {
+        if (!imageseo_allowed()) {
             return;
         }
 
@@ -33,9 +33,9 @@ class Enqueue
             return;
         }
 
-        wp_enqueue_script('seoimage-admin-bar-js', SEOIMAGE_URL_DIST . '/admin-bar.js', ['jquery']);
-        wp_localize_script('seoimage-admin-bar-js', 'i18nSeoImage', [
-            "alternative_text" => __("Alternative text", "seoimage")
+        wp_enqueue_script('imageseo-admin-bar-js', IMAGESEO_URL_DIST . '/admin-bar.js', ['jquery']);
+        wp_localize_script('imageseo-admin-bar-js', 'i18nImageSeo', [
+            "alternative_text" => __("Alternative text", "imageseo")
         ]);
     }
 }

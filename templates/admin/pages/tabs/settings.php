@@ -4,25 +4,26 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
 
 $options_available = [
     'api_key' => [
         'key'         => 'api_key',
-        'label'       => __('API Key', 'seoimage'),
+        'label'       => __('API Key', 'imageseo'),
         'description' => '',
     ],
 ];
 
-$allowed = seoimage_allowed();
-$class = ($allowed) ? 'seoimage-account-info--success' : 'seoimage-account-info--error';
+$allowed = imageseo_allowed();
+$class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info--error';
+
 ?>
 
-<div class="seoimage-account-info <?php echo $class; ?>">
+<div class="imageseo-account-info <?php echo $class; ?>">
     <?php if ($allowed): ?>
-        <p><?php _e('Your account is not connected to our SeoImage application', 'seoimage'); ?></p>
+        <p><?php _e('Your account is well connected to our ImageSeo application', 'imageseo'); ?></p>
     <?php else: ?>
-        <p><?php _e('Your account is well connected to our SeoImage application', 'seoimage'); ?></p>
+        <p><?php _e('Your account is not connected to our ImageSeo application', 'imageseo'); ?></p>
     <?php endif; ?>
 </div>
 
@@ -37,7 +38,7 @@ $class = ($allowed) ? 'seoimage-account-info--success' : 'seoimage-account-info-
             </th>
             <td class="forminp forminp-text">
                 <input
-                    name="<?php echo esc_attr(sprintf('%s[%s]', SEOIMAGE_SLUG, $options_available['api_key']['key'])); ?>"
+                    name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['api_key']['key'])); ?>"
                     id="<?php echo esc_attr($options_available['api_key']['key']); ?>"
                     type="text"
                     class="regular-text"
@@ -46,7 +47,7 @@ $class = ($allowed) ? 'seoimage-account-info--success' : 'seoimage-account-info-
                     value="<?php echo esc_attr($this->options[ $options_available['api_key']['key'] ]); ?>"
                 >
                 <p>
-                    <?php _e('Register and log in to <a target="_blank" href="https://app.seoimage.io/register">SeoImage</a> to get your API key.', 'seoimage'); ?>
+                    <?php _e('Register and log in to <a target="_blank" href="https://app.imageseo.io/register">ImageSeo</a> to get your API key.', 'imageseo'); ?>
                 </p>
             </td>
         </tr>

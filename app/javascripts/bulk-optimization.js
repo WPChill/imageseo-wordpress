@@ -1,22 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const $ = jQuery
 
-	if (SEOIMAGE_ATTACHMENTS.length === 0) {
+	if (IMAGESEO_ATTACHMENTS.length === 0) {
 		return
 	}
 
 	document
-		.querySelector('#seoimage-bulk-reports')
+		.querySelector('#imageseo-bulk-reports')
 		.addEventListener('click', function(e) {
 			e.preventDefault()
-			document.querySelector('#seoimage-percent-bulk').style.display =
+			document.querySelector('#imageseo-percent-bulk').style.display =
 				'block'
 			$(this).prop('disabled', true)
 			launchReportImages(0)
 		})
 
 	function launchReportImages(current) {
-		const total = SEOIMAGE_ATTACHMENTS.length
+		const total = IMAGESEO_ATTACHMENTS.length
 
 		if (current > total) {
 			finishReportImages()
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					}
 
 					const el = document.querySelector(
-						'#seoimage-percent-bulk .seoimage-percent--item'
+						'#imageseo-percent-bulk .imageseo-percent--item'
 					)
 					el.style.width = `${percent}%`
 					el.textContent = `${percent}%`
@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 			},
 			{
-				action: 'seoimage_report_attachment',
-				attachment_id: SEOIMAGE_ATTACHMENTS[current]
+				action: 'imageseo_report_attachment',
+				attachment_id: IMAGESEO_ATTACHMENTS[current]
 			}
 		)
 	}
 
 	function finishReportImages() {
-		$('#seoimage-bulk-reports').prop('disabled', false)
+		$('#imageseo-bulk-reports').prop('disabled', false)
 	}
 })

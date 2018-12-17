@@ -1,22 +1,22 @@
 <?php
 
-namespace SeoImageWP\Services;
+namespace ImageSeoWP\Services;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImage\Client\Client;
+use ImageSeo\Client\Client;
 
-use SeoImageWP\Helpers\AttachmentMeta;
-use SeoImageWP\Helpers\AltTagsSeoImage;
+use ImageSeoWP\Helpers\AttachmentMeta;
+use ImageSeoWP\Helpers\AltTags;
 
 class ReportImage
 {
     public function __construct()
     {
-        $this->clientService = seoimage_get_service('ClientApi');
-        $this->optionService = seoimage_get_service('Option');
+        $this->clientService = imageseo_get_service('ClientApi');
+        $this->optionService = imageseo_get_service('Option');
     }
 
     /**
@@ -43,10 +43,15 @@ class ReportImage
      */
     public function generateReportByAttachmentId($attachmentId)
     {
-        $file = get_attached_file($attachmentId);
+        $filePath = get_attached_file($attachmentId);
+        $metadata = wp_get_attachment_metadata($attachmentId);
 
-        $reportImages = $this->clientService->getClient()->getResource('report_images');
-        $result = $reportImages->generateReport($file);
+        $reportImages = $this->clientService->getClient()->getResource('api_keys_images');
+        $result = $reportImages->generateReportFromFile([
+            'filePath' => $filePath,
+            'width' => $metadata['width'],
+            'height' => $metadata['height'],
+        ]);
 
         if ($result && !$result['success']) {
             return $result;
@@ -80,9 +85,9 @@ class ReportImage
     {
         $altValue = $this->optionService->getOption('alt_value');
 
-        $alt = str_replace(AltTagsSeoImage::SITE_TITLE, get_bloginfo('title'), $altValue);
-        $alt = str_replace(AltTagsSeoImage::ALT_AUTO_CONTEXT, $this->getAltAutoContextFromReport($report), $alt);
-        $alt = str_replace(AltTagsSeoImage::ALT_AUTO_REPRESENTATION, $this->getAltAutoRepresentationFromReport($report), $alt);
+        $alt = str_replace(AltTags::SITE_TITLE, get_bloginfo('title'), $altValue);
+        $alt = str_replace(AltTags::ALT_AUTO_CONTEXT, $this->getAltAutoContextFromReport($report), $alt);
+        $alt = str_replace(AltTags::ALT_AUTO_REPRESENTATION, $this->getAltAutoRepresentationFromReport($report), $alt);
 
         return $alt;
     }

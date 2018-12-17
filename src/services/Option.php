@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Services;
+namespace ImageSeoWP\Services;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\AltTagsSeoImage;
+use ImageSeoWP\Helpers\AltTags;
 
 class Option
 {
@@ -18,7 +18,7 @@ class Option
         'allowed' => false,
         'active_alt_rewrite' => 1,
         'alt_auto_percent' => 80,
-        'alt_value' => AltTagsSeoImage::SITE_TITLE . ' - ' . AltTagsSeoImage::ALT_AUTO_CONTEXT
+        'alt_value' => AltTags::SITE_TITLE . ' - ' . AltTags::ALT_AUTO_CONTEXT
     ];
 
     /**
@@ -36,8 +36,8 @@ class Option
     public function getOptions()
     {
         return apply_filters(
-            'seoimage_get_options',
-            wp_parse_args(get_option(SEOIMAGE_SLUG), $this->getOptionsDefault())
+            'imageseo_get_options',
+            wp_parse_args(get_option(IMAGESEO_SLUG), $this->getOptionsDefault())
         );
     }
 
@@ -63,7 +63,7 @@ class Option
      */
     public function setOptions($options)
     {
-        update_option(SEOIMAGE_SLUG, $options);
+        update_option(IMAGESEO_SLUG, $options);
         return $this;
     }
 

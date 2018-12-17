@@ -1,23 +1,23 @@
 <?php
 
-namespace SeoImageWP;
+namespace ImageSeoWP;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\BootstrapSeoImage;
+use ImageSeoWP\Bootstrap;
 
 /**
  * Only use for get one context
  */
-abstract class ContextSeoImage
+abstract class Context
 {
 
     /**
      * @static
      * @since 1.0
-     * @var BootstrapSeoImage|null
+     * @var Bootstrap|null
      */
     protected static $context;
 
@@ -34,7 +34,7 @@ abstract class ContextSeoImage
             return self::$context;
         }
 
-        self::$context = new BootstrapSeoImage();
+        self::$context = new Bootstrap();
 
         self::getClasses(__DIR__ . '/services', 'services', 'Services\\');
         self::getClasses(__DIR__ . '/actions', 'actions', 'Actions\\');
@@ -54,7 +54,7 @@ abstract class ContextSeoImage
                 continue;
             }
 
-            $data = '\\SeoImageWP\\' . $namespace . str_replace('.php', '', $filename);
+            $data = '\\ImageSeoWP\\' . $namespace . str_replace('.php', '', $filename);
 
             switch ($type) {
                 case 'services':

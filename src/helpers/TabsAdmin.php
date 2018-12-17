@@ -1,19 +1,21 @@
 <?php
 
-namespace SeoImageWP\Helpers;
+namespace ImageSeoWP\Helpers;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-abstract class TabsAdminSeoImage
+abstract class TabsAdmin
 {
+    /**
+     * @var string
+     */
+    const SETTINGS = 'imageseo-settings';
 
     /**
      * @var string
      */
-    const SETTINGS = 'settings-seoimage';
-
     const SETTINGS_ALT = 'alt';
 
 
@@ -39,17 +41,17 @@ abstract class TabsAdminSeoImage
     {
         return [
             self::SETTINGS => [
-                'title' => __('General settings', 'seoimage'),
+                'title' => __('General settings', 'imageseo'),
                 'url'   => get_admin_url(
                     null,
-                    sprintf('admin.php?page=%s&tab=%s', TabsAdminSeoImage::SETTINGS, self::SETTINGS)
+                    sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS)
                 ),
             ],
             self::SETTINGS_ALT => [
-                'title' => __('Alt settings', 'seoimage'),
+                'title' => __('Alt settings', 'imageseo'),
                 'url'   => get_admin_url(
                     null,
-                    sprintf('admin.php?page=%s&tab=%s', TabsAdminSeoImage::SETTINGS, self::SETTINGS_ALT)
+                    sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS_ALT)
                 ),
             ],
         ];

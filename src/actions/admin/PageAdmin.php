@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
 
 /**
  * @since 1.0.0
@@ -15,7 +15,7 @@ class PageAdmin
 {
     public function __construct()
     {
-        $this->optionServices     = seoimage_get_service('Option');
+        $this->optionServices     = imageseo_get_service('Option');
     }
 
     /**
@@ -35,28 +35,28 @@ class PageAdmin
     public function pluginMenu()
     {
         add_menu_page(
-            'SeoImage',
-            'SeoImage',
+            'ImageSEO',
+            'ImageSEO',
             'manage_options',
-            TabsAdminSeoImage::SETTINGS,
+            TabsAdmin::SETTINGS,
             [ $this, 'pluginSettingsPage' ],
-            SEOIMAGE_URL_DIST . '/images/favicon.png'
+            IMAGESEO_URL_DIST . '/images/favicon.png'
         );
 
         add_submenu_page(
-            TabsAdminSeoImage::SETTINGS,
-            __('Settings', 'seoimage'),
-            __('Settings', 'seoimage'),
+            TabsAdmin::SETTINGS,
+            __('Settings', 'imageseo'),
+            __('Settings', 'imageseo'),
             'manage_options',
-            'seoimage-settings',
+            'imageseo-options',
             [$this, 'pluginSettingsPage']
         );
         add_submenu_page(
-            TabsAdminSeoImage::SETTINGS,
-            __('Bulk Optimization', 'seoimage'),
-            __('Bulk Optimization', 'seoimage'),
+            TabsAdmin::SETTINGS,
+            __('Bulk Optimization', 'imageseo'),
+            __('Bulk Optimization', 'imageseo'),
             'manage_options',
-            'seoimage-optimization',
+            'imageseo-optimization',
             [$this, 'optimizationPage']
         );
     }
@@ -67,8 +67,8 @@ class PageAdmin
     public function menuOrderCount()
     {
         global $submenu;
-        if (isset($submenu[TabsAdminSeoImage::SETTINGS])) {
-            unset($submenu[TabsAdminSeoImage::SETTINGS][0]);
+        if (isset($submenu[TabsAdmin::SETTINGS])) {
+            unset($submenu[TabsAdmin::SETTINGS][0]);
         }
     }
 
@@ -78,19 +78,19 @@ class PageAdmin
      */
     public function pluginSettingsPage()
     {
-        $this->tabs       = TabsAdminSeoImage::getFullTabs();
-        $this->tab_active = TabsAdminSeoImage::SETTINGS;
+        $this->tabs       = TabsAdmin::getFullTabs();
+        $this->tab_active = TabsAdmin::SETTINGS;
 
         if (isset($_GET['tab'])) { // phpcs:ignore
             $this->tab_active = sanitize_text_field(wp_unslash($_GET['tab'])); // phpcs:ignore
         }
 
         $this->options = $this->optionServices->getOptions();
-        include_once SEOIMAGE_TEMPLATES_ADMIN_PAGES . '/settings.php';
+        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/settings.php';
     }
 
     public function optimizationPage()
     {
-        include_once SEOIMAGE_TEMPLATES_ADMIN_PAGES . '/optimization.php';
+        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/optimization.php';
     }
 }

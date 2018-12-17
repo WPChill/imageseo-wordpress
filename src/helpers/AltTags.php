@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Helpers;
+namespace ImageSeoWP\Helpers;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-abstract class AltTagsSeoImage
+abstract class AltTags
 {
 
     /**

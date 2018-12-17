@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Helpers;
+namespace ImageSeoWP\Helpers;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -12,11 +12,11 @@ abstract class AttachmentMeta
     /**
      * @var string
      */
-    const DATE_REPORT = '_seoimage_date_report';
+    const DATE_REPORT = '_imageseo_date_report';
 
     /**
      * @var string
      */
 
-    const REPORT = '_seoimage_report';
+    const REPORT = '_imageseo_report';
 }

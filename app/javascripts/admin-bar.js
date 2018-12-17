@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		color = 'green'
 	}
 
-	$('#wp-admin-bar-seoimage-loading-alts').html(
+	$('#wp-admin-bar-imageseo-loading-alts').html(
 		`${
-			i18nSeoImage.alternative_text
+			i18nImageSeo.alternative_text
 		} : ${totalAlts} / ${totalImages} ( <span style='color:${color}'>${percent}% </span>)`
 	)
 })

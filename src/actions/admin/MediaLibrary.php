@@ -1,6 +1,6 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -18,7 +18,7 @@ class MediaLibrary
      */
     public function __construct()
     {
-        $this->reportImageServices   = seoimage_get_service('ReportImage');
+        $this->reportImageServices   = imageseo_get_service('ReportImage');
     }
 
     /**
@@ -26,7 +26,7 @@ class MediaLibrary
      */
     public function hooks()
     {
-        if (!seoimage_allowed()) {
+        if (!imageseo_allowed()) {
             return;
         }
 
@@ -35,7 +35,7 @@ class MediaLibrary
         add_action('manage_media_custom_column', [$this, 'manageMediaCustomColumn'], 10, 2);
 
         add_filter('image_send_to_editor', [$this, 'sendToEditor'], 10, 2);
-        add_action('wp_ajax_seoimage_media_alt_update', [$this, 'ajaxAltUpdate']);
+        add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
     }
@@ -60,10 +60,10 @@ class MediaLibrary
         }
 
 
-        $formFields['seoimage-has-report'] = array(
-            'label'         => __('SeoImage Report'),
+        $formFields['imageseo-has-report'] = array(
+            'label'         => __('ImageSEO Report'),
             'input'         => 'html',
-            'html'          => '<a id="seoimage-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'seoimage') . '</a>',
+            'html'          => '<a id="imageseo-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'imageseo') . '</a>',
             'show_in_edit'  => true,
             'show_in_modal' => true,
         );
@@ -74,8 +74,8 @@ class MediaLibrary
     public function metaboxReport()
     {
         add_meta_box(
-            'seoimage-report',
-            __('Report SeoImage', 'seoimage'),
+            'imageseo-report',
+            __('Report ImageSEO', 'imageseo'),
             [$this, 'viewMetaboxReport'],
             'attachment',
             'normal'
@@ -84,7 +84,7 @@ class MediaLibrary
 
     public function viewMetaboxReport($post)
     {
-        include_once SEOIMAGE_TEMPLATES_ADMIN_METABOXES . '/report.php';
+        include_once IMAGESEO_TEMPLATES_ADMIN_METABOXES . '/report.php';
     }
 
     /**
@@ -94,7 +94,7 @@ class MediaLibrary
      */
     public function manageMediaColumns($columns)
     {
-        $columns['seoimage'] = __('SeoImage', 'seoimage');
+        $columns['imageseo'] = __('ImageSEO', 'imageseo');
 
         return $columns;
     }
@@ -109,40 +109,40 @@ class MediaLibrary
      */
     public function manageMediaCustomColumn($columnName, $attachmentId)
     {
-        if ($columnName !== 'seoimage') {
+        if ($columnName !== 'imageseo') {
             return;
         }
 
         $alt = wp_strip_all_tags(__(get_post_meta($attachmentId, '_wp_attachment_image_alt', true)));
 
         $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId); ?>
-        <div class="media-column-seoimage">
+        <div class="media-column-imageseo">
             <?php
             if (empty($alt)) {
                 ?>
-                <div class="media-column-seoimage--no_alt">
+                <div class="media-column-imageseo--no_alt">
                     <span class="dashicons dashicons-dismiss"></span>
-                    <span class="text"><?php esc_html_e('This image has not alt attribute !', 'seoimage'); ?>
+                    <span class="text"><?php esc_html_e('This image has not alt attribute !', 'imageseo'); ?>
                 </div>
                 <?php
             }
         if ($haveAlreadyReport) {
             ?>
-                <p><?php esc_html_e('The media file already has a report', 'seoimage'); ?></p>
-                <div class="media-column-seoimage--actions">
-                    <a id="seoimage-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
-                        <?php echo __('View report', 'seoimage'); ?>
+                <p><?php esc_html_e('The media file already has a report', 'imageseo'); ?></p>
+                <div class="media-column-imageseo--actions">
+                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
+                        <?php echo __('View report', 'imageseo'); ?>
                     </a>
-                    <a id="seoimage-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=seoimage_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button">
-                        <?php echo __('Re-Analyze', 'seoimage'); ?>
+                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button">
+                        <?php echo __('Re-Analyze', 'imageseo'); ?>
                     </a>
                 </div>
                 <?php
         } else {
             ?>
-                <div class="media-column-seoimage--actions">
-                    <a id="seoimage-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=seoimage_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
-                        <?php echo __('Analyze', 'seoimage'); ?>
+                <div class="media-column-imageseo--actions">
+                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
+                        <?php echo __('Analyze', 'imageseo'); ?>
                     </a>
                 </div>
             <?php
@@ -150,12 +150,12 @@ class MediaLibrary
             <div id="wrapper-<?php echo $attachmentId; ?>">
                 <input
                     type="text"
-                    name="seoimage-alt"
+                    name="imageseo-alt"
                     data-id="<?php echo $attachmentId; ?>"
-                    class="seoimage-alt-ajax large-text"
-                    id="seoimage-alt-<?php echo $attachmentId; ?>"
+                    class="imageseo-alt-ajax large-text"
+                    id="imageseo-alt-<?php echo $attachmentId; ?>"
                     value="<?php echo $alt; ?>"
-                    placeholder="<?php echo esc_html('Enter alt attribute', 'seoimage'); ?>"
+                    placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
                 />
             </div>
         </div>

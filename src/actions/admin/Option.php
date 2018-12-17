@@ -1,12 +1,12 @@
 <?php
 
-namespace SeoImageWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-use SeoImageWP\Helpers\TabsAdminSeoImage;
+use ImageSeoWP\Helpers\TabsAdmin;
 
 /**
  * @since 1.0.0
@@ -19,8 +19,8 @@ class Option
      */
     public function __construct()
     {
-        $this->optionServices   = seoimage_get_service('Option');
-        $this->clientServices   = seoimage_get_service('ClientApi');
+        $this->optionServices   = imageseo_get_service('Option');
+        $this->clientServices   = imageseo_get_service('ClientApi');
     }
 
     /**
@@ -38,7 +38,7 @@ class Option
      */
     public function activate()
     {
-        update_option('seoimage_version', SEOIMAGE_VERSION);
+        update_option('imageseo_version', IMAGESEO_VERSION);
         $options = $this->optionServices->getOptions();
 
         $this->optionServices->setOptions($options);
@@ -53,7 +53,7 @@ class Option
      */
     public function optionsInit()
     {
-        register_setting(SEOIMAGE_OPTION_GROUP, SEOIMAGE_SLUG, [ $this, 'sanitizeOptions' ]);
+        register_setting(IMAGESEO_OPTION_GROUP, IMAGESEO_SLUG, [ $this, 'sanitizeOptions' ]);
     }
 
     /**
@@ -70,7 +70,7 @@ class Option
 
 
         switch ($tab) {
-            case TabsAdminSeoImage::SETTINGS:
+            case TabsAdmin::SETTINGS:
                 if (! empty($options['api_key'])) {
                     $result = $this->clientServices->getApiKeyOwner($options['api_key']);
                     $newOptions['allowed'] = $result['success'];
@@ -79,7 +79,7 @@ class Option
                 }
 
                 break;
-            case TabsAdminSeoImage::SETTINGS_ALT:
+            case TabsAdmin::SETTINGS_ALT:
                 $newOptions['active_alt_rewrite'] = isset($options['active_alt_rewrite']) ? 1 : 0;
                 break;
         }

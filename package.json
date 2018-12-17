@@ -1,16 +1,16 @@
 {
-	"name": "seoimage",
-	"description": "SeoImage",
+	"name": "imageseo",
+	"description": "ImageSeo",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/SeoImage/seoimage-wordpress"
+		"url": "git+https://github.com/ImageSeo/imageseo-wordpress"
 	},
 	"author": "",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/SeoImage/seoimage-wordpress/issues"
+		"url": "https://github.com/ImageSeo/imageseo-wordpress/issues"
 	},
-	"homepage": "https://github.com/SeoImage/seoimage-wordpress#readme",
+	"homepage": "https://github.com/ImageSeo/imageseo-wordpress#readme",
 	"devDependencies": {
 		"autoprefixer": "^8.6.5",
 		"babel-core": "^6.26.3",

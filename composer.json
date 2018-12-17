@@ -1,16 +1,16 @@
 {
-	"name": "seoimage",
+	"name": "imageseo",
 	"type": "project",
 	"license": "GPL",
 	"authors": [
 		{
 			"name": "Thomas DENEULIN",
-			"email": "contact@seoimage.io"
+			"email": "contact@imageseo.io"
 		}
 	],
 	"autoload": {
 		"psr-4": {
-			"SeoImageWP\\": "src/"
+			"ImageSeoWP\\": "src/"
 		}
 	},
 	"require-dev": {

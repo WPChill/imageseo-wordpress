@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "da5fb546147747ac07ca5f1d0ce3f8a4",
+    "content-hash": "f64658ef25912beec8d55ff70cc7f9e8",
     "packages": [],
     "packages-dev": [
         {
@@ -1135,7 +1135,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.19",
+            "version": "v3.4.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
