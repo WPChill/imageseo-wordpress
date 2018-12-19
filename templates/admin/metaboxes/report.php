@@ -10,7 +10,7 @@ $alreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($po
 
 if (!$alreadyReport) {
     ?>
-    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
+    <a id="imageseo-<?php echo $post->ID; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $post->ID)); ?>" class="button-primary">
         <?php echo __('Analyze', 'imageseo'); ?>
     </a>
     <?php

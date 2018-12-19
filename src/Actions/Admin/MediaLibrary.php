@@ -34,7 +34,6 @@ class MediaLibrary
         add_filter('attachment_fields_to_edit', [$this, 'fieldsEdit'], 999, 2);
         add_action('manage_media_custom_column', [$this, 'manageMediaCustomColumn'], 10, 2);
 
-        add_filter('image_send_to_editor', [$this, 'sendToEditor'], 10, 2);
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
