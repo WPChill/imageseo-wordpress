@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f64658ef25912beec8d55ff70cc7f9e8",
-    "packages": [],
+    "content-hash": "fccd1d9b3dc7f8d32ebfd21cb43acf3e",
+    "packages": [
+        {
+            "name": "imageseo/imageseo-php",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ImageSEO/imageseo-php.git",
+                "reference": "db995cb75d17d59f0afb5e57cbe9746d9b10e3ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ImageSEO/imageseo-php/zipball/db995cb75d17d59f0afb5e57cbe9746d9b10e3ef",
+                "reference": "db995cb75d17d59f0afb5e57cbe9746d9b10e3ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ImageSeo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Deneulin",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP library for the ImageSeo API",
+            "homepage": "https://imageseo.io/",
+            "keywords": [
+                "image",
+                "imageseo",
+                "imageseo-library",
+                "php",
+                "seo",
+                "seotools"
+            ],
+            "time": "2018-12-17T19:34:27+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
