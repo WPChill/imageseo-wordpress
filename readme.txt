@@ -45,5 +45,5 @@ Maybe because you never thought about it, maybe because you don't know how to do
 
 == Changelog ==
 
-= 0.5.0 (MM/DD/YYYY) =
+= 0.5.0-beta (12-19-2018) =
 * Init plugin
