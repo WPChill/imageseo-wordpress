@@ -155,13 +155,6 @@ class Bootstrap
      */
     public function deactivatePlugin()
     {
-        foreach ($this->actions as $action) {
-            $action = new $action();
-            if (! method_exists($action, 'deactivate')) {
-                continue;
-            }
-
-            $action->deactivate();
-        }
+        // Deactivate plugin
     }
 }

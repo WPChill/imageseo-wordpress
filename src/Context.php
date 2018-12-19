@@ -36,8 +36,8 @@ abstract class Context
 
         self::$context = new Bootstrap();
 
-        self::getClasses(__DIR__ . '/services', 'services', 'Services\\');
-        self::getClasses(__DIR__ . '/actions', 'actions', 'Actions\\');
+        self::getClasses(__DIR__ . '/Services', 'services', 'Services\\');
+        self::getClasses(__DIR__ . '/Actions', 'actions', 'Actions\\');
 
 
 
