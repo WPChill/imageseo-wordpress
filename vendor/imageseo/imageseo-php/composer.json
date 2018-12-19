@@ -1,0 +1,33 @@
+{
+    "name": "imageseo/imageseo-php",
+    "description": "PHP library for the ImageSeo API",
+    "homepage": "https://imageseo.io/",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Deneulin",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@imageseo.io",
+        "source": "https://github.com/imageseo/imageseo-php"
+    },
+    "keywords": [
+        "php",
+        "imageseo",
+        "imageseo-library",
+        "seo",
+        "seotools",
+        "image"
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "ImageSeo\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,49 @@
+[
+    {
+        "name": "imageseo/imageseo-php",
+        "version": "0.5.0",
+        "version_normalized": "0.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ImageSEO/imageseo-php.git",
+            "reference": "db995cb75d17d59f0afb5e57cbe9746d9b10e3ef"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ImageSEO/imageseo-php/zipball/db995cb75d17d59f0afb5e57cbe9746d9b10e3ef",
+            "reference": "db995cb75d17d59f0afb5e57cbe9746d9b10e3ef",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.6"
+        },
+        "time": "2018-12-17T19:34:27+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "ImageSeo\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Thomas Deneulin",
+                "role": "Developer"
+            }
+        ],
+        "description": "PHP library for the ImageSeo API",
+        "homepage": "https://imageseo.io/",
+        "keywords": [
+            "image",
+            "imageseo",
+            "imageseo-library",
+            "php",
+            "seo",
+            "seotools"
+        ]
+    }
+]
