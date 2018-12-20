@@ -33,6 +33,9 @@ class AjaxMediaReport
         add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReportAttachment']);
     }
 
+    /**
+     * @return int
+     */
     protected function getAttachmentId()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -76,7 +79,15 @@ class AjaxMediaReport
         $result = $this->generateReportAttachment();
 
         if ($result['success']) {
-            wp_send_json_success($result['result']);
+            $attachmentId = $this->getAttachmentId();
+            $file =  wp_get_attachment_image_src($attachmentId, 'small');
+            $altGenerate = $this->reportImageServices->getAltAttachmentWithReport($result['result']);
+            wp_send_json_success([
+                'src' => $result['result']['src'],
+                'alt_generate' => $altGenerate,
+                'file' => (!empty($file)) ? $file[0] : ''
+
+            ]);
             exit;
         }
 

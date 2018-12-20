@@ -2,9 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const $ = jQuery
 
 	let totalAlts = 0
-	let totalImages = $('img').length
+	let totalImages = 0
 
 	$('body img').each((i, el) => {
+		if ($(el).parents('#wpadminbar').length > 0) {
+			return
+		}
+
+		totalImages++
 		if ($(el).attr('alt') && $(el).attr('alt').length > 0) {
 			totalAlts++
 		}

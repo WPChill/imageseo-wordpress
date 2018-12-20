@@ -25,14 +25,17 @@ class AdminBar
      */
     public function hooks()
     {
-        if (!imageseo_allowed()) {
+        if (!imageseo_allowed() || is_admin()) {
             return;
         }
+
         add_action('admin_bar_menu', [$this, 'adminBarMenu'], 99);
         add_action('wp_ajax_get_info_user', [$this, 'getInfoUser']);
-        add_action('wp_ajax_nopriv_get_info_user', [$this, 'getInfoUser']);
     }
 
+    /**
+     * @return void
+     */
     public function getInfoUser()
     {
         $html             = 'ImageSEO - User';

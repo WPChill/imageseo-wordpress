@@ -15,8 +15,8 @@ class ReportImage
 {
     public function __construct()
     {
-        $this->clientService = imageseo_get_service('ClientApi');
-        $this->optionService = imageseo_get_service('Option');
+        $this->clientServices = imageseo_get_service('ClientApi');
+        $this->optionServices = imageseo_get_service('Option');
     }
 
     /**
@@ -46,11 +46,12 @@ class ReportImage
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
 
-        $reportImages = $this->clientService->getClient()->getResource('api_keys_images');
+        $reportImages = $this->clientServices->getClient()->getResource('api_keys_images');
+
         $result = $reportImages->generateReportFromFile([
             'filePath' => $filePath,
-            'width' => $metadata['width'],
-            'height' => $metadata['height'],
+            'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
+            'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
         ]);
 
         if ($result && !$result['success']) {
@@ -73,6 +74,9 @@ class ReportImage
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
+        if (!$this->optionServices->getOption('active_alt_rewrite')) {
+            return;
+        }
         $alt = $this->getAltAttachmentWithReport($report);
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
     }
@@ -83,7 +87,7 @@ class ReportImage
      */
     public function getAltAttachmentWithReport($report)
     {
-        $altValue = $this->optionService->getOption('alt_value');
+        $altValue = $this->optionServices->getOption('alt_value');
 
         $alt = str_replace(AltTags::SITE_TITLE, get_bloginfo('title'), $altValue);
         $alt = str_replace(AltTags::ALT_AUTO_CONTEXT, $this->getAltAutoContextFromReport($report), $alt);
@@ -117,7 +121,7 @@ class ReportImage
      */
     protected function getAltAuto($type, $report)
     {
-        $altPercent = $this->optionService->getOption('alt_auto_percent');
+        $altPercent = $this->optionServices->getOption('alt_auto_percent');
 
         $altReplace = '';
         $i = 0;

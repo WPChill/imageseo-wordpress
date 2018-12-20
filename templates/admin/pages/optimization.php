@@ -6,6 +6,8 @@ if (! defined('ABSPATH')) {
 
 use ImageSeoWP\Helpers\AttachmentMeta;
 
+$altValue = $this->optionServices->getOption('alt_value');
+
 $queryAlreadyAttachmentsOptimization = apply_filters('imageseo_query_already_attachments_optimization', [
     'post_type' => 'attachment',
     'post_status' => 'inherit',
@@ -43,17 +45,30 @@ $totalAlreadyReport = count($attachmentsAlreadyReport->posts);
         <h3><?php esc_html_e('ImageSeo - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
         <p>
-            <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
+            <strong><?php esc_html_e('Alternative text configuration : ', 'imageseo'); ?></strong> <?php echo $altValue; ?>
         </p>
         <p>
-            <strong><?php esc_html_e('Total report(s) : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
+            <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
+        </p>
+        <p id="imageseo-total-already-reports">
+            <strong><?php esc_html_e('Total report(s) : ', 'imageseo'); ?></strong> <span><?php echo $totalAlreadyReport; ?></span>
         </p>
         <button class="button button-primary button-hero" id="imageseo-bulk-reports">
-            <?php esc_html_e('Regenerate all reports', 'imageseo'); ?>
+			<span><?php esc_html_e('(Re) Generate all reports', 'imageseo'); ?></span>
+			<div class="imageseo-loading" style="display:none;"></div>
         </button>
         <hr>
         <div id="imageseo-percent-bulk" class="imageseo-percent">
             <div class="imageseo-percent--item">0%</div>
-        </div>
+		</div>
+		<div id="imageseo-reports-js" class="imageseo-reports">
+			<div class="imageseo-reports-header">
+			<div class="imageseo-reports--status"><?php _e('Status', 'imageseo'); ?></div>
+				<div class="imageseo-reports--image"><?php _e('Image', 'imageseo'); ?></div>
+				<div class="imageseo-reports--src"><?php _e('Image name', 'imageseo'); ?></div>
+				<div class="imageseo-reports--alt"><?php _e('Alternative text', 'imageseo'); ?></div>
+			</div>
+			<div class="imageseo-reports-body"></div>
+		</div>
     </div>
 </div>

@@ -67,3 +67,90 @@
     color: #fff; }
   .imageseo-account-info p {
     margin: 0; }
+
+.imageseo-loading:after {
+  content: ' ';
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  -webkit-animation: imageseo-loading 1.2s linear infinite;
+  animation: imageseo-loading 1.2s linear infinite; }
+
+.wrapper-imageseo-input-alt {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.imageseo-loading--library {
+  margin-left: 5px; }
+  .imageseo-loading--library:after {
+    width: 10px;
+    height: 10px;
+    border-color: #4040bf transparent #4040bf transparent; }
+
+@-webkit-keyframes imageseo-loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes imageseo-loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+.imageseo-reports {
+  margin-top: 10px; }
+  .imageseo-reports-header {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font-weight: bold; }
+    .imageseo-reports-header .imageseo-reports--status,
+    .imageseo-reports-header .imageseo-reports--src,
+    .imageseo-reports-header .imageseo-reports--image,
+    .imageseo-reports-header .imageseo-reports--alt {
+      border: 1px solid #dedede; }
+  .imageseo-reports-body-item {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
+  .imageseo-reports-body .imageseo-reports--image {
+    padding: 5px; }
+  .imageseo-reports--status, .imageseo-reports--src, .imageseo-reports--alt, .imageseo-reports--image {
+    padding: 5px;
+    border-bottom: 1px solid #dedede; }
+  .imageseo-reports--image {
+    max-width: 100px;
+    min-width: 100px;
+    width: 5%; }
+    .imageseo-reports--image-itm {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      background-color: black;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      background-position: center;
+      -webkit-background-size: cover;
+      background-size: cover; }
+  .imageseo-reports--status {
+    min-width: 50px;
+    width: 3%; }
+  .imageseo-reports--src {
+    width: 35%; }
+  .imageseo-reports--alt {
+    width: 57%; }

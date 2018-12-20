@@ -127,37 +127,41 @@ class MediaLibrary
             }
         if ($haveAlreadyReport) {
             ?>
-                <p><?php esc_html_e('The media file already has a report', 'imageseo'); ?></p>
-                <div class="media-column-imageseo--actions">
-                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
-                        <?php echo __('View report', 'imageseo'); ?>
-                    </a>
-                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button">
-                        <?php echo __('Re-Analyze', 'imageseo'); ?>
-                    </a>
-                </div>
-                <?php
+					<p><?php esc_html_e('The media file already has a report', 'imageseo'); ?></p>
+					<div class="media-column-imageseo--actions">
+						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
+							<?php echo __('View report', 'imageseo'); ?>
+						</a>
+						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button">
+							<?php echo __('Re-Analyze', 'imageseo'); ?>
+						</a>
+					</div>
+					<?php
         } else {
             ?>
-                <div class="media-column-imageseo--actions">
-                    <a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
-                        <?php echo __('Analyze', 'imageseo'); ?>
-                    </a>
-                </div>
-            <?php
+					<div class="media-column-imageseo--actions">
+						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
+							<?php echo __('Analyze', 'imageseo'); ?>
+						</a>
+					</div>
+				<?php
         } ?>
-            <div id="wrapper-<?php echo $attachmentId; ?>">
-                <input
-                    type="text"
-                    name="imageseo-alt"
-                    data-id="<?php echo $attachmentId; ?>"
-                    class="imageseo-alt-ajax large-text"
-                    id="imageseo-alt-<?php echo $attachmentId; ?>"
-                    value="<?php echo $alt; ?>"
-                    placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
-                />
-            </div>
-        </div>
+				<div id="wrapper-imageseo-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-alt">
+					<input
+						type="text"
+						name="imageseo-alt"
+						data-id="<?php echo $attachmentId; ?>"
+						class="imageseo-alt-ajax large-text"
+						id="imageseo-alt-<?php echo $attachmentId; ?>"
+						value="<?php echo $alt; ?>"
+						placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
+					/>
+					<button class="button" data-id="<?php echo $attachmentId; ?>">
+						<span><?php _e('Submit', 'imageseo'); ?></span>
+						<div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
+					</button>
+				</div>
+			</div>
         <?php
     }
 

@@ -4,7 +4,7 @@ Tags: seo, image, seotools, search engine optimization, indexing
 Requires at least: 4.5
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.5.0-beta
+Stable tag: 0.6.0-beta
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,8 +42,11 @@ Maybe because you never thought about it, maybe because you don't know how to do
 * WordPress 4.5 or greater
 * PHP version 5.6 or greater
 
-
 == Changelog ==
+
+= 0.6.0-beta (12-20-2018) =
+* Improve Bulk optimization
+* Add option active alt rewrite
 
 = 0.5.0-beta (12-19-2018) =
 * Init plugin
