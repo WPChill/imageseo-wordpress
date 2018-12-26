@@ -47,7 +47,10 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
                     value="<?php echo esc_attr($this->options[ $options_available['api_key']['key'] ]); ?>"
                 >
                 <p>
-                    <?php _e('Register and log in to <a target="_blank" href="https://app.imageseo.io/register">ImageSeo</a> to get your API key.', 'imageseo'); ?>
+					<?php
+                    // _e('Register and log in to <a target="_blank" href="https://app.imageseo.io/register">ImageSeo</a> to get your API key.', 'imageseo');
+                    ?>
+                    <?php _e('During the Beta, please contact us to obtain an API key: <a href="mailto:contact@imageseo.io">contact@imageseo.io</a>', 'imageseo'); ?>
                 </p>
             </td>
         </tr>
