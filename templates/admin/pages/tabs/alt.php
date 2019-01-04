@@ -11,12 +11,12 @@ $options_available = [
     'active_alt_rewrite' => [
         'key'         => 'active_alt_rewrite',
         'label'       => __('Active Alt Rewrite', 'imageseo'),
-        'description' => '',
+        'description' => __('Unchecking this option disables the automatic rewriting of alternative texts. You can still generate reports but we will not rewrite your alternative texts', 'imageseo'),
     ],
     'alt_value' => [
         'key'         => 'alt_value',
         'label'       => __('Alt attribute value', 'imageseo'),
-        'description' => '',
+        'description' => __('Enter how you would like us to rewrite your alternative texts automatically. You can use our tags and add your own text.', 'imageseo'),
     ],
     'alt_auto_percent' => [
         'key'         => 'alt_auto_percent',
@@ -38,7 +38,7 @@ $tags = AltTags::getTags();
                 <label for="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>">
                     <?php echo esc_html($options_available['active_alt_rewrite']['label']); ?>
                 </label>
-                <p class="sub-label"><?php echo $options_available['active_alt_rewrite']['description']; //phpcs:ignore?></p>
+
         </th>
         <td>
             <fieldset>
@@ -48,6 +48,7 @@ $tags = AltTags::getTags();
                 id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
                 <?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
                 >
+				<p><?php echo $options_available['active_alt_rewrite']['description']; //phpcs:ignore?></p>
             </fieldset>
         </td>
         </tr>
@@ -56,7 +57,7 @@ $tags = AltTags::getTags();
                 <label for="<?php echo esc_attr($options_available['alt_value']['key']); ?>">
                     <?php echo esc_html($options_available['alt_value']['label']); ?>
                 </label>
-                <p class="sub-label"><?php echo $options_available['alt_value']['description']; //phpcs:ignore?></p>
+
             </th>
             <td class="forminp forminp-text">
                 <input
@@ -69,7 +70,8 @@ $tags = AltTags::getTags();
                     value="<?php echo esc_attr($this->options[ $options_available['alt_value']['key'] ]); ?>"
                 >
                 <div class="available-structure-tags hide-if-no-js">
-                    <p><?php esc_html_e('Available tags :', 'imageseo'); ?></p>
+					<p><?php echo $options_available['alt_value']['description']; //phpcs:ignore?></p>
+                    <p><strong><?php esc_html_e('Available tags :', 'imageseo'); ?></strong></p>
                     <ul class="tags">
                         <?php foreach ($tags as $tag) : ?>
                             <li class="tags__item">
@@ -81,7 +83,7 @@ $tags = AltTags::getTags();
                     </ul>
                     <ul>
                         <li>
-                            <strong><?php echo AltTags::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'imageseo'); ?>
+                            <strong><?php echo AltTags::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'imageseo'); ?> <em>( <?php _e('Your site title is : ', 'imageseo'); echo get_bloginfo('title') ?> )</em>
                         </li>
                         <li>
                             <strong><?php echo AltTags::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('Keywords representative of the context in which Google analyzes your image.', 'imageseo'); ?>
@@ -125,7 +127,8 @@ $tags = AltTags::getTags();
 
             itm.addEventListener('click', function(e){
                 e.preventDefault();
-                document.querySelector(id_input).value += e.target.dataset.tag
+				document.querySelector(id_input).value += e.target.dataset.tag
+				this.blur()
             })
         })
     })

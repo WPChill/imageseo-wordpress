@@ -21,9 +21,9 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
 
 <div class="imageseo-account-info <?php echo $class; ?>">
     <?php if ($allowed): ?>
-        <p><?php _e('Your account is well connected to our ImageSeo application', 'imageseo'); ?></p>
+        <p><?php _e('Your account is well connected to our ImageSEO application', 'imageseo'); ?></p>
     <?php else: ?>
-        <p><?php _e('Your account is not connected to our ImageSeo application', 'imageseo'); ?></p>
+        <p><?php _e('Your account is not connected to our ImageSEO application', 'imageseo'); ?></p>
     <?php endif; ?>
 </div>
 
