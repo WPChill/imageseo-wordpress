@@ -10,8 +10,18 @@ use ImageSeoWP\Helpers\AltTags;
 $options_available = [
     'active_alt_rewrite' => [
         'key'         => 'active_alt_rewrite',
-        'label'       => __('Active Alt Rewrite', 'imageseo'),
-        'description' => __('Unchecking this option disables the automatic rewriting of alternative texts. You can still generate reports but we will not rewrite your alternative texts', 'imageseo'),
+        'label'       => __('Automatically fill in the alternative text attribute', 'imageseo'),
+        'description' => __('Automatic rewriting of the alternative text on your site if it is empty. Only works with articles published with Gutenberg.', 'imageseo'),
+    ],
+    'active_alt_write_upload' => [
+        'key'         => 'active_alt_write_upload',
+        'label'       => __('Alternative text write auto on media upload', 'imageseo'),
+        'description' => __('By activating this option, we will automatically write your alternative text according to the report we generate', 'imageseo'),
+    ],
+    'active_alt_write_with_report' => [
+        'key'         => 'active_alt_write_with_report',
+        'label'       => __('Alternative text automaticcaly rewrite by report', 'imageseo'),
+        'description' => __('We automatically rewrite your alternative texts as soon as you generate a report. Be careful, your old alternative texts are not saved!', 'imageseo'),
     ],
     'alt_value' => [
         'key'         => 'alt_value',
@@ -39,18 +49,56 @@ $tags = AltTags::getTags();
                     <?php echo esc_html($options_available['active_alt_rewrite']['label']); ?>
                 </label>
 
-        </th>
-        <td>
-            <fieldset>
-                <input
-                name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
-                type="checkbox"
-                id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
-                <?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
-                >
-				<p><?php echo $options_available['active_alt_rewrite']['description']; //phpcs:ignore?></p>
-            </fieldset>
-        </td>
+			</th>
+			<td>
+				<fieldset>
+					<input
+					name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_rewrite']['key'])); ?>"
+					type="checkbox"
+					id="<?php echo esc_attr($options_available['active_alt_rewrite']['key']); ?>"
+					<?php checked($this->options[ $options_available['active_alt_rewrite']['key'] ], 1); ?>
+					>
+					<p><?php echo $options_available['active_alt_rewrite']['description']; //phpcs:ignore?></p>
+				</fieldset>
+			</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row" class="titledesc">
+                <label for="<?php echo esc_attr($options_available['active_alt_write_upload']['key']); ?>">
+                    <?php echo esc_html($options_available['active_alt_write_upload']['label']); ?>
+                </label>
+
+			</th>
+			<td>
+				<fieldset>
+					<input
+					name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_write_upload']['key'])); ?>"
+					type="checkbox"
+					id="<?php echo esc_attr($options_available['active_alt_write_upload']['key']); ?>"
+					<?php checked($this->options[ $options_available['active_alt_write_upload']['key'] ], 1); ?>
+					>
+					<p><?php echo $options_available['active_alt_write_upload']['description']; //phpcs:ignore?></p>
+				</fieldset>
+			</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row" class="titledesc">
+                <label for="<?php echo esc_attr($options_available['active_alt_write_with_report']['key']); ?>">
+                    <?php echo esc_html($options_available['active_alt_write_with_report']['label']); ?>
+                </label>
+
+			</th>
+			<td>
+				<fieldset>
+					<input
+					name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_write_with_report']['key'])); ?>"
+					type="checkbox"
+					id="<?php echo esc_attr($options_available['active_alt_write_with_report']['key']); ?>"
+					<?php checked($this->options[ $options_available['active_alt_write_with_report']['key'] ], 1); ?>
+					>
+					<p><?php echo $options_available['active_alt_write_with_report']['description']; //phpcs:ignore?></p>
+				</fieldset>
+			</td>
         </tr>
         <tr valign="top">
             <th scope="row" class="titledesc">

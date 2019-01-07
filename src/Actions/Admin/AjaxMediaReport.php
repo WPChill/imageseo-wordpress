@@ -59,7 +59,14 @@ class AjaxMediaReport
         $attachmentId = $this->getAttachmentId();
 
 
-        return $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        $report = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        $activeWriteReport = $this->optionServices->getOption('active_alt_write_with_report');
+
+        if ($report && $activeWriteReport) {
+            $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+        }
+
+        return $report;
     }
 
     /**
@@ -81,7 +88,7 @@ class AjaxMediaReport
         if ($result['success']) {
             $attachmentId = $this->getAttachmentId();
             $file =  wp_get_attachment_image_src($attachmentId, 'small');
-            $altGenerate = $this->reportImageServices->getAltAttachmentWithReport($result['result']);
+            $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($result['result']);
             wp_send_json_success([
                 'src' => $result['result']['src'],
                 'alt_generate' => $altGenerate,

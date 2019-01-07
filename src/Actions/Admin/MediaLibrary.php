@@ -18,6 +18,7 @@ class MediaLibrary
      */
     public function __construct()
     {
+        $this->optionServices = imageseo_get_service('Option');
         $this->reportImageServices   = imageseo_get_service('ReportImage');
     }
 
@@ -37,8 +38,31 @@ class MediaLibrary
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
+        add_action('add_attachment', [$this, 'addAttachment']);
     }
 
+    /**
+     * @since 1.0.0
+     * @param int $postId
+     * @return void
+     */
+    public function addAttachment($attachmentId)
+    {
+        $activeWriteReport = $this->optionServices->getOption('active_alt_write_upload');
+
+        if (!$activeWriteReport) {
+            return;
+        }
+
+        $report = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+    }
+
+
+    /**
+     * @since 2.1.0
+     * @return void
+     */
     public function ajaxAltUpdate()
     {
         $postId = absint($_POST['post_id']);
@@ -49,7 +73,12 @@ class MediaLibrary
         }
     }
 
-
+    /**
+     * @since 1.0.0
+     * @param array $formFields
+     * @param object $post
+     * @return array
+     */
     public function fieldsEdit($formFields, $post)
     {
         global $pagenow;
@@ -70,6 +99,10 @@ class MediaLibrary
         return $formFields;
     }
 
+    /**
+     * @since 1.0.0
+     * @return void
+     */
     public function metaboxReport()
     {
         add_meta_box(
@@ -81,6 +114,11 @@ class MediaLibrary
         );
     }
 
+    /**
+     * @since 1.0.0
+     * @param object $post
+     * @return void
+     */
     public function viewMetaboxReport($post)
     {
         include_once IMAGESEO_TEMPLATES_ADMIN_METABOXES . '/report.php';
@@ -88,7 +126,7 @@ class MediaLibrary
 
     /**
      * Activate array
-     *
+     * @since 1.0.0
      * @return void
      */
     public function manageMediaColumns($columns)
@@ -101,10 +139,10 @@ class MediaLibrary
 
 
     /**
-     *
      * @since  1.0
      * @param string $columnName   Name of the custom column.
      * @param int    $attachment_id Attachment ID.
+     * @return void
      */
     public function manageMediaCustomColumn($columnName, $attachmentId)
     {
@@ -112,7 +150,7 @@ class MediaLibrary
             return;
         }
 
-        $alt = wp_strip_all_tags(__(get_post_meta($attachmentId, '_wp_attachment_image_alt', true)));
+        $alt = wp_strip_all_tags($this->reportImageServices->getAlt($attachmentId));
 
         $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId); ?>
         <div class="media-column-imageseo">
@@ -163,13 +201,5 @@ class MediaLibrary
 				</div>
 			</div>
         <?php
-    }
-
-
-    public function sendToEditor($html, $attachmentId)
-    {
-        $result = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
-
-        return $html;
     }
 }

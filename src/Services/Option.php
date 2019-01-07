@@ -17,7 +17,9 @@ class Option
         'api_key' => '',
         'allowed' => false,
         'active_alt_rewrite' => 1,
-        'alt_auto_percent' => 80,
+        'active_alt_write_upload' => 1,
+        'active_alt_write_with_report' => 0,
+        'alt_auto_percent' => 60,
         'alt_value' => AltTags::SITE_TITLE . ' - ' . AltTags::ALT_AUTO_CONTEXT
     ];
 

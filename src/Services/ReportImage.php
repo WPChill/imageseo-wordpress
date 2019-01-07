@@ -43,6 +43,11 @@ class ReportImage
      */
     public function generateReportByAttachmentId($attachmentId)
     {
+        $mimeType = get_post_mime_type($attachmentId);
+        if (strpos($mimeType, 'image') === false) {
+            return;
+        }
+
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
 
@@ -62,8 +67,6 @@ class ReportImage
         update_post_meta($attachmentId, AttachmentMeta::DATE_REPORT, time());
         update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
 
-        $this->updateAltAttachmentWithReport($attachmentId, $report);
-
         return $result;
     }
 
@@ -74,10 +77,7 @@ class ReportImage
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
-        if (!$this->optionServices->getOption('active_alt_rewrite')) {
-            return;
-        }
-        $alt = $this->getAltAttachmentWithReport($report);
+        $alt = $this->getAltValueAttachmentWithReport($report);
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
     }
 
@@ -85,7 +85,7 @@ class ReportImage
      * @param array $report
      * @return string
      */
-    public function getAltAttachmentWithReport($report)
+    public function getAltValueAttachmentWithReport($report)
     {
         $altValue = $this->optionServices->getOption('alt_value');
 
@@ -138,5 +138,14 @@ class ReportImage
         }
 
         return $altReplace;
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function getAlt($id)
+    {
+        return get_post_meta($id, '_wp_attachment_image_alt', true);
     }
 }

@@ -11,6 +11,7 @@ class Content
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');
+        $this->optionServices = imageseo_get_service('Option');
     }
 
     /**
@@ -19,6 +20,10 @@ class Content
     public function hooks()
     {
         if (!imageseo_allowed()) {
+            return;
+        }
+
+        if (!$this->optionServices->getOption('active_alt_rewrite')) {
             return;
         }
 
@@ -43,8 +48,8 @@ class Content
         $regexImg = "#<img([^\>]+?)?alt=(\"|\')([\s\S]*)(\"|\')([^\>]+?)?>#U";
 
         foreach ($ids as $key => $id) {
-            $report = $this->reportImageServices->getReportByAttachmentId($id);
-            if (!$report) {
+            $altSave = $this->reportImageServices->getAlt($id);
+            if (empty($altSave)) {
                 continue;
             }
 
@@ -56,8 +61,7 @@ class Content
             }
 
             $replaceContent = $matches[0][0];
-            $alt = $this->reportImageServices->getAltAttachmentWithReport($report);
-            $imgReplace = str_replace('alt=""', 'alt="' . $alt . '"', $replaceContent);
+            $imgReplace = str_replace('alt=""', 'alt="' . $altSave . '"', $replaceContent);
 
             $contentFilter = str_replace($replaceContent, $imgReplace, $contentFilter);
         }
