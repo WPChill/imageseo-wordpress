@@ -7,7 +7,7 @@ Author: ImageSEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 0.7.0-beta
+Version: 0.8.1-beta
 */
 
 if (! defined('ABSPATH')) {
@@ -21,7 +21,7 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '0.7.0-beta');
+define('IMAGESEO_VERSION', '0.8.1-beta');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
@@ -109,8 +109,6 @@ function imageseo_plugin_uninstall()
  */
 function imageseo_plugin_loaded()
 {
-    require_once __DIR__ . '/imageseo-compatibility.php';
-
     if (imageseo_is_compatible()) {
         require_once __DIR__ . '/imageseo-functions.php';
 

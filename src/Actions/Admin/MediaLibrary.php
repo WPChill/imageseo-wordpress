@@ -39,7 +39,7 @@ class MediaLibrary
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
-        add_action('admin_menu', [$this, 'addMediaPage']);
+        // add_action('admin_menu', [$this, 'addMediaPage']);
         add_action('add_attachment', [$this, 'addAttachment']);
     }
 
