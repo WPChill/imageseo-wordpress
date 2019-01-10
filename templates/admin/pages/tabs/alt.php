@@ -25,13 +25,13 @@ $options_available = [
     ],
     'alt_value' => [
         'key'         => 'alt_value',
-        'label'       => __('Alt attribute value', 'imageseo'),
+        'label'       => __('Alternative text attribute value', 'imageseo'),
         'description' => __('Enter how you would like us to rewrite your alternative texts automatically. You can use our tags and add your own text.', 'imageseo'),
     ],
     'alt_auto_percent' => [
         'key'         => 'alt_auto_percent',
-        'label'       => __('Alt auto percent', 'imageseo'),
-        'description' => '',
+        'label'       => __('Alternative text auto percent', 'imageseo'),
+        'description' => __('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text. Example, if you put an 80 and we have two keywords between 80 and 100, we will choose the highest.', 'imageseo'),
     ]
 ];
 
@@ -148,7 +148,6 @@ $tags = AltTags::getTags();
                 <label for="<?php echo esc_attr($options_available['alt_auto_percent']['key']); ?>">
                     <?php echo esc_html($options_available['alt_auto_percent']['label']); ?>
                 </label>
-                <p class="sub-label"><?php echo $options_available['alt_auto_percent']['description']; //phpcs:ignore?></p>
             </th>
             <td class="forminp forminp-text">
                 <input
@@ -160,9 +159,7 @@ $tags = AltTags::getTags();
                     placeholder="<?php esc_html_e('Your attribute value', 'imageseo'); ?>"
                     value="<?php echo esc_attr($this->options[ $options_available['alt_auto_percent']['key'] ]); ?>"
                 >
-                <p>
-                    <?php _e('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text', 'imageseo'); ?>
-                </p>
+				<p class="sub-label"><?php echo $options_available['alt_auto_percent']['description']; //phpcs:ignore?></p>
             </td>
         </tr>
     </tbody>

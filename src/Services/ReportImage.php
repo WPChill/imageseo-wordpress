@@ -10,6 +10,7 @@ use ImageSeo\Client\Client;
 
 use ImageSeoWP\Helpers\AttachmentMeta;
 use ImageSeoWP\Helpers\AltTags;
+use ImageSeoWP\Helpers\RenameTags;
 
 class ReportImage
 {
@@ -67,7 +68,7 @@ class ReportImage
         update_post_meta($attachmentId, AttachmentMeta::DATE_REPORT, time());
         update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
 
-        return $result;
+        return $report;
     }
 
     /**
@@ -77,7 +78,7 @@ class ReportImage
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
-        $alt = $this->getAltValueAttachmentWithReport($report);
+        $alt = $this->getValueAttachmentWithReport($report);
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
     }
 
@@ -85,33 +86,47 @@ class ReportImage
      * @param array $report
      * @return string
      */
-    public function getAltValueAttachmentWithReport($report)
+    public function getValueAttachmentWithReport($report, $fromOption = 'alt_value')
     {
-        $altValue = $this->optionServices->getOption('alt_value');
+        $value = $this->optionServices->getOption($fromOption);
 
-        $alt = str_replace(AltTags::SITE_TITLE, get_bloginfo('title'), $altValue);
-        $alt = str_replace(AltTags::ALT_AUTO_CONTEXT, $this->getAltAutoContextFromReport($report), $alt);
-        $alt = str_replace(AltTags::ALT_AUTO_REPRESENTATION, $this->getAltAutoRepresentationFromReport($report), $alt);
+        $value = str_replace(AltTags::SITE_TITLE, get_bloginfo('title'), $value);
+        $value = str_replace(AltTags::ALT_AUTO_CONTEXT, $this->getAutoContextFromReport($report), $value);
+        $value = str_replace(AltTags::ALT_AUTO_REPRESENTATION, $this->getAutoRepresentationFromReport($report), $value);
 
-        return $alt;
+        return $value;
+    }
+
+    /**
+     * @param int $attachmentId
+     * @return string
+     */
+    public function getNameFileAttachmentWithId($attachmentId)
+    {
+        $report = $this->getReportByAttachmentId($attachmentId);
+        $value = $this->getValueAttachmentWithReport($report, 'rename_value');
+        // $value = str_replace(RenameTags::ATTACHED_POST_TITLE, $this->getAutoRepresentationFromReport($report), $value);
+
+        return $value;
+    }
+
+
+    /**
+     * @param array $report
+     * @return string
+     */
+    public function getAutoContextFromReport($report)
+    {
+        return $this->getValueAuto('alts', $report);
     }
 
     /**
      * @param array $report
      * @return string
      */
-    public function getAltAutoContextFromReport($report)
+    public function getAutoRepresentationFromReport($report)
     {
-        return $this->getAltAuto('alts', $report);
-    }
-
-    /**
-     * @param array $report
-     * @return string
-     */
-    public function getAltAutoRepresentationFromReport($report)
-    {
-        return $this->getAltAuto('labels', $report);
+        return $this->getValueAuto('labels', $report);
     }
 
     /**
@@ -119,7 +134,7 @@ class ReportImage
      * @param array $report
      * @return string
      */
-    protected function getAltAuto($type, $report)
+    protected function getValueAuto($type, $report)
     {
         $altPercent = $this->optionServices->getOption('alt_auto_percent');
 

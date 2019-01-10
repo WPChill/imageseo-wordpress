@@ -31,6 +31,7 @@ class MediaLibrary
             return;
         }
 
+
         add_filter('manage_media_columns', [$this, 'manageMediaColumns']);
         add_filter('attachment_fields_to_edit', [$this, 'fieldsEdit'], 999, 2);
         add_action('manage_media_custom_column', [$this, 'manageMediaCustomColumn'], 10, 2);
@@ -38,7 +39,26 @@ class MediaLibrary
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
+        add_action('admin_menu', [$this, 'addMediaPage']);
         add_action('add_attachment', [$this, 'addAttachment']);
+    }
+
+    /**
+     * @since 1.0.0
+     * @return void
+     */
+    public function addMediaPage()
+    {
+        add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [ $this, 'adminMediaFiles' ]);
+    }
+
+    /**
+     * @since 1.0.0
+     * @return void
+     */
+    public function adminMediaFiles()
+    {
+        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/media_library.php';
     }
 
     /**
@@ -151,8 +171,13 @@ class MediaLibrary
         }
 
         $alt = wp_strip_all_tags($this->reportImageServices->getAlt($attachmentId));
+        $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId);
+        $autoWriteAlt = $this->optionServices->getOption('active_alt_write_with_report');
 
-        $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId); ?>
+        $text = __('Generate report', 'imageseo');
+        if ($autoWriteAlt) {
+            $text = __('Generate report and rewrite alt');
+        } ?>
         <div class="media-column-imageseo">
             <?php
             if (empty($alt)) {
@@ -167,19 +192,22 @@ class MediaLibrary
             ?>
 					<p><?php esc_html_e('The media file already has a report', 'imageseo'); ?></p>
 					<div class="media-column-imageseo--actions">
-						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
+						<a id="imageseo-view-report-<?php echo $attachmentId; ?>" href="<?php echo esc_url(get_edit_post_link($attachmentId)); ?>" class="button">
 							<?php echo __('View report', 'imageseo'); ?>
 						</a>
-						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button">
-							<?php echo __('Re-Analyze', 'imageseo'); ?>
+						<a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+							<?php echo __('Rename file', 'imageseo'); ?>
+						</a>
+						<a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+							<?php echo __('(Re) Rewrite alt', 'imageseo'); ?>
 						</a>
 					</div>
 					<?php
         } else {
             ?>
 					<div class="media-column-imageseo--actions">
-						<a id="imageseo-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
-							<?php echo __('Analyze', 'imageseo'); ?>
+						<a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button-primary">
+							<?php echo $text; ?>
 						</a>
 					</div>
 				<?php

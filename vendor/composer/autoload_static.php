@@ -12,6 +12,10 @@ class ComposerStaticInit46a5c8cc15f9576edeb95e147c229ec6
             'ImageSeo\\' => 9,
             'ImageSeoWP\\' => 11,
         ),
+        'C' => 
+        array (
+            'Cocur\\Slugify\\' => 14,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -22,6 +26,10 @@ class ComposerStaticInit46a5c8cc15f9576edeb95e147c229ec6
         'ImageSeoWP\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Cocur\\Slugify\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cocur/slugify/src',
         ),
     );
 

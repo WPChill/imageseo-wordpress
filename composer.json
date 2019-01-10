@@ -14,10 +14,10 @@
 		}
 	},
 	"require-dev": {
-		"squizlabs/php_codesniffer": "*",
-		"phpunit/phpunit": "^4"
+		"squizlabs/php_codesniffer": "*"
 	},
 	"require": {
-		"imageseo/imageseo-php": "^0.5.0"
+		"imageseo/imageseo-php": "^0.5.0",
+		"cocur/slugify": "^3.1"
 	}
 }

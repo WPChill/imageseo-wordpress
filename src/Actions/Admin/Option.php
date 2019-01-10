@@ -29,7 +29,22 @@ class Option
     public function hooks()
     {
         add_action('admin_init', [ $this, 'optionsInit' ]);
+        add_action('admin_notices', [ $this, 'settingsNoticesSuccess']);
     }
+
+    public function settingsNoticesSuccess()
+    {
+        if (get_transient('imageseo_success_settings') !== false) {
+            delete_transient('imageseo_success_settings');
+        } else {
+            return;
+        } ?>
+		<div class="notice notice-success">
+			<p><?php _e('Your settings have been saved.', 'imageseo'); ?></p>
+		</div>
+    	<?php
+    }
+
 
     /**
      * Activate plugin
@@ -84,13 +99,11 @@ class Option
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
                 $newOptions['active_alt_write_with_report'] = isset($options['active_alt_write_with_report']) ? 1 : 0;
                 break;
+            // case TabsAdmin::SETTINGS_RENAME_FILE:
+            //     break;
         }
 
-
-
-
-
-
+        set_transient('imageseo_success_settings', 1, 60);
 
         return $newOptions;
     }
