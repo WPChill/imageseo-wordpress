@@ -7,6 +7,7 @@ if (! defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\AltTags;
+use ImageSeoWP\Helpers\RenameTags;
 
 class Option
 {
@@ -20,8 +21,12 @@ class Option
         'active_alt_write_upload' => 1,
         'active_alt_write_with_report' => 0,
         'alt_auto_percent' => 60,
-        'alt_value' => AltTags::SITE_TITLE . ' - ' . AltTags::ALT_AUTO_CONTEXT
+        'alt_value' => AltTags::SITE_TITLE . ' - ' . AltTags::ALT_AUTO_CONTEXT,
+        'rename_delimiter' => '-',
+        'rename_value' => RenameTags::ALT_AUTO_CONTEXT . '-' . RenameTags::ALT_AUTO_REPRESENTATION,
+        'rename_auto_percent' => 60
     ];
+
 
     /**
      * Get options default

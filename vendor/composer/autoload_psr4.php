@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'ImageSeo\\' => array($vendorDir . '/imageseo/imageseo-php/src'),
     'ImageSeoWP\\' => array($baseDir . '/src'),
+    'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
 );

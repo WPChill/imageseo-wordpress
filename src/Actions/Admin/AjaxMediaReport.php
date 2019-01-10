@@ -18,6 +18,8 @@ class AjaxMediaReport
     public function __construct()
     {
         $this->reportImageServices   = imageseo_get_service('ReportImage');
+        $this->optionServices   = imageseo_get_service('Option');
+        $this->renameFileServices   = imageseo_get_service('RenameFile');
     }
 
     /**
@@ -31,6 +33,9 @@ class AjaxMediaReport
 
         add_action('admin_post_imageseo_report_attachment', [$this, 'adminPostReportAttachment']);
         add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReportAttachment']);
+
+        add_action('admin_post_imageseo_rename_attachment', [$this, 'adminPostRenameAttachment']);
+        // add_action('wp_ajax_imageseo_rename_attachment', [$this, 'ajaxReportAttachment']);
     }
 
     /**
@@ -81,6 +86,15 @@ class AjaxMediaReport
     /**
      * @return void
      */
+    public function adminPostRenameAttachment()
+    {
+        $this->renameFileServices->renameAttachment($this->getAttachmentId());
+        wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+    }
+
+    /**
+     * @return void
+     */
     public function ajaxReportAttachment()
     {
         $result = $this->generateReportAttachment();
@@ -88,7 +102,7 @@ class AjaxMediaReport
         if ($result['success']) {
             $attachmentId = $this->getAttachmentId();
             $file =  wp_get_attachment_image_src($attachmentId, 'small');
-            $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($result['result']);
+            $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($result['result']);
             wp_send_json_success([
                 'src' => $result['result']['src'],
                 'alt_generate' => $altGenerate,

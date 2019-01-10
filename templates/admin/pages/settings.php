@@ -19,6 +19,9 @@ use ImageSeoWP\Helpers\TabsAdmin;
                 case TabsAdmin::SETTINGS_ALT:
                     include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/alt.php';
                     break;
+                case TabsAdmin::SETTINGS_RENAME_FILE:
+                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/rename.php';
+                    break;
                 case TabsAdmin::SETTINGS:
                 default:
                     include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/settings.php';

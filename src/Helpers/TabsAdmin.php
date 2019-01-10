@@ -18,6 +18,11 @@ abstract class TabsAdmin
      */
     const SETTINGS_ALT = 'alt';
 
+    /**
+     * @var string
+     */
+    const SETTINGS_RENAME_FILE = 'rename';
+
 
     /**
      * Get tabs constant
@@ -28,7 +33,8 @@ abstract class TabsAdmin
     {
         return [
             self::SETTINGS,
-            self::SETTINGS_ALT
+            self::SETTINGS_ALT,
+            self::SETTINGS_RENAME_FILE
         ];
     }
 
@@ -52,6 +58,13 @@ abstract class TabsAdmin
                 'url'   => get_admin_url(
                     null,
                     sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS_ALT)
+                ),
+            ],
+            self::SETTINGS_RENAME_FILE => [
+                'title' => __('Rename media settings', 'imageseo'),
+                'url'   => get_admin_url(
+                    null,
+                    sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS_RENAME_FILE)
                 ),
             ],
         ];
