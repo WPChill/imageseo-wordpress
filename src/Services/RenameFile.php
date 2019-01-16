@@ -7,23 +7,70 @@ if (! defined('ABSPATH')) {
 }
 
 use Cocur\Slugify\Slugify;
+use ImageSeoWP\Exception\NoRenameFile;
 
 class RenameFile
 {
+    /**
+     * @since 1.0.0
+     */
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');
         $this->optionServices = imageseo_get_service('Option');
     }
 
+    /**
+     * @since 1.0.0
+     *
+     * @param integer $attachmentId
+     * @return string
+     */
     public function getNameFileWithAttachmentId($attachmentId)
     {
         $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId);
         $delimiter = $this->optionServices->getOption('rename_delimiter');
         $slugify = new Slugify(['separator' => $delimiter]);
-        return $slugify->slugify($value);
+        $newName = $slugify->slugify($value);
+
+        $filePath = get_attached_file($attachmentId);
+        $splitName = explode('.', basename($filePath));
+        $oldName = $splitName[0];
+
+        if ($oldName === $newName) {
+            throw new NoRenameFile("No need to change");
+        }
+
+        return $this->generateUniqueFilename([
+            trailingslashit(dirname($filePath)), // Directory
+            $splitName[1], // Ext
+            $delimiter // Delimiter
+        ], $slugify->slugify($value));
     }
 
+
+    /**
+     * @since 1.0.0
+     *
+     * @param string $name
+     * @return string
+     */
+    public function generateUniqueFilename($data, $name, $counter = 1)
+    {
+        list($directory, $ext, $delimiter) = $data;
+        if (file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
+            return $this->generateUniqueFilename($data, sprintf('%s%s%s.%s', $name, $delimiter, $counter, $ext), ++$counter);
+        }
+
+        return $name;
+    }
+
+    /**
+     * @since 1.0.0
+     *
+     * @param integer $attachmentId
+     * @return bool
+     */
     public function renameAttachment($attachmentId)
     {
         $filePath = get_attached_file($attachmentId);
@@ -31,7 +78,11 @@ class RenameFile
             return false;
         }
 
-        $newFilename = $this->getNameFileWithAttachmentId($attachmentId);
+        try {
+            $newFilename = $this->getNameFileWithAttachmentId($attachmentId);
+        } catch (NoRenameFile $e) {
+            return true;
+        }
 
         $metadata = wp_get_attachment_metadata($attachmentId);
         $post = get_post($attachmentId, ARRAY_A);
