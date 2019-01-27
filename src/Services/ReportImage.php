@@ -52,7 +52,7 @@ class ReportImage
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
 
-        $reportImages = $this->clientServices->getClient()->getResource('api_keys_images');
+        $reportImages = $this->clientServices->getClient()->getResource('report_images');
 
         $result = $reportImages->generateReportFromFile([
             'filePath' => $filePath,

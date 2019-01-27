@@ -5,9 +5,9 @@ namespace ImageSeo\Client\Endpoints;
 /**
  * @package ImageSeo\Client\Endpoints
  */
-class ApiKeysImages extends AbstractEndpoint
+class ReportImages extends AbstractEndpoint
 {
-    const RESOURCE_NAME = "api_keys_images";
+    const RESOURCE_NAME = "report_images";
 
     /**
      * @return string
@@ -16,7 +16,7 @@ class ApiKeysImages extends AbstractEndpoint
     {
         $options = $this->getOptions();
 
-        return sprintf('/v1/api_keys/%s/images', $options['apiKey']);
+        return sprintf('/v1/projects/images');
     }
 
     /**

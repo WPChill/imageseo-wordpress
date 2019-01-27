@@ -2,10 +2,10 @@
 
 ## Resources
 
--   `api_keys` :
+-   `projects` :
 
     -   getOwner()
 
--   `api_keys_images`
+-   `report_images`
     -   generateReportFromUrl($data,$query = null)
     -   generateReportFromFile($data,$query = null)

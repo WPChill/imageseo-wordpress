@@ -46,6 +46,6 @@ class ClientApi
      */
     public function getApiKeyOwner($apiKey)
     {
-        return $this->getClient($apiKey)->getResource('api_keys')->getOwner($apiKey);
+        return $this->getClient($apiKey)->getResource('projects')->getOwner();
     }
 }
