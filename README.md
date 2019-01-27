@@ -1,1 +1,1 @@
-# [In Development] ImageSeo WordPress
+# ImageSEO WordPress

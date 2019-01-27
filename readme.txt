@@ -44,6 +44,9 @@ Maybe because you never thought about it, maybe because you don't know how to do
 
 == Changelog ==
 
+= 0.9.0-beta (01-27-2019) =
+- Changed : New endpoints library
+
 = 0.8.2-beta (01-16-2019) =
 - Improved : Checking the uniqueness of a file name
 
