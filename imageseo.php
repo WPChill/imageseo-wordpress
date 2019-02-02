@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: ImageSEO
+Plugin Name: Auto Image Attributes and Rename Media by ImageSEO
 Plugin URI: http://wordpress.org/plugins/imageseo/
-Description: Improve your SEO Image
+Description: Optimize all your images for search engine
 Author: ImageSEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo

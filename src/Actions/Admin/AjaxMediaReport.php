@@ -99,20 +99,19 @@ class AjaxMediaReport
     {
         $result = $this->generateReportAttachment();
 
-        if ($result['success']) {
-            $attachmentId = $this->getAttachmentId();
-            $file =  wp_get_attachment_image_src($attachmentId, 'small');
-            $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($result['result']);
-            wp_send_json_success([
-                'src' => $result['result']['src'],
-                'alt_generate' => $altGenerate,
-                'file' => (!empty($file)) ? $file[0] : ''
-
-            ]);
+        if (array_key_exists('success', $result) && !$result['success']) {
+            wp_send_json_error($result);
             exit;
         }
 
-        wp_send_json_error($result);
-        exit;
+        $attachmentId = $this->getAttachmentId();
+        $file =  wp_get_attachment_image_src($attachmentId, 'small');
+        $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($result);
+        wp_send_json_success([
+            'src' => $result['result']['src'],
+            'alt_generate' => $altGenerate,
+            'file' => (!empty($file)) ? $file[0] : ''
+
+        ]);
     }
 }

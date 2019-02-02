@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			$('span', $(this)).hide()
 			$('.imageseo-loading', $(this)).show()
 			$('#imageseo-total-already-reports span').text(0)
+			$(
+				'#imageseo-reports-js .imageseo-reports-body'
+			).html('')
 			launchReportImages(0)
 		})
 

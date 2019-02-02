@@ -23,7 +23,7 @@ class Content
             return;
         }
 
-        if (!$this->optionServices->getOption('active_alt_rewrite')) {
+        if (! apply_filters('imageseo_active_alt_rewrite', true)) {
             return;
         }
 

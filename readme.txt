@@ -1,4 +1,4 @@
-=== ImageSeo ===
+===  Auto Image Attributes and Rename Media by ImageSEO ===
 Contributors: gmulti
 Tags: seo, image, seotools, search engine optimization, indexing
 Requires at least: 4.5

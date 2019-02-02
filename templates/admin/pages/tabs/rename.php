@@ -11,17 +11,17 @@ $options_available = [
     'rename_delimiter' => [
         'key'         => 'rename_delimiter',
         'label'       => __('Delimiter name file', 'imageseo'),
-        'description' => __('Choose the delimiter that we should use for your file names.', 'imageseo'),
+        'description' => __('Search engines dislike blank space in url. Select the type of delimiter you want to use (if needed) in your file names.', 'imageseo'),
     ],
     'rename_value' => [
         'key'         => 'rename_value',
         'label'       => __('Rename value', 'imageseo'),
-        'description' => __('Enter the value you want to be assigned to your files. Be careful, everything will be written in lowercase. We also use a delimiter if there are spaces.', 'im@ageseo'),
+        'description' => __('Decide how you want ImageSEO to rewrite your image file names. Enter the tag(s) you want to be assigned to your files. You can use up to three tags. However we recommend you to only use %alt_auto_representation% to rename your files. File names will be written in lowercase.', 'im@ageseo'),
     ],
     'rename_auto_percent' => [
         'key'         => 'rename_auto_percent',
         'label'       => __('Rename auto percent', 'imageseo'),
-        'description' => __('Choose a minimum percentage (between 0 and 100) for which you want us to use our "auto" results to fill in your automatic alternative text. Example, if you put an 80 and we have two keywords between 80 and 100, we will choose the highest.', 'imageseo'),
+        'description' => __('Our plugin works with artificial intelligence. The %alt_auto_context% and %alt_auto_representation% might therefor not be 100% accurate with your images. You need to define a threshold (between 0 and 100) of accuracy. We advise you to set up the threshold at 60%. We always chose the most relevant keyword(s).', 'imageseo'),
     ]
 ];
 
@@ -62,14 +62,14 @@ $tags = RenameTags::getTags();
                         <?php endforeach; ?>
                     </ul>
                     <ul>
-                        <li>
-                            <strong><?php echo RenameTags::SITE_TITLE; ?> </strong>: <?php _e('Corresponds to the title of your site', 'imageseo'); ?> <em>( <?php _e('Your site title is : ', 'imageseo'); echo get_bloginfo('title') ?> )</em>
+                       <li>
+                            <strong><?php echo RenameTags::SITE_TITLE; ?> </strong>: <?php _e('We use your site title to fill up alternative texts', 'imageseo'); ?> <em>( <?php _e('Your site title is : ', 'imageseo'); echo get_bloginfo('title') ?> )</em>
                         </li>
                         <li>
-                            <strong><?php echo RenameTags::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('Keywords representative of the context in which Google analyzes your image.', 'imageseo'); ?>
+                            <strong><?php echo RenameTags::ALT_AUTO_CONTEXT; ?></strong> : <?php _e('We use keyword(s) representative of the context in which Google analyzes your image on your website and on internet. We use AI and machine learning for these results.', 'imageseo'); ?>
                         </li>
                         <li>
-                            <strong><?php echo RenameTags::ALT_AUTO_REPRESENTATION; ?></strong> : <?php _e('Keyword proposals corresponding to the analysis of the image content. We use machine learning for these results.', 'imageseo'); ?>
+                            <strong><?php echo RenameTags::ALT_AUTO_REPRESENTATION; ?></strong> : <?php _e(': we use keywords corresponding to the analysis of the image content. We use AI and machine learning for these results.', 'imageseo'); ?>
                         </li>
                     </ul>
                 </div>

@@ -17,7 +17,6 @@ class Option
     protected $optionsDefault = [
         'api_key' => '',
         'allowed' => false,
-        'active_alt_rewrite' => 1,
         'active_alt_write_upload' => 1,
         'active_alt_write_with_report' => 0,
         'alt_auto_percent' => 60,

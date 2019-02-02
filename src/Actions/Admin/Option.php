@@ -95,7 +95,6 @@ class Option
 
                 break;
             case TabsAdmin::SETTINGS_ALT:
-                $newOptions['active_alt_rewrite'] = isset($options['active_alt_rewrite']) ? 1 : 0;
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
                 $newOptions['active_alt_write_with_report'] = isset($options['active_alt_write_with_report']) ? 1 : 0;
                 break;
