@@ -1,30 +1,36 @@
 ===  Auto Image Attributes and Rename Media by ImageSEO ===
 Contributors: gmulti
 Tags: seo, image, seotools, search engine optimization, indexing
-Requires at least: 4.5
+Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.9.2-beta
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-We growth your search traffic and your marketing power through images
+ImageSEO is a WordPress plugin that optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
+Our SEO plugin optimize - in 2 minutes - all your images with what search engines want to see. Save time, rank to the top on image keywords, attract new visitors and increase your audience with ImageSEO plugin!
 
-<p>Stop neglecting images in your SEO and marketing strategy because they matter ! ImageSEO helps you to fix this. Alt attributes, images site map, legends, sizes, names, we generate everything for you based on what Google wants.</p>
-
-<h2>Why you need to pay attention to SEO !</h2>
-Besides being your best way to get customers attention and traffic, images play a major role in SEO. Webmasters generally spend 99% of there SEO efforts on text optimization and backlinks (which is good) and totally forget images (<strong>which is bad</strong>). You need to fix this because :
+With ImageSEO WordPress Plugin, you can automatically :
 <ul>
-    <li>Optimizing your images for research will have a real impact on the global SEO of your website and therefore growth your traffic ;</li>
-    <li>Since people doesn't really pay attention to SEO for images, it is way more easy for you to top-rank on Google image competitive key words ;</li>
-    <li>Every day, images and visual contents are becoming more and more important for your customers and your audience. If you want to keep them, you need to provide quality and responsive content. Yes, imageSEO helps you to do that as well !</li>
+	<li>Rename all your image files with something relevant and finally get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike ; </li>
+	<li>Fill up all your image alternative texts with relevant keywords ;</li>
 </ul>
 
-<h2>Why haven't you paid attention to images optimization so far? </h2>
-Maybe because you never thought about it, maybe because you don't know how to do it, or maybe because it is boring and repetitive. Either ways, ImageSEO is the first tool on the market
+= How does ImageSEO work ? =
+<p>
+We analyze your images with the help of machins learning. and artificial intelligence (AI). We rename them and fill out their alt attributes with what search engines want to see ! You just need to settings up the plugin and we do all the job. Brilliant isn’t it ?
+</p>
 
+= Why you need to use ImageSEO ? =
+<p>
+Well, if you went that down on the page, you already know that Image Search Engine can drive an important traffic on your website and that optimizing your images will have a positive impact on your global seo strategy. With our plugin, we do every thing and you can get a rid of this time consuming activity.
+</p>
+<p>
+ImageSEO also come with a web application if you want to go deeper in your SEO strategy regarding pictures.
+</p>
 
 = Features =
 
@@ -34,6 +40,9 @@ Maybe because you never thought about it, maybe because you don't know how to do
 
 = What about the Premium? =
 
+ImageSEO is free for small websites (under 15 images by month).
+ImageSEO has Free and Premium plans available on the pricing page, depending on your needs.
+We offers professional support to premium users to help them optimize their websites.
 
 
 == Installation ==
@@ -43,6 +52,9 @@ Maybe because you never thought about it, maybe because you don't know how to do
 * PHP version 5.6 or greater
 
 == Changelog ==
+
+= 1.0.0 (04-02-2019) =
+- Initial version
 
 = 0.9.2-beta (02-02-2019) =
 - Remove : option rewrite alt. It's automatic now

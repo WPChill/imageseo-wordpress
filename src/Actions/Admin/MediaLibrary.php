@@ -174,10 +174,7 @@ class MediaLibrary
         $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId);
         $autoWriteAlt = $this->optionServices->getOption('active_alt_write_with_report');
 
-        $text = __('Generate report', 'imageseo');
-        if ($autoWriteAlt) {
-            $text = __('Generate report and rewrite alt');
-        } ?>
+        $text = __('Generate alt', 'imageseo'); ?>
         <div class="media-column-imageseo">
             <?php
             if (empty($alt)) {

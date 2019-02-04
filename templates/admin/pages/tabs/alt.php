@@ -15,8 +15,8 @@ $options_available = [
     ],
     'active_alt_write_with_report' => [
         'key'         => 'active_alt_write_with_report',
-        'label'       => __('Automatically fill out and rewrite all your alternative texts', 'imageseo'),
-        'description' => __('By activating this option, we will automatically fill out and rewrite ALL your alternative texts. We will therefore erase and replace all your alternative texts (empty + existing one)', 'imageseo'),
+        'label'       => __('Automatically fill out and rewrite your alternative texts', 'imageseo'),
+        'description' => __('By activating this option, we will automatically fill out and rewrite your alternative texts. We will therefore erase and replace your alternative texts (empty + existing one)', 'imageseo'),
     ],
     'alt_value' => [
         'key'         => 'alt_value',
