@@ -1,4 +1,4 @@
-===  Auto Image Attributes and Rename Media by ImageSEO ===
+===  Images alternative texts and Media file names generator by ImageSEO ===
 Contributors: gmulti
 Tags: seo, image, seotools, search engine optimization, indexing
 Requires at least: 4.6
