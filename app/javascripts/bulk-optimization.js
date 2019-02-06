@@ -1,24 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const $ = jQuery
-
+	let _execution = false
 	if (IMAGESEO_ATTACHMENTS.length === 0) {
 		return
 	}
 
 	document
-		.querySelector('#imageseo-bulk-reports')
+		.querySelector('#imageseo-bulk-reports--stop')
+		.addEventListener('click', function(e) {
+			e.preventDefault()
+			$(this).html('Current shutdown ...')
+			_execution = false
+		})
+
+	document
+		.querySelector('#imageseo-bulk-reports--start')
 		.addEventListener('click', function(e) {
 			e.preventDefault()
 			document.querySelector('#imageseo-percent-bulk').style.display =
 				'block'
+
 			$(this).prop('disabled', true)
 			$('span', $(this)).hide()
 			$('.imageseo-loading', $(this)).show()
-			$('#imageseo-total-already-reports span').text(0)
-			$(
-				'#imageseo-reports-js .imageseo-reports-body'
-			).html('')
-			launchReportImages(0)
+			$('#imageseo-reports-js .imageseo-reports-body').html('')
+			$('#imageseo-bulk-reports--stop').prop('disabled', false)
+
+			const val = $("input[name='method']:checked").val()
+			let total, start, add
+
+			if (val === 'new') {
+				total = IMAGESEO_ATTACHMENTS.length
+				start = 0
+				add = 0
+			} else {
+				total =
+					IMAGESEO_ATTACHMENTS.length - (IMAGESEO_CURRENT_PROCESS + 1)
+				start = IMAGESEO_CURRENT_PROCESS
+				add = 1
+			}
+
+			_execution = true
+			launchReportImages(start, 0, total, add)
 		})
 
 	const getPercent = (current, total) => {
@@ -42,87 +65,97 @@ document.addEventListener('DOMContentLoaded', function() {
 		dashicons,
 		src,
 		alt_generate,
+		name_file,
 		file = ''
 	}) => `<div class="imageseo-reports-body-item">
 		<div class="imageseo-reports--status"><span class="dashicons dashicons-${dashicons}"></span></div>
 		<div class="imageseo-reports--image"><div class="imageseo-reports--image-itm" style="background-image:url('${file}')"></div></div>
-		<div class="imageseo-reports--src">${src}</div>
+		<div class="imageseo-reports--src">${src}<br />${name_file}</div>
 		<div class="imageseo-reports--alt">${alt_generate}</div>
 	</div>`
 
-	function launchReportImages(current) {
-		const total = IMAGESEO_ATTACHMENTS.length
-		if (current > total) {
+	function launchReportImages(start, current, total, add = 0) {
+		const index = start + current + add
+
+		if (current > total || !_execution) {
 			finishReportImages()
 			return
 		}
 
-		if (typeof IMAGESEO_ATTACHMENTS[current] === 'undefined') {
+		if (typeof IMAGESEO_ATTACHMENTS[index] === 'undefined') {
 			current++
-			launchReportImages(current)
+			launchReportImages(start, current, total, add)
 			return
+		}
+		const updateAlt = $('#option-update-alt').is(':checked')
+		const renameFile = $('#option-rename-file').is(':checked')
+
+		const _errorReportAttachment = res => {
+			$('#imageseo-reports-js .imageseo-reports-body').prepend(
+				ReportItem({
+					src: `Attachment ID: ${IMAGESEO_ATTACHMENTS[index]}`,
+					name_file: '',
+					alt_generate: '',
+					dashicons: 'no'
+				})
+			)
+			current++
+			setPercentLoader(current, total)
+			launchReportImages(start, current, total, add)
+		}
+
+		const _successReportAttachment = res => {
+			IMAGESEO_CURRENT_PROCESS = current + 1
+			let txt = `Attachment ID : ${IMAGESEO_ATTACHMENTS[index]}`
+			if (res.data && res.data.src) {
+				txt = res.data.src
+			}
+			current++
+			setPercentLoader(current, total)
+			if (res.success) {
+				$('#imageseo-reports-js .imageseo-reports-body').prepend(
+					ReportItem({
+						...res.data,
+						src: txt,
+						dashicons: 'yes'
+					})
+				)
+			} else {
+				$('#imageseo-reports-js .imageseo-reports-body').prepend(
+					ReportItem({
+						...res.data,
+						src: txt,
+						dashicons: 'no'
+					})
+				)
+			}
+			launchReportImages(start, current, total, add)
 		}
 
 		$.post(
 			{
 				url: ajaxurl,
-				success: function(res) {
-					let txt = `Attachment ID : ${IMAGESEO_ATTACHMENTS[current]}`
-					if (res.data && res.data.src) {
-						txt = res.data.src
-					}
-					current++
-					setPercentLoader(current, total)
-					if (res.success) {
-						$(
-							'#imageseo-reports-js .imageseo-reports-body'
-						).prepend(
-							ReportItem({
-								...res.data,
-								src: txt,
-								dashicons: 'yes'
-							})
-						)
-					} else {
-						$(
-							'#imageseo-reports-js .imageseo-reports-body'
-						).prepend(
-							ReportItem({
-								...res.data,
-								src: txt,
-								dashicons: 'no'
-							})
-						)
-					}
-					$('#imageseo-total-already-reports span').text(current)
-					launchReportImages(current)
-				},
-				error: function(res) {
-					$('#imageseo-reports-js .imageseo-reports-body').prepend(
-						ReportItem({
-							src: `Attachment ID: ${
-								IMAGESEO_ATTACHMENTS[current]
-							}`,
-							alt_generate: '',
-							dashicons: 'no'
-						})
-					)
-					current++
-					setPercentLoader(current, total)
-					$('#imageseo-total-already-reports span').text(current)
-					launchReportImages(current)
-				}
+				success: _successReportAttachment,
+				error: _errorReportAttachment
 			},
 			{
 				action: 'imageseo_report_attachment',
-				attachment_id: IMAGESEO_ATTACHMENTS[current]
+				update_alt: updateAlt,
+				rename_file: renameFile,
+				total: IMAGESEO_ATTACHMENTS.length,
+				current: index,
+				attachment_id: IMAGESEO_ATTACHMENTS[index]
 			}
 		)
 	}
 
 	function finishReportImages() {
-		$('#imageseo-bulk-reports').prop('disabled', false)
-		$('#imageseo-bulk-reports .imageseo-loading').hide()
-		$('#imageseo-bulk-reports span').show()
+		_execution = false
+		$('#imageseo-bulk-reports--start').prop('disabled', false)
+		$('#imageseo-bulk-reports--start .imageseo-loading').hide()
+		$('#imageseo-bulk-reports--start span').show()
+		$('#imageseo-bulk-reports--stop')
+			.prop('disabled', true)
+			.html('Stop')
 	}
 })

@@ -68,7 +68,7 @@ class ReportImage
         update_post_meta($attachmentId, AttachmentMeta::DATE_REPORT, time());
         update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
 
-        return $report;
+        return $result;
     }
 
     /**

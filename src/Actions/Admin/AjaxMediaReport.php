@@ -63,15 +63,7 @@ class AjaxMediaReport
 
         $attachmentId = $this->getAttachmentId();
 
-
-        $report = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
-        $activeWriteReport = $this->optionServices->getOption('active_alt_write_with_report');
-
-        if ($report && $activeWriteReport) {
-            $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
-        }
-
-        return $report;
+        return $this->reportImageServices->generateReportByAttachmentId($attachmentId);
     }
 
     /**
@@ -79,8 +71,22 @@ class AjaxMediaReport
      */
     public function adminPostReportAttachment()
     {
-        $result = $this->generateReportAttachment();
-        wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+        $response = $this->generateReportAttachment();
+        $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
+        if (!$response['success']) {
+            wp_redirect($urlRedirect);
+            return;
+        }
+
+        $activeWriteReport = $this->optionServices->getOption('active_alt_write_with_report');
+        if (!$activeWriteReport) {
+            wp_redirect($urlRedirect);
+            return;
+        }
+
+        $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+
+        wp_redirect($urlRedirect);
     }
 
     /**
@@ -97,20 +103,51 @@ class AjaxMediaReport
      */
     public function ajaxReportAttachment()
     {
-        $result = $this->generateReportAttachment();
+        $currentBulk = (int) $_POST['current'];
+        $total = (int) $_POST['total'];
+        $response = $this->generateReportAttachment();
 
-        if (array_key_exists('success', $result) && !$result['success']) {
+        if (!$response['success']) {
             wp_send_json_error($result);
             exit;
         }
 
         $attachmentId = $this->getAttachmentId();
+        $report = $response['result'];
+
+
+        $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
+        $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
+        if ($updateAlt) {
+            $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+        }
+
+        if ($renameFile) {
+            $this->renameFileServices->renameAttachment($attachmentId);
+        }
+
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
-        $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($result);
+        $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($report);
+
+
+        if ($currentBulk+1 < $total) {
+            update_option('_imageseo_current_processed', $currentBulk);
+        } elseif ($currentBulk+1 === $total) {
+            delete_option('_imageseo_current_processed');
+        }
+
+        $srcFile = '';
+        $nameFile = '';
+        if (!empty($file)) {
+            $srcFile = $file[0];
+            $nameFile = basename($srcFile);
+        }
+
         wp_send_json_success([
             'src' => $result['result']['src'],
             'alt_generate' => $altGenerate,
-            'file' => (!empty($file)) ? $file[0] : ''
+            'file' => $srcFile,
+            'name_file' => $nameFile
 
         ]);
     }
