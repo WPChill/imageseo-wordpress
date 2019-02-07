@@ -84,7 +84,7 @@ class AjaxMediaReport
             return;
         }
 
-        $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+        $this->reportImageServices->updateAltAttachmentWithReport($this->getAttachmentId(), $response['result']);
 
         wp_redirect($urlRedirect);
     }
