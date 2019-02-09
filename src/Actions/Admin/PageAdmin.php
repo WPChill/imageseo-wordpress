@@ -15,7 +15,8 @@ class PageAdmin
 {
     public function __construct()
     {
-        $this->optionServices     = imageseo_get_service('Option');
+        $this->optionServices = imageseo_get_service('Option');
+        $this->clientServices = imageseo_get_service('ClientApi');
     }
 
     /**
@@ -91,6 +92,7 @@ class PageAdmin
 
     public function optimizationPage()
     {
+        $this->owner = $this->clientServices->getApiKeyOwner();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/optimization.php';
     }
 }

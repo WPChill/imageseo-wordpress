@@ -70,6 +70,13 @@
 		background-color: #da0b0b;
 		color: #fff;
 	}
+	&--warning {
+		background-color: #b9431f;
+		color: #fff;
+		a {
+			color: #fff;
+		}
+	}
 	p {
 		margin: 0;
 	}

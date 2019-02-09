@@ -65,6 +65,11 @@
   .imageseo-account-info--error {
     background-color: #da0b0b;
     color: #fff; }
+  .imageseo-account-info--warning {
+    background-color: #b9431f;
+    color: #fff; }
+    .imageseo-account-info--warning a {
+      color: #fff; }
   .imageseo-account-info p {
     margin: 0; }
 

@@ -35,9 +35,9 @@ $queryAttachmentsOptimization = apply_filters('imageseo_query_attachments_optimi
 ]);
 $attachments = new WP_Query($queryAttachmentsOptimization);
 
-
 $total = count($attachments->posts);
 $totalAlreadyReport = count($attachmentsAlreadyReport->posts);
+
 $currentProcess = get_option('_imageseo_current_processed', 0);
 ?>
 
@@ -57,6 +57,28 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
         <p>
             <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
+        <p>
+			<strong><?php esc_html_e('Total already report(s) : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
+			<br />
+			<span><?php _e('Reports already made are not included in your image limitation', 'imageseo'); ?></span>
+        </p>
+        <p>
+            <strong><?php esc_html_e('Your image limitation : ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+		</p>
+
+		<?php if ($this->owner['current_request_images'] >= $this->owner['plan']['limit_images']) {
+    $images_available = 0;
+} else {
+    $images_available = $this->owner['plan']['limit_images'] - $this->owner['current_request_images'];
+}
+
+        ?>
+		<?php if ($images_available <= 0): ?>
+			<div class="imageseo-account-info imageseo-account-info--warning">
+				<p><?php _e('Be careful, you do not have enough credits left to complete the report of all your images', 'imageseo'); ?></p>
+				<p><?php _e('Remember to increase your plan by <a href="https://app.imageseo.io/" target="_blank">logging into your account </a>', 'imageseo'); ?></p>
+			</div>
+		<?php endif; ?>
 
       	<h2><?php _e('Method', 'imageseo'); ?></h2>
 

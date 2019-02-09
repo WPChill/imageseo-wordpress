@@ -86,11 +86,12 @@ class Option
 
         switch ($tab) {
             case TabsAdmin::SETTINGS:
+                $newOptions['allowed'] = false;
                 if (! empty($options['api_key'])) {
-                    $result = $this->clientServices->getApiKeyOwner($options['api_key']);
-                    $newOptions['allowed'] = $result['success'];
-                } else {
-                    $newOptions['allowed'] = false;
+                    $owner = $this->clientServices->getApiKeyOwner($options['api_key']);
+                    if ($owner) {
+                        $newOptions['allowed'] = true;
+                    }
                 }
 
                 break;
