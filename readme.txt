@@ -4,7 +4,7 @@ Tags: seo, image, seotools, search engine optimization, indexing
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,12 @@ We offers professional support to premium users to help them optimize their webs
 * PHP version 5.6 or greater
 
 == Changelog ==
+
+= 1.0.2 (09-02-2019) =
+- Changed : prevent limitation images
+
+= 1.0.1 (07-02-2019) =
+- Changed : add start and stop on optimization bulk
 
 = 1.0.0 (04-02-2019) =
 - Initial version
