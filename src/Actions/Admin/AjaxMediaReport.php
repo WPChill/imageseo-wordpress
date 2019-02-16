@@ -119,9 +119,15 @@ class AjaxMediaReport
 
 
         $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
+        $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && $_POST['update_alt_not_empty'] === 'true') ? true : false;
         $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
+        $altGenerate = $alt = $this->reportImageServices->getAlt($attachmentId);
+
         if ($updateAlt) {
-            $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+            if (!$alt || $updateAltNotEmpty) {
+                $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+                $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
+            }
         }
 
         if ($renameFile) {
@@ -129,8 +135,6 @@ class AjaxMediaReport
         }
 
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
-        $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
-
 
         if ($currentBulk+1 < $total) {
             update_option('_imageseo_current_processed', $currentBulk);

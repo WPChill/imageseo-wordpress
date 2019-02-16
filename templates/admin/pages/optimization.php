@@ -48,6 +48,7 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
     <div class="wrap">
         <h3><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
+		<h4><?php esc_html_e('We use artificial intelligence and machine learning. The first processing of an image can take up to 30 seconds.', 'imageseo'); ?></h4>
         <p>
             <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
@@ -99,7 +100,14 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt" id="option-update-alt" />
-				<?php _e('Update alternative texts automatically', 'imageseo'); ?>
+				<?php _e('Complete alternative texts automatically', 'imageseo'); ?>
+			</label>
+		</div>
+		<br />
+		<div class="option">
+			<label>
+				<input type="checkbox" name="update_alt_not_empty" id="option-update-alt-not-empty" />
+				<?php _e('Rewrite alternative texts already completed', 'imageseo'); ?>
 			</label>
 		</div>
 		<br />

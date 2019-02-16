@@ -20,6 +20,18 @@ class RenameFile
         $this->optionServices = imageseo_get_service('Option');
     }
 
+    protected function getDelimiter()
+    {
+        return apply_filters('imageseo_rename_delimiter', '-');
+    }
+
+    protected function generateNameFromReport($attachmentId, $params = [])
+    {
+        $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId, $params);
+        $slugify = new Slugify(['separator' => $this->getDelimiter()]);
+        return $slugify->slugify($value);
+    }
+
     /**
      * @since 1.0.0
      *
@@ -28,10 +40,7 @@ class RenameFile
      */
     public function getNameFileWithAttachmentId($attachmentId)
     {
-        $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId);
-        $delimiter = apply_filters('imageseo_rename_delimiter', '-');
-        $slugify = new Slugify(['separator' => $delimiter]);
-        $newName = $slugify->slugify($value);
+        $newName = $this->generateNameFromReport($attachmentId);
 
         $filePath = get_attached_file($attachmentId);
         $splitName = explode('.', basename($filePath));
@@ -44,8 +53,9 @@ class RenameFile
         return $this->generateUniqueFilename([
             trailingslashit(dirname($filePath)), // Directory
             $splitName[1], // Ext
-            $delimiter // Delimiter
-        ], $slugify->slugify($value));
+            $this->getDelimiter(), // Delimiter,
+            $attachmentId
+        ], $newName);
     }
 
 
@@ -57,11 +67,36 @@ class RenameFile
      */
     public function generateUniqueFilename($data, $name, $counter = 1)
     {
-        list($directory, $ext, $delimiter) = $data;
+        list($directory, $ext, $delimiter, $attachmentId) = $data;
 
-        if (file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
-            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, $counter), ++$counter);
+        $number_try_name = apply_filters('imageseo_number_try_name_file', 7);
+
+        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
+            return $name;
         }
+
+        if ($counter < $number_try_name) {
+            $name = $this->generateNameFromReport($attachmentId, [
+                'max_percent' => 100-($counter*10)
+            ]);
+
+            if ($name === get_bloginfo('title')) {
+                $name = $this->generateNameFromReport($attachmentId);
+            }
+        } elseif ($counter >= $number_try_name) {
+            $name = $this->generateNameFromReport($attachmentId);
+        }
+
+        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
+            return $name;
+        }
+
+        if ($counter < $number_try_name) {
+            return $this->generateUniqueFilename($data, $name, ++$counter);
+        } else {
+            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, ($number_try_name+2) - $counter), ++$counter);
+        }
+
 
         return $name;
     }

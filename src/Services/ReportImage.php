@@ -104,11 +104,13 @@ class ReportImage
      * @param int $attachmentId
      * @return string
      */
-    public function getNameFileAttachmentWithId($attachmentId)
+    public function getNameFileAttachmentWithId($attachmentId, $params = [])
     {
         $report = $this->getReportByAttachmentId($attachmentId);
         $blogTitle = get_bloginfo('title');
-        $value = sprintf('%s-%s', $blogTitle, $this->getAutoContextFromReport($report));
+        $nameAuto = $this->getAutoContextFromReport($report, $params);
+
+        $value = sprintf('%s-%s', $blogTitle, $nameAuto);
 
         return apply_filters('imageseo_get_name_file_attachment_id', $value, $attachmentId);
     }
@@ -118,35 +120,41 @@ class ReportImage
      * @param array $report
      * @return string
      */
-    public function getAutoContextFromReport($report)
+    public function getAutoContextFromReport($report, $params = [])
     {
-        return $this->getValueAuto('alts', $report);
+        return $this->getValueAuto('alts', $report, $params);
     }
 
     /**
      * @param array $report
      * @return string
      */
-    public function getAutoRepresentationFromReport($report)
+    public function getAutoRepresentationFromReport($report, $params =[])
     {
-        return $this->getValueAuto('labels', $report);
+        return $this->getValueAuto('labels', $report, $params);
     }
 
     /**
      * @param string $type
      * @param array $report
+     * @param array $params
      * @return string
      */
-    protected function getValueAuto($type, $report)
+    protected function getValueAuto($type, $report, $params = [])
     {
-        $altPercent = apply_filters('imageseo_get_value_auto', 1, $type, $report);
+        if (!isset($params['min_percent'])) {
+            $params['min_percent'] = apply_filters('imageseo_get_value_auto_min_percent', 1, $type, $report);
+        }
+        if (!isset($params['max_percent'])) {
+            $params['max_percent'] = apply_filters('imageseo_get_value_auto_max_percent', 101, $type, $report);
+        }
 
         $altReplace = '';
         $i = 0;
         $total = count($report[$type]);
 
         while (empty($altReplace) && $i < $total) {
-            if ($altPercent > $report[$type][$i]['score']) {
+            if ($params['min_percent'] >= round($report[$type][$i]['score']) || $params['max_percent'] <= round($report[$type][$i]['score'])) {
                 $i++;
                 continue;
             }

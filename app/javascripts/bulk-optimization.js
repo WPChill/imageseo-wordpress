@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				'block'
 
 			$(this).prop('disabled', true)
+			$('#option-update-alt').prop('disabled', true)
+			$('#option-update-alt-not-empty').prop('disabled', true)
+			$('#option-rename-file').prop('disabled', true)
 			$('span', $(this)).hide()
 			$('.imageseo-loading', $(this)).show()
 			$('#imageseo-reports-js .imageseo-reports-body').html('')
@@ -88,6 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			return
 		}
 		const updateAlt = $('#option-update-alt').is(':checked')
+		const updateAltNotEmpty = $('#option-update-alt-not-empty').is(
+			':checked'
+		)
 		const renameFile = $('#option-rename-file').is(':checked')
 
 		const _errorReportAttachment = res => {
@@ -141,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			{
 				action: 'imageseo_report_attachment',
 				update_alt: updateAlt,
+				update_alt_not_empty: updateAltNotEmpty,
 				rename_file: renameFile,
 				total: IMAGESEO_ATTACHMENTS.length,
 				current: index,
@@ -154,6 +161,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		$('#imageseo-bulk-reports--start').prop('disabled', false)
 		$('#imageseo-bulk-reports--start .imageseo-loading').hide()
 		$('#imageseo-bulk-reports--start span').show()
+
+		$('#option-update-alt').prop('disabled', false)
+		$('#option-update-alt-not-empty').prop('disabled', false)
+		$('#option-rename-file').prop('disabled', false)
 		$('#imageseo-bulk-reports--stop')
 			.prop('disabled', true)
 			.html('Stop')
