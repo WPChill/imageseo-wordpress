@@ -1,10 +1,10 @@
-===  Images alternative texts and Media file names generator by ImageSEO ===
+===  Auto alt and media file rename for optimized SEO images by ImageSEO ===
 Contributors: gmulti
-Tags: seo, image, seotools, search engine optimization, indexing
+Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 ImageSEO is a WordPress plugin that optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
 Our SEO plugin optimize - in 2 minutes - all your images with what search engines want to see. Save time, rank to the top on image keywords, attract new visitors and increase your audience with ImageSEO plugin!
+The plugin allows you to dynamically insert "alt" attributes to your images using our application.
 
 With ImageSEO WordPress Plugin, you can automatically :
 <ul>
@@ -34,15 +35,22 @@ ImageSEO also come with a web application if you want to go deeper in your SEO s
 
 = Features =
 
-* Automate the filling of alternative texts
-* Receive a report from each of your images to understand how they are referenced
+* Fill in your "alt" tags automatically
+* Receive a report of each of your images to understand how they are referenced
 * See how many alternative texts are filled in on each of your pages
+* Automatically rename your files
+* Support for Featured Images
+★ Support for WooCommerce
+★ Support for Custom Post Type Images
+★ Support for popular page builders like Elementor, Site Origin etc
 
 = What about the Premium? =
 
 ImageSEO is free for small websites (under 15 images by month).
 ImageSEO has Free and Premium plans available on the pricing page, depending on your needs.
 We offers professional support to premium users to help them optimize their websites.
+
+★ Support and Updates
 
 
 == Installation ==

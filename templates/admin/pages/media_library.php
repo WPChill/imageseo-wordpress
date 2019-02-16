@@ -37,15 +37,6 @@ if (! defined('ABSPATH')) {
 					<input type="checkbox" name="media[]" id="cb-select-20" value="20">
 				</th>
 				<td class="title has-row-actions" data-colname="File">
-					<strong class="has-media-icon">
-						<a href="http://weglotpluginv2.local/wp-admin/post.php?post=20&amp;action=edit" aria-label="“Capture d’écran 2018-12-27 à 15.28.47” (Edit)">
-							<span class="media-icon image-icon">
-								<img width="60" height="60" src="http://weglotpluginv2.local/wp-content/uploads/2019/01/Capture-d’écran-2018-12-27-à-15.28.47-100x100.png"
-								 class="attachment-60x60 size-60x60">
-							</span>
-							Capture d’écran 2018-12-27 à 15.28.47
-						</a>
-					</strong>
 					<p class="filename">
 						<span class="screen-reader-text">
 							File name:
