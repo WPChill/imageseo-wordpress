@@ -61,6 +61,11 @@ We offers professional support to premium users to help them optimize their webs
 
 == Changelog ==
 
+= 1.0.3 (16-02-2019) =
+- Changed : Improve rename file
+- Changed : Light settings
+- Changed : Improve bulk optimization
+
 = 1.0.2 (09-02-2019) =
 - Changed : prevent limitation images
 
