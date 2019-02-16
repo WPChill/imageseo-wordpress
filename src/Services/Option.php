@@ -19,11 +19,9 @@ class Option
         'allowed' => false,
         'active_alt_write_upload' => 1,
         'active_alt_write_with_report' => 1,
-        'alt_auto_percent' => 60,
         'alt_value' => AltTags::ALT_AUTO_CONTEXT . ' ' . AltTags::ALT_AUTO_REPRESENTATION,
         'rename_delimiter' => '-',
         'rename_value' => RenameTags::ALT_AUTO_CONTEXT . '-' . RenameTags::ALT_AUTO_REPRESENTATION,
-        'rename_auto_percent' => 60
     ];
 
 
@@ -58,7 +56,7 @@ class Option
             return null;
         }
 
-        return $options[ $name ];
+        return apply_filters('imageseo_' . $name . '_option', $options[ $name ]);
     }
 
 

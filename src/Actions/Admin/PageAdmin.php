@@ -81,6 +81,7 @@ class PageAdmin
     {
         $this->tabs       = TabsAdmin::getFullTabs();
         $this->tab_active = TabsAdmin::SETTINGS;
+        $this->owner = $this->clientServices->getApiKeyOwner();
 
         if (isset($_GET['tab'])) { // phpcs:ignore
             $this->tab_active = sanitize_text_field(wp_unslash($_GET['tab'])); // phpcs:ignore

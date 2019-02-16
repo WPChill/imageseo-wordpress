@@ -78,7 +78,16 @@ class ReportImage
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
-        $alt = $this->getValueAttachmentWithReport($report);
+        $alt = $this->getAltValueAttachmentWithReport($report);
+
+
+        $postId = wp_get_post_parent_id($attachmentId);
+        if ($postId) {
+            $alt = sprintf('%s - %s', get_the_title($postId), $alt);
+        }
+
+        $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId, $report);
+
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
     }
 
@@ -86,15 +95,9 @@ class ReportImage
      * @param array $report
      * @return string
      */
-    public function getValueAttachmentWithReport($report, $fromOption = 'alt_value')
+    public function getAltValueAttachmentWithReport($report)
     {
-        $value = $this->optionServices->getOption($fromOption);
-
-        $value = str_replace(AltTags::SITE_TITLE, get_bloginfo('title'), $value);
-        $value = str_replace(AltTags::ALT_AUTO_CONTEXT, $this->getAutoContextFromReport($report), $value);
-        $value = str_replace(AltTags::ALT_AUTO_REPRESENTATION, $this->getAutoRepresentationFromReport($report), $value);
-
-        return $value;
+        return $this->getAutoContextFromReport($report);
     }
 
     /**
@@ -104,10 +107,10 @@ class ReportImage
     public function getNameFileAttachmentWithId($attachmentId)
     {
         $report = $this->getReportByAttachmentId($attachmentId);
-        $value = $this->getValueAttachmentWithReport($report, 'rename_value');
-        // $value = str_replace(RenameTags::ATTACHED_POST_TITLE, $this->getAutoRepresentationFromReport($report), $value);
+        $blogTitle = get_bloginfo('title');
+        $value = sprintf('%s-%s', $blogTitle, $this->getAutoContextFromReport($report));
 
-        return $value;
+        return apply_filters('imageseo_get_name_file_attachment_id', $value, $attachmentId);
     }
 
 
@@ -136,7 +139,7 @@ class ReportImage
      */
     protected function getValueAuto($type, $report)
     {
-        $altPercent = $this->optionServices->getOption('alt_auto_percent');
+        $altPercent = apply_filters('imageseo_get_value_auto', 1, $type, $report);
 
         $altReplace = '';
         $i = 0;

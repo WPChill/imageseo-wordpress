@@ -86,6 +86,7 @@ class Option
 
         switch ($tab) {
             case TabsAdmin::SETTINGS:
+            default:
                 $newOptions['allowed'] = false;
                 if (! empty($options['api_key'])) {
                     $owner = $this->clientServices->getApiKeyOwner($options['api_key']);
@@ -93,14 +94,8 @@ class Option
                         $newOptions['allowed'] = true;
                     }
                 }
-
-                break;
-            case TabsAdmin::SETTINGS_ALT:
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
-                $newOptions['active_alt_write_with_report'] = isset($options['active_alt_write_with_report']) ? 1 : 0;
                 break;
-            // case TabsAdmin::SETTINGS_RENAME_FILE:
-            //     break;
         }
 
         set_transient('imageseo_success_settings', 1, 60);

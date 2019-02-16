@@ -63,6 +63,14 @@ class AjaxMediaReport
 
         $attachmentId = $this->getAttachmentId();
 
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+        if ($report) {
+            return [
+                "success" => true,
+                "result" => $report
+            ];
+        }
+
         return $this->reportImageServices->generateReportByAttachmentId($attachmentId);
     }
 
@@ -74,12 +82,6 @@ class AjaxMediaReport
         $response = $this->generateReportAttachment();
         $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
         if (!$response['success']) {
-            wp_redirect($urlRedirect);
-            return;
-        }
-
-        $activeWriteReport = $this->optionServices->getOption('active_alt_write_with_report');
-        if (!$activeWriteReport) {
             wp_redirect($urlRedirect);
             return;
         }
@@ -127,7 +129,7 @@ class AjaxMediaReport
         }
 
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
-        $altGenerate = $this->reportImageServices->getValueAttachmentWithReport($report);
+        $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
 
 
         if ($currentBulk+1 < $total) {

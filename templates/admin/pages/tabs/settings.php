@@ -27,6 +27,13 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
     <?php endif; ?>
 </div>
 
+
+<?php if ($allowed): ?>
+	 <p>
+		<strong><?php esc_html_e('Quota of your account : ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+	</p>
+<?php endif; ?>
+
 <table class="form-table">
     <tbody>
         <tr valign="top">

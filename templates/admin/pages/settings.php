@@ -16,15 +16,11 @@ use ImageSeoWP\Helpers\TabsAdmin;
         <form method="post" id="mainform" action="<?php echo esc_url(admin_url('options.php')); ?>">
             <?php
             switch ($this->tab_active) {
-                case TabsAdmin::SETTINGS_ALT:
-                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/alt.php';
-                    break;
-                case TabsAdmin::SETTINGS_RENAME_FILE:
-                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/rename.php';
-                    break;
                 case TabsAdmin::SETTINGS:
                 default:
                     include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/settings.php';
+                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/alt.php';
+
                     break;
             }
 

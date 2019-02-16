@@ -6,9 +6,6 @@ if (! defined('ABSPATH')) {
 
 use ImageSeoWP\Helpers\AttachmentMeta;
 
-$altValue = $this->optionServices->getOption('alt_value');
-$renameValue = $this->optionServices->getOption('rename_value');
-
 $queryAlreadyAttachmentsOptimization = apply_filters('imageseo_query_already_attachments_optimization', [
     'post_type' => 'attachment',
     'post_status' => 'inherit',
@@ -51,9 +48,6 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
     <div class="wrap">
         <h3><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
-        <p>
-            <strong><?php esc_html_e('Alternative text configuration : ', 'imageseo'); ?></strong> <?php echo $altValue; ?>
-        </p>
         <p>
             <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
@@ -105,14 +99,14 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt" id="option-update-alt" />
-				<?php _e('Update alternative texts. Your configuration : ', 'imageseo'); ?><?php echo $altValue; ?>
+				<?php _e('Update alternative texts automatically', 'imageseo'); ?>
 			</label>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="rename_file" id="option-rename-file" />
-				<?php _e('Rename files. Your configuration :', 'imageseo'); ?> <?php echo $renameValue; ?>
+				<?php _e('Rename files automatically', 'imageseo'); ?>
 			</label>
 		</div>
 		<br />

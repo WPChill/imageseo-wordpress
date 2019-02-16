@@ -29,7 +29,7 @@ class RenameFile
     public function getNameFileWithAttachmentId($attachmentId)
     {
         $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId);
-        $delimiter = $this->optionServices->getOption('rename_delimiter');
+        $delimiter = apply_filters('imageseo_rename_delimiter', '-');
         $slugify = new Slugify(['separator' => $delimiter]);
         $newName = $slugify->slugify($value);
 
@@ -58,8 +58,9 @@ class RenameFile
     public function generateUniqueFilename($data, $name, $counter = 1)
     {
         list($directory, $ext, $delimiter) = $data;
+
         if (file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
-            return $this->generateUniqueFilename($data, sprintf('%s%s%s.%s', $name, $delimiter, $counter, $ext), ++$counter);
+            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, $counter), ++$counter);
         }
 
         return $name;
@@ -73,7 +74,13 @@ class RenameFile
      */
     public function renameAttachment($attachmentId)
     {
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+        if (!$report) {
+            $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        }
+
         $filePath = get_attached_file($attachmentId);
+
         if (!wp_mkdir_p(dirname($filePath))) {
             return false;
         }
@@ -91,6 +98,7 @@ class RenameFile
         $directory = trailingslashit(dirname($filePath));
 
         $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
+
         // Rename file
         rename($filePath, $newFilePath);
 
@@ -118,7 +126,9 @@ class RenameFile
                 rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
             }
         }
+
         $oldAttachedFile = get_post_meta($attachmentId, '_wp_attached_file', true);
+
         update_attached_file($attachmentId, str_replace($basenameWithoutExt, $newFilename, $oldAttachedFile));
         wp_update_attachment_metadata($attachmentId, $metadata);
         clean_post_cache($attachmentId);
