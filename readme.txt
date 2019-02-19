@@ -1,5 +1,5 @@
 ===  Auto alt and media file rename for optimized SEO images by ImageSEO ===
-Contributors: gmulti
+Contributors: gmulti, freemius
 Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.0
@@ -33,6 +33,8 @@ Well, if you went that down on the page, you already know that Image Search Engi
 ImageSEO also come with a web application if you want to go deeper in your SEO strategy regarding pictures.
 </p>
 
+Alternate text (Alt text) is a text description that can be added to an image’s HTML tag on a Web page. It is used when the image in the Web page cannot be displayed, in which case the Alt text is shown instead. It is also displayed when a user mouses over the image. So, the alt attribute is a critical step that is often overlooked.
+
 = Features =
 
 * Fill in your "alt" tags automatically
@@ -40,9 +42,9 @@ ImageSEO also come with a web application if you want to go deeper in your SEO s
 * See how many alternative texts are filled in on each of your pages
 * Automatically rename your files
 * Support for Featured Images
-★ Support for WooCommerce
-★ Support for Custom Post Type Images
-★ Support for popular page builders like Elementor, Site Origin etc
+* Support for WooCommerce
+* Support for Custom Post Type Images
+* Support for popular page builders like Elementor, Site Origin etc
 
 = What about the Premium? =
 
@@ -50,7 +52,7 @@ ImageSEO is free for small websites (under 15 images by month).
 ImageSEO has Free and Premium plans available on the pricing page, depending on your needs.
 We offers professional support to premium users to help them optimize their websites.
 
-★ Support and Updates
+* Support and Updates
 
 
 == Installation ==
