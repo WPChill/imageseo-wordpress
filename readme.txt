@@ -1,8 +1,9 @@
-===  Auto alt and media file rename for optimized SEO images by ImageSEO ===
+
+===  Auto alt text and rename file optimizer for Google Images by Image SEO ===
 Contributors: gmulti, freemius
 Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
-Tested up to: 5.0
+Tested up to: 5.1.0
 Requires PHP: 5.6
 Stable tag: 1.0.3
 License: GPLv2 or later
@@ -16,24 +17,26 @@ The plugin allows you to dynamically insert "alt" attributes to your images usin
 
 With ImageSEO WordPress Plugin, you can automatically :
 <ul>
-	<li>Rename all your image files with something relevant and finally get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike ; </li>
+	<li>Rename media files all with something relevant and finally get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike ; ( for a better SEO ) </li>
 	<li>Fill up all your image alternative texts with relevant keywords ;</li>
 </ul>
 
-= How does ImageSEO work ? =
-<p>
-We analyze your images with the help of machins learning. and artificial intelligence (AI). We rename them and fill out their alt attributes with what search engines want to see ! You just need to settings up the plugin and we do all the job. Brilliant isn’t it ?
-</p>
-
 = Why you need to use ImageSEO ? =
+<p><strong>Don't lose any more traffic. 20% of Google searches are done on Google Images! To do this, optimize your alts tags and remember to name your files correctly.</strong></p>
 <p>
-Well, if you went that down on the page, you already know that Image Search Engine can drive an important traffic on your website and that optimizing your images will have a positive impact on your global seo strategy. With our plugin, we do every thing and you can get a rid of this time consuming activity.
+Well, Image Search Engine can drive an important traffic on your website and that optimizing your images will have a positive impact on your global seo strategy. With our plugin, we do every thing and you can get a rid of this time consuming activity.
 </p>
 <p>
 ImageSEO also come with a web application if you want to go deeper in your SEO strategy regarding pictures.
 </p>
 
 Alternate text (Alt text) is a text description that can be added to an image’s HTML tag on a Web page. It is used when the image in the Web page cannot be displayed, in which case the Alt text is shown instead. It is also displayed when a user mouses over the image. So, the alt attribute is a critical step that is often overlooked.
+
+= How does ImageSEO work ? =
+<p>
+We analyze your images with the help of machins learning. and artificial intelligence (AI). We rename them and fill out their alt attributes with what search engines want to see ! You just need to settings up the plugin and we do all the job. Brilliant isn’t it ?
+</p>
+
 
 = Features =
 
@@ -60,6 +63,25 @@ We offers professional support to premium users to help them optimize their webs
 = Minimum Requirements for ImageSeo =
 * WordPress 4.5 or greater
 * PHP version 5.6 or greater
+
+1. Upload the plugin files to the `/wp-content/plugins/imageseo` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
+
+== Frequently Asked Questions ==
+
+= What is an alternative text? =
+The alt attribute (alternative text) is used in your HTML code on IMG tags to describe the appearance and function of an image on a page.
+
+You currently can connect to Mailchimp, Mailjet, SendInBlue or SendGrid
+
+= Does ImageSEO integrates with other plugins? =
+
+We are compatible with all plugins using the WordPress media library (WooCommerce, Polylang, Easy Digital Download, ...)
+
+= Is ImageSEO available in my language? =
+
+ImageSEO currently supports English and French.
+To help us translate ImageSEO in your language, contact us
 
 == Changelog ==
 
