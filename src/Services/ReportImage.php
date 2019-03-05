@@ -107,12 +107,9 @@ class ReportImage
     public function getNameFileAttachmentWithId($attachmentId, $params = [])
     {
         $report = $this->getReportByAttachmentId($attachmentId);
-        $blogTitle = get_bloginfo('title');
         $nameAuto = $this->getAutoContextFromReport($report, $params);
 
-        $value = sprintf('%s-%s', $blogTitle, $nameAuto);
-
-        return apply_filters('imageseo_get_name_file_attachment_id', $value, $attachmentId);
+        return apply_filters('imageseo_get_name_file_attachment_id', $nameAuto, $attachmentId);
     }
 
 

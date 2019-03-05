@@ -10,8 +10,8 @@ use ImageSeoWP\Helpers\AltTags;
 $options_available = [
     'active_alt_write_upload' => [
         'key'         => 'active_alt_write_upload',
-        'label'       => __('Alternative text write auto on media upload', 'imageseo'),
-        'description' => __('By activating this option, we will automatically write your alternative text according to the report we generate', 'imageseo'),
+        'label'       => __('Automatically fill out your ALT when you upload a media', 'imageseo'),
+        'description' => __('If you check this box, uploading a media in the library might be slightly longer (time for our IA to process the file). ', 'imageseo'),
     ],
     'active_alt_write_with_report' => [
         'key'         => 'active_alt_write_with_report',

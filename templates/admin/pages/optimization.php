@@ -48,17 +48,17 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
     <div class="wrap">
         <h3><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
-		<h4><?php esc_html_e('We use artificial intelligence and machine learning. The first processing of an image can take up to 30 seconds.', 'imageseo'); ?></h4>
+		<h4><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. The processing of an image can therefore take up to 30 seconds.', 'imageseo'); ?></h4>
         <p>
-            <strong><?php esc_html_e('Total attachment(s) : ', 'imageseo'); ?></strong> <?php echo $total; ?>
+            <strong><?php esc_html_e('Total number of image(s) to be processed : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
         <p>
-			<strong><?php esc_html_e('Total already report(s) : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
+			<strong><?php esc_html_e('Number of image(s) that have already been analyzed : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
 			<br />
 			<span><?php _e('Reports already made are not included in your image limitation', 'imageseo'); ?></span>
         </p>
         <p>
-            <strong><?php esc_html_e('Your image limitation : ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+            <strong><?php esc_html_e('Images consumption: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
 		</p>
 
 		<?php if ($this->owner['current_request_images'] >= $this->owner['plan']['limit_images']) {
@@ -70,17 +70,17 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
         ?>
 		<?php if ($images_available <= 0): ?>
 			<div class="imageseo-account-info imageseo-account-info--warning">
-				<p><?php _e('Be careful, you do not have enough credits left to complete the report of all your images', 'imageseo'); ?></p>
-				<p><?php _e('Remember to increase your plan by <a href="https://app.imageseo.io/" target="_blank">logging into your account </a>', 'imageseo'); ?></p>
+				<p><?php _e("Be careful, you don't have enough credits left to complete the report of all your images", 'imageseo'); ?></p>
+				<p><?php _e('<a href="https://app.imageseo.io/" target="_blank">You can increase this limit on ImageSEO</a>. If you have any question  <a href="mailto:support@imageseo.io">support@imageseo.io</a> ', 'imageseo'); ?></p>
 			</div>
 		<?php endif; ?>
 
-      	<h2><?php _e('Method', 'imageseo'); ?></h2>
+      	<h2><?php _e('Choose your process:', 'imageseo'); ?></h2>
 
 		<div class="option">
 			<label>
 				<input type="radio" name="method" value="new" checked>
-				<?php _e('Start a new process', 'imageseo'); ?>
+				<?php _e('Start a new process (The ALT and file names that you have already generated will be updated)', 'imageseo'); ?>
 			</label>
 		</div>
 		<?php if ($currentProcess !== 0): ?>
@@ -88,34 +88,36 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 		<div class="option">
 			<label>
 				<input type="radio" name="method" value="old">
-				<?php _e('Continue the last process', 'imageseo'); ?>
+				<?php _e('Continue the current process', 'imageseo'); ?>
 				<span>(<?php echo sprintf('%s/%s', $currentProcess+1, $total); ?>)</span>
 			</label>
 		</div>
 		<?php endif; ?>
 
         <h3>
-           	<?php _e('Options', 'imageseo'); ?>
+           	<?php _e('Bulk settings', 'imageseo'); ?>
 		</h3>
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt" id="option-update-alt" />
-				<?php _e('Complete alternative texts automatically', 'imageseo'); ?>
+				<?php _e('Fill out missing alternative texts only', 'imageseo'); ?>
 			</label>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt_not_empty" id="option-update-alt-not-empty" />
-				<?php _e('Rewrite alternative texts already completed', 'imageseo'); ?>
+				<?php _e('Fill out and rewrite ALL your alternative texts', 'imageseo'); ?>
 			</label>
+			<p><?php _e('Be careful, we will erase the alternative texts that already exist and replace them.', 'imageseo'); ?></p>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="rename_file" id="option-rename-file" />
-				<?php _e('Rename files automatically', 'imageseo'); ?>
+				<?php _e('Rename all your files', 'imageseo'); ?>
 			</label>
+			<p><?php _e('Be careful, we will erase your current names and replace them', 'imageseo'); ?></p>
 		</div>
 		<br />
         <button class="button button-primary" id="imageseo-bulk-reports--start">

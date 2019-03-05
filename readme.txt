@@ -3,7 +3,7 @@
 Contributors: gmulti, freemius
 Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
-Tested up to: 5.1.0
+Tested up to: 5.1
 Requires PHP: 5.6
 Stable tag: 1.0.3
 License: GPLv2 or later
@@ -11,28 +11,28 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-ImageSEO is a WordPress plugin that optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
-Our SEO plugin optimize - in 2 minutes - all your images with what search engines want to see. Save time, rank to the top on image keywords, attract new visitors and increase your audience with ImageSEO plugin!
+Image SEO is a WordPress plugin that optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
+Our SEO plugin optimize - in 2 minutes - all your images with what search engines want to see. Save time, rank to the top on image keywords, attract new visitors and increase your audience with Image SEO plugin!
 The plugin allows you to dynamically insert "alt" attributes to your images using our application.
 
-With ImageSEO WordPress Plugin, you can automatically :
+With Image SEO WordPress Plugin, you can automatically :
 <ul>
 	<li>Rename media files all with something relevant and finally get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike ; ( for a better SEO ) </li>
 	<li>Fill up all your image alternative texts with relevant keywords ;</li>
 </ul>
 
-= Why you need to use ImageSEO ? =
+= Why you need to use Image SEO ? =
 <p><strong>Don't lose any more traffic. 20% of Google searches are done on Google Images! To do this, optimize your alts tags and remember to name your files correctly.</strong></p>
 <p>
 Well, Image Search Engine can drive an important traffic on your website and that optimizing your images will have a positive impact on your global seo strategy. With our plugin, we do every thing and you can get a rid of this time consuming activity.
 </p>
 <p>
-ImageSEO also come with a web application if you want to go deeper in your SEO strategy regarding pictures.
+Image SEO also come with a web application if you want to go deeper in your SEO strategy regarding pictures.
 </p>
 
 Alternate text (Alt text) is a text description that can be added to an image’s HTML tag on a Web page. It is used when the image in the Web page cannot be displayed, in which case the Alt text is shown instead. It is also displayed when a user mouses over the image. So, the alt attribute is a critical step that is often overlooked.
 
-= How does ImageSEO work ? =
+= How does Image SEO work ? =
 <p>
 We analyze your images with the help of machins learning. and artificial intelligence (AI). We rename them and fill out their alt attributes with what search engines want to see ! You just need to settings up the plugin and we do all the job. Brilliant isn’t it ?
 </p>
@@ -51,8 +51,8 @@ We analyze your images with the help of machins learning. and artificial intelli
 
 = What about the Premium? =
 
-ImageSEO is free for small websites (under 15 images by month).
-ImageSEO has Free and Premium plans available on the pricing page, depending on your needs.
+Image SEO is free for small websites (under 15 images by month).
+Image SEO has Free and Premium plans available on the pricing page, depending on your needs.
 We offers professional support to premium users to help them optimize their websites.
 
 * Support and Updates
@@ -60,11 +60,11 @@ We offers professional support to premium users to help them optimize their webs
 
 == Installation ==
 
-= Minimum Requirements for ImageSeo =
+= Minimum Requirements for Image Seo =
 * WordPress 4.5 or greater
 * PHP version 5.6 or greater
 
-1. Upload the plugin files to the `/wp-content/plugins/imageseo` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/image seo` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
 
 == Frequently Asked Questions ==
@@ -74,14 +74,14 @@ The alt attribute (alternative text) is used in your HTML code on IMG tags to de
 
 You currently can connect to Mailchimp, Mailjet, SendInBlue or SendGrid
 
-= Does ImageSEO integrates with other plugins? =
+= Does Image SEO integrates with other plugins? =
 
 We are compatible with all plugins using the WordPress media library (WooCommerce, Polylang, Easy Digital Download, ...)
 
-= Is ImageSEO available in my language? =
+= Is Image SEO available in my language? =
 
-ImageSEO currently supports English and French.
-To help us translate ImageSEO in your language, contact us
+Image SEO currently supports English and French.
+To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 

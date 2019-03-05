@@ -21,7 +21,7 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
 
 <div class="imageseo-account-info <?php echo $class; ?>">
     <?php if ($allowed): ?>
-        <p><?php _e('Your account is well connected to our ImageSEO application', 'imageseo'); ?></p>
+        <p><?php _e('Your account is connected with ImageSEO Application', 'imageseo'); ?></p>
     <?php else: ?>
         <p><?php _e('Your account is not connected to our ImageSEO application', 'imageseo'); ?></p>
     <?php endif; ?>
@@ -30,7 +30,7 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
 
 <?php if ($allowed): ?>
 	 <p>
-		<strong><?php esc_html_e('Quota of your account : ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+		<strong><?php esc_html_e('Current Images limit: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
 	</p>
 <?php endif; ?>
 
@@ -57,7 +57,7 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
 					<?php
                     // _e('Register and log in to <a target="_blank" href="https://app.imageseo.io/register">ImageSeo</a> to get your API key.', 'imageseo');
                     ?>
-                    <?php _e('Go on  <a target="_blank" href="https://app.imageseo.io/register">ImageSEO.io</a> to try our tool and get your key ! If you have any questions, you can reach us out at <a href="mailto:contact@imageseo.io">contact@imageseo.io</a> !', 'imageseo'); ?>
+                    <?php _e('Go on  <a target="_blank" href="https://app.imageseo.io/register">ImageSEO.io</a> to get your key ! If you have any questions, you can reach us out <a href="mailto:support@imageseo.io">support@imageseo.io</a> !', 'imageseo'); ?>
                 </p>
             </td>
         </tr>
