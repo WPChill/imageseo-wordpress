@@ -5,7 +5,7 @@ Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,10 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.4 (05-03-2019) =
+- Changed: Improve wording
+- Changed: Improve rename file
 
 = 1.0.3 (16-02-2019) =
 - Changed : Improve rename file
