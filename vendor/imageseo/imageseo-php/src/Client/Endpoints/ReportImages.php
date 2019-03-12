@@ -2,6 +2,8 @@
 
 namespace ImageSeo\Client\Endpoints;
 
+use ImageSeo\Util\FileMimeTypes;
+
 /**
  * @package ImageSeo\Client\Endpoints
  */
@@ -47,10 +49,12 @@ class ReportImages extends AbstractEndpoint
         $filePath = $data['filePath'];
         unset($data['filePath']);
 
-        $infoFile = mime_content_type($filePath);
+        $fileMimeTypes = new FileMimeTypes($filePath);
+
+        $mimeType = $fileMimeTypes->getMimeTypeForFile();
 
         $cFile = curl_file_create($filePath);
-        $cFile->setMimeType($infoFile);
+        $cFile->setMimeType($mimeType);
 
         $data['imageFile'] = $cFile;
 
