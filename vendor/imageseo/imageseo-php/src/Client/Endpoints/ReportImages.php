@@ -9,7 +9,7 @@ use ImageSeo\Util\FileMimeTypes;
  */
 class ReportImages extends AbstractEndpoint
 {
-    const RESOURCE_NAME = "report_images";
+    const RESOURCE_NAME = "ImageReports";
 
     /**
      * @return string
@@ -18,7 +18,7 @@ class ReportImages extends AbstractEndpoint
     {
         $options = $this->getOptions();
 
-        return sprintf('/v1/projects/images');
+        return sprintf('/v1/external/projects/images');
     }
 
     /**

@@ -7,14 +7,14 @@ namespace ImageSeo\Client\Endpoints;
  */
 class Projects extends AbstractEndpoint
 {
-    const RESOURCE_NAME = "projects";
+    const RESOURCE_NAME = "Projects";
 
     /**
      * @return array
      */
     public function getOwner()
     {
-        $url = sprintf('/v1/projects/owner');
+        $url = sprintf('/v1/external/projects/owner');
         return $this->makeRequest('GET', $url);
     }
 }
