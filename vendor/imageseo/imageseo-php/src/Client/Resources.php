@@ -13,13 +13,9 @@ trait Resources
         $files      = array_diff(scandir($path), [ '..', '.' ]);
         foreach ($files as $filename) {
             $pathCheck = $path . '/' . $filename;
-            if (is_dir($pathCheck)) {
-                $this->getClasses($pathCheck, $type, $namespace . $filename . '\\');
-                continue;
-            }
 
             $fileNoExtension = str_replace('.php', '', $filename);
-            $class = '\\ImageSeo\Client\\Endpoints\\' . $namespace . $fileNoExtension;
+            $class = '\\ImageSeo\Client\\Endpoints\\' . $fileNoExtension;
             if (! defined($class . '::RESOURCE_NAME')) {
                 continue;
             }

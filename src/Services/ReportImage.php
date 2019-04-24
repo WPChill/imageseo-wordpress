@@ -97,7 +97,14 @@ class ReportImage
      */
     public function getAltValueAttachmentWithReport($report)
     {
-        return $this->getAutoContextFromReport($report);
+        $keysContext = $this->getAutoContextFromReport($report);
+
+        $alt = $keysContext;
+        if (array_key_exists('a_vision', $report) && array_key_exists('description', $report['a_vision']) && array_key_exists('captions', $report['a_vision']['description']) && !empty($report['a_vision']['description']['captions'])) {
+            $alt = sprintf('%s - %s', $report['a_vision']['description']['captions'][0]['text'], $alt);
+        }
+
+        return apply_filters('imageseo_get_alt_value_attachment_with_report', ucfirst($alt), $report);
     }
 
     /**

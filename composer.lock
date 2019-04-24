@@ -73,16 +73,16 @@
         },
         {
             "name": "imageseo/imageseo-php",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ImageSEO/imageseo-php.git",
-                "reference": "b695b37777382636986eb4049e848f6c6431bb1c"
+                "reference": "e1c859fe1130f4979456cbd095baa4a6c3f24f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ImageSEO/imageseo-php/zipball/b695b37777382636986eb4049e848f6c6431bb1c",
-                "reference": "b695b37777382636986eb4049e848f6c6431bb1c",
+                "url": "https://api.github.com/repos/ImageSEO/imageseo-php/zipball/e1c859fe1130f4979456cbd095baa4a6c3f24f86",
+                "reference": "e1c859fe1130f4979456cbd095baa4a6c3f24f86",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +114,7 @@
                 "seo",
                 "seotools"
             ],
-            "time": "2019-04-07T14:57:13+00:00"
+            "time": "2019-04-08T20:37:50+00:00"
         }
     ],
     "packages-dev": [
