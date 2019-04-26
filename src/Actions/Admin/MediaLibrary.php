@@ -111,7 +111,7 @@ class MediaLibrary
         if ('post.php' === $pagenow) {
             $formFields['imageseo-data-pin-description'] = array(
                 'label'         => __('Pinterest description', 'imageseo'),
-                'input'         => 'text',
+                'input'         => 'textarea',
                 'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_description', true),
                 'show_in_edit'  => true,
                 'show_in_modal' => true,
