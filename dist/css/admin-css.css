@@ -132,11 +132,27 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
+    .imageseo-reports-body-item--error .imageseo-reports--status {
+      padding-top: 20px; }
+    .imageseo-reports-body-item--error .imageseo-reports--error,
+    .imageseo-reports-body-item--error .imageseo-reports--src {
+      padding: 20px; }
   .imageseo-reports-body .imageseo-reports--image {
     padding: 5px; }
-  .imageseo-reports--status, .imageseo-reports--src, .imageseo-reports--alt, .imageseo-reports--image {
+  .imageseo-reports--status, .imageseo-reports--src, .imageseo-reports--alt, .imageseo-reports--error, .imageseo-reports--image {
     padding: 5px;
     border-bottom: 1px solid #dedede; }
+  .imageseo-reports--error {
+    width: 62%; }
+  .imageseo-reports--src, .imageseo-reports--alt {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center; }
   .imageseo-reports--image {
     max-width: 100px;
     min-width: 100px;

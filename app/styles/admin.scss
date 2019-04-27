@@ -132,6 +132,15 @@
 	&-body {
 		&-item {
 			display: flex;
+			&--error {
+				.imageseo-reports--status {
+					padding-top: 20px;
+				}
+				.imageseo-reports--error,
+				.imageseo-reports--src {
+					padding: 20px;
+				}
+			}
 		}
 		.imageseo-reports--image {
 			padding: 5px;
@@ -140,9 +149,18 @@
 	&--status,
 	&--src,
 	&--alt,
+	&--error,
 	&--image {
 		padding: 5px;
 		border-bottom: 1px solid #dedede;
+	}
+	&--error {
+		width: 62%;
+	}
+	&--src,
+	&--alt {
+		display: flex;
+		align-items: center;
 	}
 	&--image {
 		max-width: 100px;

@@ -74,8 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
 	}) => `<div class="imageseo-reports-body-item">
 		<div class="imageseo-reports--status"><span class="dashicons dashicons-${dashicons}"></span></div>
 		<div class="imageseo-reports--image"><div class="imageseo-reports--image-itm" style="background-image:url('${file}')"></div></div>
-		<div class="imageseo-reports--src">Current name file : ${current_name_file}<hr /> <strong>ImageSEO AI suggestion</strong> : ${name_file}</div>
-		<div class="imageseo-reports--alt">Current alt : ${current_alt} <hr />  <strong>ImageSEO AI suggestion</strong> : ${alt_generate}</div>
+		<div class="imageseo-reports--src"><div>Current name file : ${current_name_file}<hr /> <strong>ImageSEO AI suggestion</strong> : ${name_file}</div></div>
+		<div class="imageseo-reports--alt"><div>Current alt : ${current_alt} <hr />  <strong>ImageSEO AI suggestion</strong> : ${alt_generate}</div></div>
+	</div>`
+
+	const ReportItemError = ({
+		dashicons,
+		src
+	}) => `<div class="imageseo-reports-body-item imageseo-reports-body-item--error">
+		<div class="imageseo-reports--status"><span class="dashicons dashicons-${dashicons}"></span></div>
+		<div class="imageseo-reports--src">${src}</div>
+		<div class="imageseo-reports--error">Impossible to generate the report of this image. Remember to check your remaining credits</div>
 	</div>`
 
 	function launchReportImages(start, current, total, add = 0) {
@@ -119,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			current++
 			setPercentLoader(current, total)
-			console.log(res.data)
+
 			if (res.success) {
 				$('#imageseo-reports-js .imageseo-reports-body').prepend(
 					ReportItem({
@@ -130,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				)
 			} else {
 				$('#imageseo-reports-js .imageseo-reports-body').prepend(
-					ReportItem({
+					ReportItemError({
 						...res.data,
 						src: txt,
 						dashicons: 'no'

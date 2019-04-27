@@ -125,7 +125,6 @@ class AjaxMediaReport
         $attachmentId = $this->getAttachmentId();
         $report = $response['result'];
 
-
         $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
         $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && $_POST['update_alt_not_empty'] === 'true') ? true : false;
         $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
