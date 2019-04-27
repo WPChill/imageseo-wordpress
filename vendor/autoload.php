@@ -4,8 +4,4 @@
 
 require_once __DIR__ . '/composer/autoload_real.php';
 
-<<<<<<< HEAD
 return ComposerAutoloaderInita940d81b94fffdbccebcc8393f6bab7b::getLoader();
-=======
-return ComposerAutoloaderInitc4e103841e599d0791953aa59a4a6af2::getLoader();
->>>>>>> WIP on image report bulk optimisation
