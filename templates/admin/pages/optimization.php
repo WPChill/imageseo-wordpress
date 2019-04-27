@@ -123,10 +123,16 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
         <button class="button button-primary" id="imageseo-bulk-reports--start">
 			<span><?php esc_html_e('Run (may take a while)', 'imageseo'); ?></span>
 			<div class="imageseo-loading" style="display:none;"></div>
-        </button>
-        <button class="button button-secondary" id="imageseo-bulk-reports--stop" disabled>
+		</button>
+		<span style="display:inline-block; padding-top:5px; font-size:16px; margin: 0px 5px;">or</span>
+		<button class="button button-primary" id="imageseo-bulk-reports--preview">
+			<span><?php esc_html_e('Optimization preview', 'imageseo'); ?></span>
+			<div class="imageseo-loading" style="display:none;"></div>
+		</button>
+		<span style="display:inline-block; padding-top:5px; font-size:16px; margin: 0px 5px;">|</span>
+		<button class="button button-secondary" id="imageseo-bulk-reports--stop" disabled>
 			<span><?php esc_html_e('Stop', 'imageseo'); ?></span>
-        </button>
+		</button>
         <hr>
         <div id="imageseo-percent-bulk" class="imageseo-percent">
             <div class="imageseo-percent--item">0%</div>

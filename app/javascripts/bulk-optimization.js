@@ -21,10 +21,53 @@ document.addEventListener('DOMContentLoaded', function() {
 				'block'
 
 			$(this).prop('disabled', true)
+			$('#imageseo-bulk-reports--preview').prop('disabled', true)
 			$('#option-update-alt').prop('disabled', true)
 			$('#option-update-alt-not-empty').prop('disabled', true)
 			$('#option-rename-file').prop('disabled', true)
 			$('span', $(this)).hide()
+			$('.imageseo-loading', $(this)).show()
+			$('#imageseo-reports-js .imageseo-reports-body').html('')
+			$('#imageseo-bulk-reports--stop').prop('disabled', false)
+
+			const val = $("input[name='method']:checked").val()
+			let total, start, add
+
+			if (val === 'new') {
+				total = IMAGESEO_ATTACHMENTS.length
+				start = 0
+				add = 0
+			} else {
+				total =
+					IMAGESEO_ATTACHMENTS.length - (IMAGESEO_CURRENT_PROCESS + 1)
+				start = IMAGESEO_CURRENT_PROCESS
+				add = 1
+			}
+
+			_execution = true
+			launchReportImages(start, 0, total, add)
+		})
+
+	document
+		.querySelector('#imageseo-bulk-reports--preview')
+		.addEventListener('click', function(e) {
+			e.preventDefault()
+			document.querySelector('#imageseo-percent-bulk').style.display =
+				'block'
+
+			$(this).prop('disabled', true)
+			$('#option-update-alt')
+				.prop('disabled', true)
+				.prop('checked', false)
+			$('#option-update-alt-not-empty')
+				.prop('disabled', true)
+				.prop('checked', false)
+			$('#option-rename-file')
+				.prop('disabled', true)
+				.prop('checked', false)
+			$('span', $(this)).hide()
+
+			$('#imageseo-bulk-reports--start').prop('disabled', true)
 			$('.imageseo-loading', $(this)).show()
 			$('#imageseo-reports-js .imageseo-reports-body').html('')
 			$('#imageseo-bulk-reports--stop').prop('disabled', false)
@@ -172,6 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		$('#imageseo-bulk-reports--start').prop('disabled', false)
 		$('#imageseo-bulk-reports--start .imageseo-loading').hide()
 		$('#imageseo-bulk-reports--start span').show()
+
+		$('#imageseo-bulk-reports--preview').prop('disabled', false)
+		$('#imageseo-bulk-reports--preview .imageseo-loading').hide()
+		$('#imageseo-bulk-reports--preview span').show()
 
 		$('#option-update-alt').prop('disabled', false)
 		$('#option-update-alt-not-empty').prop('disabled', false)
