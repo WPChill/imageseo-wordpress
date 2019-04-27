@@ -107,10 +107,18 @@ class AjaxMediaReport
     {
         $currentBulk = (int) $_POST['current'];
         $total = (int) $_POST['total'];
-        $response = $this->generateReportAttachment();
+
+        try {
+            $response = $this->generateReportAttachment();
+        } catch (\Exception $e) {
+            wp_send_json_error([
+                "code" => "error_generate_report"
+            ]);
+            exit;
+        }
 
         if (!$response['success']) {
-            wp_send_json_error($result);
+            wp_send_json_error($response);
             exit;
         }
 
@@ -121,12 +129,19 @@ class AjaxMediaReport
         $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
         $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && $_POST['update_alt_not_empty'] === 'true') ? true : false;
         $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
-        $altGenerate = $alt = $this->reportImageServices->getAlt($attachmentId);
+        $currentAlt = $this->reportImageServices->getAlt($attachmentId);
+        $currentFile =  wp_get_attachment_image_src($attachmentId, 'small');
+        $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
+
+        $currentNameFile = '';
+        if (!empty($currentFile)) {
+            $currentNameFile = basename($currentFile[0]);
+        }
+
 
         if ($updateAlt) {
-            if (!$alt || $updateAltNotEmpty) {
+            if (!$currentAlt || $updateAltNotEmpty) {
                 $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
-                $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
             }
         }
 
@@ -150,9 +165,11 @@ class AjaxMediaReport
         }
 
         wp_send_json_success([
-            'src' => $result['result']['src'],
+            'src' => $report['src'],
+            'current_alt' => $currentAlt,
             'alt_generate' => $altGenerate,
             'file' => $srcFile,
+            'current_name_file' => $currentNameFile,
             'name_file' => $nameFile
 
         ]);

@@ -66,15 +66,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const ReportItem = ({
 		dashicons,
-		src,
-		alt_generate,
+		current_name_file,
 		name_file,
+		current_alt,
+		alt_generate,
 		file = ''
 	}) => `<div class="imageseo-reports-body-item">
 		<div class="imageseo-reports--status"><span class="dashicons dashicons-${dashicons}"></span></div>
 		<div class="imageseo-reports--image"><div class="imageseo-reports--image-itm" style="background-image:url('${file}')"></div></div>
-		<div class="imageseo-reports--src">${src}<br />${name_file}</div>
-		<div class="imageseo-reports--alt">${alt_generate}</div>
+		<div class="imageseo-reports--src">Current name file : ${current_name_file}<hr /> <strong>ImageSEO AI suggestion</strong> : ${name_file}</div>
+		<div class="imageseo-reports--alt">Current alt : ${current_alt} <hr />  <strong>ImageSEO AI suggestion</strong> : ${alt_generate}</div>
 	</div>`
 
 	function launchReportImages(start, current, total, add = 0) {
@@ -118,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			current++
 			setPercentLoader(current, total)
+			console.log(res.data)
 			if (res.success) {
 				$('#imageseo-reports-js .imageseo-reports-body').prepend(
 					ReportItem({
