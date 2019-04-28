@@ -5,7 +5,7 @@ Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,7 @@ We use the keyword coming from the graphical analysis of your image to rename th
 * Rename your image files automatically;
 * Receive a report for every images to understand how to optimize them;
 * See how many alternative texts are missing on your pages;
+* Data attribute for pinterest (data-pin-description, data-pin-media, data-pin-url, data-pin-id)
 * Support for Featured Images
 * Support for WooCommerce
 * Support for Custom Post Type Images
@@ -108,6 +109,10 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.8 (28-04-2019) =
+- Add : Manage data attribute for Pinterest
+- Improved : Bulk optimization
 
 = 1.0.7 (24-04-2019) =
 - Changed: Improve alt generator

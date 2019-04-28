@@ -133,6 +133,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	function launchReportImages(start, current, total, add = 0) {
 		const index = start + current + add
 
+		if (current > IMAGESEO_LIMIT_IMAGES) {
+			$('#imageseo-reports-js .imageseo-reports-body').prepend(
+				`<div class="imageseo-reports-body-item imageseo-reports-body-item--error">
+		<div class="imageseo-reports--status"><span class="dashicons dashicons-no"></span></div>
+		<div class="imageseo-reports--src"></div>
+		<div class="imageseo-reports--error">You have exceeded your image limit</div>
+	</div>`
+			)
+			finishReportImages()
+			return
+		}
+
 		if (current > total || !_execution) {
 			finishReportImages()
 			return

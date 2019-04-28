@@ -42,6 +42,7 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
     var IMAGESEO_ATTACHMENTS_ALREADY_REPORT_IDS =<?php echo wp_json_encode($attachmentsAlreadyReport->posts); ?>;
 	var IMAGESEO_ATTACHMENTS = <?php echo wp_json_encode($attachments->posts); ?>;
 	var IMAGESEO_CURRENT_PROCESS = <?php echo $currentProcess; ?>;
+	var IMAGESEO_LIMIT_IMAGES = <?php echo $this->owner['plan']['limit_images']; ?>;
 </script>
 
 <div id="wrap-imageseo">
@@ -58,7 +59,7 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 			<span><?php _e('Reports already made are not included in your image limitation', 'imageseo'); ?></span>
         </p>
         <p>
-            <strong><?php esc_html_e('Images consumption: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+            <strong><?php esc_html_e('Images consumption: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> / <?php echo $this->owner['plan']['limit_images']; ?>
 		</p>
 
 		<?php if ($this->owner['current_request_images'] >= $this->owner['plan']['limit_images']) {
