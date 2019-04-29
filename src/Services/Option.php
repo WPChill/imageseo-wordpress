@@ -18,6 +18,7 @@ class Option
         'api_key' => '',
         'allowed' => false,
         'active_alt_write_upload' => 1,
+        'active_rename_write_upload' => 1,
         'active_alt_write_with_report' => 1,
         'alt_value' => AltTags::ALT_AUTO_CONTEXT . ' ' . AltTags::ALT_AUTO_REPRESENTATION,
         'rename_delimiter' => '-',

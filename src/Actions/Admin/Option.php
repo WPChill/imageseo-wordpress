@@ -95,6 +95,7 @@ class Option
                     }
                 }
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
+                $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
                 break;
         }
 

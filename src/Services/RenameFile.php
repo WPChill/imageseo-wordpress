@@ -107,7 +107,7 @@ class RenameFile
      * @param integer $attachmentId
      * @return bool
      */
-    public function renameAttachment($attachmentId)
+    public function renameAttachment($attachmentId, $metadata = null)
     {
         $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
         if (!$report) {
@@ -117,16 +117,22 @@ class RenameFile
         $filePath = get_attached_file($attachmentId);
 
         if (!wp_mkdir_p(dirname($filePath))) {
-            return false;
+            return [
+                'success' => false
+            ];
         }
 
         try {
             $newFilename = $this->getNameFileWithAttachmentId($attachmentId);
         } catch (NoRenameFile $e) {
-            return true;
+            return [
+                'success' => true
+            ];
         }
 
-        $metadata = wp_get_attachment_metadata($attachmentId);
+        if ($metadata === null) {
+            $metadata = wp_get_attachment_metadata($attachmentId);
+        }
         $post = get_post($attachmentId, ARRAY_A);
         $basename = basename($filePath);
         $basenameWithoutExt = explode('.', $basename)[0];
@@ -177,6 +183,10 @@ class RenameFile
         $wpdb->query($query);
         clean_post_cache($attachmentId);
 
-        return true;
+        return [
+            'success' => true,
+            'metadata' => $metadata,
+            'post' => $post
+        ];
     }
 }

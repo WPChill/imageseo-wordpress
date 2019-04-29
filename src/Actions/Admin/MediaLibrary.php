@@ -20,6 +20,7 @@ class MediaLibrary
     {
         $this->optionServices = imageseo_get_service('Option');
         $this->reportImageServices   = imageseo_get_service('ReportImage');
+        $this->renameFileServices   = imageseo_get_service('RenameFile');
     }
 
     /**
@@ -40,8 +41,10 @@ class MediaLibrary
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
+        add_action('add_attachment', [$this, 'addAltOnUpload']);
+        add_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
+
         // add_action('admin_menu', [$this, 'addMediaPage']);
-        add_action('add_attachment', [$this, 'addAttachment']);
     }
 
     /**
@@ -67,7 +70,7 @@ class MediaLibrary
      * @param int $postId
      * @return void
      */
-    public function addAttachment($attachmentId)
+    public function addAltOnUpload($attachmentId)
     {
         $activeWriteReport = $this->optionServices->getOption('active_alt_write_upload');
 
@@ -77,10 +80,37 @@ class MediaLibrary
 
         $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
         if (!$response['success']) {
-            wp_redirect($urlRedirect);
+            return;
         }
 
         $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+    }
+
+    /**
+     * @since 1.0.9
+     * @param array $metadata
+     * @param int $attachmentId
+     * @return array
+     */
+    public function renameFileOnUpload($metadata, $attachmentId)
+    {
+        $activeWriteReport = $this->optionServices->getOption('active_rename_write_upload');
+
+        if (!$activeWriteReport) {
+            return $metadata;
+        }
+
+        $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        if (!$response['success']) {
+            return;
+        }
+
+        $result = $this->renameFileServices->renameAttachment($attachmentId, $metadata);
+        if (array_key_exists('metadata', $result)) {
+            $metadata = $result['metadata'];
+        }
+
+        return $metadata;
     }
 
 
@@ -108,52 +138,48 @@ class MediaLibrary
     {
         global $pagenow;
 
-        if ('post.php' === $pagenow) {
-            $formFields['imageseo-data-pin-description'] = array(
-                'label'         => __('Pinterest description', 'imageseo'),
-                'input'         => 'textarea',
-                'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_description', true),
-                'show_in_edit'  => true,
-                'show_in_modal' => true,
-                'helps' => '&lt;img src="#" data-pin-description="My description" /&gt;'
-            );
-            $formFields['imageseo-data-pin-url'] = array(
-                'label'         => __('Pinterest URL', 'imageseo'),
-                'input'         => 'text',
-                'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_url', true),
-                'show_in_edit'  => true,
-                'show_in_modal' => true,
-                'helps' => '&lt;img src="#" data-pin-url="https://imageseo.io" /&gt;'
-            );
-            $formFields['imageseo-data-pin-id'] = array(
-                'label'         => __('Pinterest ID', 'imageseo'),
-                'input'         => 'text',
-                'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_id', true),
-                'show_in_edit'  => true,
-                'show_in_modal' => true,
-                'helps' => '&lt;img src="#" data-pin-id="id-pin" /&gt;'
-            );
-            $formFields['imageseo-data-pin-media'] = array(
-                'label'         => __('Pinterest Media', 'imageseo'),
-                'input'         => 'text',
-                'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_media', true),
-                'show_in_edit'  => true,
-                'show_in_modal' => true,
-                'helps' => '&lt;img src="#"  data-pin-media="https://example.com/my-image.jpg" /&gt;'
-            );
-            return $formFields;
-        }
-
-
-
-
-        $formFields['imageseo-has-report'] = array(
-            'label'         => __('ImageSEO Report', 'imageseo'),
-            'input'         => 'html',
-            'html'          => '<a id="imageseo-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'imageseo') . '</a>',
+        $formFields['imageseo-data-pin-description'] = array(
+            'label'         => __('Pinterest description', 'imageseo'),
+            'input'         => 'textarea',
+            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_description', true),
             'show_in_edit'  => true,
             'show_in_modal' => true,
+            'helps' => '&lt;img src="#" data-pin-description="My description" /&gt;'
         );
+        $formFields['imageseo-data-pin-url'] = array(
+            'label'         => __('Pinterest URL', 'imageseo'),
+            'input'         => 'text',
+            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_url', true),
+            'show_in_edit'  => true,
+            'show_in_modal' => true,
+            'helps' => '&lt;img src="#" data-pin-url="https://imageseo.io" /&gt;'
+        );
+        $formFields['imageseo-data-pin-id'] = array(
+            'label'         => __('Pinterest ID', 'imageseo'),
+            'input'         => 'text',
+            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_id', true),
+            'show_in_edit'  => true,
+            'show_in_modal' => true,
+            'helps' => '&lt;img src="#" data-pin-id="id-pin" /&gt;'
+        );
+        $formFields['imageseo-data-pin-media'] = array(
+            'label'         => __('Pinterest Media', 'imageseo'),
+            'input'         => 'text',
+            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_media', true),
+            'show_in_edit'  => true,
+            'show_in_modal' => true,
+            'helps' => '&lt;img src="#"  data-pin-media="https://example.com/my-image.jpg" /&gt;'
+        );
+
+        if ('post.php' !== $pagenow) {
+            $formFields['imageseo-has-report'] = array(
+                'label'         => __('ImageSEO Report', 'imageseo'),
+                'input'         => 'html',
+                'html'          => '<a id="imageseo-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'imageseo') . '</a>',
+                'show_in_edit'  => true,
+                'show_in_modal' => true,
+            );
+        }
 
         return $formFields;
     }

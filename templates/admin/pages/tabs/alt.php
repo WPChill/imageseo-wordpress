@@ -13,15 +13,10 @@ $options_available = [
         'label'       => __('Automatically fill out your ALT when you upload a media', 'imageseo'),
         'description' => __('If you check this box, uploading a media in the library might be slightly longer (time for our IA to process the file). ', 'imageseo'),
     ],
-    'active_alt_write_with_report' => [
-        'key'         => 'active_alt_write_with_report',
-        'label'       => __('Automatically fill out and rewrite your alternative texts', 'imageseo'),
-        'description' => __('By activating this option, we will automatically fill out and rewrite your alternative texts. We will therefore erase and replace your alternative texts (empty + existing one)', 'imageseo'),
-    ],
-    'alt_value' => [
-        'key'         => 'alt_value',
-        'label'       => __('Alternative texts value', 'imageseo'),
-        'description' => __('Decide how you want ImageSEO to rewrite your alternative texts. You can use up to three tags and add your own text. However we recommend you to only use %alt_auto_context% for alternative texts.', 'imageseo'),
+    'active_rename_write_upload' => [
+        'key'         => 'active_rename_write_upload',
+        'label'       => __('Automatically rename your files when you download media', 'imageseo'),
+        'description' => __('If you check this box, uploading a media in the library might be slightly longer (time for our IA to process the file).', 'imageseo'),
     ]
 ];
 
@@ -48,6 +43,25 @@ $tags = AltTags::getTags();
 					<?php checked($this->options[ $options_available['active_alt_write_upload']['key'] ], 1); ?>
 					>
 					<p><?php echo $options_available['active_alt_write_upload']['description']; //phpcs:ignore?></p>
+				</fieldset>
+			</td>
+        </tr>
+        <tr valign="top">
+            <th scope="row" class="titledesc">
+                <label for="<?php echo esc_attr($options_available['active_rename_write_upload']['key']); ?>">
+                    <?php echo esc_html($options_available['active_rename_write_upload']['label']); ?>
+                </label>
+
+			</th>
+			<td>
+				<fieldset>
+					<input
+					name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_rename_write_upload']['key'])); ?>"
+					type="checkbox"
+					id="<?php echo esc_attr($options_available['active_rename_write_upload']['key']); ?>"
+					<?php checked($this->options[ $options_available['active_rename_write_upload']['key'] ], 1); ?>
+					>
+					<p><?php echo $options_available['active_rename_write_upload']['description']; //phpcs:ignore?></p>
 				</fieldset>
 			</td>
         </tr>

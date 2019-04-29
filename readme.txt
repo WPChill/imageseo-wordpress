@@ -5,7 +5,7 @@ Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,6 +109,11 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.9 (28-04-2019) =
+- Improved : esc_attr on data attribute for Pinterest
+- Add : automatically rename files during upload
+- Add : Featured image support
 
 = 1.0.8 (28-04-2019) =
 - Add : Manage data attribute for Pinterest
