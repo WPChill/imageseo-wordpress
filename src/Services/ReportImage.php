@@ -53,8 +53,9 @@ class ReportImage
         $metadata = wp_get_attachment_metadata($attachmentId);
 
         $reportImages = $this->clientServices->getClient()->getResource('ImageReports');
-
+ 
         $result = $reportImages->generateReportFromFile([
+            'lang' => $this->optionServices->getOption('default_language_ia'),
             'filePath' => $filePath,
             'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
             'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',

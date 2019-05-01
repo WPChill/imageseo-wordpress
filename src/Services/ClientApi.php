@@ -52,4 +52,18 @@ class ClientApi
         }
         return $response['result'];
     }
+
+    /**
+     * @return array
+     */
+    public function getLanguages()
+    {
+        $apiKey = $this->optionService->getOption('api_key');
+
+        $response = $this->getClient($apiKey)->getResource('Languages')->getLanguages();
+        if (!$response['success']) {
+            return null;
+        }
+        return $response['result'];
+    }
 }

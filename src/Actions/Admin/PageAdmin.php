@@ -88,6 +88,7 @@ class PageAdmin
         }
 
         $this->options = $this->optionServices->getOptions();
+        $this->languages = $this->clientServices->getLanguages();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/settings.php';
     }
 

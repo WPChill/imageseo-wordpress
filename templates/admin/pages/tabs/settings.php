@@ -23,7 +23,7 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
     <?php if ($allowed): ?>
         <p><?php _e('Your account is connected with ImageSEO Application', 'imageseo'); ?></p>
     <?php else: ?>
-        <p><?php _e('Your account is not connected to our ImageSEO application', 'imageseo'); ?></p>
+        <p><?php _e('You account is not connected with ImageSEO Application. Get an account, it’s free.', 'imageseo'); ?></p>
     <?php endif; ?>
 </div>
 
@@ -54,8 +54,8 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
                     value="<?php echo esc_attr($this->options[ $options_available['api_key']['key'] ]); ?>"
                 >
                 <p>
-                    <?php _e('Go on  <a target="_blank" href="https://app.imageseo.io/register-wordpress">ImageSEO.io</a> to get your key ! If you have any questions, you can reach us out <a href="mailto:support@imageseo.io">support@imageseo.io</a> !', 'imageseo'); ?>
-                </p>
+                    <?php _e('Go on  <a target="_blank" href="https://app.imageseo.io/register-wordpress">ImageSEO.io</a> to get your key ! If you have any questions, you can reach us out at <a href="mailto:support@imageseo.io">support@imageseo.io</a> !', 'imageseo'); ?>
+				</p>
             </td>
         </tr>
     </tbody>

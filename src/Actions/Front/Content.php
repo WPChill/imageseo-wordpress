@@ -33,6 +33,50 @@ class Content
     }
 
     /**
+     *
+     * @param string $content
+     * @param int $attachmentId
+     * @return string
+     */
+    protected function updatePinterestContent($content, $attachmentId)
+    {
+        $pinterest = $this->pinterestServices->getDataPinterestByAttachmentId($attachmentId);
+
+        $strDataPinterest = '';
+        foreach ($pinterest as $key => $metaPinterest) {
+            if (empty($metaPinterest)) {
+                continue;
+            }
+
+            $strDataPinterest .= sprintf("%s='%s' ", $key, esc_attr($metaPinterest));
+        }
+
+        if (!empty($strDataPinterest)) {
+            $content = str_replace('<img', '<img ' . $strDataPinterest, $content);
+        }
+
+        return $content;
+    }
+
+    /**
+     *
+     * @param string $content
+     * @param int $attachmentId
+     * @return string
+     */
+    protected function updateAltContent($content, $attachmentId)
+    {
+        $altSave = $this->reportImageServices->getAlt($attachmentId);
+
+        if (!empty($altSave)) {
+            $content = str_replace('alt=""', 'alt="' . $altSave . '"', $content);
+        }
+
+        return $content;
+    }
+
+    /**
+     * @param string $contentFilter
      * @return string
      */
     public function contentImagesAttribute($contentFilter)
@@ -50,41 +94,28 @@ class Content
         $regexImg = "#<img([^\>]+?)?alt=(\"|\')([\s\S]*)(\"|\')([^\>]+?)?>#U";
 
         foreach ($ids as $key => $id) {
-            $pinterest = $this->pinterestServices->getDataPinterestByAttachmentId($id);
-            $altSave = $this->reportImageServices->getAlt($id);
-
             preg_match_all($regexImg, $contents[$key], $matches);
             $alt = $matches[3][0];
 
-            $strDataPinterest = '';
-            foreach ($pinterest as $key => $metaPinterest) {
-                if (empty($metaPinterest)) {
-                    continue;
-                }
+            $contentMatch = $matches[0][0];
 
-                $strDataPinterest .= sprintf("%s='%s' ", $key, esc_attr($metaPinterest));
-            }
-            $replaceContent = $matches[0][0];
-            $updateFilter = false;
-            $imgReplace  = $replaceContent;
-            if (!empty($strDataPinterest)) {
-                $imgReplace = str_replace('<img', '<img ' . $strDataPinterest, $imgReplace);
-                $updateFilter = true;
-            }
+            $contentReplace = $this->updatePinterestContent($contentMatch, $id);
+            $contentReplace = $this->updateAltContent($contentMatch, $id);
 
-            if (!empty($altSave)) {
-                $imgReplace = str_replace('alt=""', 'alt="' . $altSave . '"', $imgReplace);
-                $updateFilter = true;
-            }
-
-            if ($updateFilter) {
-                $contentFilter = str_replace($replaceContent, $imgReplace, $contentFilter);
+            if ($contentMatch !== $contentReplace) {
+                $contentFilter = str_replace($contentMatch, $contentReplace, $contentFilter);
             }
         }
 
         return apply_filters('imageseo_the_content_alt', $contentFilter);
     }
 
+    /**
+     *
+     * @param array $attrs
+     * @param object $attachment
+     * @return array
+     */
     public function postThumbnailAttributes($attrs, $attachment)
     {
         $pinterest = $this->pinterestServices->getDataPinterestByAttachmentId($attachment->ID);

@@ -49,12 +49,12 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
     <div class="wrap">
         <h3><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h3>
         <hr />
-		<h4><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. The processing of an image can therefore take up to 30 seconds.', 'imageseo'); ?></h4>
+		<h4><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. Image processing can therefore take up to 30 seconds.', 'imageseo'); ?></h4>
         <p>
             <strong><?php esc_html_e('Total number of image(s) to be processed : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
         <p>
-			<strong><?php esc_html_e('Number of image(s) that have already been analyzed : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
+			<strong><?php esc_html_e('Number of image(s) that have already been processed : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
 			<br />
 			<span><?php _e('Reports already made are not included in your image limitation', 'imageseo'); ?></span>
         </p>
@@ -77,7 +77,7 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 		<?php endif; ?>
 
       	<h2><?php _e('Choose your process:', 'imageseo'); ?></h2>
-
+		<p><?php _e('No worries, you can get a preview of the results before going further.', 'imageseo'); ?>
 		<div class="option">
 			<label>
 				<input type="radio" name="method" value="new" checked>
@@ -101,33 +101,31 @@ $currentProcess = get_option('_imageseo_current_processed', 0);
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt" id="option-update-alt" />
-				<?php _e('Fill out missing alternative texts only', 'imageseo'); ?>
+				<?php _e('Fill out your empty ALT Tag(s) only.', 'imageseo'); ?>
 			</label>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt_not_empty" id="option-update-alt-not-empty" />
-				<?php _e('Fill out and rewrite ALL your alternative texts', 'imageseo'); ?>
+				<?php _e('Fill out and rewrite ALL your alt tags.', 'imageseo'); ?>
 			</label>
-			<p><?php _e('Be careful, we will erase the alternative texts that already exist and replace them.', 'imageseo'); ?></p>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="rename_file" id="option-rename-file" />
-				<?php _e('Rename all your files', 'imageseo'); ?>
+				<?php _e('Rename all your image files.', 'imageseo'); ?>
 			</label>
-			<p><?php _e('Be careful, we will erase your current names and replace them', 'imageseo'); ?></p>
 		</div>
 		<br />
-        <button class="button button-primary" id="imageseo-bulk-reports--start">
-			<span><?php esc_html_e('Run (may take a while)', 'imageseo'); ?></span>
+		<button class="button button-primary" id="imageseo-bulk-reports--preview">
+			<span><?php esc_html_e('Optimization preview', 'imageseo'); ?></span>
 			<div class="imageseo-loading" style="display:none;"></div>
 		</button>
 		<span style="display:inline-block; padding-top:5px; font-size:16px; margin: 0px 5px;">or</span>
-		<button class="button button-primary" id="imageseo-bulk-reports--preview">
-			<span><?php esc_html_e('Optimization preview', 'imageseo'); ?></span>
+		<button class="button button-primary" id="imageseo-bulk-reports--start">
+			<span><?php esc_html_e('Run the plugin for real (may take a while)', 'imageseo'); ?></span>
 			<div class="imageseo-loading" style="display:none;"></div>
 		</button>
 		<span style="display:inline-block; padding-top:5px; font-size:16px; margin: 0px 5px;">|</span>

@@ -25,11 +25,6 @@ abstract class AltTags
     const SITE_TITLE = '%site_title%';
 
     /**
-     * @var string
-     */
-    const POST_TITLE = '%post_title%';
-
-    /**
      * Get tags constant
      * @static
      * @return array
@@ -40,7 +35,6 @@ abstract class AltTags
             self::SITE_TITLE,
             self::ALT_AUTO_CONTEXT,
             self::ALT_AUTO_REPRESENTATION
-            // self::POST_TITLE
         ];
     }
 }

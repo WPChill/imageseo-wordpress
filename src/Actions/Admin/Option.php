@@ -96,6 +96,7 @@ class Option
                 }
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
                 $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
+                $newOptions['default_language_ia'] = isset($options['default_language_ia']) ? $options['default_language_ia'] : 'en';
                 break;
         }
 

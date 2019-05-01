@@ -7,7 +7,7 @@ use ImageSeo\Util\FileMimeTypes;
 /**
  * @package ImageSeo\Client\Endpoints
  */
-class ReportImages extends AbstractEndpoint
+class ImageReports extends AbstractEndpoint
 {
     const RESOURCE_NAME = "ImageReports";
 

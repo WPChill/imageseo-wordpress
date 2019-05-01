@@ -18,10 +18,6 @@ abstract class TabsAdmin
      */
     const SETTINGS_ALT = 'alt';
 
-    /**
-     * @var string
-     */
-    const SETTINGS_RENAME_FILE = 'rename';
 
 
     /**
@@ -33,8 +29,7 @@ abstract class TabsAdmin
     {
         return [
             self::SETTINGS,
-            self::SETTINGS_ALT,
-            // self::SETTINGS_RENAME_FILE
+            self::SETTINGS_ALT
         ];
     }
 
@@ -52,21 +47,7 @@ abstract class TabsAdmin
                     null,
                     sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS)
                 ),
-            ],
-            // self::SETTINGS_ALT => [
-            //     'title' => __('Alt settings', 'imageseo'),
-            //     'url'   => get_admin_url(
-            //         null,
-            //         sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS_ALT)
-            //     ),
-            // ],
-            // self::SETTINGS_RENAME_FILE => [
-            //     'title' => __('Rename media settings', 'imageseo'),
-            //     'url'   => get_admin_url(
-            //         null,
-            //         sprintf('admin.php?page=%s&tab=%s', TabsAdmin::SETTINGS, self::SETTINGS_RENAME_FILE)
-            //     ),
-            // ],
+            ]
         ];
     }
 }

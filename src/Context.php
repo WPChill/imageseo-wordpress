@@ -44,6 +44,13 @@ abstract class Context
         return self::$context;
     }
 
+    /**
+     * @static
+     * @param string $path
+     * @param string $type
+     * @param string $namespace
+     * @return void
+     */
     public static function getClasses($path, $type, $namespace = '')
     {
         $files      = array_diff(scandir($path), [ '..', '.' ]);

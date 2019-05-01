@@ -20,6 +20,7 @@ class Option
         'active_alt_write_upload' => 1,
         'active_rename_write_upload' => 1,
         'active_alt_write_with_report' => 1,
+        'default_language_ia' => 'en',
         'alt_value' => AltTags::ALT_AUTO_CONTEXT . ' ' . AltTags::ALT_AUTO_REPRESENTATION,
         'rename_delimiter' => '-',
         'rename_value' => RenameTags::ALT_AUTO_CONTEXT . '-' . RenameTags::ALT_AUTO_REPRESENTATION,
