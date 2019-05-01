@@ -15,7 +15,6 @@ if (! defined('ABSPATH')) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/../../imageseo-php/vendor/autoload.php';
 
 use ImageSeoWP\Context;
 
