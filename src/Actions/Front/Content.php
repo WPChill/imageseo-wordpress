@@ -66,8 +66,9 @@ class Content
             }
             $replaceContent = $matches[0][0];
             $updateFilter = false;
+            $imgReplace  = $replaceContent;
             if (!empty($strDataPinterest)) {
-                $imgReplace = str_replace('<img', '<img ' . $strDataPinterest, $replaceContent);
+                $imgReplace = str_replace('<img', '<img ' . $strDataPinterest, $imgReplace);
                 $updateFilter = true;
             }
 
