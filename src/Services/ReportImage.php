@@ -40,9 +40,10 @@ class ReportImage
 
     /**
      * @param int $attachmentId
+     * @param array $query
      * @return array
      */
-    public function generateReportByAttachmentId($attachmentId)
+    public function generateReportByAttachmentId($attachmentId, $query)
     {
         $mimeType = get_post_mime_type($attachmentId);
         if (strpos($mimeType, 'image') === false) {
@@ -52,14 +53,14 @@ class ReportImage
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
 
-        $reportImages = $this->clientServices->getClient()->getResource('ImageReports');
- 
+        $reportImages = $this->clientServices->getClient()->getResource('ImageReports', $query);
+
         $result = $reportImages->generateReportFromFile([
             'lang' => $this->optionServices->getOption('default_language_ia'),
             'filePath' => $filePath,
             'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
             'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
-        ]);
+        ], $query);
 
         if ($result && !$result['success']) {
             return $result;
@@ -80,7 +81,6 @@ class ReportImage
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
         $alt = $this->getAltValueAttachmentWithReport($report);
-
 
         $postId = wp_get_post_parent_id($attachmentId);
         if ($postId) {

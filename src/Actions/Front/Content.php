@@ -100,7 +100,7 @@ class Content
             $contentMatch = $matches[0][0];
 
             $contentReplace = $this->updatePinterestContent($contentMatch, $id);
-            $contentReplace = $this->updateAltContent($contentMatch, $id);
+            $contentReplace = $this->updateAltContent($contentReplace, $id);
 
             if ($contentMatch !== $contentReplace) {
                 $contentFilter = str_replace($contentMatch, $contentReplace, $contentFilter);

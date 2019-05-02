@@ -51,9 +51,10 @@ class AjaxMediaReport
     }
 
     /**
+     * @param array $query
      * @return array
      */
-    protected function generateReportAttachment()
+    protected function generateReportAttachment($query)
     {
         if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
             return [
@@ -63,6 +64,11 @@ class AjaxMediaReport
 
         $attachmentId = $this->getAttachmentId();
 
+        $get_cache_request = apply_filters('imageseo_get_cache_request', false);
+        if (!$get_cache_request) {
+            return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
+        }
+
         $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
         if ($report) {
             return [
@@ -70,8 +76,6 @@ class AjaxMediaReport
                 "result" => $report
             ];
         }
-
-        return $this->reportImageServices->generateReportByAttachmentId($attachmentId);
     }
 
     /**
@@ -79,7 +83,7 @@ class AjaxMediaReport
      */
     public function adminPostReportAttachment()
     {
-        $response = $this->generateReportAttachment();
+        $response = $this->generateReportAttachment(['force' => true]);
         $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
         if (!$response['success']) {
             wp_redirect($urlRedirect);
