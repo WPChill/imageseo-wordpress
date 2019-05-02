@@ -27,6 +27,7 @@ $options_available = [
 
 $tags = AltTags::getTags();
 
+$currentLanguage = ($this->owner['plan']['slug'] === 'free') ? 'en' : $this->options[ $options_available['default_language_ia']['key'] ];
 ?>
 
 
@@ -81,10 +82,11 @@ $tags = AltTags::getTags();
 				<fieldset>
 					<select
 						name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['default_language_ia']['key'])); ?>"
+						disabled="<?php $this->owner['plan']['slug'] === 'free' ?>"
 					>
 						<?php foreach ($this->languages as $language): ?>
 							<option
-								<?php selected($this->options[ $options_available['default_language_ia']['key'] ], $language['code']); ?>
+								<?php selected($currentLanguage, $language['code']); ?>
 								value="<?php echo esc_attr($language['code']); ?>"
 							>
 								<?php echo esc_html($language['name']); ?>
@@ -92,6 +94,11 @@ $tags = AltTags::getTags();
 						<?php endforeach; ?>
 					</select>
 					<p><?php echo $options_available['default_language_ia']['description']; //phpcs:ignore?></p>
+					<?php if ($this->owner['plan']['slug'] === 'free'): ?>
+						<div class="imageseo-account-info imageseo-account-info--error" style="background-color:#c50000;">
+							 <?php _e('You need to <a target="_blank" style="color:#fff" href="https://app.imageseo.io/plan">become a premium</a> to be able to change the language of the AI', 'imageseo'); ?>
+						</div>
+					<?php endif; ?>
 				</fieldset>
 			</td>
         </tr>
