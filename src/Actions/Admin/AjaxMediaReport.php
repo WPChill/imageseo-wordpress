@@ -54,7 +54,7 @@ class AjaxMediaReport
      * @param array $query
      * @return array
      */
-    protected function generateReportAttachment($query)
+    protected function generateReportAttachment($query = [])
     {
         if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
             return [

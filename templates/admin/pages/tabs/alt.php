@@ -28,6 +28,7 @@ $options_available = [
 $tags = AltTags::getTags();
 
 $currentLanguage = ($this->owner['plan']['slug'] === 'free') ? 'en' : $this->options[ $options_available['default_language_ia']['key'] ];
+
 ?>
 
 
@@ -82,7 +83,9 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free') ? 'en' : $this->opt
 				<fieldset>
 					<select
 						name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['default_language_ia']['key'])); ?>"
-						disabled="<?php $this->owner['plan']['slug'] === 'free' ?>"
+						<?php if ($this->owner['plan']['slug'] === 'free' || $this->owner === null): ?>
+						disabled
+						<?php endif;?>
 					>
 						<?php foreach ($this->languages as $language): ?>
 							<option
