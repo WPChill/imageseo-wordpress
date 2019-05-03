@@ -43,7 +43,7 @@ class ReportImage
      * @param array $query
      * @return array
      */
-    public function generateReportByAttachmentId($attachmentId, $query)
+    public function generateReportByAttachmentId($attachmentId, $query = [])
     {
         $mimeType = get_post_mime_type($attachmentId);
         if (strpos($mimeType, 'image') === false) {
