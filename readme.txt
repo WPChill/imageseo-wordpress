@@ -5,7 +5,7 @@ Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,46 +110,50 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 1.0.11 (03-05-2019) =
+= 1.0.12 (05-11-2019) =
+- Bugfix : Error when replacing the file name if the account was full
+- Improved : Admin notice if the configuration is not completed
+
+= 1.0.11 (05-03-2019) =
 - Bugfix: Error on upload directly image
 
-= 1.0.10 (02-05-2019) =
+= 1.0.10 (05-02-2019) =
 - Add : Language support to generate file names / alts
 
-= 1.0.9 (28-04-2019) =
+= 1.0.9 (04-28-2019) =
 - Improved : esc_attr on data attribute for Pinterest
 - Add : automatically rename files during upload
 - Add : Featured image support
 
-= 1.0.8 (28-04-2019) =
+= 1.0.8 (04-28-2019) =
 - Add : Manage data attribute for Pinterest
 - Improved : Bulk optimization
 
-= 1.0.7 (24-04-2019) =
+= 1.0.7 (04-24-2019) =
 - Changed: Improve alt generator
 
-= 1.0.6 (09-04-2019) =
+= 1.0.6 (04-09-2019) =
 - Changed: Update library PHP for new API
 
-= 1.0.5 (12-03-2019) =
+= 1.0.5 (03-12-2019) =
 - Changed: Update library PHP for improve get mime types
 
-= 1.0.4 (05-03-2019) =
+= 1.0.4 (03-05-2019) =
 - Changed: Improve wording
 - Changed: Improve rename file
 
-= 1.0.3 (16-02-2019) =
+= 1.0.3 (02-16-2019) =
 - Changed : Improve rename file
 - Changed : Light settings
 - Changed : Improve bulk optimization
 
-= 1.0.2 (09-02-2019) =
+= 1.0.2 (02-09-2019) =
 - Changed : prevent limitation images
 
-= 1.0.1 (07-02-2019) =
+= 1.0.1 (02-07-2019) =
 - Changed : add start and stop on optimization bulk
 
-= 1.0.0 (04-02-2019) =
+= 1.0.0 (02-04-2019) =
 - Initial version
 
 = 0.9.2-beta (02-02-2019) =
