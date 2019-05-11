@@ -15,14 +15,19 @@ $options_available = [
 ];
 
 $allowed = imageseo_allowed();
+$class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info--error';
 
 ?>
 
-<?php if ($allowed): ?>
-<div class="imageseo-account-info imageseo-account-info--success">
-	<p><?php _e('Your account is connected with ImageSEO Application', 'imageseo'); ?></p>
-</div>
-<?php endif; ?>
+<?php if ($allowed || (  !$allowed && !empty( $this->options['api_key'] ) ) ){ ?>
+	<div class="imageseo-account-info <?php echo $class; ?>">
+		<?php if ($allowed ){ ?>
+			<p><?php _e('Your account is connected with ImageSEO Application', 'imageseo'); ?></p>
+		<?php } elseif ( !$allowed && !empty( $this->options['api_key'] ) ) { ?>
+			<p><?php _e('You account is not connected with ImageSEO Application. Get an account, it’s free.', 'imageseo'); ?></p>
+		<?php } ?>
+	</div>
+<?php } ?>
 
 
 <?php if ($allowed): ?>

@@ -72,6 +72,10 @@ class MediaLibrary
      */
     public function addAltOnUpload($attachmentId)
     {
+		if (!wp_attachment_is_image($attachmentId)) {
+			return;
+		}
+
         $activeWriteReport = $this->optionServices->getOption('active_alt_write_upload');
 
         if (!$activeWriteReport) {
@@ -94,6 +98,10 @@ class MediaLibrary
      */
     public function renameFileOnUpload($metadata, $attachmentId)
     {
+		if (!wp_attachment_is_image($attachmentId)) {
+			return $metadata;
+		}
+
         $activeWriteReport = $this->optionServices->getOption('active_rename_write_upload');
 
         if (!$activeWriteReport) {
