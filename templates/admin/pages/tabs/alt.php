@@ -97,7 +97,7 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free') ? 'en' : $this->opt
 						<?php endforeach; ?>
 					</select>
 					<p><?php echo $options_available['default_language_ia']['description']; //phpcs:ignore?></p>
-					<?php if ($this->owner['plan']['slug'] === 'free'): ?>
+					<?php if ($this->owner['plan']['slug'] === 'free' || empty($this->options['api_key'])): ?>
 						<div class="imageseo-account-info imageseo-account-info--error" style="background-color:#c50000;">
 							 <?php _e('You need to <a target="_blank" style="color:#fff" href="https://app.imageseo.io/plan">become a premium</a> to be able to change the language of the AI', 'imageseo'); ?>
 						</div>
