@@ -102,7 +102,7 @@ class MediaLibrary
 
         $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
         if (!$response['success']) {
-            return;
+            return $metadata;
         }
 
         $result = $this->renameFileServices->renameAttachment($attachmentId, $metadata);
