@@ -160,8 +160,13 @@ class AjaxMediaReport
             }
         }
 
+		$newFilePath = false;
         if ($renameFile) {
-            $this->renameFileServices->renameAttachment($attachmentId);
+			$this->renameFileServices->renameAttachment($attachmentId);
+			$file =  wp_get_attachment_image_src($attachmentId, 'small');
+			if (!empty($file)) {
+				$newFilePath = basename($file[0]);
+			}
         }
 
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
@@ -179,11 +184,13 @@ class AjaxMediaReport
             $nameFile = basename($srcFile);
 		}
 		
-        $basenameWithoutExt = explode('.', $nameFile)[0];
-		try {
-			$newFilePath = sprintf( '%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1] );
-		} catch (NoRenameFile $e) {
-			$newFilePath = $nameFile;
+		if(!$newFilePath){
+			$basenameWithoutExt = explode('.', $nameFile)[0];
+			try {
+				$newFilePath = sprintf( '%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1] );
+			} catch (NoRenameFile $e) {
+				$newFilePath = $nameFile;
+			}
 		}
 
         wp_send_json_success([
