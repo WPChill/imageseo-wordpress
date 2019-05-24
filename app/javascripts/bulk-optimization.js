@@ -110,14 +110,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const ReportItem = ({
 		dashicons,
 		current_name_file,
-		name_file,
+		file_generate,
 		current_alt,
 		alt_generate,
 		file = ''
 	}) => `<div class="imageseo-reports-body-item">
 		<div class="imageseo-reports--status"><span class="dashicons dashicons-${dashicons}"></span></div>
 		<div class="imageseo-reports--image"><div class="imageseo-reports--image-itm" style="background-image:url('${file}')"></div></div>
-		<div class="imageseo-reports--src"><div>Current name file : ${current_name_file}<hr /> <strong>ImageSEO AI suggestion</strong> : ${name_file}</div></div>
+		<div class="imageseo-reports--src"><div>Current name file : ${current_name_file}<hr /> <strong>ImageSEO AI suggestion</strong> : ${file_generate}</div></div>
 		<div class="imageseo-reports--alt"><div>Current alt : ${current_alt} <hr />  <strong>ImageSEO AI suggestion</strong> : ${alt_generate}</div></div>
 	</div>`
 
