@@ -6,6 +6,8 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Exception\NoRenameFile;
+
 /**
  * @since 1.0.0
  */
@@ -63,27 +65,38 @@ class AjaxMediaReport
         }
 
         $attachmentId = $this->getAttachmentId();
-
-        $get_cache_request = apply_filters('imageseo_get_cache_request', false);
-        if (!$get_cache_request) {
-            return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
-        }
-
-        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
-        if ($report) {
+		$get_cache_request = apply_filters('imageseo_get_cache_request', true);
+		$report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+        if ($report && $get_cache_request) {
             return [
                 "success" => true,
                 "result" => $report
             ];
-        }
-    }
+		}
+		        
+		return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
+
+	}
+	
+	public function getForceReport(){
+		$force = false;
+		if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset( $_GET['force'] )  && $_GET['force'] == 1 ) {
+            $force = true;
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['force'] ) && $_POST['force'] == 1 ) {
+            $force = true;
+		}
+		
+		return $force;
+	}
 
     /**
      * @return void
      */
     public function adminPostReportAttachment()
     {
-        $response = $this->generateReportAttachment(['force' => true]);
+		
+		$force = $this->getForceReport();
+        $response = $this->generateReportAttachment(['force' => $force]);
         $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
         if (!$response['success']) {
             wp_redirect($urlRedirect);
@@ -120,7 +133,6 @@ class AjaxMediaReport
             ]);
             exit;
         }
-
         if (!$response['success']) {
             wp_send_json_error($response);
             exit;
@@ -148,8 +160,13 @@ class AjaxMediaReport
             }
         }
 
+		$newFilePath = false;
         if ($renameFile) {
-            $this->renameFileServices->renameAttachment($attachmentId);
+			$this->renameFileServices->renameAttachment($attachmentId);
+			$file =  wp_get_attachment_image_src($attachmentId, 'small');
+			if (!empty($file)) {
+				$newFilePath = basename($file[0]);
+			}
         }
 
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
@@ -165,12 +182,22 @@ class AjaxMediaReport
         if (!empty($file)) {
             $srcFile = $file[0];
             $nameFile = basename($srcFile);
-        }
+		}
+		
+		if(!$newFilePath){
+			$basenameWithoutExt = explode('.', $nameFile)[0];
+			try {
+				$newFilePath = sprintf( '%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1] );
+			} catch (NoRenameFile $e) {
+				$newFilePath = $nameFile;
+			}
+		}
 
         wp_send_json_success([
             'src' => $report['src'],
             'current_alt' => $currentAlt,
-            'alt_generate' => $altGenerate,
+			'alt_generate' => $altGenerate,
+			'file_generate' => $newFilePath,
             'file' => $srcFile,
             'current_name_file' => $currentNameFile,
             'name_file' => $nameFile
