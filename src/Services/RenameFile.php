@@ -52,7 +52,7 @@ class RenameFile
 
         return $this->generateUniqueFilename([
             trailingslashit(dirname($filePath)), // Directory
-            $splitName[1], // Ext
+            $splitName[count($splitName)-1], // Ext
             $this->getDelimiter(), // Delimiter,
             $attachmentId
         ], $newName);
@@ -135,9 +135,10 @@ class RenameFile
         }
         $post = get_post($attachmentId, ARRAY_A);
         $basename = basename($filePath);
-        $basenameWithoutExt = explode('.', $basename)[0];
+        $splitName = explode('.', $basename);
+        unset($splitName[count($splitName)-1]);
+        $basenameWithoutExt = implode('.', $splitName);
         $directory = trailingslashit(dirname($filePath));
-
         $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
 
         // Rename file
