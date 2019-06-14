@@ -5,7 +5,7 @@ Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: v1.0.13
+Stable tag: v1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,10 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.14 (06-14-2019) =
+- Bugfix : Separation of the 2 bulk options during the alts update 
+- Improved : Support for unnecessary"."" in upload file names
 
 = 1.0.13 (05-24-2019) =
 - Bugfix : Rename file on bulk optimization
