@@ -72,9 +72,9 @@ class MediaLibrary
      */
     public function addAltOnUpload($attachmentId)
     {
-		if (!wp_attachment_is_image($attachmentId)) {
-			return;
-		}
+        if (!wp_attachment_is_image($attachmentId)) {
+            return;
+        }
 
         $activeWriteReport = $this->optionServices->getOption('active_alt_write_upload');
 
@@ -98,9 +98,9 @@ class MediaLibrary
      */
     public function renameFileOnUpload($metadata, $attachmentId)
     {
-		if (!wp_attachment_is_image($attachmentId)) {
-			return $metadata;
-		}
+        if (!wp_attachment_is_image($attachmentId)) {
+            return $metadata;
+        }
 
         $activeWriteReport = $this->optionServices->getOption('active_rename_write_upload');
 
@@ -131,9 +131,7 @@ class MediaLibrary
         $postId = absint($_POST['post_id']);
         $alt = wp_strip_all_tags($_POST['alt']);
 
-        if (!empty($_POST['alt'])) {
-            update_post_meta($postId, '_wp_attachment_image_alt', $alt);
-        }
+        update_post_meta($postId, '_wp_attachment_image_alt', $alt);
     }
 
     /**

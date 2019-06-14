@@ -10,8 +10,9 @@ use ImageSeoWP\Helpers\TabsAdmin;
 
 <div id="wrap-imageseo">
     <div class="wrap">
-
-        <?php //include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/nav.php'; ?>
+        <h1>ImageSEO Settings</h1>
+        <hr>
+        <?php //include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/nav.php';?>
 
         <form method="post" id="mainform" action="<?php echo esc_url(admin_url('options.php')); ?>">
             <?php

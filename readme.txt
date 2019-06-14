@@ -1,5 +1,5 @@
 
-===  Auto alt text and rename file optimizer for Google Images by Image SEO ===
+===  Auto ALT tags and filenames optimizer tool for Google Images by Image SEO ===
 Contributors: gmulti, freemius
 Tags: alt, alt tag, seo, images, media, rename
 Requires at least: 4.6
@@ -13,63 +13,70 @@ Optimize your images keywords for SEO (alt texts and file names) thanks to Artif
 
 == Description ==
 
-Image SEO is a WordPress plugin that automatically optimizes your images for Search Engines (alt attributes and file names) thanks to Artificial Intelligence.
+Image SEO WordPress Plugin generates optimized medias filenames and ALT tags using Artificial Intelligence. Our SEO plugin grows your research traffic through images and photo. Stop torturing yourself with media optimization ! Alt tags, filenames, keywords, our AI will provide you with the best SEO content for your images.
+
+[Get your API Key and try with your own images !](https://app.imageseo.io/register-wordpress)
 
 On average, 20% of the traffic come from images researches. Yet, search engine optimization and web marketing strategies often neglect their images. Stop doing this mistake and optimize your Images for SEO with our tool.
 
+
 = What Image SEO Optimizer does ? =
 
-We optimize your Images Library with what Search Engines want to see. The plugin allows you :
+We optimize your media library and your image gallery for Search Engines and Social Media using Artificial Intelligence. 
 
-* to dynamically insert "alt" tag to your images when you upload them in the Library;
-* to rewrite all your images with an optimized name ;
+* Automatically fill out your images alternative texts (ALT tag) when you upload them in the library.
+* Optimize and rewrite all your image and photo filenames (Bulk Optimization).
+* Optimize your images for Pinterest (description, URL, ID, Media).
 
-Image SEO will save your times, improve your ranking on image keywords and therefore allow you to attract new visitors on your blog.
+Image SEO saves your time, improves your ranking on image keywords and allow you to attract new visitors on your blog, gallery or website.
 
-With our SEO WordPress Plugin, you can automatically :
+- We rename your medias for a better SEO : get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike !
+- We improve your website accessibility : image alternatives texts are optimized with relevent content : get rid of your ugly keywords stuffing !
 
-Rename your medias with something relevant and finally get rid of your 123445HDFRE.JPG file that Search Engines, especially Google, dislike ; ( for a better SEO )
-Fill out all your image alternative texts with relevant keywords ; ( for a better SEO and a better accessibility )
-Our plugin, does everything and you can get a rid of this time consuming activity.
-Nota bene : Alternate text (Alt text) is a text description that can be added to an image’s HTML tag (<img alt="">) on a Web page. It is particularly useful when images on the web page cannot be displayed, in which case, the Alternative Text is shown instead. It is also displayed when a user mouses over the image. So, the alt attribute is a critical step that is often overlooked.
+Leave us this time consuming activity and spare your time and your imagination for something else ! The plugin is ideal for artists, photographers, E-Commerce, store owners, niche sites, business, local business, startups, directories and marketplace websites.
 
-= Why you need to use Image SEO ? =
+It is useful when images on the web page cannot be displayed or loaded, in which case, the Alternative Text is shown instead. It is also displayed when a user mousse is over the image. The alt attribute is a critical step that is often overlooked in SEO Strategy. ALT Tags shouldn’t be mingled with others HTML tags such as figurecaptation, title or legend. 
 
-* To stop losing traffic : 20% of Google searches are done on Google Images! To do this, you need to optimize your alts tags and rename your files correctly.
-* Because optimizing your images will have a positive impact on your global SEO strategy.
-* Because Image are more compelling than words when it comes to sell or tell somethings.
-* Because it’s easier to rank on competitive keywords during an Image research.
+
+= WHY MUST YOU USE IMAGE SEO WORDPRESS PLUGIN ? =
+
+* To stop losing traffic : more than 20% of Google searches are coming from Google Images. To increase your position in the SERP you need to optimize your ALTs tags and rename your files and medias in a good way. ImageSEO does it ! 
+* Because optimizing your images will have a positive impact on your global SEO strategy. ImageSEO does it !
+* Because Image are more compelling than words when it comes to sell or tell somethings. Improve your images ranking in Google, Qwant and Bing will improve your conversion rate. ImageSEO does it !
+* Because it’s easier to rank on competitive keywords during image researches (and ImageSEO does it, but you knew it already ;))
 
 = How to get your API Key set up Image SEO WordPress Plugin ? =
 
 Step 1 : you have to download and activate Image SEO Plugin.
-Step 2 : you need to create an account on Image SEO and create a project to get an API Key.
+Step 2 : you need to [create an account on Image SEO]((https://app.imageseo.io/register-wordpress)) to get an API Key (it's free).
 Step 3 : back on the plugin and enter your API Key.
-Step 4 : Start to improve your images for SEO ! :)
+Step 4 : bulk your library / image galery and start to improve your images for SEO ! 
 
 = How does Image SEO work ? =
 
-We analyze your Images with the help of Artificial Intelligence (AI) and Machine Learning. Search Engines (Google, Qwant, Bing, etc.) analyze your images in multiple ways. We gather and combine some of their results to rename your medias and fill out your alt texts.
+We use Artificial Intelligences (AI) and Machine Learning to analyze your images. Our algorithms rename your medias and fill out your ALT tags with the most relevant results. Our Web Application also provide you with optimized keywords for Search Engines. You just need to settings up the plugin and we do all the job.
 
 We use the keyword coming from the graphical analysis of your image to rename them and we use the keyword coming from the contextual analysis of your image to fill out your alt tags. In other words, we provide you with the keywords that Search Engines want to see ! You just need to settings up the plugin and we do all the job.
 
 = Features =
 
-* Fill out your "alt" tags automatically;
-* Rename your image files automatically;
-* Receive a report for every images to understand how to optimize them;
-* See how many alternative texts are missing on your pages;
-* Data attribute for pinterest (data-pin-description, data-pin-media, data-pin-url, data-pin-id)
-* Support for Featured Images
-* Support for WooCommerce
-* Support for Custom Post Type Images
-* Support for popular page builders like Elementor, Site Origin, etc.
+* Fill out your ALT tags automatically;
+* Rename your images and medias automatically;
+* Bulk optimization for ALT tags and filenames; 
+* Receive a report for every image to understand how to optimize them;
+* See how many alternative texts are missing in your pages;
+* Data attribute for pinterest (data-pin-description, data-pin-media, data-pin-url, data-pin-id);
+* Compatibility and support for Featured Images;
+* Compatibility and support for WooCommerce;
+* Compatibility and support with WordPress Gallery Plugins (NextGEN, Photo Gallery, Responsive Photo Gallerye, FooGallery, etc.)
+* Compatibility and support for Custom Post Type Images; 
+* Compatibility and support for popular page builders like Elementor, Site Origin, Divi, etc.
 
 = What about the Premium? =
 
-Image SEO is free for small websites (under 15 images by month).
-Image SEO has Premium plans for E-Commerce, Photographers, Marketplace, and SEO Specialists available. Feel free to go on our pricing page to discover them.
-We offers professional support to premium users and help them to optimize their websites.
+Image SEO is free for small websites (3 images by month).
+
+Image SEO has Premium plans for E-Commerce, Photographers, Marketplace, and SEO Specialists available. Feel free to go on our pricing page to discover them. We offers professional support to premium users and help them to optimize their websites. Payment are secured by Stripe.
 
 * Support and Updates
 
@@ -97,7 +104,7 @@ For the people willing to go in depth about the ImageSEO our web application pro
 == Frequently Asked Questions ==
 
 = What is an alternative text? =
-The alt attribute (alternative text) is used in your HTML code on IMG tags to describe the appearance and function of an image on a page.
+Alternative text (ALT text or ALT Tag) is a text description that can be added to an image’s HTML tag () on a Web page (ie : <img alt="This is the logo of ImageSEO, the best images SEO plugin for WordPress">).
 
 = Does Image SEO integrates with other plugins? =
 

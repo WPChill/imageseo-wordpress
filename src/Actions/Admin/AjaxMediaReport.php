@@ -65,37 +65,36 @@ class AjaxMediaReport
         }
 
         $attachmentId = $this->getAttachmentId();
-		$get_cache_request = apply_filters('imageseo_get_cache_request', true);
-		$report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+        $get_cache_request = apply_filters('imageseo_get_cache_request', true);
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
         if ($report && $get_cache_request) {
             return [
                 "success" => true,
                 "result" => $report
             ];
-		}
-		        
-		return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
-
-	}
-	
-	public function getForceReport(){
-		$force = false;
-		if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset( $_GET['force'] )  && $_GET['force'] == 1 ) {
+        }
+                
+        return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
+    }
+    
+    public function getForceReport()
+    {
+        $force = false;
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['force'])  && $_GET['force'] == 1) {
             $force = true;
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['force'] ) && $_POST['force'] == 1 ) {
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['force']) && $_POST['force'] == 1) {
             $force = true;
-		}
-		
-		return $force;
-	}
+        }
+        
+        return $force;
+    }
 
     /**
      * @return void
      */
     public function adminPostReportAttachment()
     {
-		
-		$force = $this->getForceReport();
+        $force = $this->getForceReport();
         $response = $this->generateReportAttachment(['force' => $force]);
         $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
         if (!$response['success']) {
@@ -154,19 +153,19 @@ class AjaxMediaReport
         }
 
 
-        if ($updateAlt) {
-            if (!$currentAlt || $updateAltNotEmpty) {
+        if ($updateAlt || $updateAltNotEmpty) {
+            if (($updateAlt && !$currentAlt) || $updateAltNotEmpty) {
                 $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
             }
         }
 
-		$newFilePath = false;
+        $newFilePath = false;
         if ($renameFile) {
-			$this->renameFileServices->renameAttachment($attachmentId);
-			$file =  wp_get_attachment_image_src($attachmentId, 'small');
-			if (!empty($file)) {
-				$newFilePath = basename($file[0]);
-			}
+            $this->renameFileServices->renameAttachment($attachmentId);
+            $file =  wp_get_attachment_image_src($attachmentId, 'small');
+            if (!empty($file)) {
+                $newFilePath = basename($file[0]);
+            }
         }
 
         $file =  wp_get_attachment_image_src($attachmentId, 'small');
@@ -182,22 +181,22 @@ class AjaxMediaReport
         if (!empty($file)) {
             $srcFile = $file[0];
             $nameFile = basename($srcFile);
-		}
-		
-		if(!$newFilePath){
-			$basenameWithoutExt = explode('.', $nameFile)[0];
-			try {
-				$newFilePath = sprintf( '%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1] );
-			} catch (NoRenameFile $e) {
-				$newFilePath = $nameFile;
-			}
-		}
+        }
+        
+        if (!$newFilePath) {
+            $basenameWithoutExt = explode('.', $nameFile)[0];
+            try {
+                $newFilePath = sprintf('%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1]);
+            } catch (NoRenameFile $e) {
+                $newFilePath = $nameFile;
+            }
+        }
 
         wp_send_json_success([
             'src' => $report['src'],
             'current_alt' => $currentAlt,
-			'alt_generate' => $altGenerate,
-			'file_generate' => $newFilePath,
+            'alt_generate' => $altGenerate,
+            'file_generate' => $newFilePath,
             'file' => $srcFile,
             'current_name_file' => $currentNameFile,
             'name_file' => $nameFile
