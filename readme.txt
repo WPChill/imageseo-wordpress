@@ -1,7 +1,7 @@
 
-===  Auto ALT tags and filenames optimizer tool for Google Images by Image SEO ===
+===  Image SEO - Auto ALT tags & filenames optimizer for Google Images & Pinterest ===
 Contributors: gmulti, freemius
-Tags: alt, alt tag, seo, images, media, rename
+Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
@@ -9,7 +9,7 @@ Stable tag: v1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Optimize your images keywords for SEO (alt texts and file names) thanks to Artificial Intelligence.
+Optimize your image seo keywords. Rename & replace media filename and alt texts with an Artificial Intelligence.
 
 == Description ==
 
