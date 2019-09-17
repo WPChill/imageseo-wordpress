@@ -74,7 +74,7 @@ $apiKey = "YOUR_API_KEY";
 $client =new Client($apiKey);
 
 $data = [
-    "url": "https://example.com/image.jpg"
+    "src": "https://example.com/image.jpg"
 ];
 $report = $client->getResource('ImageReports')->generateReportFromUrl($data);
 ```
