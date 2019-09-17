@@ -28,7 +28,7 @@ class ImageReports extends AbstractEndpoint
      */
     public function generateReportFromUrl($data, $query = null)
     {
-        if (! isset($data['url'])) {
+        if (! isset($data['src'])) {
             throw new \Exception("Miss URL params");
         }
 
