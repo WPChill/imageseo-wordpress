@@ -17,6 +17,8 @@ $options_available = [
 $allowed = imageseo_allowed();
 $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info--error';
 
+$limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
+
 ?>
 
 <?php if ($allowed || (  !$allowed && !empty( $this->options['api_key'] ) ) ){ ?>
@@ -32,7 +34,7 @@ $class = ($allowed) ? 'imageseo-account-info--success' : 'imageseo-account-info-
 
 <?php if ($allowed): ?>
 	 <p>
-		<strong><?php esc_html_e('Current Images limit: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $this->owner['plan']['limit_images']; ?>
+		<strong><?php esc_html_e('Current Images limit: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> /<?php echo $limitImages; ?>
 	</p>
 <?php endif; ?>
 

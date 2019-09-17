@@ -114,8 +114,9 @@ class RenameFile
             $this->reportImageServices->generateReportByAttachmentId($attachmentId);
         }
 
+        
         $filePath = get_attached_file($attachmentId);
-
+        
         if (!wp_mkdir_p(dirname($filePath))) {
             return [
                 'success' => false
