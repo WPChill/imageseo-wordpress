@@ -55,12 +55,30 @@ class ReportImage
 
         $reportImages = $this->clientServices->getClient()->getResource('ImageReports', $query);
 
-        $result = $reportImages->generateReportFromFile([
-            'lang' => $this->optionServices->getOption('default_language_ia'),
-            'filePath' => $filePath,
-            'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
-            'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
-        ], $query);
+        if (file_exists($filePath)) {
+            try {
+                $result = $reportImages->generateReportFromFile([
+                    'lang' => $this->optionServices->getOption('default_language_ia'),
+                    'filePath' => $filePath,
+                    'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
+                    'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+                ], $query);
+            } catch (\Exception $th) {
+                $result = $reportImages->generateReportFromUrl([
+                    'lang' => $this->optionServices->getOption('default_language_ia'),
+                    'src' => $filePath,
+                    'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
+                    'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+                ], $query);
+            }
+        } else {
+            $result = $reportImages->generateReportFromUrl([
+                'lang' => $this->optionServices->getOption('default_language_ia'),
+                'src' => $filePath,
+                'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
+                'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+            ], $query);
+        }
 
         if ($result && !$result['success']) {
             return $result;
