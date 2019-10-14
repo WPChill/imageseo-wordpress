@@ -45,6 +45,10 @@ class ReportImage
      */
     public function generateReportByAttachmentId($attachmentId, $query = [])
     {
+        if (!apply_filters('imageseo_authorize_generate_report_attachment_id', true, $attachmentId)) {
+            return;
+        }
+
         $mimeType = get_post_mime_type($attachmentId);
         if (strpos($mimeType, 'image') === false) {
             return;
@@ -119,7 +123,7 @@ class ReportImage
         $keysContext = $this->getAutoContextFromReport($report);
 
         $alt = $keysContext;
-        if (array_key_exists('a_vision', $report) && array_key_exists('description', $report['a_vision']) && array_key_exists('captions', $report['a_vision']['description']) && !empty($report['a_vision']['description']['captions'])) {
+        if (array_key_exists('captions', $report) && !empty($report['captions'])) {
             $alt = sprintf('%s - %s', $report['a_vision']['description']['captions'][0]['text'], $alt);
         }
 
@@ -177,6 +181,12 @@ class ReportImage
         $total = count($report[$type]);
 
         while (empty($altReplace) && $i < $total) {
+            if (null === $report[$type][$i]['score']) {
+                $altReplace = $report[$type][$i]['name'];
+                $i++;
+                continue;
+            }
+
             if ($params['min_percent'] >= round($report[$type][$i]['score']) || $params['max_percent'] <= round($report[$type][$i]['score'])) {
                 $i++;
                 continue;

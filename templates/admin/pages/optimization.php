@@ -61,6 +61,9 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
         </p>
         <p>
             <strong><?php esc_html_e('Images consumption: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> / <?php echo $limitImages; ?>
+			<?php if($this->owner['bonus_stock_images'] > 0): ?>
+			(<?php echo sprintf(esc_html('including %s bonus credit'), $this->owner['bonus_stock_images']); ?>)
+			<?php endif; ?>
 		</p>
 
 		<?php if ($this->owner['current_request_images'] >= $limitImages) {
@@ -68,7 +71,6 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 } else {
     $images_available = $limitImages - $this->owner['current_request_images'];
 }
-
         ?>
 		<?php if ($images_available <= 0): ?>
 			<div class="imageseo-account-info imageseo-account-info--warning">

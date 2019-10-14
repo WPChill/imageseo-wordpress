@@ -7,7 +7,7 @@ Author: ImageSEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 1.0.15
+Version: 1.0.16
 */
 
 if (! defined('ABSPATH')) {
@@ -21,7 +21,7 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '1.0.15');
+define('IMAGESEO_VERSION', '1.0.16');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);

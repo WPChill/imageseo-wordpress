@@ -47,3 +47,20 @@ function imageseo_allowed()
 {
     return imageseo_get_option('allowed');
 }
+
+
+function imageseo_generate_alt_attachment_id($attachmentId)
+{
+    $reportImageService = imageseo_get_service('ReportImage');
+    $response = $reportImageServices->generateReportByAttachmentId($attachmentId);
+    if (!$response['success']) {
+        return;
+    }
+
+    $reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+}
+
+function imageseo_rename_file_attachment_id($attachmentId, $metadata = null)
+{
+    return imageseo_get_service('RenameFile')->renameAttachment($attachmentId);
+}
