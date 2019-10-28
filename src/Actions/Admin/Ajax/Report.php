@@ -1,6 +1,6 @@
 <?php
 
-namespace ImageSeoWP\Actions\Admin;
+namespace ImageSeoWP\Actions\Admin\Ajax;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -11,7 +11,7 @@ use ImageSeoWP\Exception\NoRenameFile;
 /**
  * @since 1.0.0
  */
-class AjaxMediaReport
+class Report
 {
 
     /**
@@ -19,9 +19,9 @@ class AjaxMediaReport
      */
     public function __construct()
     {
-        $this->reportImageServices   = imageseo_get_service('ReportImage');
-        $this->optionServices   = imageseo_get_service('Option');
-        $this->renameFileServices   = imageseo_get_service('RenameFile');
+        $this->reportImageService   = imageseo_get_service('ReportImage');
+        $this->altService   = imageseo_get_service('Alt');
+        $this->renameFileService   = imageseo_get_service('RenameFile');
     }
 
     /**
@@ -33,11 +33,8 @@ class AjaxMediaReport
             return;
         }
 
-        add_action('admin_post_imageseo_report_attachment', [$this, 'adminPostReportAttachment']);
-        add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReportAttachment']);
+        add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReport']);
 
-        add_action('admin_post_imageseo_rename_attachment', [$this, 'adminPostRenameAttachment']);
-        // add_action('wp_ajax_imageseo_rename_attachment', [$this, 'ajaxReportAttachment']);
     }
 
     /**
@@ -65,61 +62,23 @@ class AjaxMediaReport
         }
 
         $attachmentId = $this->getAttachmentId();
-        $get_cache_request = apply_filters('imageseo_get_cache_request', true);
-        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
-        if ($report && $get_cache_request) {
+
+        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+        if ($report) {
             return [
                 "success" => true,
                 "result" => $report
             ];
         }
                 
-        return $this->reportImageServices->generateReportByAttachmentId($attachmentId, $query);
+        return $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
     }
-    
-    public function getForceReport()
-    {
-        $force = false;
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['force'])  && $_GET['force'] == 1) {
-            $force = true;
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['force']) && $_POST['force'] == 1) {
-            $force = true;
-        }
-        
-        return $force;
-    }
+  
 
     /**
      * @return void
      */
-    public function adminPostReportAttachment()
-    {
-        $force = $this->getForceReport();
-        $response = $this->generateReportAttachment(['force' => $force]);
-        $urlRedirect = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
-        if (!$response['success']) {
-            wp_redirect($urlRedirect);
-            return;
-        }
-
-        $this->reportImageServices->updateAltAttachmentWithReport($this->getAttachmentId(), $response['result']);
-
-        wp_redirect($urlRedirect);
-    }
-
-    /**
-     * @return void
-     */
-    public function adminPostRenameAttachment()
-    {
-        $this->renameFileServices->renameAttachment($this->getAttachmentId());
-        wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
-    }
-
-    /**
-     * @return void
-     */
-    public function ajaxReportAttachment()
+    public function ajaxReport()
     {
         $currentBulk = (int) $_POST['current'];
         $total = (int) $_POST['total'];
@@ -132,6 +91,7 @@ class AjaxMediaReport
             ]);
             exit;
         }
+
         if (!$response['success']) {
             wp_send_json_error($response);
             exit;
@@ -143,9 +103,9 @@ class AjaxMediaReport
         $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
         $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && $_POST['update_alt_not_empty'] === 'true') ? true : false;
         $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
-        $currentAlt = $this->reportImageServices->getAlt($attachmentId);
+        $currentAlt = $this->altService->getAlt($attachmentId);
         $currentFile =  wp_get_attachment_image_src($attachmentId, 'small');
-        $altGenerate = $this->reportImageServices->getAltValueAttachmentWithReport($report);
+        $altGenerate = $this->altService->getAltValueAttachmentWithReport($report);
 
         $currentNameFile = '';
         if (!empty($currentFile)) {
@@ -155,13 +115,13 @@ class AjaxMediaReport
 
         if ($updateAlt || $updateAltNotEmpty) {
             if (($updateAlt && !$currentAlt) || $updateAltNotEmpty) {
-                $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $report);
+                $this->altService->updateAltAttachmentWithReport($attachmentId, $report);
             }
         }
 
         $newFilePath = false;
         if ($renameFile) {
-            $this->renameFileServices->renameAttachment($attachmentId);
+            $this->renameFileService->renameAttachment($attachmentId);
             $file =  wp_get_attachment_image_src($attachmentId, 'small');
             if (!empty($file)) {
                 $newFilePath = basename($file[0]);
@@ -186,7 +146,7 @@ class AjaxMediaReport
         if (!$newFilePath) {
             $basenameWithoutExt = explode('.', $nameFile)[0];
             try {
-                $newFilePath = sprintf('%s.%s', $this->renameFileServices->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1]);
+                $newFilePath = sprintf('%s.%s', $this->renameFileService->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1]);
             } catch (NoRenameFile $e) {
                 $newFilePath = $nameFile;
             }

@@ -10,9 +10,9 @@ class Content
 {
     public function __construct()
     {
-        $this->reportImageServices = imageseo_get_service('ReportImage');
-        $this->optionServices = imageseo_get_service('Option');
-        $this->pinterestServices = imageseo_get_service('Pinterest');
+        $this->reportImageService = imageseo_get_service('ReportImage');
+        $this->altService = imageseo_get_service('Alt');
+        $this->pinterestService = imageseo_get_service('Pinterest');
     }
 
     /**
@@ -40,7 +40,7 @@ class Content
      */
     protected function updatePinterestContent($content, $attachmentId)
     {
-        $pinterest = $this->pinterestServices->getDataPinterestByAttachmentId($attachmentId);
+        $pinterest = $this->pinterestService->getDataPinterestByAttachmentId($attachmentId);
 
         $strDataPinterest = '';
         foreach ($pinterest as $key => $metaPinterest) {
@@ -66,7 +66,7 @@ class Content
      */
     protected function updateAltContent($content, $attachmentId)
     {
-        $altSave = $this->reportImageServices->getAlt($attachmentId);
+        $altSave = $this->altService->getAlt($attachmentId);
 
         if (!empty($altSave)) {
             $content = str_replace('alt=""', 'alt="' . $altSave . '"', $content);
@@ -118,8 +118,8 @@ class Content
      */
     public function postThumbnailAttributes($attrs, $attachment)
     {
-        $pinterest = $this->pinterestServices->getDataPinterestByAttachmentId($attachment->ID);
-        $alt       = $this->reportImageServices->getAlt($attachment->ID);
+        $pinterest = $this->pinterestService->getDataPinterestByAttachmentId($attachment->ID);
+        $alt       = $this->altService->getAlt($attachment->ID);
 
         foreach ($pinterest as $key => $metaPinterest) {
             if (empty($metaPinterest)) {

@@ -16,8 +16,8 @@ class ReportImage
 {
     public function __construct()
     {
-        $this->clientServices = imageseo_get_service('ClientApi');
-        $this->optionServices = imageseo_get_service('Option');
+        $this->clientService = imageseo_get_service('ClientApi');
+        $this->optionService = imageseo_get_service('Option');
     }
 
     /**
@@ -57,19 +57,19 @@ class ReportImage
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
 
-        $reportImages = $this->clientServices->getClient()->getResource('ImageReports', $query);
+        $reportImages = $this->clientService->getClient()->getResource('ImageReports', $query);
 
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang' => $this->optionServices->getOption('default_language_ia'),
+                    'lang' => $this->optionService->getOption('default_language_ia'),
                     'filePath' => $filePath,
                     'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
                     'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
                 ], $query);
             } catch (\Exception $th) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang' => $this->optionServices->getOption('default_language_ia'),
+                    'lang' => $this->optionService->getOption('default_language_ia'),
                     'src' => $filePath,
                     'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
                     'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
@@ -77,7 +77,7 @@ class ReportImage
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang' => $this->optionServices->getOption('default_language_ia'),
+                'lang' => $this->optionService->getOption('default_language_ia'),
                 'src' => $filePath,
                 'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
                 'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
@@ -95,42 +95,10 @@ class ReportImage
         return $result;
     }
 
-    /**
-     * @param int $attachmentId
-     * @param array $report
-     * @return void
-     */
-    public function updateAltAttachmentWithReport($attachmentId, $report)
-    {
-        $alt = $this->getAltValueAttachmentWithReport($report);
-
-        $postId = wp_get_post_parent_id($attachmentId);
-        if ($postId) {
-            $alt = sprintf('%s - %s', get_the_title($postId), $alt);
-        }
-
-        $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId, $report);
-
-        update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
-    }
 
     /**
-     * @param array $report
-     * @return string
-     */
-    public function getAltValueAttachmentWithReport($report)
-    {
-        $keysContext = $this->getAutoContextFromReport($report);
-
-        $alt = $keysContext;
-        if (array_key_exists('captions', $report) && !empty($report['captions'])) {
-            $alt = sprintf('%s - %s', $report['a_vision']['description']['captions'][0]['text'], $alt);
-        }
-
-        return apply_filters('imageseo_get_alt_value_attachment_with_report', ucfirst($alt), $report);
-    }
-
-    /**
+     * Get name file for an attachment id from a report
+     * 
      * @param int $attachmentId
      * @return string
      */
@@ -199,12 +167,4 @@ class ReportImage
         return $altReplace;
     }
 
-    /**
-     * @param int $id
-     * @return string
-     */
-    public function getAlt($id)
-    {
-        return get_post_meta($id, '_wp_attachment_image_alt', true);
-    }
 }

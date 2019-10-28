@@ -18,9 +18,10 @@ class MediaLibrary
      */
     public function __construct()
     {
-        $this->optionServices = imageseo_get_service('Option');
-        $this->reportImageServices   = imageseo_get_service('ReportImage');
-        $this->renameFileServices   = imageseo_get_service('RenameFile');
+        $this->optionService = imageseo_get_service('Option');
+        $this->reportImageService   = imageseo_get_service('ReportImage');
+        $this->renameFileService   = imageseo_get_service('RenameFile');
+        $this->altService   = imageseo_get_service('Alt');
     }
 
     /**
@@ -76,18 +77,18 @@ class MediaLibrary
             return;
         }
 
-        $activeWriteReport = $this->optionServices->getOption('active_alt_write_upload');
+        $activeWriteReport = $this->optionService->getOption('active_alt_write_upload');
 
         if (!$activeWriteReport) {
             return;
         }
 
-        $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
         if (!$response['success']) {
             return;
         }
 
-        $this->reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+        $this->altService->updateAltAttachmentWithReport($attachmentId, $response['result']);
     }
 
     /**
@@ -102,18 +103,18 @@ class MediaLibrary
             return $metadata;
         }
 
-        $activeWriteReport = $this->optionServices->getOption('active_rename_write_upload');
+        $activeWriteReport = $this->optionService->getOption('active_rename_write_upload');
 
         if (!$activeWriteReport) {
             return $metadata;
         }
 
-        $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId);
+        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
         if (!$response['success']) {
             return $metadata;
         }
 
-        $result = $this->renameFileServices->renameAttachment($attachmentId, $metadata);
+        $result = $this->renameFileService->renameAttachment($attachmentId, $metadata);
         if (array_key_exists('metadata', $result)) {
             $metadata = $result['metadata'];
         }
@@ -263,9 +264,9 @@ class MediaLibrary
             return;
         }
 
-        $alt = wp_strip_all_tags($this->reportImageServices->getAlt($attachmentId));
-        $haveAlreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($attachmentId);
-        $autoWriteAlt = $this->optionServices->getOption('active_alt_write_with_report');
+        $alt = wp_strip_all_tags($this->altService->getAlt($attachmentId));
+        $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId);
+        $autoWriteAlt = $this->optionService->getOption('active_alt_write_with_report');
 
         $text = __('Generate alt', 'imageseo');
         if ($haveAlreadyReport && !empty($alt)) {

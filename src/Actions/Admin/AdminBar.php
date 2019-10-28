@@ -39,7 +39,6 @@ class AdminBar
     public function getInfoUser()
     {
         $html             = 'ImageSEO - User';
-        // Call API
 
         wp_send_json_success($html);
     }

@@ -5,7 +5,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-$alreadyReport = $this->reportImageServices->haveAlreadyReportByAttachmentId($post->ID);
+$alreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($post->ID);
 
 
 if (!$alreadyReport) {
@@ -16,7 +16,7 @@ if (!$alreadyReport) {
     <?php
     return;
 }
-$report = $this->reportImageServices->getReportByAttachmentId($post->ID);
+$report = $this->reportImageService->getReportByAttachmentId($post->ID);
 
 ?>
 <h3><?php esc_html_e('List of keywords representative of the context in which Google analyzes your image.', 'imageseo');
