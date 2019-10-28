@@ -48,9 +48,9 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 
 <div id="wrap-imageseo">
     <div class="wrap">
-        <h3><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h3>
+        <h2><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h2>
         <hr />
-		<h4><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. Image processing can therefore take up to 30 seconds.', 'imageseo'); ?></h4>
+		<h3><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. Image processing can therefore take up to 30 seconds.', 'imageseo'); ?></h3>
         <p>
             <strong><?php esc_html_e('Total number of image(s) to be processed : ', 'imageseo'); ?></strong> <?php echo $total; ?>
         </p>
@@ -61,7 +61,7 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
         </p>
         <p>
             <strong><?php esc_html_e('Images consumption: ', 'imageseo'); ?></strong> <?php echo $this->owner['current_request_images']; ?> / <?php echo $limitImages; ?>
-			<?php if($this->owner['bonus_stock_images'] > 0): ?>
+			<?php if ($this->owner['bonus_stock_images'] > 0): ?>
 			(<?php echo sprintf(esc_html('including %s bonus credit'), $this->owner['bonus_stock_images']); ?>)
 			<?php endif; ?>
 		</p>
@@ -79,7 +79,7 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 			</div>
 		<?php endif; ?>
 
-      	<h2><?php _e('Choose your process:', 'imageseo'); ?></h2>
+      	<h3><?php _e('Choose your process:', 'imageseo'); ?></h3>
 		<p><?php _e('No worries, you can get a preview of the results before going further.', 'imageseo'); ?>
 		<div class="option">
 			<label>
@@ -135,6 +135,7 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 		<button class="button button-secondary" id="imageseo-bulk-reports--stop" disabled>
 			<span><?php esc_html_e('Stop', 'imageseo'); ?></span>
 		</button>
+		<p><?php esc_html_e('If you preview the results, it will consume 1 credit per image. On the other hand, once you preview, you will not have any additional consumption if you want to make the change', 'imageseo'); ?>
         <hr>
         <div id="imageseo-percent-bulk" class="imageseo-percent">
             <div class="imageseo-percent--item">0%</div>

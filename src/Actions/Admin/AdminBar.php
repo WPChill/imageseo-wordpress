@@ -68,12 +68,5 @@ class AdminBar
                 'title'  => '<div id="wp-admin-bar-imageseo-loading-alts" class="hide-if-no-js">' . __('Loading count alts...', 'imageseo') . '</div><div id="wp-admin-bar-imageseo-content" class="hide-if-no-js"></div>',
             ));
         }
-
-
-        // $wp_admin_bar->add_menu(array(
-        //     'parent' => 'imageseo',
-        //     'id'     => 'imageseo-profile',
-        //     'title'  => '<div id="wp-admin-bar-imageseo-loading-profile" class="hide-if-no-js">' . __('Loading...', 'imageseo') . '</div><div id="wp-admin-bar-imageseo-content" class="hide-if-no-js"></div>',
-        // ));
     }
 }
