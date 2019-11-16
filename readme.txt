@@ -3,7 +3,7 @@
 Contributors: gmulti
 Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
-Tested up to: 5.2
+Tested up to: 5.3
 Requires PHP: 5.6
 Stable tag: v1.0.17
 License: GPLv2 or later
