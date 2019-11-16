@@ -1,11 +1,11 @@
 
 ===  Image SEO - Auto ALT tags & filenames optimizer for Google Images & Pinterest ===
-Contributors: gmulti, freemius
+Contributors: gmulti
 Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: v1.0.16
+Stable tag: v1.0.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,11 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.17 (10-14-2019) =
+- New: You can filter your library according to the filling of your alternative texts
+- Improved: Possibility to know the traffic gain you should get after optimization
+- Improved: Help to choose your image credit needs
 
 = 1.0.16 (10-14-2019) =
 - Improved : Adding features for developers
