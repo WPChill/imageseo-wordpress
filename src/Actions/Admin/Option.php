@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -13,28 +13,24 @@ use ImageSeoWP\Helpers\TabsAdmin;
  */
 class Option
 {
-
     /**
      * @since 1.0.0
      */
     public function __construct()
     {
-        $this->optionServices   = imageseo_get_service('Option');
-        $this->clientServices   = imageseo_get_service('ClientApi');
+        $this->optionServices = imageseo_get_service('Option');
+        $this->clientServices = imageseo_get_service('ClientApi');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
-        add_action('admin_init', [ $this, 'optionsInit' ]);
-        add_action('admin_notices', [ $this, 'settingsNoticesSuccess']);
+        add_action('admin_init', [$this, 'optionsInit']);
+        add_action('admin_notices', [$this, 'settingsNoticesSuccess']);
     }
 
     public function settingsNoticesSuccess()
     {
-        if (get_transient('imageseo_success_settings') !== false) {
+        if (false !== get_transient('imageseo_success_settings')) {
             delete_transient('imageseo_success_settings');
         } else {
             return;
@@ -45,11 +41,8 @@ class Option
     	<?php
     }
 
-
     /**
-     * Activate plugin
-     *
-     * @return void
+     * Activate plugin.
      */
     public function activate()
     {
@@ -60,35 +53,33 @@ class Option
     }
 
     /**
-     * Register setting options
+     * Register setting options.
      *
      * @see admin_init
-     *
-     * @return void
      */
     public function optionsInit()
     {
-        register_setting(IMAGESEO_OPTION_GROUP, IMAGESEO_SLUG, [ $this, 'sanitizeOptions' ]);
+        register_setting(IMAGESEO_OPTION_GROUP, IMAGESEO_SLUG, [$this, 'sanitizeOptions']);
     }
 
     /**
-     * Callback register_setting for sanitize options
+     * Callback register_setting for sanitize options.
      *
      * @param array $options
+     *
      * @return array
      */
     public function sanitizeOptions($options)
     {
-        $tab         = (isset($_POST['tab'])) ? $_POST['tab'] : null;
+        $tab = (isset($_POST['tab'])) ? $_POST['tab'] : null;
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
-
 
         switch ($tab) {
             case TabsAdmin::SETTINGS:
             default:
                 $newOptions['allowed'] = false;
-                if (! empty($options['api_key'])) {
+                if (!empty($options['api_key'])) {
                     $owner = $this->clientServices->getApiKeyOwner($options['api_key']);
                     if ($owner) {
                         $newOptions['allowed'] = true;

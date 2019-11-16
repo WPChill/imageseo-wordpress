@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Actions\Front;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -15,27 +15,24 @@ class Content
         $this->pinterestService = imageseo_get_service('Pinterest');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
         if (!imageseo_allowed()) {
             return;
         }
 
-        if (! apply_filters('imageseo_active_alt_rewrite', true)) {
+        if (!apply_filters('imageseo_active_alt_rewrite', true)) {
             return;
         }
 
-        add_filter('the_content', [ $this, 'contentImagesAttribute' ], 1);
+        add_filter('the_content', [$this, 'contentImagesAttribute'], 1);
         add_filter('wp_get_attachment_image_attributes', [$this, 'postThumbnailAttributes'], 10, 2);
     }
 
     /**
-     *
      * @param string $content
-     * @param int $attachmentId
+     * @param int    $attachmentId
+     *
      * @return string
      */
     protected function updatePinterestContent($content, $attachmentId)
@@ -59,9 +56,9 @@ class Content
     }
 
     /**
-     *
      * @param string $content
-     * @param int $attachmentId
+     * @param int    $attachmentId
+     *
      * @return string
      */
     protected function updateAltContent($content, $attachmentId)
@@ -77,6 +74,7 @@ class Content
 
     /**
      * @param string $contentFilter
+     *
      * @return string
      */
     public function contentImagesAttribute($contentFilter)
@@ -111,15 +109,15 @@ class Content
     }
 
     /**
-     *
-     * @param array $attrs
+     * @param array  $attrs
      * @param object $attachment
+     *
      * @return array
      */
     public function postThumbnailAttributes($attrs, $attachment)
     {
         $pinterest = $this->pinterestService->getDataPinterestByAttachmentId($attachment->ID);
-        $alt       = $this->altService->getAlt($attachment->ID);
+        $alt = $this->altService->getAlt($attachment->ID);
 
         foreach ($pinterest as $key => $metaPinterest) {
             if (empty($metaPinterest)) {
@@ -129,7 +127,7 @@ class Content
             $attrs[$key] = $metaPinterest;
         }
 
-        if (! array_key_exists('alt', $attrs) && empty($attrs['alt'])) {
+        if (!array_key_exists('alt', $attrs) && empty($attrs['alt'])) {
             $attrs['alt'] = $alt;
         }
 

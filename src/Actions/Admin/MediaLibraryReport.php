@@ -66,6 +66,4 @@ class MediaLibraryReport
         $this->renameFileServices->renameAttachment($this->getAttachmentId());
         wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
     }
-
-    
 }

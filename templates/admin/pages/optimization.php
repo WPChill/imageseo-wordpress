@@ -1,34 +1,37 @@
 <?php
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
 use ImageSeoWP\Helpers\AttachmentMeta;
 
+$totalNoAlt = imageseo_get_service('ImageLibrary')->getNumberImageNonOptimizeAlt();
+$totalAlt = imageseo_get_service('ImageLibrary')->getNumberImageOptimizeAlt();
+$percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalNoAlt);
+
 $queryAlreadyAttachmentsOptimization = apply_filters('imageseo_query_already_attachments_optimization', [
-    'post_type' => 'attachment',
-    'post_status' => 'inherit',
+    'post_type'      => 'attachment',
+    'post_status'    => 'inherit',
     'posts_per_page' => -1,
-    'meta_key' => AttachmentMeta::REPORT,
-    'meta_compare' => 'EXISTS',
+    'meta_key'       => AttachmentMeta::REPORT,
+    'meta_compare'   => 'EXISTS',
     'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
-    'fields' => 'ids',
-    'orderby' => 'id',
-    'order'   => 'ASC',
+    'fields'         => 'ids',
+    'orderby'        => 'id',
+    'order'          => 'ASC',
 ]);
 
 $attachmentsAlreadyReport = new WP_Query($queryAlreadyAttachmentsOptimization);
 
-
 $queryAttachmentsOptimization = apply_filters('imageseo_query_attachments_optimization', [
-    'post_type' => 'attachment',
-    'post_status' => 'inherit',
+    'post_type'      => 'attachment',
+    'post_status'    => 'inherit',
     'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
     'posts_per_page' => -1,
-    'fields' => 'ids',
-    'orderby' => 'id',
-    'order'   => 'ASC',
+    'fields'         => 'ids',
+    'orderby'        => 'id',
+    'order'          => 'ASC',
 ]);
 $attachments = new WP_Query($queryAttachmentsOptimization);
 
@@ -36,7 +39,7 @@ $total = count($attachments->posts);
 $totalAlreadyReport = count($attachmentsAlreadyReport->posts);
 
 $currentProcess = get_option('_imageseo_current_processed', 0);
-$limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
+$limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
 ?>
 
 <script>
@@ -50,10 +53,24 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
     <div class="wrap">
         <h2><?php esc_html_e('ImageSEO - Bulk Optimization', 'imageseo'); ?></h2>
         <hr />
-		<h3><?php esc_html_e('We use Artificial Intelligence and Machine Learning to generate your alternative texts and rename your files. Image processing can therefore take up to 30 seconds.', 'imageseo'); ?></h3>
-        <p>
-            <strong><?php esc_html_e('Total number of image(s) to be processed : ', 'imageseo'); ?></strong> <?php echo $total; ?>
-        </p>
+        <h3><?php esc_html_e('Overview', 'imageseo'); ?></h3>
+
+		<div class="imageseo-flex">
+			<div class="fl-2 imageseo-overview">
+				<p><?php echo sprintf(__('You have <strong class="imageseo-overview__total-images">%s image(s)</strong>', 'imageseo'), $total); ?></p>
+				<p><?php echo sprintf(__('<strong>%s images</strong> are not optimized for your referencing (alternative text)', 'imageseo'), $totalNoAlt); ?></p>
+				<?php if ($percentLoose > 0): ?>
+					<p>
+						<p><?php echo sprintf(__('On a basis of 100 users from Google, you could <strong class="imageseo-overview__gain">gain %s%s of traffic</strong> by optimizing all your alternative texts', 'imageseo'), $percentLoose, '%'); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+			<div class="fl-2">
+				<?php include_once __DIR__ . '/_plan_need.php'; ?>
+			</div>
+		</div>
+		
+		<hr />
         <p>
 			<strong><?php esc_html_e('Number of image(s) that have already been processed : ', 'imageseo'); ?></strong> <?php echo $totalAlreadyReport; ?>
 			<br />
@@ -87,13 +104,13 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 				<?php _e('Start a new process (The ALT and file names that you have already generated will be updated)', 'imageseo'); ?>
 			</label>
 		</div>
-		<?php if ($currentProcess !== 0): ?>
+		<?php if (0 !== $currentProcess): ?>
 		<br />
 		<div class="option">
 			<label>
 				<input type="radio" name="method" value="old">
 				<?php _e('Continue the current process', 'imageseo'); ?>
-				<span>(<?php echo sprintf('%s/%s', $currentProcess+1, $total); ?>)</span>
+				<span>(<?php echo sprintf('%s/%s', $currentProcess + 1, $total); ?>)</span>
 			</label>
 		</div>
 		<?php endif; ?>
@@ -122,6 +139,7 @@ $limitImages =  $this->owner['plan']['limit_images'] + $this->owner['bonus_stock
 			</label>
 		</div>
 		<br />
+		<h3><?php esc_html_e('Image processing can therefore take up to 30 seconds (by image).', 'imageseo'); ?></h3>
 		<button class="button button-primary" id="imageseo-bulk-reports--preview">
 			<span><?php esc_html_e('Optimization preview', 'imageseo'); ?></span>
 			<div class="imageseo-loading" style="display:none;"></div>

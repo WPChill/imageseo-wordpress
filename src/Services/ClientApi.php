@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Services;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -22,7 +22,7 @@ class ClientApi
      */
     public function getClient($apiKey = null)
     {
-        if ($apiKey === null) {
+        if (null === $apiKey) {
             $apiKey = $this->optionService->getOption('api_key');
         }
 
@@ -42,6 +42,7 @@ class ClientApi
 
     /**
      * @param string $apiKey
+     *
      * @return array
      */
     public function getApiKeyOwner($apiKey = null)
@@ -50,6 +51,7 @@ class ClientApi
         if (!$response['success']) {
             return null;
         }
+
         return $response['result'];
     }
 
@@ -64,6 +66,7 @@ class ClientApi
         if (!$response['success']) {
             return null;
         }
+
         return $response['result'];
     }
 }

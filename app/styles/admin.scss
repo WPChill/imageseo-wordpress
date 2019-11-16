@@ -1,4 +1,9 @@
+@import 'colors';
+@import 'settings';
+@import 'overview';
+
 #wrap-imageseo {
+	max-width: 80%;
 	.tags {
 		display: flex;
 		.tags__item {

@@ -2,15 +2,9 @@
 
 namespace ImageSeoWP\Services;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
-
-use ImageSeo\Client\Client;
-
-use ImageSeoWP\Helpers\AttachmentMeta;
-use ImageSeoWP\Helpers\AltTags;
-use ImageSeoWP\Helpers\RenameTags;
 
 class Alt
 {
@@ -20,14 +14,13 @@ class Alt
     }
 
     /**
-     *
      * @param int $attachmentId
-     * @return void
      */
-    public function generateForAttachmentId($attachmentId, $query = []){
+    public function generateForAttachmentId($attachmentId, $query = [])
+    {
         if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
             return [
-                'success' => false
+                'success' => false,
             ];
         }
 
@@ -35,26 +28,23 @@ class Alt
         if (!$report) {
             $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
 
-            if(!$response['success']){
+            if (!$response['success']) {
                 return $response;
             }
 
             $report = $response['result'];
         }
-                
 
         $this->updateAltAttachmentWithReport($attachmentId, $report);
 
         return [
-            'success' => true
+            'success' => true,
         ];
-
     }
 
     /**
-     * @param int $attachmentId
+     * @param int   $attachmentId
      * @param array $report
-     * @return void
      */
     public function updateAltAttachmentWithReport($attachmentId, $report)
     {
@@ -72,6 +62,7 @@ class Alt
 
     /**
      * @param array $report
+     *
      * @return string
      */
     public function getAltValueAttachmentWithReport($report)
@@ -88,6 +79,7 @@ class Alt
 
     /**
      * @param int $id
+     *
      * @return string
      */
     public function getAlt($id)

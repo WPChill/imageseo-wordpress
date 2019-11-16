@@ -7,6 +7,12 @@ if (! defined('ABSPATH')) {
 use ImageSeoWP\Helpers\TabsAdmin;
 use ImageSeoWP\Helpers\AltTags;
 
+
+$total = imageseo_get_service('ImageLibrary')->getTotalImages();
+$totalNoAlt = imageseo_get_service('ImageLibrary')->getNumberImageNonOptimizeAlt();
+$totalAlt = imageseo_get_service('ImageLibrary')->getNumberImageOptimizeAlt();
+$percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalNoAlt);
+
 $options_available = [
     'active_alt_write_upload' => [
         'key'         => 'active_alt_write_upload',
@@ -31,7 +37,28 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bo
 
 ?>
 
+<h3><?php esc_html_e('Overview', 'imageseo'); ?></h3>
+<hr>
+<div class="imageseo-flex" style="margin-bottom:40px;">
+	<div class="fl-2 imageseo-overview">
+		<p><?php echo sprintf(__('You have <strong class="imageseo-overview__total-images">%s image(s)</strong>', 'imageseo'), $total); ?></p>
+		<p><?php echo sprintf(__('<strong>%s images</strong> are not optimized for your referencing (alternative text)', 'imageseo'), $totalNoAlt); ?></p>
+		<?php if ($percentLoose > 0): ?>
+			<p>
+				<p><?php echo sprintf(__('On a basis of 100 users from Google, you could <strong class="imageseo-overview__gain">gain %s%s of traffic</strong> by optimizing all your alternative texts', 'imageseo'), $percentLoose, '%'); ?>
+			</p>
+		<?php endif; ?>
+	</div>
+	<?php if(imageseo_allowed()): ?>
+		<div class="fl-2">
+			<?php include_once __DIR__ . '/../_plan_need.php'; ?>
+		</div>
+	<?php endif; ?>
+</div>
 
+
+<h3><?php esc_html_e('Options', 'imageseo'); ?></h3>
+<hr>
 <table class="form-table">
     <tbody>
         <tr valign="top">

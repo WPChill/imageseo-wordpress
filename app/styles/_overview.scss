@@ -1,0 +1,55 @@
+
+
+.imageseo-overview{
+    padding:15px;
+    background-color: #fff;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    &__total-images{
+        color:$blue;
+    }
+    &__gain{
+        color:$blueLight;
+    }
+    p{
+        font-size: 17px;
+    }
+}
+
+.imageseo-plan-need{
+    margin-left: 5%;
+    border-radius: 20px;
+    position: relative;
+    background-image: radial-gradient(circle at top center, #0E214D 0%, $blueShady 100%);
+    color:#fff;
+    padding:15px;
+    font-size: 15px;
+    &__choice{
+        strong{
+            font-size: 17px;
+            color:$blueCoral;
+        }
+    }
+    &__title{
+        font-size: 17px;
+        font-weight: 700;
+    }
+    a{
+        -webkit-transition: all 0.1s ease-in 0s;
+        -moz-transition: all 0.1s ease-in 0s;
+        -o-transition: all 0.1s ease-in 0s;
+        transition: all 0.1s ease-in 0s;
+        display: inline-block;
+        padding: 1.3rem 3rem;
+        background: $blueCoral;
+        border: none;
+        border-radius: 2.5rem;
+        color: $blueShady;
+        font-size: 1.4rem;
+        cursor: pointer;
+        text-decoration: none;
+        opacity: 1;
+        font-weight: bold;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+}
