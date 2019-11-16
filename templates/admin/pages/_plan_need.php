@@ -1,7 +1,7 @@
 <?php
 use ImageSeoWP\Helpers\Plan;
 $imageLibraryService = imageseo_get_service('ImageLibrary');
-
+$total = $imageLibraryService->getTotalImages();
 $plan = Plan::getPlanByImages($imageLibraryService->getImagesNeedByMonth());
 $oneShot = Plan::getOneShotByImages($imageLibraryService->getNumberImageNonOptimizeAlt());
 ?>
@@ -12,14 +12,14 @@ $oneShot = Plan::getOneShotByImages($imageLibraryService->getNumberImageNonOptim
     </div>
 
     <p>
-        <?php esc_html_e("Let us help you by analyzing your existing images and determine the best plan for you.", 'imageseo'); ?>
+        <?php esc_html_e("Our plugin can help you to understand your needs and determine the best plan for you.", 'imageseo'); ?>
     </p>
     <p class="imageseo-plan-need__choice">
-        <?php esc_html_e("Your image consumption tells us that you should use the plan : ", "imageseo"); ?> <strong><?php echo $plan['name']; ?> (<?php echo $plan['price']; ?>€ <?php esc_html_e('by month', 'imageseo'); ?>)</strong>
+        <?php echo sprintf(__("You have %s. We recommend you : ", "imageseo"), $total); ?> <strong><?php echo $plan['name']; ?> (<?php echo $plan['price']; ?>€ <?php esc_html_e('by month', 'imageseo'); ?>)</strong>
     </p>
     <?php if($oneShot != null): ?>
     <p class="imageseo-plan-need__choice">
-        <?php echo sprintf(__("If you want to optimize all your missing images, you could buy %s credits for : ", "imageseo"), $oneShot['images']); ?> <strong><?php echo $oneShot['price']; ?>€</strong>
+        <?php echo sprintf(__("If you want to bulk all your library you should buy this one shoot plan : ", "imageseo"), $oneShot['images']); ?> <strong><?php echo $oneShot['price']; ?>€</strong>
     </p>
     <?php endif; ?>
 

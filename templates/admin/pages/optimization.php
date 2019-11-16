@@ -57,13 +57,7 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
 
 		<div class="imageseo-flex">
 			<div class="fl-2 imageseo-overview">
-				<p><?php echo sprintf(__('You have <strong class="imageseo-overview__total-images">%s image(s)</strong>', 'imageseo'), $total); ?></p>
-				<p><?php echo sprintf(__('<strong>%s images</strong> are not optimized for your referencing (alternative text)', 'imageseo'), $totalNoAlt); ?></p>
-				<?php if ($percentLoose > 0): ?>
-					<p>
-						<p><?php echo sprintf(__('On a basis of 100 users from Google, you could <strong class="imageseo-overview__gain">gain %s%s of traffic</strong> by optimizing all your alternative texts', 'imageseo'), $percentLoose, '%'); ?>
-					</p>
-				<?php endif; ?>
+				<?php include_once __DIR__ . '/_optimization'; ?>
 			</div>
 			<div class="fl-2">
 				<?php include_once __DIR__ . '/_plan_need.php'; ?>
