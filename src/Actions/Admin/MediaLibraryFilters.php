@@ -38,7 +38,7 @@ class MediaLibraryFilters
         $isEmpty   = filter_input(INPUT_GET, 'alt_is_empty', FILTER_SANITIZE_STRING);
         $selected = (int)$isEmpty > 0 ? $isEmpty : '-1'; ?>
         <select name="alt_is_empty" id="alt_is_empty" class="">
-            <option value="-1" <?php selected($selected, '-1'); ?>><?php esc_html_e('All', 'imageseo'); ?></option>
+            <option value="-1" <?php selected($selected, '-1'); ?>><?php esc_html_e('All (alt empty or not)', 'imageseo'); ?></option>
             <option value="1" <?php selected($selected, '1'); ?>><?php esc_html_e('Alt is empty', 'imageseo'); ?></option>
             <option value="2" <?php selected($selected, '2'); ?>><?php esc_html_e('Alt is not empty', 'imageseo'); ?></option>
         </select>
