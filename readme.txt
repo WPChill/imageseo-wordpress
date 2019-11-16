@@ -40,15 +40,15 @@ It is useful when images on the web page cannot be displayed or loaded, in which
 
 = WHY MUST YOU USE IMAGE SEO WORDPRESS PLUGIN ? =
 
-* To stop losing traffic : more than 20% of Google searches are coming from Google Images. To increase your position in the SERP you need to optimize your ALTs tags and rename your files and medias in a good way. ImageSEO does it ! 
-* Because optimizing your images will have a positive impact on your global SEO strategy. ImageSEO does it !
-* Because Image are more compelling than words when it comes to sell or tell somethings. Improve your images ranking in Google, Qwant and Bing will improve your conversion rate. ImageSEO does it !
-* Because it’s easier to rank on competitive keywords during image researches (and ImageSEO does it, but you knew it already ;))
+* To stop losing traffic : more than 20% of Google searches are coming from Google Images. To increase your position in the SERP you need to optimize your ALTs tags and rename your files and medias in a good way. Image SEO does it ! 
+* Because optimizing your images will have a positive impact on your global SEO strategy. Image SEO does it !
+* Because Image are more compelling than words when it comes to sell or tell somethings. Improve your images ranking in Google, Qwant and Bing will improve your conversion rate. Image SEO does it !
+* Because it’s easier to rank on competitive keywords during image researches (and Image SEO does it, but you knew it already ;))
 
 = How to get your API Key set up Image SEO WordPress Plugin ? =
 
 Step 1 : you have to download and activate Image SEO Plugin.
-Step 2 : you need to [create an account on Image SEO]((https://app.imageseo.io/register-wordpress)) to get an API Key (it's free).
+Step 2 : you need to [create an account on Image SEO](https://app.imageseo.io/register-wordpress) to get an API Key (it's free).
 Step 3 : back on the plugin and enter your API Key.
 Step 4 : bulk your library / image galery and start to improve your images for SEO ! 
 
@@ -82,9 +82,9 @@ Image SEO is free for small websites (10 images optimization every month).We hav
 
 * Support and Updates
 
-= ImageSEO Web Application =
+= Image SEO Web Application =
 
-For the people willing to go in depth about the ImageSEO our web application provide you a complete audit about your images SEO Strategy :
+For the people willing to go in depth about the Image SEO our web application provide you a complete audit about your images SEO Strategy :
 
 * Image Sitemap;
 * Image Size and Responsive;
