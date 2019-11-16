@@ -15,7 +15,7 @@ $oneShot = Plan::getOneShotByImages($imageLibraryService->getNumberImageNonOptim
         <?php esc_html_e("Our plugin can help you to understand your needs and determine the best plan for you.", 'imageseo'); ?>
     </p>
     <p class="imageseo-plan-need__choice">
-        <?php echo sprintf(__("You have %s images. We recommend you : ", "imageseo"), $total); ?> <strong><?php echo $plan['name']; ?> (<?php echo $plan['price']; ?>€ <?php esc_html_e('by month', 'imageseo'); ?>)</strong>
+        <?php echo sprintf(__("You have %s images. We recommend this plan for you : ", "imageseo"), $total); ?> <strong><?php echo $plan['name']; ?> (<?php echo $plan['price']; ?>€ <?php esc_html_e('by month', 'imageseo'); ?>)</strong>
     </p>
     <?php if($oneShot != null): ?>
     <p class="imageseo-plan-need__choice">
