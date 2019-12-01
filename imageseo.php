@@ -7,7 +7,7 @@ Author: ImageSEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 1.0.17
+Version: 1.0.18
 */
 
 if (!defined('ABSPATH')) {
@@ -21,14 +21,13 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '1.0.17');
+define('IMAGESEO_VERSION', '1.0.18');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-// define('IMAGESEO_API_URL', 'https://api.imageseo.io');
-define('IMAGESEO_API_URL', 'http://devapi.imageseo.ngrok.io');
+define('IMAGESEO_API_URL', 'https://api.imageseo.io');
 
 define('IMAGESEO_DIRURL', plugin_dir_url(__FILE__));
 define('IMAGESEO_URL_DIST', IMAGESEO_DIRURL . 'dist');
