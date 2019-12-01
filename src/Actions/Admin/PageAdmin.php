@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -19,19 +19,16 @@ class PageAdmin
         $this->clientServices = imageseo_get_service('ClientApi');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
-        add_action('admin_menu', [ $this, 'pluginMenu' ]);
-        add_action('admin_head', [ $this, 'menuOrderCount' ]);
+        add_action('admin_menu', [$this, 'pluginMenu']);
+        add_action('admin_head', [$this, 'menuOrderCount']);
     }
 
     /**
-     * Add menu and sub pages
+     * Add menu and sub pages.
+     *
      * @see admin_menu
-     * @return void
      */
     public function pluginMenu()
     {
@@ -40,7 +37,7 @@ class PageAdmin
             'ImageSEO',
             'manage_options',
             TabsAdmin::SETTINGS,
-            [ $this, 'pluginSettingsPage' ],
+            [$this, 'pluginSettingsPage'],
             IMAGESEO_URL_DIST . '/images/favicon.png'
         );
 
@@ -62,9 +59,6 @@ class PageAdmin
         );
     }
 
-    /**
-    * @return void
-    */
     public function menuOrderCount()
     {
         global $submenu;
@@ -74,12 +68,11 @@ class PageAdmin
     }
 
     /**
-     * Page settings
-     * @return void
+     * Page settings.
      */
     public function pluginSettingsPage()
     {
-        $this->tabs       = TabsAdmin::getFullTabs();
+        $this->tabs = TabsAdmin::getFullTabs();
         $this->tab_active = TabsAdmin::SETTINGS;
         $this->owner = $this->clientServices->getApiKeyOwner();
 

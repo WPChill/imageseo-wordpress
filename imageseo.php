@@ -10,7 +10,7 @@ Domain Path: /languages/
 Version: 1.0.17
 */
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -27,7 +27,8 @@ define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-define('IMAGESEO_API_URL', 'https://api.imageseo.io');
+// define('IMAGESEO_API_URL', 'https://api.imageseo.io');
+define('IMAGESEO_API_URL', 'http://devapi.imageseo.ngrok.io');
 
 define('IMAGESEO_DIRURL', plugin_dir_url(__FILE__));
 define('IMAGESEO_URL_DIST', IMAGESEO_DIRURL . 'dist');
@@ -38,7 +39,6 @@ define('IMAGESEO_TEMPLATES_ADMIN_NOTICES', IMAGESEO_TEMPLATES_ADMIN . '/notices'
 define('IMAGESEO_TEMPLATES_ADMIN_PAGES', IMAGESEO_TEMPLATES_ADMIN . '/pages');
 define('IMAGESEO_TEMPLATES_ADMIN_METABOXES', IMAGESEO_TEMPLATES_ADMIN . '/metaboxes');
 
-
 /**
  * Check compatibility this ImageSeo with WordPress config.
  */
@@ -47,6 +47,7 @@ function imageseo_is_compatible()
     // Check php version.
     if (version_compare(PHP_VERSION, IMAGESEO_PHP_MIN) < 0) {
         add_action('admin_notices', 'imageseo_php_min_compatibility');
+
         return false;
     }
 
@@ -54,13 +55,11 @@ function imageseo_is_compatible()
 }
 
 /**
- * Admin notices if imageseo not compatible
- *
- * @return void
+ * Admin notices if imageseo not compatible.
  */
 function imageseo_php_min_compatibility()
 {
-    if (! file_exists(IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php')) {
+    if (!file_exists(IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php')) {
         return;
     }
 
@@ -72,10 +71,9 @@ function imageseo_php_min_compatibility()
  */
 function imageseo_plugin_activate()
 {
-    if (! imageseo_is_compatible()) {
+    if (!imageseo_is_compatible()) {
         return;
     }
-
 
     require_once __DIR__ . '/imageseo-functions.php';
 
@@ -100,7 +98,6 @@ function imageseo_plugin_uninstall()
     delete_option(IMAGESEO_SLUG);
 }
 
-
 /**
  * Load ImageSEO.
  *
@@ -116,7 +113,6 @@ function imageseo_plugin_loaded()
         Context::getContext()->initPlugin();
     }
 }
-
 
 register_activation_hook(__FILE__, 'imageseo_plugin_activate');
 register_deactivation_hook(__FILE__, 'imageseo_plugin_deactivate');

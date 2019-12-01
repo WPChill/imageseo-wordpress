@@ -53,6 +53,50 @@
     font-weight: bold;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); }
 
+.imageseo-block {
+  background-color: white;
+  box-shadow: rgba(33, 43, 61, 0.1) 0px 3px 6px 0px, rgba(33, 43, 61, 0.05) 0px 0px 6px 0px;
+  margin-bottom: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c8d0dd;
+  border-image: initial;
+  border-radius: 3px;
+  padding: 15px;
+  margin-right: 15px;
+  height: 100%; }
+  .imageseo-block h3 {
+    line-height: 1.5; }
+  .imageseo-block p {
+    font-size: 1.1em; }
+  .imageseo-block--secondary {
+    background-image: radial-gradient(circle at top center, #0E214D 0%, #08142E 100%);
+    color: #fff; }
+
+.imageseo-btn {
+  transition: all 0.1s ease-in 0s;
+  display: inline-block;
+  border: none;
+  border-radius: 2.5rem;
+  padding: .5rem 1.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 1;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); }
+  .imageseo-btn--primary {
+    background: #04EDDA;
+    color: #08142E; }
+  .imageseo-btn--large {
+    padding: 1.3rem 3rem;
+    font-size: 1.4rem; }
+
+*[class^=imageseo],
+*[class^=imageseo] * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
 #wrap-imageseo {
   max-width: 80%; }
   #wrap-imageseo .tags {
@@ -232,3 +276,43 @@
     width: 35%; }
   .imageseo-reports--alt {
     width: 57%; }
+
+#form-register label {
+  display: block; }
+
+#form-register button {
+  display: block;
+  margin-top: 20px;
+  width: 100%; }
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 40px;
+  height: 30px; }
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  -webkit-animation: lds-dual-ring 1.2s linear infinite;
+  animation: lds-dual-ring 1.2s linear infinite; }
+
+@-webkit-keyframes lds-dual-ring {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes lds-dual-ring {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }

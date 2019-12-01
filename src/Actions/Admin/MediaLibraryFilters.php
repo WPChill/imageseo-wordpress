@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -11,32 +11,29 @@ class MediaLibraryFilters
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
-        $this->reportImageServices   = imageseo_get_service('ReportImage');
-        $this->renameFileServices   = imageseo_get_service('RenameFile');
+        $this->reportImageServices = imageseo_get_service('ReportImage');
+        $this->renameFileServices = imageseo_get_service('RenameFile');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
         if (!imageseo_allowed()) {
             return;
         }
 
-        add_action('restrict_manage_posts', [$this,'filtersByAlt']);
+        add_action('restrict_manage_posts', [$this, 'filtersByAlt']);
         add_action('pre_get_posts', [$this, 'applyFiltersByAlt']);
     }
 
     public function filtersByAlt()
     {
         $scr = get_current_screen();
-        if ($scr->base !== 'upload') {
+        if ('upload' !== $scr->base) {
             return;
         }
-    
-        $isEmpty   = filter_input(INPUT_GET, 'alt_is_empty', FILTER_SANITIZE_STRING);
-        $selected = (int)$isEmpty > 0 ? $isEmpty : '-1'; ?>
+
+        $isEmpty = filter_input(INPUT_GET, 'alt_is_empty', FILTER_SANITIZE_STRING);
+        $selected = (int) $isEmpty > 0 ? $isEmpty : '-1'; ?>
         <select name="alt_is_empty" id="alt_is_empty" class="">
             <option value="-1" <?php selected($selected, '-1'); ?>><?php esc_html_e('All (alt empty or not)', 'imageseo'); ?></option>
             <option value="1" <?php selected($selected, '1'); ?>><?php esc_html_e('Alt is empty', 'imageseo'); ?></option>
@@ -54,19 +51,19 @@ class MediaLibraryFilters
         if (!$query->is_main_query()) {
             return;
         }
-        
-        if (!isset($_GET['alt_is_empty']) || $_GET['alt_is_empty'] == -1) {
+
+        if (!isset($_GET['alt_is_empty']) || -1 == $_GET['alt_is_empty']) {
             return;
         }
-        
-        $compare = (int) $_GET['alt_is_empty'] === 1 ? '=' : '!=';
+
+        $compare = 1 === (int) $_GET['alt_is_empty'] ? '=' : '!=';
 
         $meta_query = [
             [
-                'key' => '_wp_attachment_image_alt',
-                'value' => '',
-                'compare' => $compare
-            ]
+                'key'     => '_wp_attachment_image_alt',
+                'value'   => '',
+                'compare' => $compare,
+            ],
         ];
         $query->set('meta_query', $meta_query);
     }

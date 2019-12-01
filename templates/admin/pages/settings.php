@@ -1,10 +1,8 @@
 <?php
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
-
-use ImageSeoWP\Helpers\TabsAdmin;
 
 ?>
 
@@ -15,19 +13,12 @@ use ImageSeoWP\Helpers\TabsAdmin;
 
         <form method="post" id="mainform" action="<?php echo esc_url(admin_url('options.php')); ?>">
             <?php
-            switch ($this->tab_active) {
-                case TabsAdmin::SETTINGS:
-                default:
-                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/settings.php';
-                    include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/tabs/alt.php';
-
-                    break;
-            }
+            include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/settings/api.php';
+            include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/settings/alt.php';
 
             settings_fields(IMAGESEO_OPTION_GROUP);
             submit_button();
             ?>
-            <input type="hidden" name="tab" value="<?php echo esc_attr($this->tab_active); ?>">
         </form>
         <hr>
     </div>

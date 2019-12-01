@@ -2,37 +2,31 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
 /**
- *
  * @since 1.0.0
  */
 class MediaLibrary
 {
-
     /**
      * @since 1.0.0
      */
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
-        $this->reportImageService   = imageseo_get_service('ReportImage');
-        $this->renameFileService   = imageseo_get_service('RenameFile');
-        $this->altService   = imageseo_get_service('Alt');
+        $this->reportImageService = imageseo_get_service('ReportImage');
+        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->altService = imageseo_get_service('Alt');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
         if (!imageseo_allowed()) {
             return;
         }
-
 
         add_filter('manage_media_columns', [$this, 'manageMediaColumns']);
         add_filter('attachment_fields_to_edit', [$this, 'fieldsEdit'], 999, 2);
@@ -50,16 +44,14 @@ class MediaLibrary
 
     /**
      * @since 1.0.0
-     * @return void
      */
     public function addMediaPage()
     {
-        add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [ $this, 'adminMediaFiles' ]);
+        add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [$this, 'adminMediaFiles']);
     }
 
     /**
      * @since 1.0.0
-     * @return void
      */
     public function adminMediaFiles()
     {
@@ -68,8 +60,8 @@ class MediaLibrary
 
     /**
      * @since 1.0.0
+     *
      * @param int $postId
-     * @return void
      */
     public function addAltOnUpload($attachmentId)
     {
@@ -93,8 +85,10 @@ class MediaLibrary
 
     /**
      * @since 1.0.9
+     *
      * @param array $metadata
-     * @param int $attachmentId
+     * @param int   $attachmentId
+     *
      * @return array
      */
     public function renameFileOnUpload($metadata, $attachmentId)
@@ -122,10 +116,8 @@ class MediaLibrary
         return $metadata;
     }
 
-
     /**
      * @since 2.1.0
-     * @return void
      */
     public function ajaxAltUpdate()
     {
@@ -137,55 +129,57 @@ class MediaLibrary
 
     /**
      * @since 1.0.0
-     * @param array $formFields
+     *
+     * @param array  $formFields
      * @param object $post
+     *
      * @return array
      */
     public function fieldsEdit($formFields, $post)
     {
         global $pagenow;
 
-        $formFields['imageseo-data-pin-description'] = array(
+        $formFields['imageseo-data-pin-description'] = [
             'label'         => __('Pinterest description', 'imageseo'),
             'input'         => 'textarea',
-            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_description', true),
+            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_description', true),
             'show_in_edit'  => true,
             'show_in_modal' => true,
-            'helps' => '&lt;img src="#" data-pin-description="My description" /&gt;'
-        );
-        $formFields['imageseo-data-pin-url'] = array(
+            'helps'         => '&lt;img src="#" data-pin-description="My description" /&gt;',
+        ];
+        $formFields['imageseo-data-pin-url'] = [
             'label'         => __('Pinterest URL', 'imageseo'),
             'input'         => 'text',
-            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_url', true),
+            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_url', true),
             'show_in_edit'  => true,
             'show_in_modal' => true,
-            'helps' => '&lt;img src="#" data-pin-url="https://imageseo.io" /&gt;'
-        );
-        $formFields['imageseo-data-pin-id'] = array(
+            'helps'         => '&lt;img src="#" data-pin-url="https://imageseo.io" /&gt;',
+        ];
+        $formFields['imageseo-data-pin-id'] = [
             'label'         => __('Pinterest ID', 'imageseo'),
             'input'         => 'text',
-            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_id', true),
+            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_id', true),
             'show_in_edit'  => true,
             'show_in_modal' => true,
-            'helps' => '&lt;img src="#" data-pin-id="id-pin" /&gt;'
-        );
-        $formFields['imageseo-data-pin-media'] = array(
+            'helps'         => '&lt;img src="#" data-pin-id="id-pin" /&gt;',
+        ];
+        $formFields['imageseo-data-pin-media'] = [
             'label'         => __('Pinterest Media', 'imageseo'),
             'input'         => 'text',
-            'value' 		=> get_post_meta($post->ID, '_imageseo_data_pin_media', true),
+            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_media', true),
             'show_in_edit'  => true,
             'show_in_modal' => true,
-            'helps' => '&lt;img src="#"  data-pin-media="https://example.com/my-image.jpg" /&gt;'
-        );
+            'helps'         => '&lt;img src="#"  data-pin-media="https://example.com/my-image.jpg" /&gt;',
+        ];
 
         if ('post.php' !== $pagenow) {
-            $formFields['imageseo-has-report'] = array(
+            $formFields['imageseo-has-report'] = [
                 'label'         => __('ImageSEO Report', 'imageseo'),
                 'input'         => 'html',
                 'html'          => '<a id="imageseo-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'imageseo') . '</a>',
                 'show_in_edit'  => true,
                 'show_in_modal' => true,
-            );
+            ];
         }
 
         return $formFields;
@@ -193,7 +187,6 @@ class MediaLibrary
 
     /**
      * @since 1.0.8
-     * @return void
      */
     public function saveDataPinterest($post, $attachment)
     {
@@ -215,7 +208,6 @@ class MediaLibrary
 
     /**
      * @since 1.0.0
-     * @return void
      */
     public function metaboxReport()
     {
@@ -230,8 +222,8 @@ class MediaLibrary
 
     /**
      * @since 1.0.0
+     *
      * @param object $post
-     * @return void
      */
     public function viewMetaboxReport($post)
     {
@@ -239,9 +231,9 @@ class MediaLibrary
     }
 
     /**
-     * Activate array
+     * Activate array.
+     *
      * @since 1.0.0
-     * @return void
      */
     public function manageMediaColumns($columns)
     {
@@ -250,17 +242,15 @@ class MediaLibrary
         return $columns;
     }
 
-
-
     /**
      * @since  1.0
-     * @param string $columnName   Name of the custom column.
+     *
+     * @param string $columnName    Name of the custom column.
      * @param int    $attachment_id Attachment ID.
-     * @return void
      */
     public function manageMediaCustomColumn($columnName, $attachmentId)
     {
-        if ($columnName !== 'imageseo') {
+        if ('imageseo' !== $columnName) {
             return;
         }
 

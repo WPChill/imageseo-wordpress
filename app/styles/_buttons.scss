@@ -1,0 +1,23 @@
+&-btn{
+    transition: all 0.1s ease-in 0s;
+    display: inline-block;
+    border: none;
+    
+    border-radius: 2.5rem;
+    padding: .5rem 1.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 1;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    &--primary{
+        background: $blueCoral;
+        color: $blueShady;
+    }
+    &--large{
+        padding: 1.3rem 3rem;
+        font-size: 1.4rem;
+    }
+}
+

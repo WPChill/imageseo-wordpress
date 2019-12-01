@@ -1,0 +1,23 @@
+&-block{
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(33, 43, 61, 0.1) 0px 3px 6px 0px, rgba(33, 43, 61, 0.05) 0px 0px 6px 0px;
+    margin-bottom: 20px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(200, 208, 221);
+    border-image: initial;
+    border-radius: 3px;
+    padding:15px;
+    margin-right: 15px;
+    height: 100%;
+    h3{
+        line-height: 1.5;
+    }
+    p{
+        font-size: 1.1em;
+    }
+    &--secondary{
+        background-image: radial-gradient(circle at top center, #0E214D 0%, $blueShady 100%);
+        color:#fff;
+    }
+}

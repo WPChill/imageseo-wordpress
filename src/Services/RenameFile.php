@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Services;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -29,13 +29,15 @@ class RenameFile
     {
         $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId, $params);
         $slugify = new Slugify(['separator' => $this->getDelimiter()]);
+
         return $slugify->slugify($value);
     }
 
     /**
      * @since 1.0.0
      *
-     * @param integer $attachmentId
+     * @param int $attachmentId
+     *
      * @return string
      */
     public function getNameFileWithAttachmentId($attachmentId)
@@ -47,22 +49,22 @@ class RenameFile
         $oldName = $splitName[0];
 
         if ($oldName === $newName) {
-            throw new NoRenameFile("No need to change");
+            throw new NoRenameFile('No need to change');
         }
 
         return $this->generateUniqueFilename([
             trailingslashit(dirname($filePath)), // Directory
-            $splitName[count($splitName)-1], // Ext
+            $splitName[count($splitName) - 1], // Ext
             $this->getDelimiter(), // Delimiter,
-            $attachmentId
+            $attachmentId,
         ], $newName);
     }
-
 
     /**
      * @since 1.0.0
      *
      * @param string $name
+     *
      * @return string
      */
     public function generateUniqueFilename($data, $name, $counter = 1)
@@ -77,7 +79,7 @@ class RenameFile
 
         if ($counter < $number_try_name) {
             $name = $this->generateNameFromReport($attachmentId, [
-                'max_percent' => 100-($counter*10)
+                'max_percent' => 100 - ($counter * 10),
             ]);
 
             if ($name === get_bloginfo('title')) {
@@ -94,9 +96,8 @@ class RenameFile
         if ($counter < $number_try_name) {
             return $this->generateUniqueFilename($data, $name, ++$counter);
         } else {
-            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, ($number_try_name+2) - $counter), ++$counter);
+            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, ($number_try_name + 2) - $counter), ++$counter);
         }
-
 
         return $name;
     }
@@ -104,7 +105,8 @@ class RenameFile
     /**
      * @since 1.0.0
      *
-     * @param integer $attachmentId
+     * @param int $attachmentId
+     *
      * @return bool
      */
     public function renameAttachment($attachmentId, $metadata = null)
@@ -114,12 +116,11 @@ class RenameFile
             $this->reportImageServices->generateReportByAttachmentId($attachmentId);
         }
 
-        
         $filePath = get_attached_file($attachmentId);
-        
+
         if (!wp_mkdir_p(dirname($filePath))) {
             return [
-                'success' => false
+                'success' => false,
             ];
         }
 
@@ -127,17 +128,17 @@ class RenameFile
             $newFilename = $this->getNameFileWithAttachmentId($attachmentId);
         } catch (NoRenameFile $e) {
             return [
-                'success' => true
+                'success' => true,
             ];
         }
 
-        if ($metadata === null) {
+        if (null === $metadata) {
             $metadata = wp_get_attachment_metadata($attachmentId);
         }
         $post = get_post($attachmentId, ARRAY_A);
         $basename = basename($filePath);
         $splitName = explode('.', $basename);
-        unset($splitName[count($splitName)-1]);
+        unset($splitName[count($splitName) - 1]);
         $basenameWithoutExt = implode('.', $splitName);
         $directory = trailingslashit(dirname($filePath));
         $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
@@ -186,9 +187,9 @@ class RenameFile
         clean_post_cache($attachmentId);
 
         return [
-            'success' => true,
+            'success'  => true,
             'metadata' => $metadata,
-            'post' => $post
+            'post'     => $post,
         ];
     }
 }

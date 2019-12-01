@@ -56,7 +56,7 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
         <h3><?php esc_html_e('Overview', 'imageseo'); ?></h3>
 
 		<div class="imageseo-flex">
-			<div class="fl-2 imageseo-overview">
+			<div class="fl-2">
 				<?php include_once __DIR__ . '/_optimization.php'; ?>
 			</div>
 			<div class="fl-2">

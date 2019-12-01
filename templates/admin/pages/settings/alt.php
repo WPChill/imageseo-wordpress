@@ -1,12 +1,10 @@
 <?php
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\TabsAdmin;
 use ImageSeoWP\Helpers\AltTags;
-
 
 $options_available = [
     'active_alt_write_upload' => [
@@ -23,22 +21,22 @@ $options_available = [
         'key'         => 'default_language_ia',
         'label'       => __('Language', 'imageseo'),
         'description' => __('Our Artificial lntelligence works in English. You can choose another language if you want. The ALT Tags, and filenames will be generated accordingly.', 'imageseo'),
-    ]
+    ],
 ];
 
 $tags = AltTags::getTags();
 
-$currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bonus_stock_images']  === 0 ) ? 'en' : $this->options[ $options_available['default_language_ia']['key'] ];
+$currentLanguage = ('free' === $this->owner['plan']['slug'] && 0 === $this->owner['bonus_stock_images']) ? 'en' : $this->options[$options_available['default_language_ia']['key']];
 
 ?>
 
 <h3><?php esc_html_e('Overview', 'imageseo'); ?></h3>
 <hr>
 <div class="imageseo-flex" style="margin-bottom:40px;">
-	<div class="fl-2 imageseo-overview">
+	<div class="fl-2">
 		<?php include_once __DIR__ . '/../_optimization.php'; ?>
 	</div>
-	<?php if(imageseo_allowed()): ?>
+	<?php if (imageseo_allowed()): ?>
 		<div class="fl-2">
 			<?php include_once __DIR__ . '/../_plan_need.php'; ?>
 		</div>
@@ -63,7 +61,7 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bo
 						name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_alt_write_upload']['key'])); ?>"
 						type="checkbox"
 						id="<?php echo esc_attr($options_available['active_alt_write_upload']['key']); ?>"
-						<?php checked($this->options[ $options_available['active_alt_write_upload']['key'] ], 1); ?>
+						<?php checked($this->options[$options_available['active_alt_write_upload']['key']], 1); ?>
 					>
 					<p><?php echo $options_available['active_alt_write_upload']['description']; //phpcs:ignore?></p>
 				</fieldset>
@@ -82,7 +80,7 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bo
 						name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['active_rename_write_upload']['key'])); ?>"
 						type="checkbox"
 						id="<?php echo esc_attr($options_available['active_rename_write_upload']['key']); ?>"
-						<?php checked($this->options[ $options_available['active_rename_write_upload']['key'] ], 1); ?>
+						<?php checked($this->options[$options_available['active_rename_write_upload']['key']], 1); ?>
 					>
 					<p><?php echo $options_available['active_rename_write_upload']['description']; //phpcs:ignore?></p>
 				</fieldset>
@@ -99,9 +97,9 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bo
 				<fieldset>
 					<select
 						name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['default_language_ia']['key'])); ?>"
-						<?php if ($this->owner === null || ($this->owner['plan']['slug'] === 'free' && $this->owner['bonus_stock_images'] === 0)): ?>
+						<?php if (null === $this->owner || ('free' === $this->owner['plan']['slug'] && 0 === $this->owner['bonus_stock_images'])): ?>
 						disabled
-						<?php endif;?>
+						<?php endif; ?>
 					>
 						<?php foreach ($this->languages as $language): ?>
 							<option
@@ -113,7 +111,7 @@ $currentLanguage = ($this->owner['plan']['slug'] === 'free'  && $this->owner['bo
 						<?php endforeach; ?>
 					</select>
 					<p><?php echo $options_available['default_language_ia']['description']; //phpcs:ignore?></p>
-					<?php if ($this->owner === null || ($this->owner['plan']['slug'] === 'free' && $this->owner['bonus_stock_images']  === 0) || empty( $this->options['api_key'] ) || !imageseo_allowed() ): ?>
+					<?php if (null === $this->owner || ('free' === $this->owner['plan']['slug'] && 0 === $this->owner['bonus_stock_images']) || empty($this->options['api_key']) || !imageseo_allowed()): ?>
 						<div class="imageseo-account-info imageseo-account-info--error" style="background-color:#c50000;">
 							 <?php _e('You need to <a target="_blank" style="color:#fff" href="https://app.imageseo.io/plan?from=wordpress">become a premium</a> to be able to change the language of the AI', 'imageseo'); ?>
 						</div>

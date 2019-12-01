@@ -8,6 +8,7 @@ module.exports = {
 	entry: {
 		'media-upload': './app/javascripts/media-upload.js',
 		'bulk-optimization': './app/javascripts/bulk-optimization.js',
+		'register': './app/javascripts/register.js',
 		'admin-bar': './app/javascripts/admin-bar.js',
 		'admin-css': './app/styles/admin.scss'
 	},

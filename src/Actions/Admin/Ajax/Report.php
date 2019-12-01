@@ -2,7 +2,7 @@
 
 namespace ImageSeoWP\Actions\Admin\Ajax;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -13,20 +13,16 @@ use ImageSeoWP\Exception\NoRenameFile;
  */
 class Report
 {
-
     /**
      * @since 1.0.0
      */
     public function __construct()
     {
-        $this->reportImageService   = imageseo_get_service('ReportImage');
-        $this->altService   = imageseo_get_service('Alt');
-        $this->renameFileService   = imageseo_get_service('RenameFile');
+        $this->reportImageService = imageseo_get_service('ReportImage');
+        $this->altService = imageseo_get_service('Alt');
+        $this->renameFileService = imageseo_get_service('RenameFile');
     }
 
-    /**
-     * @return void
-     */
     public function hooks()
     {
         if (!imageseo_allowed()) {
@@ -34,7 +30,6 @@ class Report
         }
 
         add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReport']);
-
     }
 
     /**
@@ -42,22 +37,23 @@ class Report
      */
     protected function getAttachmentId()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if ('GET' === $_SERVER['REQUEST_METHOD']) {
             return (int) $_GET['attachment_id'];
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
             return(int) $_POST['attachment_id'];
         }
     }
 
     /**
      * @param array $query
+     *
      * @return array
      */
     protected function generateReportAttachment($query = [])
     {
         if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
             return [
-                'success' => false
+                'success' => false,
             ];
         }
 
@@ -66,18 +62,14 @@ class Report
         $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
         if ($report) {
             return [
-                "success" => true,
-                "result" => $report
+                'success' => true,
+                'result'  => $report,
             ];
         }
-                
+
         return $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
     }
-  
 
-    /**
-     * @return void
-     */
     public function ajaxReport()
     {
         $currentBulk = (int) $_POST['current'];
@@ -87,7 +79,7 @@ class Report
             $response = $this->generateReportAttachment();
         } catch (\Exception $e) {
             wp_send_json_error([
-                "code" => "error_generate_report"
+                'code' => 'error_generate_report',
             ]);
             exit;
         }
@@ -100,18 +92,17 @@ class Report
         $attachmentId = $this->getAttachmentId();
         $report = $response['result'];
 
-        $updateAlt = (isset($_POST['update_alt']) && $_POST['update_alt'] === 'true') ? true : false;
-        $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && $_POST['update_alt_not_empty'] === 'true') ? true : false;
-        $renameFile = (isset($_POST['rename_file']) && $_POST['rename_file'] === 'true') ? true : false;
+        $updateAlt = (isset($_POST['update_alt']) && 'true' === $_POST['update_alt']) ? true : false;
+        $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && 'true' === $_POST['update_alt_not_empty']) ? true : false;
+        $renameFile = (isset($_POST['rename_file']) && 'true' === $_POST['rename_file']) ? true : false;
         $currentAlt = $this->altService->getAlt($attachmentId);
-        $currentFile =  wp_get_attachment_image_src($attachmentId, 'small');
+        $currentFile = wp_get_attachment_image_src($attachmentId, 'small');
         $altGenerate = $this->altService->getAltValueAttachmentWithReport($report);
 
         $currentNameFile = '';
         if (!empty($currentFile)) {
             $currentNameFile = basename($currentFile[0]);
         }
-
 
         if ($updateAlt || $updateAltNotEmpty) {
             if (($updateAlt && !$currentAlt) || $updateAltNotEmpty) {
@@ -122,17 +113,17 @@ class Report
         $newFilePath = false;
         if ($renameFile) {
             $this->renameFileService->renameAttachment($attachmentId);
-            $file =  wp_get_attachment_image_src($attachmentId, 'small');
+            $file = wp_get_attachment_image_src($attachmentId, 'small');
             if (!empty($file)) {
                 $newFilePath = basename($file[0]);
             }
         }
 
-        $file =  wp_get_attachment_image_src($attachmentId, 'small');
+        $file = wp_get_attachment_image_src($attachmentId, 'small');
 
-        if ($currentBulk+1 < $total) {
+        if ($currentBulk + 1 < $total) {
             update_option('_imageseo_current_processed', $currentBulk);
-        } elseif ($currentBulk+1 === $total) {
+        } elseif ($currentBulk + 1 === $total) {
             delete_option('_imageseo_current_processed');
         }
 
@@ -142,7 +133,7 @@ class Report
             $srcFile = $file[0];
             $nameFile = basename($srcFile);
         }
-        
+
         if (!$newFilePath) {
             $basenameWithoutExt = explode('.', $nameFile)[0];
             try {
@@ -153,14 +144,13 @@ class Report
         }
 
         wp_send_json_success([
-            'src' => $report['src'],
-            'current_alt' => $currentAlt,
-            'alt_generate' => $altGenerate,
-            'file_generate' => $newFilePath,
-            'file' => $srcFile,
+            'src'               => $report['src'],
+            'current_alt'       => $currentAlt,
+            'alt_generate'      => $altGenerate,
+            'file_generate'     => $newFilePath,
+            'file'              => $srcFile,
             'current_name_file' => $currentNameFile,
-            'name_file' => $nameFile
-
+            'name_file'         => $nameFile,
         ]);
     }
 }

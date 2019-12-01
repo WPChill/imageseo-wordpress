@@ -2,15 +2,11 @@
 
 namespace ImageSeoWP\Services;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeo\Client\Client;
-
 use ImageSeoWP\Helpers\AttachmentMeta;
-use ImageSeoWP\Helpers\AltTags;
-use ImageSeoWP\Helpers\RenameTags;
 
 class ReportImage
 {
@@ -22,6 +18,7 @@ class ReportImage
 
     /**
      * @param int $attachmentId
+     *
      * @return bool
      */
     public function haveAlreadyReportByAttachmentId($attachmentId)
@@ -31,6 +28,7 @@ class ReportImage
 
     /**
      * @param int $attachmentId
+     *
      * @return array
      */
     public function getReportByAttachmentId($attachmentId)
@@ -39,8 +37,9 @@ class ReportImage
     }
 
     /**
-     * @param int $attachmentId
+     * @param int   $attachmentId
      * @param array $query
+     *
      * @return array
      */
     public function generateReportByAttachmentId($attachmentId, $query = [])
@@ -50,7 +49,7 @@ class ReportImage
         }
 
         $mimeType = get_post_mime_type($attachmentId);
-        if (strpos($mimeType, 'image') === false) {
+        if (false === strpos($mimeType, 'image')) {
             return;
         }
 
@@ -62,25 +61,25 @@ class ReportImage
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang' => $this->optionService->getOption('default_language_ia'),
+                    'lang'     => $this->optionService->getOption('default_language_ia'),
                     'filePath' => $filePath,
-                    'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
-                    'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+                    'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                    'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
-            } catch (\Exception $th) {
+            } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang' => $this->optionService->getOption('default_language_ia'),
-                    'src' => $filePath,
-                    'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
-                    'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+                    'lang'   => $this->optionService->getOption('default_language_ia'),
+                    'src'    => $filePath,
+                    'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                    'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang' => $this->optionService->getOption('default_language_ia'),
-                'src' => $filePath,
-                'width' => (is_array($metadata) && !empty($metadata)) ?  $metadata['width'] : '',
-                'height' => (is_array($metadata) && !empty($metadata)) ?  $metadata['height'] : '',
+                'lang'   => $this->optionService->getOption('default_language_ia'),
+                'src'    => $filePath,
+                'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
             ], $query);
         }
 
@@ -95,11 +94,11 @@ class ReportImage
         return $result;
     }
 
-
     /**
-     * Get name file for an attachment id from a report
-     * 
+     * Get name file for an attachment id from a report.
+     *
      * @param int $attachmentId
+     *
      * @return string
      */
     public function getNameFileAttachmentWithId($attachmentId, $params = [])
@@ -110,9 +109,9 @@ class ReportImage
         return apply_filters('imageseo_get_name_file_attachment_id', $nameAuto, $attachmentId);
     }
 
-
     /**
      * @param array $report
+     *
      * @return string
      */
     public function getAutoContextFromReport($report, $params = [])
@@ -122,17 +121,19 @@ class ReportImage
 
     /**
      * @param array $report
+     *
      * @return string
      */
-    public function getAutoRepresentationFromReport($report, $params =[])
+    public function getAutoRepresentationFromReport($report, $params = [])
     {
         return $this->getValueAuto('labels', $report, $params);
     }
 
     /**
      * @param string $type
-     * @param array $report
-     * @param array $params
+     * @param array  $report
+     * @param array  $params
+     *
      * @return string
      */
     protected function getValueAuto($type, $report, $params = [])
@@ -151,20 +152,19 @@ class ReportImage
         while (empty($altReplace) && $i < $total) {
             if (null === $report[$type][$i]['score']) {
                 $altReplace = $report[$type][$i]['name'];
-                $i++;
+                ++$i;
                 continue;
             }
 
             if ($params['min_percent'] >= round($report[$type][$i]['score']) || $params['max_percent'] <= round($report[$type][$i]['score'])) {
-                $i++;
+                ++$i;
                 continue;
             }
 
             $altReplace = $report[$type][$i]['name'];
-            $i++;
+            ++$i;
         }
 
         return $altReplace;
     }
-
 }

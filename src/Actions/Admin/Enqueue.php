@@ -44,5 +44,9 @@ class Enqueue
         if (in_array($page, [ 'imageseo_page_imageseo-optimization' ], true)) {
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk-optimization.js', ['jquery']);
         }
+        
+        if(in_array($page, ['imageseo_page_imageseo-options'], true)){
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/register.js', ['jquery']);
+        }
     }
 }
