@@ -19,6 +19,7 @@ class RenameFile
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');
         $this->optionServices = imageseo_get_service('Option');
+        $this->htaccessServices = imageseo_get_service('Htaccess');
     }
 
     protected function getDelimiter()
@@ -190,13 +191,17 @@ class RenameFile
         $wpdb->query($query);
         clean_post_cache($attachmentId);
 
+
+        $targetUrl = wp_get_attachment_url($attachmentId);
         $this->searchReplaceInDB([
             'source_url'      => $sourceUrl,
             'source_metadata' => $sourceMetadata,
         ], [
-            'target_url'       => wp_get_attachment_url($attachmentId),
+            'target_url'       => $targetUrl,
             'target_metadata'  => wp_get_attachment_metadata($attachmentId),
         ]);
+
+        $this->updateRedirect($sourceUrl, $targetUrl);
 
         return [
             'success'  => true,
@@ -204,6 +209,27 @@ class RenameFile
             'post'     => $post,
         ];
     }
+
+    public function updateRedirect($sourceUrl, $targetUrl){
+
+        $data = get_transient('_imageseo_redirect_images');
+        if($data === false){
+            $data = [];
+        }
+
+
+        $sourceParse = wp_parse_url($sourceUrl);
+        if(!array_key_exists('path', $sourceParse)){
+            return;
+        }
+
+        $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
+        set_transient('_imageseo_redirect_images', $data, WEEK_IN_SECONDS * 2);
+
+        $content = $this->htaccessServices->generate();
+        $this->htaccessServices->save($content);
+    }
+
 
     /**
      * Build an array of search or replace URLs for given attachment GUID and its metadata.
@@ -337,6 +363,4 @@ class RenameFile
             }
         }
     }
-
-    // doSearchReplace
 }
