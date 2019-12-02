@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 use Cocur\Slugify\Slugify;
 use ImageSeoWP\Exception\NoRenameFile;
+use ImageSeoWP\Helpers\CleanURL;
 
 class RenameFile
 {
@@ -116,6 +117,9 @@ class RenameFile
             $this->reportImageServices->generateReportByAttachmentId($attachmentId);
         }
 
+        $sourceUrl = wp_get_attachment_url($attachmentId);
+        $sourceMetadata = wp_get_attachment_metadata($attachmentId);
+
         $filePath = get_attached_file($attachmentId);
 
         if (!wp_mkdir_p(dirname($filePath))) {
@@ -144,7 +148,7 @@ class RenameFile
         $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
 
         // Rename file
-        rename($filePath, $newFilePath);
+        @rename($filePath, $newFilePath);
 
         // Prepare post
         $post['post_title'] = $newFilename;
@@ -186,10 +190,153 @@ class RenameFile
         $wpdb->query($query);
         clean_post_cache($attachmentId);
 
+        $this->searchReplaceInDB([
+            'source_url'      => $sourceUrl,
+            'source_metadata' => $sourceMetadata,
+        ], [
+            'target_url'       => wp_get_attachment_url($attachmentId),
+            'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+        ]);
+
         return [
             'success'  => true,
             'metadata' => $metadata,
             'post'     => $post,
         ];
     }
+
+    /**
+     * Build an array of search or replace URLs for given attachment GUID and its metadata.
+     *
+     * @param string $guid
+     * @param array  $metadata
+     *
+     * @return array
+     */
+    public function getFileUrls($guid, $metadata)
+    {
+        $urls = [];
+
+        $guid = CleanURL::removeScheme($guid);
+        $guid = CleanURL::removeDomainFromFilename($guid);
+
+        $urls['guid'] = $guid;
+
+        if (empty($metadata)) {
+            return $urls;
+        }
+
+        $base_url = dirname($guid);
+
+        if (!empty($metadata['file'])) {
+            $urls['file'] = trailingslashit($base_url) . wp_basename($metadata['file']);
+        }
+
+        if (!empty($metadata['sizes'])) {
+            foreach ($metadata['sizes'] as $key => $value) {
+                $urls[$key] = trailingslashit($base_url) . wp_basename($value['file']);
+            }
+        }
+
+        return $urls;
+    }
+
+    /**
+     * Ensure new search URLs cover known sizes for old attachment.
+     * Falls back to full URL if size not covered (srcset or width/height attributes should compensate).
+     *
+     * @param array $old
+     * @param array $new
+     *
+     * @return array
+     */
+    public function normalizeFileUrls($old, $new)
+    {
+        $result = [];
+
+        if (empty($new['guid'])) {
+            return $result;
+        }
+
+        $guid = $new['guid'];
+
+        foreach ($old as $key => $value) {
+            $result[$key] = empty($new[$key]) ? $guid : $new[$key];
+        }
+
+        return $result;
+    }
+
+    public function searchReplaceInDB($source, $target)
+    {
+        global $wpdb;
+
+        $sourceUrl = $source['source_url'];
+        $sourceMetadata = $source['source_metadata'];
+
+        $targetUrl = $target['target_url'];
+        $targetMetadata = $target['target_metadata'];
+
+        // Search-and-replace filename in post database
+        $currentBaseUrl = CleanURL::getMatchUrl($sourceUrl);
+
+        /* Fail-safe if base_url is a whole directory, don't go search/replace */
+        if (is_dir($currentBaseUrl)) {
+            //Fail Safe :: Source Location seems to be a directory
+            return;
+        }
+
+        /* Search and replace in WP_POSTS */
+        // Removed $wpdb->remove_placeholder_escape from here, not compatible with WP 4.8
+        $postsSQL = $wpdb->prepare(
+            "SELECT ID, post_content 
+            FROM $wpdb->posts 
+            WHERE post_status = 'publish' 
+            AND post_content LIKE %s;",
+            '%' . $currentBaseUrl . '%');
+
+        $postmetaSQL = 'SELECT meta_id, post_id, meta_value 
+            FROM ' . $wpdb->postmeta . '
+            WHERE post_id in (SELECT ID from ' . $wpdb->posts . ' where post_status = "publish") 
+            AND meta_value like %s  ';
+
+        $postmetaSQL = $wpdb->prepare($postmetaSQL, '%' . $currentBaseUrl . '%');
+
+        $rsmeta = $wpdb->get_results($postmetaSQL, ARRAY_A);
+        $rs = $wpdb->get_results($postsSQL, ARRAY_A);
+
+        $numberOfUpdates = 0;
+
+        $search_urls = $this->getFileUrls($sourceUrl, $sourceMetadata);
+        $replace_urls = $this->getFileUrls($targetUrl, $targetMetadata);
+        $replace_urls = array_values($this->normalizeFileUrls($search_urls, $replace_urls));
+
+        if (!empty($rs)) {
+            foreach ($rs as $rows) {
+                $numberOfUpdates = $numberOfUpdates + 1;
+                // replace old URLs with new URLs.
+                $post_content = $rows['post_content'];
+                $post_content = str_replace($search_urls, $replace_urls, $post_content);
+
+                $sql = $wpdb->prepare(
+                    "UPDATE $wpdb->posts SET post_content = %s WHERE ID = %d;",
+                    [$post_content, $rows['ID']]
+                );
+
+                $wpdb->query($sql);
+            }
+        }
+        if (!empty($rsmeta)) {
+            foreach ($rsmeta as $row) {
+                ++$numberOfUpdates;
+                $content = $row['meta_value'];
+                $content = str_replace($search_urls, $replace_urls, $content);
+
+                $sql = $wpdb->prepare('UPDATE ' . $wpdb->postmeta . ' SET meta_value = %s WHERE meta_id = %d', $content, $row['meta_id']);
+                $wpdb->query($sql);
+            }
+        }
+    }
+
+    // doSearchReplace
 }
