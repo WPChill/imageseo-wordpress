@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\AttachmentMeta;
+use ImageSeoWP\Helpers\ServerSoftware;
 
 $totalNoAlt = imageseo_get_service('ImageLibrary')->getNumberImageNonOptimizeAlt();
 $totalAlt = imageseo_get_service('ImageLibrary')->getNumberImageOptimizeAlt();
@@ -132,6 +133,11 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
 				<?php _e('Rename all your image files.', 'imageseo'); ?>
 			</label>
 		</div>
+		<?php if(ServerSoftware::isApache() && !imageseo_get_service('Htaccess')->isWritable()): ?>
+			<div class="update-nag">
+				<?php _e('Be careful, your <strong>.htaccess file</strong> is not writable. We will not be able to perform 301 redirections of your images if you change the file name.', 'imageseo'); ?>
+			</div>
+		<?php endif; ?>
 		<br />
 		<h3><?php esc_html_e('Image processing can therefore take up to 30 seconds (by image).', 'imageseo'); ?></h3>
 		<button class="button button-primary" id="imageseo-bulk-reports--preview">

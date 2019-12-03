@@ -9,6 +9,7 @@ if (!defined('ABSPATH')) {
 use Cocur\Slugify\Slugify;
 use ImageSeoWP\Exception\NoRenameFile;
 use ImageSeoWP\Helpers\CleanURL;
+use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFile
 {
@@ -210,6 +211,13 @@ class RenameFile
         ];
     }
 
+    /**
+     * Update redirection server
+     *
+     * @param string $sourceUrl
+     * @param string $targetUrl
+     * @return void
+     */
     public function updateRedirect($sourceUrl, $targetUrl){
 
         $data = get_transient('_imageseo_redirect_images');
@@ -226,8 +234,11 @@ class RenameFile
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
         set_transient('_imageseo_redirect_images', $data, WEEK_IN_SECONDS * 2);
 
-        $content = $this->htaccessServices->generate();
-        $this->htaccessServices->save($content);
+
+        if(ServerSoftware::isApache() && $this->htaccessServices->isWritable()){
+            $content = $this->htaccessServices->generate();
+            $this->htaccessServices->save($content);
+        }
     }
 
 

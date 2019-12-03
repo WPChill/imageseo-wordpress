@@ -10,7 +10,24 @@ class Htaccess
 {
 
     const INSERT_REGEX = '@\n?# Created by ImageSEO(?:.*?)# End of ImageSEO\n?@sm';
+
+    public function __construct(){
+        $this->filename = ABSPATH . '/.htaccess';
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isWritable(){
+        return is_writable($this->filename);
+    }
     
+    /**
+     * Generate content for redirection htaccess
+     *
+     * @return void
+     */
     public function generate()
     {
         $data = get_transient('_imageseo_redirect_images');
@@ -47,6 +64,12 @@ class Htaccess
         return "\n" . $text . "\n";
     }
 
+    /**
+     *
+     * @param boolean $existing
+     * @param string $newContent
+     * @return string
+     */
     public function get( $existing = false, $newContent ) {
 		if ( $existing ) {
 			if ( preg_match( self::INSERT_REGEX, $existing ) > 0 ) {
@@ -60,22 +83,31 @@ class Htaccess
 	}
 
 
+    /**
+     * Save content in htaccess
+     *
+     * @param string $content
+     * @return boolean
+     */
     public function save($content){
         $existing = false;
-		$filename = ABSPATH . '/.htaccess';
 
-		if ( file_exists( $filename ) ) {
-			$existing = file_get_contents( $filename );
+        try {
+            if ( file_exists( $this->filename ) ) {
+                $existing = file_get_contents( $this->filename );
+            } 
+
+            $file = @fopen( $this->filename, 'w' );
+            if ( $file ) {
+                $result = fwrite( $file, $this->get( $existing, $content ) );
+                fclose( $file );
+    
+                return $result !== false;
+            }
+        } catch (\Exception $e) {
+            return false;
         }
     
-		$file = @fopen( $filename, 'w' );
-		if ( $file ) {
-			$result = fwrite( $file, $this->get( $existing, $content ) );
-			fclose( $file );
-
-			return $result !== false;
-		}
-
 		return false;
     }
 }

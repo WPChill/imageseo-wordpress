@@ -59,12 +59,22 @@ class MediaLibraryFilters
         $compare = 1 === (int) $_GET['alt_is_empty'] ? '=' : '!=';
 
         $meta_query = [
+            'relation' => 'OR',
             [
                 'key'     => '_wp_attachment_image_alt',
                 'value'   => '',
                 'compare' => $compare,
             ],
+            
         ];
+
+        if($compare === '='){
+            $meta_query[] = [
+                'key'     => '_wp_attachment_image_alt',
+                'compare' => 'NOT EXISTS',
+            ];
+        }
+
         $query->set('meta_query', $meta_query);
     }
 }
