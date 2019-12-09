@@ -19,10 +19,15 @@ class ImageLibrary
             'post_status'    => ['publish', 'pending', 'future', 'private', 'inherit'],
             'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
             'meta_query'     => [
+                'relation' => 'OR',
                 [
                     'key'     => '_wp_attachment_image_alt',
                     'value'   => '',
                     'compare' => '=',
+                ],
+                [
+                    'key'     => '_wp_attachment_image_alt',
+                    'compare' => 'NOT EXISTS',
                 ],
             ],
         ];
@@ -77,11 +82,10 @@ class ImageLibrary
      * @return int
      */
     public function getPercentLooseTraffic($numberImagesNonOptimize, $base = 100)
-    {   
-
+    {
         $percent = ($numberImagesNonOptimize * 100) / $base;
 
-        return round($percent / 5 , 2);
+        return round($percent / 5, 2);
     }
 
     /**
@@ -92,25 +96,27 @@ class ImageLibrary
         return round($this->getTotalImages() / 12);
     }
 
-    public function getEstimatedByImagesHuman($numberImages, $type = 'minutes'){
+    public function getEstimatedByImagesHuman($numberImages, $type = 'minutes')
+    {
         $timeEstimatedByImage = 90;
-        $seconds = $numberImages*$timeEstimatedByImage;
-        switch($type){
+        $seconds = $numberImages * $timeEstimatedByImage;
+        switch ($type) {
             case 'minutes':
             default:
                 return round($seconds / 60);
-            case "seconds":
+            case 'seconds':
                 return $seconds;
         }
     }
 
-    public function getStringEstimatedImages($numberImages){
+    public function getStringEstimatedImages($numberImages)
+    {
         $seconds = $this->getEstimatedByImagesHuman($numberImages, 'seconds');
         $time = $seconds / 3;
 
         $mins = floor($time / 60 % 60);
         $secs = floor($time % 60);
 
-        return sprintf(__("%s minutes and %s seconds", "imageseo"), $mins, $secs);
+        return sprintf(__('%s minutes and %s seconds', 'imageseo'), $mins, $secs);
     }
 }

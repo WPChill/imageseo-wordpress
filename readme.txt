@@ -5,7 +5,7 @@ Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.0.19
+Stable tag: v1.0.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,9 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.0.20 (12-09-2019) =
+- Bugfix: Correction of the calculation of the images to be optimized with the alternative text
 
 = 1.0.19 (12-03-2019) =
 - Improved: Renaming your old file name by new ones throughout your database
