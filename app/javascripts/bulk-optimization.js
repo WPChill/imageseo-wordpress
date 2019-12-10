@@ -1,8 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
 	const $ = jQuery
 	let _execution = false
-	if (IMAGESEO_ATTACHMENTS.length === 0) {
+	if (IMAGESEO_ATTACHMENTS.length === 0 || IMAGESEO_ATTACHMENTS_WITH_TAG_EMPTY.length === 0) {
 		return
+	}
+
+	const getImageAttachmentsList = () =>{
+		const updateAlt = $('#option-update-alt').is(':checked')
+		return updateAlt ? IMAGESEO_ATTACHMENTS_WITH_TAG_EMPTY : IMAGESEO_ATTACHMENTS
+		
 	}
 
 	document
@@ -34,12 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			let total, start, add
 
 			if (val === 'new') {
-				total = IMAGESEO_ATTACHMENTS.length
+				total = getImageAttachmentsList().length
 				start = 0
 				add = 0
 			} else {
 				total =
-					IMAGESEO_ATTACHMENTS.length - (IMAGESEO_CURRENT_PROCESS + 1)
+					getImageAttachmentsList().length - (IMAGESEO_CURRENT_PROCESS + 1)
 				start = IMAGESEO_CURRENT_PROCESS
 				add = 1
 			}
@@ -76,12 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
 			let total, start, add
 
 			if (val === 'new') {
-				total = IMAGESEO_ATTACHMENTS.length
+				total = getImageAttachmentsList().length
 				start = 0
 				add = 0
 			} else {
 				total =
-					IMAGESEO_ATTACHMENTS.length - (IMAGESEO_CURRENT_PROCESS + 1)
+					getImageAttachmentsList().length - (IMAGESEO_CURRENT_PROCESS + 1)
 				start = IMAGESEO_CURRENT_PROCESS
 				add = 1
 			}
@@ -150,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			return
 		}
 
-		if (typeof IMAGESEO_ATTACHMENTS[index] === 'undefined') {
+		if (typeof getImageAttachmentsList()[index] === 'undefined') {
 			current++
 			launchReportImages(start, current, total, add)
 			return
@@ -164,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const _errorReportAttachment = res => {
 			$('#imageseo-reports-js .imageseo-reports-body').prepend(
 				ReportItem({
-					src: `Attachment ID: ${IMAGESEO_ATTACHMENTS[index]}`,
+					src: `Attachment ID: ${getImageAttachmentsList()[index]}`,
 					name_file: '',
 					alt_generate: '',
 					dashicons: 'no'
@@ -177,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		const _successReportAttachment = res => {
 			IMAGESEO_CURRENT_PROCESS = current + 1
-			let txt = `Attachment ID : ${IMAGESEO_ATTACHMENTS[index]}`
+			let txt = `Attachment ID : ${getImageAttachmentsList()[index]}`
 			if (res.data && res.data.src) {
 				txt = res.data.src
 			}
@@ -215,9 +221,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				update_alt: updateAlt,
 				update_alt_not_empty: updateAltNotEmpty,
 				rename_file: renameFile,
-				total: IMAGESEO_ATTACHMENTS.length,
+				total: getImageAttachmentsList().length,
 				current: index,
-				attachment_id: IMAGESEO_ATTACHMENTS[index]
+				attachment_id: getImageAttachmentsList()[index]
 			}
 		)
 	}

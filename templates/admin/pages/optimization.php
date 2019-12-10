@@ -34,7 +34,33 @@ $queryAttachmentsOptimization = apply_filters('imageseo_query_attachments_optimi
     'orderby'        => 'id',
     'order'          => 'ASC',
 ]);
+
 $attachments = new WP_Query($queryAttachmentsOptimization);
+
+$queryAttachmentsOptimizationWithTagEmpty = [
+    'post_type'      => 'attachment',
+    'post_status'    => 'inherit',
+    'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
+    'posts_per_page' => -1,
+    'fields'         => 'ids',
+    'orderby'        => 'id',
+    'order'          => 'ASC',
+    'meta_query'     => [
+        'relation' => 'OR',
+        [
+            'key'     => '_wp_attachment_image_alt',
+            'value'   => '',
+            'compare' => '=',
+        ],
+        [
+            'key'     => '_wp_attachment_image_alt',
+            'compare' => 'NOT EXISTS',
+        ],
+    ],
+];
+
+$attachments = new WP_Query($queryAttachmentsOptimization);
+$attachmentsWithTagEmpty = new WP_Query($queryAttachmentsOptimizationWithTagEmpty);
 
 $total = count($attachments->posts);
 $totalAlreadyReport = count($attachmentsAlreadyReport->posts);
@@ -46,6 +72,7 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
 <script>
     var IMAGESEO_ATTACHMENTS_ALREADY_REPORT_IDS =<?php echo wp_json_encode($attachmentsAlreadyReport->posts); ?>;
 	var IMAGESEO_ATTACHMENTS = <?php echo wp_json_encode($attachments->posts); ?>;
+	var IMAGESEO_ATTACHMENTS_WITH_TAG_EMPTY = <?php echo wp_json_encode($attachmentsWithTagEmpty->posts); ?>;
 	var IMAGESEO_CURRENT_PROCESS = <?php echo $currentProcess; ?>;
 	var IMAGESEO_LIMIT_IMAGES = <?php echo $limitImages; ?>;
 </script>
@@ -116,14 +143,14 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt" id="option-update-alt" />
-				<?php _e('Fill out your empty ALT Tag(s) only.', 'imageseo'); ?>
+				<?php _e('Fill out your empty ALT Tag(s) only.', 'imageseo'); ?> <strong>(<?php echo count($attachmentsWithTagEmpty->posts); ?> <?php _e('image(s)'); ?>)</strong>
 			</label>
 		</div>
 		<br />
 		<div class="option">
 			<label>
 				<input type="checkbox" name="update_alt_not_empty" id="option-update-alt-not-empty" />
-				<?php _e('Fill out and rewrite ALL your alt tags.', 'imageseo'); ?>
+				<?php _e('Fill out and rewrite ALL your alt tags.', 'imageseo'); ?> <strong>(<?php echo $total; ?> <?php _e('image(s)'); ?>)</strong>
 			</label>
 		</div>
 		<br />
@@ -133,7 +160,7 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
 				<?php _e('Rename all your image files.', 'imageseo'); ?>
 			</label>
 		</div>
-		<?php if(ServerSoftware::isApache() && !imageseo_get_service('Htaccess')->isWritable()): ?>
+		<?php if (ServerSoftware::isApache() && !imageseo_get_service('Htaccess')->isWritable()): ?>
 			<div class="update-nag">
 				<?php _e('Be careful, your <strong>.htaccess file</strong> is not writable. We will not be able to perform 301 redirections of your images if you change the file name.', 'imageseo'); ?>
 			</div>
