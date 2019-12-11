@@ -6,7 +6,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\TabsAdmin;
+use ImageSeoWP\Helpers\Pages;
 
 class Enqueue
 {
@@ -31,7 +31,7 @@ class Enqueue
      */
     public function adminEnqueueScripts($page)
     {
-        if (! in_array($page, [ 'toplevel_page_' . TabsAdmin::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options' ], true)) {
+        if (! in_array($page, [ 'toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options' ], true)) {
             return;
         }
 
@@ -42,7 +42,7 @@ class Enqueue
         }
 
         if (in_array($page, [ 'imageseo_page_imageseo-optimization' ], true)) {
-            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk-optimization.js', ['jquery']);
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery']);
         }
         
         if(in_array($page, ['imageseo_page_imageseo-options'], true)){

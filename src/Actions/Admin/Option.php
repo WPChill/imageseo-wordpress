@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\TabsAdmin;
+use ImageSeoWP\Helpers\Pages;
 
 /**
  * @since 1.0.0
@@ -76,7 +76,7 @@ class Option
         $newOptions = wp_parse_args($options, $optionsBdd);
 
         switch ($tab) {
-            case TabsAdmin::SETTINGS:
+            case Pages::SETTINGS:
             default:
                 $newOptions['allowed'] = false;
                 if (!empty($options['api_key'])) {

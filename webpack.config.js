@@ -7,6 +7,7 @@ const env = process.env.NODE_ENV || 'development'
 module.exports = {
 	entry: {
 		'media-upload': './app/javascripts/media-upload.js',
+		'bulk': './app/javascripts/react/index.js',
 		'bulk-optimization': './app/javascripts/bulk-optimization.js',
 		'register': './app/javascripts/register.js',
 		'admin-bar': './app/javascripts/admin-bar.js',
@@ -22,7 +23,6 @@ module.exports = {
 			{
 				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
-				include: path.join(__dirname, 'node_modules'),
 				use: 'babel-loader'
 			},
 			{
@@ -57,5 +57,11 @@ module.exports = {
 			filename: 'css/[name].css'
 		}),
 		new CopyWebpackPlugin([{ from: 'app/images', to: 'images' }])
-	]
+	],
+	resolve: {
+		extensions: [
+		  '.js',
+		  '.jsx'
+		]
+	}
 }
