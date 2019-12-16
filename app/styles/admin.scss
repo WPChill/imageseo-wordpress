@@ -1,15 +1,20 @@
-@import 'colors';
-@import 'settings';
-@import 'overview';
+@import "colors";
+@import "overview";
 
-.imageseo {
-	@import 'blocks';
-	@import 'buttons';
+#wrap-imageseo {
+	.imageseo {
+		@import "blocks";
+		@import "buttons";
+		@import "elements";
+		@import "settings";
+		@import "inputs";
+	}
+	@import "components/index";
 }
 
-*[class^=imageseo],
-*[class^=imageseo] *{
-	box-sizing:border-box;
+*[class^="imageseo"],
+*[class^="imageseo"] * {
+	box-sizing: border-box;
 }
 
 #wrap-imageseo {
@@ -98,7 +103,7 @@
 }
 .imageseo-loading {
 	&:after {
-		content: ' ';
+		content: " ";
 		display: block;
 		width: 10px;
 		height: 10px;
@@ -205,40 +210,26 @@
 	}
 }
 
-
-#form-register{
-	label {
-		display: block;
-	}
-	button{
-		display: block;
-		margin-top: 20px;
-		width: 100%;
-	}
-}
-
-
 .lds-dual-ring {
-    display: inline-block;
-    width: 40px;
-    height: 30px;
+	display: inline-block;
+	width: 40px;
+	height: 30px;
 }
 .lds-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 6px solid #fff;
-    border-color: #fff transparent #fff transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
+	content: " ";
+	display: block;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 6px solid #fff;
+	border-color: #fff transparent #fff transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
 }
 @keyframes lds-dual-ring {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
-  

@@ -72,8 +72,6 @@ class PageAdmin
      */
     public function pluginSettingsPage()
     {
-        $this->tabs = Pages::getFullTabs();
-        $this->tab_active = Pages::SETTINGS;
         $this->owner = $this->clientServices->getApiKeyOwner();
 
         if (isset($_GET['tab'])) { // phpcs:ignore

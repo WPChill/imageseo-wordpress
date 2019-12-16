@@ -1,23 +1,68 @@
-&-block{
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(33, 43, 61, 0.1) 0px 3px 6px 0px, rgba(33, 43, 61, 0.05) 0px 0px 6px 0px;
-    margin-bottom: 20px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(200, 208, 221);
-    border-image: initial;
-    border-radius: 3px;
-    padding:15px;
-    margin-right: 15px;
-    height: 100%;
-    h3{
-        line-height: 1.5;
-    }
-    p{
-        font-size: 1.1em;
-    }
-    &--secondary{
-        background-image: radial-gradient(circle at top center, #0E214D 0%, $blueShady 100%);
-        color:#fff;
-    }
+&-block {
+	border-radius: 12px;
+	background-color: #ffffff;
+
+	height: 100%;
+	position: relative;
+	&__inner {
+		padding: 30px;
+		&--head {
+			border-bottom: 1px solid $greyShady;
+		}
+		&--actions {
+			display: flex;
+			.imageseo-block__inner {
+				&__title {
+					flex: 1;
+				}
+			}
+		}
+	}
+	h2,
+	h3 {
+		margin-top: 0;
+		font-size: 24px;
+		font-weight: bold;
+		color: $blueShady;
+		margin-bottom: 10px;
+	}
+	p {
+		font-size: 16px;
+		color: $blackLight;
+		line-height: 1.5;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	&--secondary {
+		background-image: linear-gradient(97deg, #3139cc, #179ae6);
+		color: #fff;
+		p,
+		h2,
+		h3 {
+			color: #fff;
+		}
+	}
+	&--introduce {
+		padding: 30px;
+		height: 153px;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		h2 {
+			margin-bottom: 0;
+		}
+	}
+	&__image-introduce {
+		position: absolute;
+		right: 0;
+		top: 0;
+		object-fit: contain;
+	}
+	&__image-oval {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		object-fit: contain;
+	}
 }

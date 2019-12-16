@@ -30,6 +30,7 @@ class Report
         }
 
         add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReport']);
+        add_action('wp_ajax_imageseo_generate_report', [$this, 'generateReport']);
     }
 
     /**
@@ -42,6 +43,22 @@ class Report
         } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
             return(int) $_POST['attachment_id'];
         }
+    }
+
+    public function generateReport()
+    {
+        $id = (int) $_POST['attachmentId'];
+
+        try {
+            $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+        } catch (\Exception $e) {
+            wp_send_json_error([
+                'code' => 'error_generate_report',
+            ]);
+            exit;
+        }
+
+        wp_send_json_success($report);
     }
 
     /**

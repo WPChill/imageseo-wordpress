@@ -1,23 +1,26 @@
-&-btn{
-    transition: all 0.1s ease-in 0s;
-    display: inline-block;
-    border: none;
-    
-    border-radius: 2.5rem;
-    padding: .5rem 1.5rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    text-decoration: none;
-    opacity: 1;
-    font-weight: bold;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-    &--primary{
-        background: $blueCoral;
-        color: $blueShady;
-    }
-    &--large{
-        padding: 1.3rem 3rem;
-        font-size: 1.4rem;
-    }
-}
+&-btn {
+	transition: all 0.1s ease-in 0s;
+	display: inline-block;
+	border: none;
 
+	border-radius: 4px;
+	padding: 15px 30px;
+	cursor: pointer;
+	text-decoration: none;
+	opacity: 1;
+	font-weight: bold;
+	font-size: 14px;
+	color: $blueShady;
+	&--primary {
+		background: $blueCoral;
+		color: $blueShady;
+	}
+	&--large {
+		padding: 1.3rem 3rem;
+		font-size: 1.4rem;
+	}
+	&--simple {
+		border: solid 1px #c8d0dd;
+		background-color: #ffffff;
+	}
+}
