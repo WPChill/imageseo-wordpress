@@ -1,7 +1,6 @@
 &-block {
 	border-radius: 12px;
 	background-color: #ffffff;
-
 	height: 100%;
 	position: relative;
 	&__inner {
@@ -30,6 +29,7 @@
 		font-size: 16px;
 		color: $blackLight;
 		line-height: 1.5;
+		margin-top: 5px;
 		&:last-child {
 			margin-bottom: 0;
 		}

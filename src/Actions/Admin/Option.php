@@ -6,8 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\Pages;
-
 /**
  * @since 1.0.0
  */
@@ -71,25 +69,12 @@ class Option
      */
     public function sanitizeOptions($options)
     {
-        $tab = (isset($_POST['tab'])) ? $_POST['tab'] : null;
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
 
-        switch ($tab) {
-            case Pages::SETTINGS:
-            default:
-                $newOptions['allowed'] = false;
-                if (!empty($options['api_key'])) {
-                    $owner = $this->clientServices->getApiKeyOwner($options['api_key']);
-                    if ($owner) {
-                        $newOptions['allowed'] = true;
-                    }
-                }
-                $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
-                $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
-                $newOptions['default_language_ia'] = isset($options['default_language_ia']) ? $options['default_language_ia'] : 'en';
-                break;
-        }
+        $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
+        $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
+        $newOptions['default_language_ia'] = isset($options['default_language_ia']) ? $options['default_language_ia'] : 'en';
 
         set_transient('imageseo_success_settings', 1, 60);
 

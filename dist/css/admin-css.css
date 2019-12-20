@@ -65,7 +65,8 @@
   #wrap-imageseo .imageseo-block p {
     font-size: 16px;
     color: #2C303B;
-    line-height: 1.5; }
+    line-height: 1.5;
+    margin-top: 5px; }
     #wrap-imageseo .imageseo-block p:last-child {
       margin-bottom: 0; }
   #wrap-imageseo .imageseo-block--secondary {
@@ -94,12 +95,12 @@
     bottom: 0;
     object-fit: contain; }
 
-#wrap-imageseo .imageseo-btn {
+#wrap-imageseo .imageseo-btn, #wrap-imageseo #submit {
   transition: all 0.1s ease-in 0s;
   display: inline-block;
   border: none;
   border-radius: 4px;
-  padding: 15px 30px;
+  padding: 14px 30px;
   cursor: pointer;
   text-decoration: none;
   opacity: 1;
@@ -159,13 +160,17 @@
 #wrap-imageseo .imageseo-mr-3 {
   margin-right: 30px; }
 
+#wrap-imageseo .imageseo-h100 {
+  height: 100%; }
+
 #wrap-imageseo .imageseo-input {
-  height: 44px;
+  min-height: 44px;
   border-radius: 4px;
   border: solid 1px #c8d0dd;
-  background-color: #fafafc; }
+  background-color: #fafafc;
+  width: 100%; }
 
-#wrap-imageseo #form-register label {
+#wrap-imageseo .imageseo-label {
   display: block;
   font-size: 16px;
   color: #2C303B;
@@ -176,6 +181,32 @@
   display: block;
   margin-top: 20px;
   width: 100%; }
+
+#wrap-imageseo .imageseo-separator {
+  height: 1px;
+  background-color: #C8D0DD;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  position: relative; }
+  #wrap-imageseo .imageseo-separator span {
+    position: absolute;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    top: 50%;
+    margin-left: -18px;
+    margin-top: -18px;
+    color: #C8D0DD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px; }
+
+#wrap-imageseo #submit {
+  color: #08142E;
+  line-height: 1.2;
+  background-color: #04EDDA; }
 
 *[class^="imageseo"],
 *[class^="imageseo"] * {

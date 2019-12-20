@@ -8,8 +8,16 @@
 		@import "elements";
 		@import "settings";
 		@import "inputs";
+		@import "labels";
 	}
 	@import "components/index";
+
+	#submit {
+		@extend .imageseo-btn;
+		color: $blueShady;
+		line-height: 1.2;
+		background-color: $blueCoral;
+	}
 }
 
 *[class^="imageseo"],
