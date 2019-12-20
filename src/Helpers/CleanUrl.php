@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-abstract class CleanURL
+abstract class CleanUrl
 {
     /**
      * Maybe remove query string from URL.

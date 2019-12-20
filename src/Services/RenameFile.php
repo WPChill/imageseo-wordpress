@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use Cocur\Slugify\Slugify;
 use ImageSeoWP\Exception\NoRenameFile;
-use ImageSeoWP\Helpers\CleanURL;
+use ImageSeoWP\Helpers\CleanUrl;
 use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFile
@@ -192,7 +192,6 @@ class RenameFile
         $wpdb->query($query);
         clean_post_cache($attachmentId);
 
-
         $targetUrl = wp_get_attachment_url($attachmentId);
         $this->searchReplaceInDB([
             'source_url'      => $sourceUrl,
@@ -212,35 +211,31 @@ class RenameFile
     }
 
     /**
-     * Update redirection server
+     * Update redirection server.
      *
      * @param string $sourceUrl
      * @param string $targetUrl
-     * @return void
      */
-    public function updateRedirect($sourceUrl, $targetUrl){
-
+    public function updateRedirect($sourceUrl, $targetUrl)
+    {
         $data = get_transient('_imageseo_redirect_images');
-        if($data === false){
+        if (false === $data) {
             $data = [];
         }
 
-
         $sourceParse = wp_parse_url($sourceUrl);
-        if(!array_key_exists('path', $sourceParse)){
+        if (!array_key_exists('path', $sourceParse)) {
             return;
         }
 
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
         set_transient('_imageseo_redirect_images', $data, WEEK_IN_SECONDS * 2);
 
-
-        if(ServerSoftware::isApache() && $this->htaccessServices->isWritable()){
+        if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
             $content = $this->htaccessServices->generate();
             $this->htaccessServices->save($content);
         }
     }
-
 
     /**
      * Build an array of search or replace URLs for given attachment GUID and its metadata.
@@ -254,8 +249,8 @@ class RenameFile
     {
         $urls = [];
 
-        $guid = CleanURL::removeScheme($guid);
-        $guid = CleanURL::removeDomainFromFilename($guid);
+        $guid = CleanUrl::removeScheme($guid);
+        $guid = CleanUrl::removeDomainFromFilename($guid);
 
         $urls['guid'] = $guid;
 
@@ -315,7 +310,7 @@ class RenameFile
         $targetMetadata = $target['target_metadata'];
 
         // Search-and-replace filename in post database
-        $currentBaseUrl = CleanURL::getMatchUrl($sourceUrl);
+        $currentBaseUrl = CleanUrl::getMatchUrl($sourceUrl);
 
         /* Fail-safe if base_url is a whole directory, don't go search/replace */
         if (is_dir($currentBaseUrl)) {
