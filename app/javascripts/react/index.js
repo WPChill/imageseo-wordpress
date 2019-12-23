@@ -4,7 +4,7 @@ import Bulk from "./modules/Bulk";
 import { ThemeProvider } from "styled-components";
 
 const theme = {
-	col: 12,
+	col: 24,
 	gutter: 4
 };
 

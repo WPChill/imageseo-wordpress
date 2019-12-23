@@ -1,33 +1,71 @@
-import React from "react";
-import { Row, Col } from "../../ui/Flex";
+import React, { useState } from "react";
 import Block from "../../ui/Block";
 import queryImages from "../../services/ajax/query-images";
-import Filters from "../../components/Filters";
-import FiltersContextProvider from "../../contexts/FiltersContext";
+import BlockContentInner, {
+	BlockContentInnerTitle,
+	BlockContentInnerAction
+} from "../../ui/Block/ContentInner";
+import IconChevron from "../../ui/Icons/Chevron";
+
+import BulkSettingsContextProvider from "../../contexts/BulkSettingsContext";
+import BulkSettings from "../../components/Bulk/Settings";
+import BlockFooter from "../../ui/Block/Footer";
+import Button from "../../ui/Button";
+import BulkResults from "../../components/Bulk/Results";
 
 function Bulk() {
-	// queryImages({
-	// 	filters: []
-	// });
+	const [openOptimization, setOpenOptimization] = useState(true);
 
 	return (
-		<Row>
-			<Col span={8}>
+		<BulkSettingsContextProvider>
+			<Block>
+				<BlockContentInner
+					isHead
+					withAction
+					style={{ alignItems: "center" }}
+				>
+					<BlockContentInnerTitle>
+						<h2>Bulk optimization settings</h2>
+					</BlockContentInnerTitle>
+					<BlockContentInnerAction>
+						<IconChevron
+							up={openOptimization}
+							down={!openOptimization}
+							onClick={() =>
+								setOpenOptimization(!openOptimization)
+							}
+						/>
+					</BlockContentInnerAction>
+				</BlockContentInner>
+				<BlockContentInner>
+					<BulkSettings />
+				</BlockContentInner>
+				<BlockFooter>
+					<p>You will use 100 credit and you have only 7 left.</p>
+					<Button primary style={{ marginRight: 15 }}>
+						Start New Bulk Optimization
+					</Button>
+					<Button simple>Get more credits</Button>
+				</BlockFooter>
+			</Block>
+			<div className="imageseo-mt-4">
 				<Block>
-					<Block.Title>Overview</Block.Title>
-					<Block.ContentInner>
-						<FiltersContextProvider>
-							<Filters />
-						</FiltersContextProvider>
-					</Block.ContentInner>
+					<BlockContentInner
+						isHead
+						withAction
+						style={{ alignItems: "center" }}
+					>
+						<BlockContentInnerTitle>
+							<h2>Bulk running</h2>
+						</BlockContentInnerTitle>
+						<BlockContentInnerAction>
+							<Button simple>Pause bulk</Button>
+						</BlockContentInnerAction>
+					</BlockContentInner>
+					<BulkResults />
 				</Block>
-			</Col>
-			<Col span={3}>
-				<Block>
-					<Block.Title>Account</Block.Title>
-				</Block>
-			</Col>
-		</Row>
+			</div>
+		</BulkSettingsContextProvider>
 	);
 }
 

@@ -17,8 +17,43 @@
 			}
 		}
 	}
+
+	&__table-head {
+		border-bottom: solid 1px #c8d0dd;
+		background-color: #fafafc;
+		&__item {
+			font-size: 16px;
+			font-weight: bold;
+			color: $blackLight;
+			padding: 10px 30px;
+		}
+	}
+	&__table-line {
+		border-bottom: solid 1px #c8d0dd;
+		&:last-child {
+			border-bottom: none;
+		}
+		&__item {
+			font-size: 16px;
+			color: $blackLight;
+			padding: 10px 30px;
+			line-height: 1.5;
+		}
+	}
+	&__footer {
+		padding: 30px;
+		border-top: 1px solid $greyShady;
+	}
+
+	&__subtitle {
+		font-size: 16px;
+		font-weight: bold;
+		color: $blue;
+		margin-bottom: 15px;
+	}
 	h2,
 	h3 {
+		line-height: 1.3;
 		margin-top: 0;
 		font-size: 24px;
 		font-weight: bold;

@@ -86,6 +86,8 @@ class PageAdmin
     public function optimizationPage()
     {
         $this->owner = $this->clientServices->getApiKeyOwner();
+        $this->languages = $this->clientServices->getLanguages();
+        $this->options = $this->optionServices->getOptions();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/new_optimization.php';
     }
 }

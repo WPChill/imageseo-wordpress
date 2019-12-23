@@ -55,8 +55,34 @@
       display: flex; }
       #wrap-imageseo .imageseo-block__inner--actions .imageseo-block__inner__title {
         flex: 1; }
+  #wrap-imageseo .imageseo-block__table-head {
+    border-bottom: solid 1px #c8d0dd;
+    background-color: #fafafc; }
+    #wrap-imageseo .imageseo-block__table-head__item {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2C303B;
+      padding: 10px 30px; }
+  #wrap-imageseo .imageseo-block__table-line {
+    border-bottom: solid 1px #c8d0dd; }
+    #wrap-imageseo .imageseo-block__table-line:last-child {
+      border-bottom: none; }
+    #wrap-imageseo .imageseo-block__table-line__item {
+      font-size: 16px;
+      color: #2C303B;
+      padding: 10px 30px;
+      line-height: 1.5; }
+  #wrap-imageseo .imageseo-block__footer {
+    padding: 30px;
+    border-top: 1px solid #C8D0DD; }
+  #wrap-imageseo .imageseo-block__subtitle {
+    font-size: 16px;
+    font-weight: bold;
+    color: #3139CC;
+    margin-bottom: 15px; }
   #wrap-imageseo .imageseo-block h2,
   #wrap-imageseo .imageseo-block h3 {
+    line-height: 1.3;
     margin-top: 0;
     font-size: 24px;
     font-weight: bold;
@@ -142,6 +168,12 @@
 #wrap-imageseo .imageseo-mb-3 {
   margin-bottom: 30px; }
 
+#wrap-imageseo .imageseo-mb-4 {
+  margin-bottom: 40px; }
+
+#wrap-imageseo .imageseo-mb-5 {
+  margin-bottom: 50px; }
+
 #wrap-imageseo .imageseo-mt-1 {
   margin-top: 10px; }
 
@@ -151,6 +183,12 @@
 #wrap-imageseo .imageseo-mt-3 {
   margin-top: 30px; }
 
+#wrap-imageseo .imageseo-mt-4 {
+  margin-top: 40px; }
+
+#wrap-imageseo .imageseo-mt-5 {
+  margin-top: 50px; }
+
 #wrap-imageseo .imageseo-mr-1 {
   margin-right: 10px; }
 
@@ -159,6 +197,21 @@
 
 #wrap-imageseo .imageseo-mr-3 {
   margin-right: 30px; }
+
+#wrap-imageseo .imageseo-mr-4 {
+  margin-right: 40px; }
+
+#wrap-imageseo .imageseo-ml-1 {
+  margin-left: 10px; }
+
+#wrap-imageseo .imageseo-ml-2 {
+  margin-left: 20px; }
+
+#wrap-imageseo .imageseo-ml-3 {
+  margin-left: 30px; }
+
+#wrap-imageseo .imageseo-ml-4 {
+  margin-left: 40px; }
 
 #wrap-imageseo .imageseo-h100 {
   height: 100%; }
@@ -170,12 +223,26 @@
   background-color: #fafafc;
   width: 100%; }
 
+#wrap-imageseo .imageseo-radio {
+  display: block;
+  font-size: 16px;
+  color: #2C303B;
+  margin-bottom: 15px; }
+
 #wrap-imageseo .imageseo-label {
   display: block;
   font-size: 16px;
   color: #2C303B;
   margin-bottom: 5px;
   font-weight: bold; }
+
+#wrap-imageseo .imageseo-icons--button {
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: solid 1px #c8d0dd;
+  background-color: #ffffff; }
+  #wrap-imageseo .imageseo-icons--button:hover {
+    cursor: pointer; }
 
 #wrap-imageseo #form-register button {
   display: block;

@@ -1,16 +1,39 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React from "react";
+import classNames from "classnames";
 
-const SCContentInner = styled.div`
-    padding: 0px 32px;
-`
-
-class BlockContentInner extends Component {
-    render() {
-        const { children } = this.props
-
-        return <SCContentInner>{children}</SCContentInner>
-    }
+function BlockContentInnerTitle({ children }) {
+	return <div className="imageseo-block__inner__title">{children}</div>;
+}
+function BlockContentInnerSubTitle({ children }) {
+	return <div className="imageseo-block__inner__subtitle">{children}</div>;
 }
 
-export default BlockContentInner
+function BlockContentInnerAction({ children }) {
+	return <div className="imagese-block__inner__actions">{children}</div>;
+}
+
+function BlockContentInner({ children, isHead, withAction, style }) {
+	return (
+		<div
+			className={classNames(
+				{
+					"imageseo-block__inner--head": isHead,
+					"imageseo-block__inner--actions": withAction
+				},
+				"imageseo-block__inner"
+			)}
+			style={style}
+		>
+			{children}
+		</div>
+	);
+}
+
+export {
+	BlockContentInnerAction,
+	BlockContentInner,
+	BlockContentInnerTitle,
+	BlockContentInnerSubTitle
+};
+
+export default BlockContentInner;
