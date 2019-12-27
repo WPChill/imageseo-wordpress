@@ -1,0 +1,11 @@
+.imageseo-loader {
+	background-color: $greyShady;
+	border-radius: 15px;
+	height: 20px;
+	&__step {
+		border-radius: 15px;
+		height: 20px;
+		background-image: linear-gradient(103deg, $blue, #179ae6);
+		transition: all 0.15s ease-in;
+	}
+}

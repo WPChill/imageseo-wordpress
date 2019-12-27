@@ -13,40 +13,10 @@ const SCContentSettings = styled.div`
 
 function BulkSettings() {
 	const { settings, actions } = useContext(BulkSettingsContext);
-	console.log("[settings]", settings);
 	return (
 		<>
 			<SubTitle>Global settings</SubTitle>
 			<SCContentSettings>
-				<div className="imageseo-mb-3">
-					<IFlex>
-						<div className="imageseo-mr-2">
-							<input
-								type="checkbox"
-								id="smallImages"
-								name="smallImages"
-								checked={settings.smallImages}
-								onChange={() =>
-									actions.setSmallImages(
-										!settings.smallImages
-									)
-								}
-							/>
-						</div>
-						<IFlexNumber number={1}>
-							<label
-								htmlFor="smallImages"
-								className="imageseo-label"
-							>
-								Optimize small sized images
-							</label>
-							<p>
-								Image under 48x48px are hard to resume and often
-								doesn’t need alt tag (like icon)
-							</p>
-						</IFlexNumber>
-					</IFlex>
-				</div>
 				<div className="imageseo-mb-3">
 					<IFlex>
 						<div className="imageseo-mr-2">
@@ -79,7 +49,7 @@ function BulkSettings() {
 				<Row className="imageseo-mb-5">
 					<Col>
 						<label htmlFor="language" className="imageseo-label">
-							I want to validate the results
+							Language
 						</label>
 						<select
 							value={settings.language}
@@ -137,8 +107,27 @@ function BulkSettings() {
 									>
 										Images that will be optimized
 									</label>
-									<select id="altFilter">
-										<option>All</option>
+									<select
+										id="altFilter"
+										value={settings.altFilter}
+										onChange={event =>
+											actions.setAltFilter(
+												event.target.value
+											)
+										}
+									>
+										{IMAGESEO_DATA.ALT_SPECIFICATION.map(
+											(item, key) => {
+												return (
+													<option
+														key={`alt_filter_${key}`}
+														value={item.id}
+													>
+														{item.label}
+													</option>
+												);
+											}
+										)}
 									</select>
 								</Col>
 								<Col span={6}>
@@ -148,9 +137,27 @@ function BulkSettings() {
 									>
 										Alt tag that will be optimized
 									</label>
-									<select id="altFill">
-										<option>All</option>
-										<option>Only empty</option>
+									<select
+										id="altFill"
+										value={settings.altFill}
+										onChange={event =>
+											actions.setAltFill(
+												event.target.value
+											)
+										}
+									>
+										{IMAGESEO_DATA.ALT_FILL_TYPE.map(
+											(item, key) => {
+												return (
+													<option
+														key={`alt_fill_${key}`}
+														value={item.id}
+													>
+														{item.label}
+													</option>
+												);
+											}
+										)}
 									</select>
 								</Col>
 							</Row>
@@ -172,7 +179,6 @@ function BulkSettings() {
 														settings.formatAlt
 													}
 													onChange={event => {
-														console.log(event);
 														actions.setAltFormat(
 															event.target.value
 														);

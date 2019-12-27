@@ -1,6 +1,7 @@
 <?php
 
 use ImageSeoWP\Helpers\AltFormat;
+use ImageSeoWP\Helpers\Bulk\AltSpecification;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,8 +9,6 @@ if (!defined('ABSPATH')) {
 
 $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
 $totalAltOptimize = imageseo_get_service('QueryImages')->getNumberImageOptimizeAlt();
-
-$attachmentsIdsAlreadyReport = imageseo_get_service('QueryImages')->getIdsAttachmentOptimized();
 
 $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
 
@@ -46,12 +45,13 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
         TOTAL_ALT_NO_OPTIMIZE : <?php echo $totalAltNoOptimize; ?>,
         TOTAL_ALT_OPTIMIZE : <?php echo $totalAltOptimize; ?>,
         PERCENT_TRAFFIC_LOOSE : <?php echo $percentLoose; ?>,
-        ATTACHMENT_IDS_ALREADY_REPORT : <?php echo wp_json_encode($attachmentsIdsAlreadyReport->posts); ?>,
         LIMIT_IMAGES: <?php echo $limitImages; ?>,
         CURRENT_PROCESS : <?php echo $currentProcess; ?>,
         USER_INFOS: <?php echo wp_json_encode($this->owner); ?>,
         LANGUAGES : <?php echo wp_json_encode($this->languages); ?>,
         OPTIONS : <?php echo wp_json_encode($this->options); ?>,
-        ALT_FORMATS : <?php echo wp_json_encode(AltFormat::getFormats()); ?>
+        ALT_FORMATS : <?php echo wp_json_encode(AltFormat::getFormats()); ?>,
+        ALT_SPECIFICATION : <?php echo wp_json_encode(AltSpecification::getMetas()); ?>,
+        ALT_FILL_TYPE : <?php echo wp_json_encode(AltSpecification::getFillType()); ?>
     }
 </script>

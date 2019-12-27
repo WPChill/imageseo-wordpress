@@ -1,14 +1,17 @@
+import { get } from "lodash";
+
 const queryImages = async options => {
-	return await fetch(ajaxurl, {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_query_images");
+	formData.append("filters", JSON.stringify(get(options, "filters", {})));
+
+	const response = await fetch(ajaxurl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			action: "imageseo_query_images",
-			...options
-		})
+		body: formData
 	});
+
+	return await response.json();
 };
 
 export default queryImages;

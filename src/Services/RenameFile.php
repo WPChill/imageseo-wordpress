@@ -37,6 +37,28 @@ class RenameFile
     }
 
     /**
+     * @param int $attachmentId
+     *
+     * @return string
+     */
+    public function getFilenameByAttachmentId($attachmentId)
+    {
+        $file = wp_get_attachment_image_src($attachmentId, 'small');
+
+        if (!$file) {
+            $file = wp_get_attachment_image_src($attachmentId);
+        }
+
+        if (!$file) {
+            return '';
+        }
+
+        $srcFile = $file[0];
+
+        return basename($srcFile);
+    }
+
+    /**
      * @since 1.0.0
      *
      * @param int $attachmentId
@@ -103,6 +125,100 @@ class RenameFile
         }
 
         return $name;
+    }
+
+    /**
+     * @since 1.0.0
+     *
+     * @param int        $attachmentId
+     * @param string     $newFilename
+     * @param array|null $metadata
+     *
+     * @return bool
+     */
+    public function updateFilename($attachmentId, $newFilename, $metadata = null)
+    {
+        $sourceUrl = wp_get_attachment_url($attachmentId);
+        $sourceMetadata = wp_get_attachment_metadata($attachmentId);
+
+        $filePath = get_attached_file($attachmentId);
+
+        if (!wp_mkdir_p(dirname($filePath))) {
+            return [
+                'success' => false,
+            ];
+        }
+
+        if (null === $metadata) {
+            $metadata = wp_get_attachment_metadata($attachmentId);
+        }
+        $postAttachment = get_post($attachmentId, ARRAY_A);
+        $basename = basename($filePath);
+        $splitName = explode('.', $basename);
+        unset($splitName[count($splitName) - 1]);
+        $basenameWithoutExt = implode('.', $splitName);
+        $directory = trailingslashit(dirname($filePath));
+        $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
+
+        // Rename file
+        @rename($filePath, $newFilePath);
+
+        // Prepare post
+        $postAttachment['post_title'] = $newFilename;
+        $postAttachment['post_name'] = $newFilename;
+
+        // Prepare metdata
+        if (isset($metadata['file']) && !empty($metadata['file'])) {
+            $metadata['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['file']);
+        }
+        if (isset($metadata['url']) && !empty($metadata['url']) && strlen($metadata['url']) > 4) {
+            $metadata['url'] = str_replace($basenameWithoutExt, $newFilename, $metadata['url']);
+        }
+
+        if (isset($metadata['sizes'])) {
+            foreach ($metadata['sizes'] as $key => $size) {
+                if (!isset($size['file'])) {
+                    continue;
+                }
+
+                $oldFile = $metadata['sizes'][$key]['file'];
+                $metadata['sizes'][$key]['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['sizes'][$key]['file']);
+
+                rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
+            }
+        }
+
+        $oldAttachedFile = get_post_meta($attachmentId, '_wp_attached_file', true);
+
+        update_attached_file($attachmentId, str_replace($basenameWithoutExt, $newFilename, $oldAttachedFile));
+        wp_update_attachment_metadata($attachmentId, $metadata);
+        clean_post_cache($attachmentId);
+        wp_update_post($postAttachment);
+
+        // Update GUID
+        $newGuid = str_replace($basenameWithoutExt, $newFilename, $postAttachment['guid']);
+
+        global $wpdb;
+        $query = $wpdb->prepare("UPDATE $wpdb->posts SET guid = '%s' WHERE ID = '%d'", $newGuid, $attachmentId);
+        $wpdb->query($query);
+        clean_post_cache($attachmentId);
+
+        $targetUrl = wp_get_attachment_url($attachmentId);
+        $this->searchReplaceInDB([
+            'source_url'      => $sourceUrl,
+            'source_metadata' => $sourceMetadata,
+        ], [
+            'target_url'       => $targetUrl,
+            'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+        ]);
+
+        $this->updateRedirect($sourceUrl, $targetUrl);
+
+        return [
+            'success'  => true,
+            'metadata' => $metadata,
+            'post'     => $postAttachment,
+        ];
     }
 
     /**
@@ -192,7 +308,6 @@ class RenameFile
         $wpdb->query($query);
         clean_post_cache($attachmentId);
 
-
         $targetUrl = wp_get_attachment_url($attachmentId);
         $this->searchReplaceInDB([
             'source_url'      => $sourceUrl,
@@ -212,35 +327,31 @@ class RenameFile
     }
 
     /**
-     * Update redirection server
+     * Update redirection server.
      *
      * @param string $sourceUrl
      * @param string $targetUrl
-     * @return void
      */
-    public function updateRedirect($sourceUrl, $targetUrl){
-
+    public function updateRedirect($sourceUrl, $targetUrl)
+    {
         $data = get_transient('_imageseo_redirect_images');
-        if($data === false){
+        if (false === $data) {
             $data = [];
         }
 
-
         $sourceParse = wp_parse_url($sourceUrl);
-        if(!array_key_exists('path', $sourceParse)){
+        if (!array_key_exists('path', $sourceParse)) {
             return;
         }
 
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
         set_transient('_imageseo_redirect_images', $data, WEEK_IN_SECONDS * 2);
 
-
-        if(ServerSoftware::isApache() && $this->htaccessServices->isWritable()){
+        if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
             $content = $this->htaccessServices->generate();
             $this->htaccessServices->save($content);
         }
     }
-
 
     /**
      * Build an array of search or replace URLs for given attachment GUID and its metadata.

@@ -1,15 +1,31 @@
-const updateAlt = async (attachmentId, alt) => {
-	return await fetch(ajaxurl, {
+const previewAlt = async (attachmentId, altTemplate) => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_preview_optimize_alt");
+	formData.append("attachmentId", attachmentId);
+	formData.append("altTemplate", altTemplate);
+
+	const response = await fetch(ajaxurl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			action: "imageseo_update_alt",
-			attachmentId,
-			alt
-		})
+		body: formData
 	});
+
+	return await response.json();
 };
 
-export default updateAlt;
+const updateAlt = async (attachmentId, alt) => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_optimize_alt");
+	formData.append("attachmentId", attachmentId);
+	formData.append("alt", alt);
+
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData
+	});
+
+	return await response.json();
+};
+
+export { updateAlt, previewAlt };

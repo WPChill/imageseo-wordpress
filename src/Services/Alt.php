@@ -77,6 +77,11 @@ class Alt
         return apply_filters('imageseo_get_alt_value_attachment_with_report', ucfirst($alt), $report);
     }
 
+    public function updateAlt($attachmentId, $alt)
+    {
+        update_post_meta($attachmentId, '_wp_attachment_image_alt', apply_filters('imageseo_update_alt', $alt, $attachmentId));
+    }
+
     /**
      * @param int $id
      *

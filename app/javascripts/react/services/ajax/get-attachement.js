@@ -1,7 +1,7 @@
-const generateReport = async attachmentId => {
+const getAttachement = async attachmentId => {
 	const formData = new FormData();
 
-	formData.append("action", "imageseo_generate_report");
+	formData.append("action", "imageseo_get_attachment");
 	formData.append("attachmentId", attachmentId);
 
 	const response = await fetch(ajaxurl, {
@@ -12,4 +12,4 @@ const generateReport = async attachmentId => {
 	return await response.json();
 };
 
-export default generateReport;
+export default getAttachement;

@@ -120,16 +120,6 @@ class ReportImage
     }
 
     /**
-     * @param array $report
-     *
-     * @return string
-     */
-    public function getAutoRepresentationFromReport($report, $params = [])
-    {
-        return $this->getValueAuto('labels', $report, $params);
-    }
-
-    /**
      * @param string $type
      * @param array  $report
      * @param array  $params

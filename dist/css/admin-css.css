@@ -42,6 +42,22 @@
     font-weight: bold;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); }
 
+@keyframes imageseo-rotation {
+  from {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg); }
+  to {
+    transform: rotate(359deg);
+    -webkit-transform: rotate(359deg); } }
+
+@-webkit-keyframes imageseo-rotation {
+  from {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg); }
+  to {
+    transform: rotate(359deg);
+    -webkit-transform: rotate(359deg); } }
+
 #wrap-imageseo .imageseo-block {
   border-radius: 12px;
   background-color: #ffffff;
@@ -56,7 +72,7 @@
       #wrap-imageseo .imageseo-block__inner--actions .imageseo-block__inner__title {
         flex: 1; }
   #wrap-imageseo .imageseo-block__table-head {
-    border-bottom: solid 1px #c8d0dd;
+    border-bottom: solid 1px #C8D0DD;
     background-color: #fafafc; }
     #wrap-imageseo .imageseo-block__table-head__item {
       font-size: 16px;
@@ -64,7 +80,7 @@
       color: #2C303B;
       padding: 10px 30px; }
   #wrap-imageseo .imageseo-block__table-line {
-    border-bottom: solid 1px #c8d0dd; }
+    border-bottom: solid 1px #C8D0DD; }
     #wrap-imageseo .imageseo-block__table-line:last-child {
       border-bottom: none; }
     #wrap-imageseo .imageseo-block__table-line__item {
@@ -140,7 +156,7 @@
     padding: 1.3rem 3rem;
     font-size: 1.4rem; }
   #wrap-imageseo .imageseo-btn--simple {
-    border: solid 1px #c8d0dd;
+    border: solid 1px #C8D0DD;
     background-color: #ffffff; }
 
 #wrap-imageseo .imageseo__page-title {
@@ -219,7 +235,7 @@
 #wrap-imageseo .imageseo-input {
   min-height: 44px;
   border-radius: 4px;
-  border: solid 1px #c8d0dd;
+  border: solid 1px #C8D0DD;
   background-color: #fafafc;
   width: 100%; }
 
@@ -239,7 +255,7 @@
 #wrap-imageseo .imageseo-icons--button {
   padding: 12px 16px;
   border-radius: 4px;
-  border: solid 1px #c8d0dd;
+  border: solid 1px #C8D0DD;
   background-color: #ffffff; }
   #wrap-imageseo .imageseo-icons--button:hover {
     cursor: pointer; }
@@ -269,6 +285,16 @@
     justify-content: center;
     align-items: center;
     font-size: 16px; }
+
+#wrap-imageseo .imageseo-loader {
+  background-color: #C8D0DD;
+  border-radius: 15px;
+  height: 20px; }
+  #wrap-imageseo .imageseo-loader__step {
+    border-radius: 15px;
+    height: 20px;
+    background-image: linear-gradient(103deg, #3139CC, #179ae6);
+    transition: all 0.15s ease-in; }
 
 #wrap-imageseo #submit {
   color: #08142E;
@@ -325,19 +351,6 @@
     flex: 1; }
     .imageseo-table-item-meta:last-child {
       border-right: none; }
-
-.imageseo-percent {
-  color: #000 !important;
-  background-color: #fff !important;
-  border-radius: 16px;
-  display: none;
-  max-width: 90%; }
-  .imageseo-percent--item {
-    color: #000 !important;
-    background-color: #2196f3 !important;
-    padding: 10px 16px;
-    border-radius: 16px;
-    width: 0%; }
 
 .imageseo-account-info {
   padding: 5px;

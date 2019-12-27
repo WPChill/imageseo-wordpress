@@ -10,6 +10,24 @@ use ImageSeoWP\Helpers\AttachmentMeta;
 
 class QueryImages
 {
+    public function getPostByAttachmentId($attachmentId)
+    {
+        global $wpdb;
+
+        $sqlQuery = "SELECT {$wpdb->posts}.ID
+            FROM {$wpdb->posts} 
+            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '_thumbnail_id' ) 
+            WHERE 1=1 
+            AND {$wpdb->postmeta}.meta_value = '{$attachmentId}'";
+
+        $ids = $wpdb->get_results($sqlQuery);
+        if (empty($ids)) {
+            return null;
+        }
+
+        return $ids[0]->ID;
+    }
+
     public function getQueryArgsDefault()
     {
         return [
@@ -20,15 +38,20 @@ class QueryImages
         ];
     }
 
-    public function getIdsAttachmentOptimized()
+    public function getQueryArgsIdsAttachmentOptimized()
     {
-        $args = array_merge($this->getQueryArgsDefault(), [
+        return  array_merge($this->getQueryArgsDefault(), [
             'meta_key'       => AttachmentMeta::REPORT,
             'meta_compare'   => 'EXISTS',
             'fields'         => 'ids',
             'orderby'        => 'id',
             'order'          => 'ASC',
         ]);
+    }
+
+    public function getIdsAttachmentOptimized()
+    {
+        $args = $this->getQueryArgsIdsAttachmentOptimized();
 
         return  new \WP_Query($args);
     }

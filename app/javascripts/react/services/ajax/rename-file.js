@@ -1,15 +1,30 @@
-const renameFile = async (attachmentId, nameFile) => {
-	return await fetch(ajaxurl, {
+const previewFilename = async attachmentId => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_preview_optimize_filename");
+	formData.append("attachmentId", attachmentId);
+
+	const response = await fetch(ajaxurl, {
 		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			action: "imageseo_rename_file",
-			attachmentId,
-			nameFile
-		})
+		body: formData
 	});
+
+	return await response.json();
 };
 
-export default renameFile;
+const renameFilename = async (attachmentId, filename) => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_optimize_filename");
+	formData.append("attachmentId", attachmentId);
+	formData.append("filename", filename);
+
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData
+	});
+
+	return await response.json();
+};
+
+export { previewFilename, renameFilename };

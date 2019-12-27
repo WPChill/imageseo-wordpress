@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { find } from "lodash";
 
 const BulkSettingsContext = createContext(null);
 
@@ -13,8 +14,12 @@ const BulkSettingsContextProvider = ({ children }) => {
 	// Alt settings
 	const [optimizeAlt, setOptimizeAlt] = useState(false);
 	const [formatAlt, setAltFormat] = useState(null);
-	const [altFilter, setAltFilter] = useState(null);
-	const [altFill, setAltFill] = useState(null);
+	const [altFilter, setAltFilter] = useState(
+		find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id
+	);
+	const [altFill, setAltFill] = useState(
+		find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id
+	);
 
 	// File settings
 	const [optimizeFile, setOptimizeFile] = useState(false);

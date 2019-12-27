@@ -47,17 +47,45 @@ class Report
 
     public function generateReport()
     {
-        $id = (int) $_POST['attachmentId'];
+        if (!isset($_POST['attachmentId'])) {
+            wp_send_json_error([
+                'code' => 'missing_parameters',
+            ]);
+
+            return;
+        }
+
+        $attachmentId = (int) $_POST['attachmentId'];
+
+        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+
+        if ($report) {
+            $report['ID'] = $attachmentId;
+            wp_send_json_success($report);
+
+            return;
+        }
 
         try {
-            $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
         } catch (\Exception $e) {
             wp_send_json_error([
                 'code' => 'error_generate_report',
             ]);
-            exit;
+
+            return;
         }
 
+        if (!$response['success']) {
+            wp_send_json_error([
+                'code' => 'error_generate_report',
+            ]);
+
+            return;
+        }
+
+        $report = $response['result'];
+        $report['ID'] = $attachmentId;
         wp_send_json_success($report);
     }
 

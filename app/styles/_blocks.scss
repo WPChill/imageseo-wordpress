@@ -19,7 +19,7 @@
 	}
 
 	&__table-head {
-		border-bottom: solid 1px #c8d0dd;
+		border-bottom: solid 1px $greyShady;
 		background-color: #fafafc;
 		&__item {
 			font-size: 16px;
@@ -29,7 +29,7 @@
 		}
 	}
 	&__table-line {
-		border-bottom: solid 1px #c8d0dd;
+		border-bottom: solid 1px $greyShady;
 		&:last-child {
 			border-bottom: none;
 		}

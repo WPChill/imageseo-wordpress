@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 function Button({ simple, primary, large, children, style, ...rest }) {
 	return (
-		<div
+		<button
 			className={classNames(
 				{
 					"imageseo-btn--simple": simple,
@@ -16,7 +16,7 @@ function Button({ simple, primary, large, children, style, ...rest }) {
 			{...rest}
 		>
 			{children}
-		</div>
+		</button>
 	);
 }
 

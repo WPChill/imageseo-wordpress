@@ -1,5 +1,6 @@
 @import "colors";
 @import "overview";
+@import "animations";
 
 #wrap-imageseo {
 	.imageseo {
@@ -69,21 +70,6 @@
 			padding: 5px;
 			flex: 1;
 		}
-	}
-}
-
-.imageseo-percent {
-	color: #000 !important;
-	background-color: #fff !important;
-	border-radius: 16px;
-	display: none;
-	max-width: 90%;
-	&--item {
-		color: #000 !important;
-		background-color: #2196f3 !important;
-		padding: 10px 16px;
-		border-radius: 16px;
-		width: 0%;
 	}
 }
 
