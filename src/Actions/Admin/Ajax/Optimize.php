@@ -55,8 +55,15 @@ class Optimize
 
         $attachmentId = (int) $_POST['attachmentId'];
 
+        $excludeFilenames = [];
         try {
-            $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId);
+            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
+        } catch (\Exception $e) {
+            $excludeFilenames = [];
+        }
+
+        try {
+            $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
         } catch (NoRenameFile $e) {
             $filename = $this->renameFileServices->getFilenameByAttachmentId($attachmentId);
         }
@@ -105,10 +112,10 @@ class Optimize
         }
 
         $attachmentId = (int) $_POST['attachmentId'];
-        $alt = sanitize_text_field($_POST['filename']);
+        $filename = sanitize_text_field($_POST['filename']);
 
         try {
-            $this->renameFileServices->updateFilename($attachmentId, $alt);
+            $this->renameFileServices->updateFilename($attachmentId, $filename);
         } catch (\Exception $e) {
             wp_send_json_error();
         }

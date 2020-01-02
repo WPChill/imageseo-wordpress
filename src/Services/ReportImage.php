@@ -119,6 +119,20 @@ class ReportImage
         return $this->getValueAuto('alts', $report, $params);
     }
 
+    public function getAltsFromReport($report)
+    {
+        $alts = [];
+        foreach ($report['alts'] as $alt) {
+            if (empty($alt['name'])) {
+                continue;
+            }
+
+            $alts[] = $alt;
+        }
+
+        return $alts;
+    }
+
     /**
      * @param string $type
      * @param array  $report
@@ -129,7 +143,7 @@ class ReportImage
     protected function getValueAuto($type, $report, $params = [])
     {
         if (!isset($params['min_percent'])) {
-            $params['min_percent'] = apply_filters('imageseo_get_value_auto_min_percent', 1, $type, $report);
+            $params['min_percent'] = apply_filters('imageseo_get_value_auto_min_percent', 10, $type, $report);
         }
         if (!isset($params['max_percent'])) {
             $params['max_percent'] = apply_filters('imageseo_get_value_auto_max_percent', 101, $type, $report);

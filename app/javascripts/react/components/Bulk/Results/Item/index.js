@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { get, isEmpty, isNil } from "lodash";
+import { get, isEmpty, isNil, memoize } from "lodash";
 
 import { Row, Col } from "../../../../ui/Flex";
 import BlockTableLine, {
@@ -7,7 +7,10 @@ import BlockTableLine, {
 	BlockTableLineImage,
 	BlockTableLineOldValue
 } from "../../../../ui/Block/TableLine";
-import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
+import {
+	BulkProcessContext,
+	selectors
+} from "../../../../contexts/BulkProcessContext";
 import { previewAlt, updateAlt } from "../../../../services/ajax/update-alt";
 import {
 	previewFilename,
@@ -15,19 +18,22 @@ import {
 } from "../../../../services/ajax/rename-file";
 import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
 import Button from "../../../../ui/Button";
+import getFilenameWithoutExtension from "../../../../helpers/getFilenameWithoutExtension";
+import getFilenamePreview from "../../../../helpers/getFilenamePreview";
 
 function BulkResultsItem({ attachment }) {
-	const { state } = useContext(BulkProcessContext);
+	const { state, dispatch } = useContext(BulkProcessContext);
 	const { settings } = useContext(BulkSettingsContext);
 	const [loading, setLoading] = useState(true);
 	const [loadingHandleResult, setLoadingHandleResult] = useState(false);
 	const [fileinfos, setFileInfos] = useState("");
 	const [alt, setAlt] = useState("");
-	const [resultIsValid, setResultIsValid] = useState(
-		!settings.wantValidateResult
-	);
+	const [altOptimizationIsValid, setAltOptimizationIsValid] = useState(false);
+	const [
+		filenameOptimizationIsValid,
+		setFilenameOptimizationIsValid
+	] = useState(false);
 
-	console.log("[resultIsValid]", resultIsValid);
 	useEffect(() => {
 		if (isNil(state.reports[attachment.ID])) {
 			return;
@@ -42,27 +48,37 @@ function BulkResultsItem({ attachment }) {
 
 				if (isEmpty(newAlt)) {
 					setAlt(null);
-					return;
-				}
-				if (success) {
+				} else if (success) {
 					setAlt(newAlt);
+					dispatch({
+						type: "ADD_ALT_PREVIEW",
+						payload: {
+							ID: attachment.ID,
+							alt: newAlt
+						}
+					});
 				}
 			}
 
 			if (settings.optimizeFile && isEmpty(fileinfos)) {
+				const filenames = selectors.getAllFilenamesPreview(state);
 				const { data: newFileinfos } = await previewFilename(
-					attachment.ID
+					attachment.ID,
+					filenames
 				);
 
 				if (isEmpty(newFileinfos.filename)) {
 					setFileInfos(null);
-					return;
+				} else {
+					setFileInfos(newFileinfos);
+					dispatch({
+						type: "ADD_FILENAME_PREVIEW",
+						payload: {
+							ID: attachment.ID,
+							file: newFileinfos
+						}
+					});
 				}
-				setFileInfos(newFileinfos);
-			}
-
-			if (!settings.wantValidateResult) {
-				handleValidateResult();
 			}
 
 			setLoading(false);
@@ -71,33 +87,74 @@ function BulkResultsItem({ attachment }) {
 		fetchOptimization();
 	}, [state.reports]);
 
-	const handleValidateResult = async () => {
-		if (resultIsValid || isEmpty(alt) || isEmpty(fileinfos)) {
+	// Optimize alt auto
+	useEffect(() => {
+		if (settings.wantValidateResult || altOptimizationIsValid) {
 			return;
 		}
 
-		if (settings.optimizeAlt) {
+		if (!settings.optimizeAlt || isEmpty(alt) || isNil(alt)) {
+			return;
+		}
+
+		const fetchUpdateAlt = async () => {
+			await updateAlt(attachment.ID, alt);
+			setAltOptimizationIsValid(true);
+		};
+
+		fetchUpdateAlt();
+	}, [alt]);
+
+	// Optimize file auto
+	useEffect(() => {
+		if (settings.wantValidateResult || filenameOptimizationIsValid) {
+			return;
+		}
+
+		if (!settings.optimizeFile || isEmpty(fileinfos) || isNil(fileinfos)) {
+			return;
+		}
+
+		const fetchUpdateFile = async () => {
+			await renameFilename(
+				attachment.ID,
+				getFilenameWithoutExtension(getFilenamePreview(fileinfos))
+			);
+			setFilenameOptimizationIsValid(true);
+		};
+
+		fetchUpdateFile();
+	}, [fileinfos]);
+
+	const handleValidateResult = async () => {
+		if (filenameOptimizationIsValid && altOptimizationIsValid) {
+			return;
+		}
+
+		if (settings.optimizeAlt && !isEmpty(alt)) {
 			await updateAlt(attachment.ID, alt);
 		}
 
-		if (settings.optimizeFile) {
-			await renameFilename(attachment.ID, fileinfos.filename);
+		if (
+			settings.optimizeFile &&
+			!isNil(fileinfos) &&
+			!isEmpty(fileinfos.filename)
+		) {
+			await renameFilename(
+				attachment.ID,
+				getFilenameWithoutExtension(getFilenamePreview(fileinfos))
+			);
 		}
 
 		if (loadingHandleResult) {
 			setLoadingHandleResult(false);
 		}
 
-		setResultIsValid(true);
+		setFilenameOptimizationIsValid(true);
+		setAltOptimizationIsValid(true);
 	};
 
-	let filename = "";
-	if (!isEmpty(fileinfos)) {
-		filename = fileinfos.filename;
-		if (filename.indexOf(".") < 0) {
-			filename = `${fileinfos.filename}.${fileinfos.extension}`;
-		}
-	}
+	let filename = getFilenamePreview(fileinfos);
 
 	return (
 		<BlockTableLine key={`attachment_${attachment.ID}`}>
@@ -157,16 +214,20 @@ function BulkResultsItem({ attachment }) {
 						)}
 
 						{!loading &&
+							(altOptimizationIsValid ||
+								filenameOptimizationIsValid) &&
 							(!isEmpty(filename) || !isEmpty(alt)) &&
 							settings.wantValidateResult &&
-							resultIsValid && (
+							filenameOptimizationIsValid &&
+							altOptimizationIsValid && (
 								<img
 									src={`${IMAGESEO_URL_DIST}/images/check.svg`}
 								/>
 							)}
 
 						{settings.wantValidateResult &&
-							!resultIsValid &&
+							(!filenameOptimizationIsValid ||
+								!altOptimizationIsValid) &&
 							(!isEmpty(filename) || !isEmpty(alt)) &&
 							!loading && (
 								<Button

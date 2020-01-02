@@ -14,6 +14,7 @@ $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($to
 
 $currentProcess = get_option('_imageseo_current_processed', 0);
 $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
+
 ?>
 
 <div id="wrap-imageseo">

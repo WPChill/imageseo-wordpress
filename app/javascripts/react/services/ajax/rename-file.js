@@ -1,8 +1,9 @@
-const previewFilename = async attachmentId => {
+const previewFilename = async (attachmentId, excludeFilenames) => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_preview_optimize_filename");
 	formData.append("attachmentId", attachmentId);
+	formData.append("excludeFilenames", JSON.stringify(excludeFilenames));
 
 	const response = await fetch(ajaxurl, {
 		method: "POST",

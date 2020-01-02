@@ -111,6 +111,9 @@ class TagsToString
             $template = str_replace($tags[0][$key], $value, $template);
         }
 
+        $template = trim($template);
+        $template = ltrim($template, '-');
+
         return $template;
     }
 }

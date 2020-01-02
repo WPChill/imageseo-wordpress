@@ -1,4 +1,7 @@
+import { reduce, isEmpty, memoize, uniq } from "lodash";
 import React, { useReducer, createContext } from "react";
+import getFilenameWithoutExtension from "../../helpers/getFilenameWithoutExtension";
+import getFilenamePreview from "../../helpers/getFilenamePreview";
 
 const initialState = {
 	allIds: [],
@@ -7,7 +10,9 @@ const initialState = {
 	bulkPause: false,
 	currentProcess: null,
 	attachments: {},
-	reports: {}
+	reports: {},
+	altPreviews: {},
+	filePreviews: {}
 };
 
 function reducer(state, { type, payload }) {
@@ -16,6 +21,22 @@ function reducer(state, { type, payload }) {
 	console.info("Payload: ", payload);
 	console.groupEnd();
 	switch (type) {
+		case "ADD_ALT_PREVIEW":
+			return {
+				...state,
+				altPreviews: {
+					...state.altPreviews,
+					[payload.ID]: payload.alt
+				}
+			};
+		case "ADD_FILENAME_PREVIEW":
+			return {
+				...state,
+				filePreviews: {
+					...state.filePreviews,
+					[payload.ID]: payload.file
+				}
+			};
 		case "UPDATE_ALL_IDS":
 			return {
 				...state,
@@ -29,7 +50,9 @@ function reducer(state, { type, payload }) {
 		case "START_BULK":
 			return {
 				...state,
-				bulkActive: true
+				bulkActive: true,
+				attachments: {},
+				reports: {}
 			};
 		case "PLAY_BULK":
 			return {
@@ -95,5 +118,27 @@ const BulkProcessContextProvider = ({ children }) => {
 	);
 };
 
+const getAllFilenamesPreviewMemoize = memoize(state => {
+	const filenames = reduce(
+		Object.values(state.filePreviews),
+		(result, value, key) => {
+			const filename = getFilenameWithoutExtension(
+				getFilenamePreview(value)
+			);
+			if (!isEmpty(filename)) {
+				result.push(filename);
+			}
+			return result;
+		},
+		[]
+	);
+
+	return uniq(filenames);
+});
+
+const selectors = {
+	getAllFilenamesPreview: getAllFilenamesPreviewMemoize
+};
+
 export default BulkProcessContextProvider;
-export { BulkProcessContext };
+export { BulkProcessContext, selectors };

@@ -35,11 +35,18 @@ abstract class AltFormat
      */
     public static function getFormats()
     {
-        return apply_filters('imageseo_alt_formats', [
+        $formats = [
             self::ALT_SIMPLE,
             self::ALT_POST_TITLE,
             self::ALT_SITE_TITLE,
-            self::ALT_PRODUCT_WOOCOMMERCE,
-        ]);
+        ];
+
+        if (
+            is_plugin_active('woocommerce/woocommerce.php')
+        ) {
+            $formats[] = self::ALT_PRODUCT_WOOCOMMERCE;
+        }
+
+        return apply_filters('imageseo_alt_formats', $formats);
     }
 }
