@@ -20,10 +20,11 @@ import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
 import Button from "../../../../ui/Button";
 import getFilenameWithoutExtension from "../../../../helpers/getFilenameWithoutExtension";
 import getFilenamePreview from "../../../../helpers/getFilenamePreview";
+import { saveCurrentBulk } from "../../../../services/ajax/current-bulk";
 
 function BulkResultsItem({ attachment }) {
 	const { state, dispatch } = useContext(BulkProcessContext);
-	const { settings } = useContext(BulkSettingsContext);
+	const { state: settings } = useContext(BulkSettingsContext);
 	const [loading, setLoading] = useState(true);
 	const [loadingHandleResult, setLoadingHandleResult] = useState(false);
 	const [fileinfos, setFileInfos] = useState("");
@@ -82,6 +83,7 @@ function BulkResultsItem({ attachment }) {
 			}
 
 			setLoading(false);
+			saveCurrentBulk(settings, state, state.currentProcess + 1);
 		};
 
 		fetchOptimization();

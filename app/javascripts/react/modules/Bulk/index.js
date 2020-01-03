@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
-import { get, isNull, isNil } from "lodash";
+import { get, isNull, isNil, find } from "lodash";
+import { format } from "date-fns";
 
 import Block from "../../ui/Block";
 import BlockContentInner, {
@@ -31,15 +32,23 @@ import { getImagesLeft } from "../../services/user";
 import getAttachement from "../../services/ajax/get-attachement";
 
 import Loader from "../../ui/Loader";
-import { Col } from "../../ui/Flex";
+import { Col, Row } from "../../ui/Flex";
 import generateReport from "../../services/ajax/generate-report";
+import SubTitle from "../../ui/Block/Subtitle";
+import { deleteCurrentBulk } from "../../services/ajax/current-bulk";
 
 function BulkWithProviders() {
-	const [openOptimization, setOpenOptimization] = useState(true);
 	const { state, dispatch } = useContext(BulkProcessContext);
 	const { state: userState } = useContext(UserContext);
-	const { settings } = useContext(BulkSettingsContext);
+	const { state: settings, dispatch: dispatchSettings } = useContext(
+		BulkSettingsContext
+	);
+	const [openOptimization, setOpenOptimization] = useState(
+		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
+	);
+
 	console.log("[state]", state);
+	console.log("[state settings]", settings);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed =
@@ -81,7 +90,7 @@ function BulkWithProviders() {
 
 		// No attachement
 		if (isNull(attachmentId)) {
-			dispatch({ type: "STOP_BULK" });
+			dispatch({ type: "FINISH_BULK" });
 			return;
 		}
 
@@ -125,6 +134,7 @@ function BulkWithProviders() {
 		});
 	};
 
+	// Start a new bulk
 	const handleStartBulk = async () => {
 		if (!canLaunchBulk(settings)) {
 			Swal.fire({
@@ -156,20 +166,199 @@ function BulkWithProviders() {
 			return;
 		}
 
-		dispatch({ type: "START_BULK" });
-		dispatch({
-			type: "NEW_PROCESS",
-			payload: 0
+		const launchBulk = async () => {
+			if (IMAGESEO_DATA.CURRENT_PROCESSED) {
+				await deleteCurrentBulk();
+				IMAGESEO_DATA.CURRENT_PROCESSED = false;
+			}
+			dispatch({ type: "START_BULK" });
+			dispatch({
+				type: "NEW_PROCESS",
+				payload: 0
+			});
+		};
+
+		Swal.fire({
+			title: "Are you sure?",
+			text:
+				"You're about to launch a bulk optimization. You can pause it and resume it at any time.",
+			icon: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			confirmButtonText: "Yes, let's go!"
+		}).then(result => {
+			if (result.value) {
+				launchBulk();
+			}
 		});
 	};
 
+	const handleRestartBulk = e => {
+		e.preventDefault();
+		if (!IMAGESEO_DATA.CURRENT_PROCESSED) {
+			return;
+		}
+
+		Swal.fire({
+			title: "Are you sure?",
+			text:
+				"You're going to take over a bulk optimization that was in progress. ",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			confirmButtonText: "Yes, let's go!"
+		}).then(result => {
+			if (result.value) {
+				dispatchSettings({
+					type: "NEW_OPTIONS",
+					payload: {
+						...IMAGESEO_DATA.CURRENT_PROCESSED.settings,
+						restartBulk: true
+					}
+				});
+			}
+		});
+	};
+
+	// Re-start an old bulk
+	useEffect(() => {
+		if (!settings.restartBulk) {
+			return;
+		}
+
+		const fetchRestartBulk = async () => {
+			await deleteCurrentBulk();
+
+			dispatch({
+				type: "RESTART_BULK",
+				payload: {
+					...IMAGESEO_DATA.CURRENT_PROCESSED.state,
+					bulkActive: true,
+					attachments: {},
+					reports: {},
+					currentProcess:
+						Number(
+							IMAGESEO_DATA.CURRENT_PROCESSED.state.currentProcess
+						) + 1
+				}
+			});
+		};
+
+		fetchRestartBulk();
+	}, [settings.restartBulk]);
+
+	useEffect(() => {
+		if (!state.bulkFinish) {
+			return;
+		}
+		setTimeout(() => {
+			deleteCurrentBulk();
+		}, 2000);
+	}, [state.bulkFinish]);
+
 	return (
 		<>
+			{IMAGESEO_DATA.CURRENT_PROCESSED && !state.bulkActive && (
+				<div className="imageseo-mb-4">
+					<Block>
+						<BlockContentInner>
+							<Row align="center">
+								<Col flex="1">
+									<h2>
+										Paused Bulk Optimization (
+										{get(
+											IMAGESEO_DATA,
+											"CURRENT_PROCESSED.count_optimized",
+											0
+										)}
+										/
+										{
+											IMAGESEO_DATA.CURRENT_PROCESSED
+												.state.allIds.length
+										}
+										)
+									</h2>
+									<p>
+										Paused :{" "}
+										{format(
+											new Date(
+												IMAGESEO_DATA.CURRENT_PROCESSED.last_updated
+											),
+											"dd MMMM yyyy - HH:mm"
+										)}
+									</p>
+								</Col>
+								<Col auto>
+									<Button primary onClick={handleRestartBulk}>
+										Re-start this bulk
+									</Button>
+								</Col>
+							</Row>
+							<div className="imageseo-mt-3">
+								<SubTitle>
+									Configuration of this optimization
+								</SubTitle>
+								<ul>
+									<li>
+										<strong>Manual Validation :</strong>{" "}
+										{IMAGESEO_DATA.CURRENT_PROCESSED
+											.settings.wantValidateResult
+											? "Yes"
+											: "No"}
+									</li>
+									<li>
+										<strong>Language :</strong>{" "}
+										{
+											find(IMAGESEO_DATA.LANGUAGES, {
+												code:
+													IMAGESEO_DATA
+														.CURRENT_PROCESSED
+														.settings.language
+											}).name
+										}
+									</li>
+									<li>
+										<strong>Optimize alt :</strong>{" "}
+										{IMAGESEO_DATA.CURRENT_PROCESSED
+											.settings.optimizeAlt
+											? "Yes"
+											: "No"}{" "}
+										{IMAGESEO_DATA.CURRENT_PROCESSED
+											.settings.optimizeAlt && (
+											<>
+												(Format :{" "}
+												{
+													IMAGESEO_DATA
+														.CURRENT_PROCESSED
+														.settings.formatAlt
+												}
+												)
+											</>
+										)}
+									</li>
+									<li>
+										<strong>Optimize filename :</strong>{" "}
+										{IMAGESEO_DATA.CURRENT_PROCESSED
+											.settings.optimizeFile
+											? "Yes"
+											: "No"}
+									</li>
+								</ul>
+							</div>
+						</BlockContentInner>
+					</Block>
+				</div>
+			)}
 			<Block>
 				<BlockContentInner
 					isHead
 					withAction
-					style={{ alignItems: "center" }}
+					style={{
+						alignItems: "center",
+						borderBottom: openOptimization
+							? "1px solid #C8D0DD"
+							: "none"
+					}}
 				>
 					<BlockContentInnerTitle>
 						<h2>Bulk optimization settings</h2>
@@ -184,30 +373,36 @@ function BulkWithProviders() {
 						/>
 					</BlockContentInnerAction>
 				</BlockContentInner>
-				<BlockContentInner>
-					{!state.bulkActive && (
-						<BulkSettings handleQueryImages={handleQueryImages} />
-					)}
-					{state.bulkActive && <BulkSummary />}
-				</BlockContentInner>
-				<BlockFooter>
-					{!state.bulkActive && (
-						<>
-							<h3>{state.allIds.length} images to optimize</h3>
+				{openOptimization && (
+					<BlockContentInner>
+						{!state.bulkActive && !state.bulkFinish && (
+							<BulkSettings
+								handleQueryImages={handleQueryImages}
+							/>
+						)}
+						{(state.bulkActive || state.bulkFinish) && (
+							<BulkSummary />
+						)}
+					</BlockContentInner>
+				)}
+				{openOptimization && !state.bulkFinish && (
+					<BlockFooter>
+						<h3>{state.allIds.length} images to optimize</h3>
+						<p>
+							You have {userImagesLeft} credits left in your
+							account and{" "}
+							<strong>
+								you are going to consume {numberCreditsNeed}{" "}
+								credits.
+							</strong>
+						</p>
+						{get(state, "allIdsOptimized", []).length > 0 && (
 							<p>
-								You have {userImagesLeft} credits left in your
-								account and{" "}
-								<strong>
-									you are going to consume {numberCreditsNeed}{" "}
-									credits.
-								</strong>
+								There are already 10 optimizations that have
+								already been done
 							</p>
-							{get(state, "allIdsOptimized", []).length > 0 && (
-								<p>
-									There are already 10 optimizations that have
-									already been done
-								</p>
-							)}
+						)}
+						{!state.bulkActive && (
 							<Button
 								primary
 								style={{ marginRight: 15 }}
@@ -218,66 +413,73 @@ function BulkWithProviders() {
 							>
 								Start New Bulk Optimization
 							</Button>
-							{numberCreditsNeed > userImagesLeft && (
-								<Button
-									simple
-									onClick={e => {
-										window.open(
-											"https://app.imageseo.io/plan",
-											"_blank"
-										);
-									}}
-								>
-									Get more credits
-								</Button>
-							)}
-						</>
-					)}
-				</BlockFooter>
+						)}
+						{numberCreditsNeed > userImagesLeft && (
+							<Button
+								simple
+								onClick={e => {
+									window.open(
+										"https://app.imageseo.io/plan",
+										"_blank"
+									);
+								}}
+							>
+								Get more credits
+							</Button>
+						)}
+					</BlockFooter>
+				)}
 			</Block>
-			<div className="imageseo-mt-4">
-				<Block>
-					<BlockContentInner
-						isHead
-						withAction
-						style={{ alignItems: "center" }}
-					>
-						<Col span={10}>
-							<h2>
-								Bulk running (
-								{Object.values(state.attachments).length}/
-								{state.allIds.length})
-							</h2>
-						</Col>
-						<Col>
-							<Loader percent={getPercentBulk(state)} />
-						</Col>
-						<Col span={7}>
-							{state.bulkActive && !state.bulkPause && (
-								<Button
-									simple
-									onClick={e => {
-										dispatch({ type: "PAUSE_BULK" });
-									}}
-								>
-									Pause bulk
-								</Button>
-							)}
-							{state.bulkActive && state.bulkPause && (
-								<Button
-									simple
-									onClick={e => {
-										dispatch({ type: "PLAY_BULK" });
-									}}
-								>
-									Play
-								</Button>
-							)}
-						</Col>
-					</BlockContentInner>
-					<BulkResults />
-				</Block>
-			</div>
+			{(state.bulkActive || state.bulkFinish) && (
+				<div className="imageseo-mt-4">
+					<Block>
+						<BlockContentInner
+							isHead
+							withAction
+							style={{ alignItems: "center" }}
+						>
+							<Col span={10}>
+								<h2>
+									Bulk running (
+									{Object.values(state.attachments).length +
+										get(
+											IMAGESEO_DATA,
+											"CURRENT_PROCESSED.count_optimized",
+											0
+										)}
+									/{state.allIds.length})
+								</h2>
+							</Col>
+							<Col>
+								<Loader percent={getPercentBulk(state)} />
+							</Col>
+							<Col span={7}>
+								{state.bulkActive && !state.bulkPause && (
+									<Button
+										simple
+										onClick={e => {
+											dispatch({ type: "PAUSE_BULK" });
+										}}
+									>
+										Pause bulk
+									</Button>
+								)}
+								{state.bulkActive && state.bulkPause && (
+									<Button
+										simple
+										onClick={e => {
+											dispatch({ type: "PLAY_BULK" });
+										}}
+									>
+										Play
+									</Button>
+								)}
+							</Col>
+						</BlockContentInner>
+						<BulkResults />
+					</Block>
+				</div>
+			)}
 		</>
 	);
 }

@@ -24,6 +24,35 @@ class Optimize
         add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
+        add_action('wp_ajax_imageseo_save_current_bulk', [$this, 'saveCurrentBulk']);
+        add_action('wp_ajax_imageseo_delete_current_bulk', [$this, 'deleteCurrentBulk']);
+    }
+
+    public function saveCurrentBulk()
+    {
+        if (!isset($_POST['settings']) || !isset($_POST['state']) || !isset($_POST['countOptimized'])) {
+            wp_send_json_error([
+                'code' => 'missing_parameters',
+            ]);
+
+            return;
+        }
+
+        $now = new \DateTime('now');
+        update_option('_imageseo_current_processed', [
+            'settings'        => json_decode(stripslashes($_POST['settings'])),
+            'state'           => json_decode(stripslashes($_POST['state'])),
+            'count_optimized' => (int) $_POST['countOptimized'],
+            'last_updated'    => $now->format('Y-m-d H:i:s'),
+        ]);
+
+        wp_send_json_success();
+    }
+
+    public function deleteCurrentBulk()
+    {
+        delete_option('_imageseo_current_processed');
+        wp_send_json_success();
     }
 
     public function getPreviewAlt()

@@ -34,6 +34,7 @@
 	},
 	"dependencies": {
 		"@wordpress/is-shallow-equal": "^1.6.1",
+		"date-fns": "^2.8.1",
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
 		"styled-components": "^4.4.1",

@@ -60,7 +60,8 @@
 		color: $blueShady;
 		margin-bottom: 10px;
 	}
-	p {
+	p,
+	li {
 		font-size: 16px;
 		color: $blackLight;
 		line-height: 1.5;
@@ -68,6 +69,10 @@
 		&:last-child {
 			margin-bottom: 0;
 		}
+	}
+	ul {
+		list-style-type: disc;
+		margin-left: 20px;
 	}
 	&--secondary {
 		background-image: linear-gradient(97deg, #3139cc, #179ae6);

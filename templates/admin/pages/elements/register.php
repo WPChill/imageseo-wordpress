@@ -1,7 +1,9 @@
 <?php
-// if (imageseo_allowed()) {
-//     return;
-// }
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 ?>
 
 <div id="js-imageseo-register" class="imageseo-block">

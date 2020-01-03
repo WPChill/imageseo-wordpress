@@ -12,8 +12,6 @@ $options_available = [
     ],
 ];
 
-$limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
-
 ?>
 
 

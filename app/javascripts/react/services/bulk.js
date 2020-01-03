@@ -19,7 +19,12 @@ function getPercentBulk(state) {
 		return 0;
 	}
 
-	return (countCurrent * 100) / state.allIds.length;
+	return (
+		((countCurrent +
+			get(IMAGESEO_DATA, "CURRENT_PROCESSED.count_optimized", 0)) *
+			100) /
+		state.allIds.length
+	);
 }
 
 export { getAttachmentIdWithProcess, canLaunchBulk, getPercentBulk };

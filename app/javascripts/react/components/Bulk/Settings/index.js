@@ -12,7 +12,8 @@ const SCContentSettings = styled.div`
 `;
 
 function BulkSettings() {
-	const { settings, actions } = useContext(BulkSettingsContext);
+	const { state: settings, dispatch } = useContext(BulkSettingsContext);
+
 	return (
 		<>
 			<SubTitle>Global settings</SubTitle>
@@ -26,9 +27,13 @@ function BulkSettings() {
 								id="wantValidateResult"
 								value={settings.wantValidateResult}
 								onChange={() =>
-									actions.setWantValidateResult(
-										!settings.wantValidateResult
-									)
+									dispatch({
+										type: "UPDATE_OPTION",
+										payload: {
+											key: "wantValidateResult",
+											value: !settings.wantValidateResult
+										}
+									})
 								}
 							/>
 						</div>
@@ -54,7 +59,13 @@ function BulkSettings() {
 						<select
 							value={settings.language}
 							onChange={event =>
-								actions.setLanguage(event.target.value)
+								dispatch({
+									type: "UPDATE_OPTION",
+									payload: {
+										key: "language",
+										value: event.target.value
+									}
+								})
 							}
 						>
 							{IMAGESEO_DATA.LANGUAGES.map(language => {
@@ -82,9 +93,13 @@ function BulkSettings() {
 								id="optimizeAlt"
 								value={settings.optimizeAlt}
 								onChange={() =>
-									actions.setOptimizeAlt(
-										!settings.optimizeAlt
-									)
+									dispatch({
+										type: "UPDATE_OPTION",
+										payload: {
+											key: "optimizeAlt",
+											value: !settings.optimizeAlt
+										}
+									})
 								}
 							/>
 						</div>
@@ -111,9 +126,13 @@ function BulkSettings() {
 										id="altFilter"
 										value={settings.altFilter}
 										onChange={event =>
-											actions.setAltFilter(
-												event.target.value
-											)
+											dispatch({
+												type: "UPDATE_OPTION",
+												payload: {
+													key: "altFilter",
+													value: event.target.value
+												}
+											})
 										}
 									>
 										{IMAGESEO_DATA.ALT_SPECIFICATION.map(
@@ -141,9 +160,13 @@ function BulkSettings() {
 										id="altFill"
 										value={settings.altFill}
 										onChange={event =>
-											actions.setAltFill(
-												event.target.value
-											)
+											dispatch({
+												type: "UPDATE_OPTION",
+												payload: {
+													key: "altFill",
+													value: event.target.value
+												}
+											})
 										}
 									>
 										{IMAGESEO_DATA.ALT_FILL_TYPE.map(
@@ -179,9 +202,17 @@ function BulkSettings() {
 														settings.formatAlt
 													}
 													onChange={event => {
-														actions.setAltFormat(
-															event.target.value
-														);
+														dispatch({
+															type:
+																"UPDATE_OPTION",
+															payload: {
+																key:
+																	"formatAlt",
+																value:
+																	event.target
+																		.value
+															}
+														});
 													}}
 												/>
 												<span className="imageseo-ml-1">
@@ -207,9 +238,13 @@ function BulkSettings() {
 								id="optimizeFile"
 								value={settings.optimizeFile}
 								onChange={() =>
-									actions.setOptimizeFile(
-										!settings.optimizeFile
-									)
+									dispatch({
+										type: "UPDATE_OPTION",
+										payload: {
+											key: "optimizeFile",
+											value: !settings.optimizeFile
+										}
+									})
 								}
 							/>
 						</div>

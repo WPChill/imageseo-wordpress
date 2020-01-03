@@ -1,7 +1,11 @@
 import React from "react";
 
-function Block({ children }) {
-	return <div className="imageseo-block">{children}</div>;
+function Block({ children, style = {} }) {
+	return (
+		<div className="imageseo-block" style={style}>
+			{children}
+		</div>
+	);
 }
 
 export default Block;

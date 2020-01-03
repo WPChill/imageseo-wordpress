@@ -11,7 +11,7 @@ import { BulkSettingsContext } from "../../../contexts/BulkSettingsContext";
 
 function BulkResults() {
 	const { state } = useContext(BulkProcessContext);
-	const { settings } = useContext(BulkSettingsContext);
+	const { state: settings } = useContext(BulkSettingsContext);
 	return (
 		<>
 			<BlockTableHead>

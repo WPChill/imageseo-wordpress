@@ -104,13 +104,18 @@
     font-weight: bold;
     color: #08142E;
     margin-bottom: 10px; }
-  #wrap-imageseo .imageseo-block p {
+  #wrap-imageseo .imageseo-block p,
+  #wrap-imageseo .imageseo-block li {
     font-size: 16px;
     color: #2C303B;
     line-height: 1.5;
     margin-top: 5px; }
-    #wrap-imageseo .imageseo-block p:last-child {
+    #wrap-imageseo .imageseo-block p:last-child,
+    #wrap-imageseo .imageseo-block li:last-child {
       margin-bottom: 0; }
+  #wrap-imageseo .imageseo-block ul {
+    list-style-type: disc;
+    margin-left: 20px; }
   #wrap-imageseo .imageseo-block--secondary {
     background-image: linear-gradient(97deg, #3139cc, #179ae6);
     color: #fff; }
@@ -175,6 +180,9 @@
   #wrap-imageseo .imageseo-flex .fl-4 {
     flex: 4; }
 
+#wrap-imageseo .imageseo-mb-0 {
+  margin-bottom: 0px; }
+
 #wrap-imageseo .imageseo-mb-1 {
   margin-bottom: 10px; }
 
@@ -189,6 +197,9 @@
 
 #wrap-imageseo .imageseo-mb-5 {
   margin-bottom: 50px; }
+
+#wrap-imageseo .imageseo-mt-0 {
+  margin-top: 0px; }
 
 #wrap-imageseo .imageseo-mt-1 {
   margin-top: 10px; }
@@ -205,6 +216,9 @@
 #wrap-imageseo .imageseo-mt-5 {
   margin-top: 50px; }
 
+#wrap-imageseo .imageseo-mr-0 {
+  margin-right: 0px; }
+
 #wrap-imageseo .imageseo-mr-1 {
   margin-right: 10px; }
 
@@ -216,6 +230,9 @@
 
 #wrap-imageseo .imageseo-mr-4 {
   margin-right: 40px; }
+
+#wrap-imageseo .imageseo-ml-0 {
+  margin-left: 0px; }
 
 #wrap-imageseo .imageseo-ml-1 {
   margin-left: 10px; }
@@ -231,6 +248,9 @@
 
 #wrap-imageseo .imageseo-h100 {
   height: 100%; }
+
+#wrap-imageseo .imageseo-color-blue {
+  color: #3139CC; }
 
 #wrap-imageseo .imageseo-input {
   min-height: 44px;
@@ -259,6 +279,16 @@
   background-color: #ffffff; }
   #wrap-imageseo .imageseo-icons--button:hover {
     cursor: pointer; }
+
+#wrap-imageseo .imageseo-icons--oval {
+  width: 60px;
+  height: 60px;
+  border-radius: 40px;
+  color: #fff;
+  background-image: linear-gradient(135deg, #3139CC, #179ae6);
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 #wrap-imageseo #form-register button {
   display: block;

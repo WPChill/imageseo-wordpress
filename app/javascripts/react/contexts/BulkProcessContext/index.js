@@ -7,6 +7,7 @@ const initialState = {
 	allIds: [],
 	allIdsOptimized: [],
 	bulkActive: false,
+	bulkFinish: false,
 	bulkPause: false,
 	currentProcess: null,
 	attachments: {},
@@ -21,6 +22,11 @@ function reducer(state, { type, payload }) {
 	console.info("Payload: ", payload);
 	console.groupEnd();
 	switch (type) {
+		case "RESTART_BULK":
+			return {
+				...state,
+				...payload
+			};
 		case "ADD_ALT_PREVIEW":
 			return {
 				...state,
@@ -64,10 +70,11 @@ function reducer(state, { type, payload }) {
 				...state,
 				bulkPause: true
 			};
-		case "STOP_BULK":
+		case "FINISH_BULK":
 			return {
 				...state,
 				bulkActive: false,
+				bulkFinish: true,
 				currentProcess: false
 			};
 		case "NEW_PROCESS":
@@ -104,6 +111,15 @@ function reducer(state, { type, payload }) {
 const BulkProcessContext = createContext(null);
 
 const BulkProcessContextProvider = ({ children }) => {
+	let initState = {
+		...initialState
+	};
+	if (IMAGESEO_DATA.CURRENT_PROCESSED) {
+		initState = {
+			...initState,
+			...IMAGESEO_DATA.CURRENT_PROCESSED.state
+		};
+	}
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	return (

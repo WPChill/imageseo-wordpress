@@ -8,4 +8,14 @@
 			cursor: pointer;
 		}
 	}
+	&--oval {
+		width: 60px;
+		height: 60px;
+		border-radius: 40px;
+		color: #fff;
+		background-image: linear-gradient(135deg, $blue, #179ae6);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 }
