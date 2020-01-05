@@ -61,13 +61,16 @@ class Report
 
         if ($report) {
             $report['ID'] = $attachmentId;
-            wp_send_json_success($report);
+            wp_send_json_success([
+                'need_update_counter' => false,
+                'report'              => $report,
+            ]);
 
             return;
         }
 
         try {
-            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
+            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, ['force' => true]);
         } catch (\Exception $e) {
             wp_send_json_error([
                 'code' => 'error_generate_report',
@@ -86,7 +89,10 @@ class Report
 
         $report = $response['result'];
         $report['ID'] = $attachmentId;
-        wp_send_json_success($report);
+        wp_send_json_success([
+            'need_update_counter' => true,
+            'report'              => $report,
+        ]);
     }
 
     /**

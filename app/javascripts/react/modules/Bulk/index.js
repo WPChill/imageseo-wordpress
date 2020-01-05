@@ -28,7 +28,7 @@ import {
 import BulkSummary from "../../components/Bulk/Summary";
 import UserContextProvider, { UserContext } from "../../contexts/UserContext";
 import queryImages from "../../services/ajax/query-images";
-import { getImagesLeft } from "../../services/user";
+import { getImagesLeft, hasLimitExcedeed } from "../../services/user";
 import getAttachement from "../../services/ajax/get-attachement";
 
 import Loader from "../../ui/Loader";
@@ -40,7 +40,9 @@ import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 
 function BulkWithProviders() {
 	const { state, dispatch } = useContext(BulkProcessContext);
-	const { state: userState } = useContext(UserContext);
+	const { state: userState, dispatch: dispatchUser } = useContext(
+		UserContext
+	);
 	const { state: settings, dispatch: dispatchSettings } = useContext(
 		BulkSettingsContext
 	);
@@ -50,6 +52,7 @@ function BulkWithProviders() {
 
 	console.log("[state]", state);
 	console.log("[state settings]", settings);
+	console.log("[state user]", userState);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed =
@@ -79,6 +82,18 @@ function BulkWithProviders() {
 			return;
 		}
 
+		if (hasLimitExcedeed(userState.user_infos)) {
+			Swal.fire({
+				title: "Oups !",
+				text:
+					"You may not have any credits left. We've stopped bulk optimization.",
+				icon: "info",
+				confirmButtonText: "Close"
+			});
+			dispatch({ type: "PAUSE_BULK" });
+			return;
+		}
+
 		const attachmentId = getAttachmentIdWithProcess(state);
 		const fetchAttachment = async attachmentId => {
 			const { data: attachment } = await getAttachement(attachmentId);
@@ -104,10 +119,42 @@ function BulkWithProviders() {
 			return;
 		}
 
+		if (hasLimitExcedeed(userState.user_infos)) {
+			dispatch({ type: "PAUSE_BULK" });
+			return;
+		}
+
 		const attachmentId = getAttachmentIdWithProcess(state);
 
 		const fetchReport = async attachmentId => {
-			const { data: report } = await generateReport(attachmentId);
+			const {
+				success,
+				data: { need_update_counter, report }
+			} = await generateReport(attachmentId);
+
+			if (!success) {
+				Swal.fire({
+					title: "Oups !",
+					text:
+						"You may not have any credits left. We've stopped bulk optimization.",
+					icon: "info",
+					confirmButtonText: "Close"
+				});
+				dispatch({ type: "PAUSE_BULK" });
+				return;
+			}
+
+			if (need_update_counter) {
+				if (userState.user_infos.bonus_stock_images > 0) {
+					dispatchUser({
+						type: "DECREASE_BONUS_STOCK_IMAGES"
+					});
+				} else {
+					dispatchUser({
+						type: "INCREASE_CURRENT_REQUEST_IMAGES"
+					});
+				}
+			}
 
 			dispatch({
 				type: "ADD_REPORT",
@@ -374,7 +421,7 @@ function BulkWithProviders() {
 						/>
 					</BlockContentInnerAction>
 				</BlockContentInner>
-				<LimitExcedeed />
+
 				{openOptimization && (
 					<BlockContentInner>
 						{!state.bulkActive && !state.bulkFinish && (
@@ -456,28 +503,41 @@ function BulkWithProviders() {
 								<Loader percent={getPercentBulk(state)} />
 							</Col>
 							<Col span={7}>
-								{state.bulkActive && !state.bulkPause && (
-									<Button
-										simple
-										onClick={e => {
-											dispatch({ type: "PAUSE_BULK" });
-										}}
-									>
-										Pause bulk
-									</Button>
-								)}
-								{state.bulkActive && state.bulkPause && (
-									<Button
-										simple
-										onClick={e => {
-											dispatch({ type: "PLAY_BULK" });
-										}}
-									>
-										Play
-									</Button>
+								{!hasLimitExcedeed(userState.user_infos) && (
+									<>
+										{state.bulkActive && !state.bulkPause && (
+											<Button
+												simple
+												onClick={e => {
+													dispatch({
+														type: "PAUSE_BULK"
+													});
+												}}
+											>
+												Pause bulk
+											</Button>
+										)}
+										{state.bulkActive && state.bulkPause && (
+											<Button
+												simple
+												onClick={e => {
+													dispatch({
+														type: "PLAY_BULK"
+													});
+												}}
+											>
+												Play
+											</Button>
+										)}
+									</>
 								)}
 							</Col>
 						</BlockContentInner>
+						{hasLimitExcedeed(userState.user_infos) && (
+							<BlockContentInner>
+								<LimitExcedeed />
+							</BlockContentInner>
+						)}
 						<BulkResults />
 					</Block>
 				</div>

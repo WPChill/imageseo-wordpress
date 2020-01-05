@@ -7,7 +7,28 @@ const initialStateReducer = {
 };
 
 function reducer(state, { type, payload }) {
+	console.group();
+	console.warn("Type User: ", type);
+	console.info("Payload User: ", payload);
+	console.groupEnd();
 	switch (type) {
+		case "DECREASE_BONUS_STOCK_IMAGES":
+			return {
+				...state,
+				user_infos: {
+					...state.user_infos,
+					bonus_stock_images: state.user_infos.bonus_stock_images - 1
+				}
+			};
+		case "INCREASE_CURRENT_REQUEST_IMAGES":
+			return {
+				...state,
+				user_infos: {
+					...state.user_infos,
+					current_request_images:
+						state.user_infos.current_request_images + 1
+				}
+			};
 		default:
 			return state;
 	}
