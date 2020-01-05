@@ -35,6 +35,7 @@ function BulkResultsItem({ attachment }) {
 		setFilenameOptimizationIsValid
 	] = useState(false);
 
+	// Preview alt and filename
 	useEffect(() => {
 		if (isNil(state.reports[attachment.ID])) {
 			return;

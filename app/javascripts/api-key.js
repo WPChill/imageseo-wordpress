@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$("#js-api-key button").on("click", function(e) {
 		e.preventDefault();
+		console.log("btich");
 		$("#js-api-key button").prop("disabled", "disabled");
+		$("#js-api-key button img").show();
 		$.ajax({
 			url: ajaxurl,
 			method: "POST",
@@ -18,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				const { success, data } = response;
 				$("#submit-form-register .loader").hide();
 				$("#submit-form-register .text").show();
+				$("#js-api-key button").prop("disabled", "");
+				$("#js-api-key button img").hide();
 				if (!success || isNull(data.user)) {
 					$("#js-api-key button").prop("disabled", "");
 					Swal.fire({

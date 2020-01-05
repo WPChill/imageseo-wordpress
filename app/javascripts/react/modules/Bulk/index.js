@@ -36,6 +36,7 @@ import { Col, Row } from "../../ui/Flex";
 import generateReport from "../../services/ajax/generate-report";
 import SubTitle from "../../ui/Block/Subtitle";
 import { deleteCurrentBulk } from "../../services/ajax/current-bulk";
+import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 
 function BulkWithProviders() {
 	const { state, dispatch } = useContext(BulkProcessContext);
@@ -373,6 +374,7 @@ function BulkWithProviders() {
 						/>
 					</BlockContentInnerAction>
 				</BlockContentInner>
+				<LimitExcedeed />
 				{openOptimization && (
 					<BlockContentInner>
 						{!state.bulkActive && !state.bulkFinish && (

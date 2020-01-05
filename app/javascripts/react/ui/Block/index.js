@@ -1,8 +1,17 @@
 import React from "react";
+import classNames from "classnames";
 
-function Block({ children, style = {} }) {
+function Block({ children, style = {}, secondary }) {
 	return (
-		<div className="imageseo-block" style={style}>
+		<div
+			className={classNames(
+				{
+					"imageseo-block--secondary": secondary
+				},
+				"imageseo-block"
+			)}
+			style={style}
+		>
 			{children}
 		</div>
 	);

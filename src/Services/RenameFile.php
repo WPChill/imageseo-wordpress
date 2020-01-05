@@ -215,13 +215,16 @@ class RenameFile
         clean_post_cache($attachmentId);
 
         $targetUrl = wp_get_attachment_url($attachmentId);
-        $this->searchReplaceInDB([
-            'source_url'      => $sourceUrl,
-            'source_metadata' => $sourceMetadata,
-        ], [
-            'target_url'       => $targetUrl,
-            'target_metadata'  => wp_get_attachment_metadata($attachmentId),
-        ]);
+
+        if (apply_filters('imageseo_replace_image_url_database', true)) {
+            $this->searchReplaceInDB([
+                'source_url'      => $sourceUrl,
+                'source_metadata' => $sourceMetadata,
+            ], [
+                'target_url'       => $targetUrl,
+                'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+            ]);
+        }
 
         $this->updateRedirect($sourceUrl, $targetUrl);
 
@@ -320,13 +323,15 @@ class RenameFile
         clean_post_cache($attachmentId);
 
         $targetUrl = wp_get_attachment_url($attachmentId);
-        $this->searchReplaceInDB([
-            'source_url'      => $sourceUrl,
-            'source_metadata' => $sourceMetadata,
-        ], [
-            'target_url'       => $targetUrl,
-            'target_metadata'  => wp_get_attachment_metadata($attachmentId),
-        ]);
+        if (apply_filters('imageseo_replace_image_url_database', true)) {
+            $this->searchReplaceInDB([
+                'source_url'      => $sourceUrl,
+                'source_metadata' => $sourceMetadata,
+            ], [
+                'target_url'       => $targetUrl,
+                'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+            ]);
+        }
 
         $this->updateRedirect($sourceUrl, $targetUrl);
 
