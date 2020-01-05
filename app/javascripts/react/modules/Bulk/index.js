@@ -220,7 +220,7 @@ function BulkWithProviders() {
 		});
 	};
 
-	// Re-start an old bulk
+	// Resume an old bulk
 	useEffect(() => {
 		if (!settings.restartBulk) {
 			return;
@@ -290,7 +290,7 @@ function BulkWithProviders() {
 								</Col>
 								<Col auto>
 									<Button primary onClick={handleRestartBulk}>
-										Re-start this bulk
+										Resume this bulk
 									</Button>
 								</Col>
 							</Row>

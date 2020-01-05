@@ -12,10 +12,11 @@ $percentComplete = 100 - $percentMissing;
 
 $limitImages = ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']) - $this->owner['current_request_images'];
 $needCreditForOptimization = 0;
-$needPercentCreditForOptimization = 100;
-if ($limitImages < $totalNoAlt) {
-    $needCreditForOptimization = $totalNoAlt - $limitImages;
-    $needPercentCreditForOptimization = ceil(($limitImages * 100) / $totalNoAlt);
+if ($this->owner) {
+    $usageCreditPercent = ceil(($this->owner['bonus_stock_images'] + $this->owner['current_request_images']) * 100 / $this->owner['plan']['limit_images']);
+    if ($limitImages < $totalNoAlt) {
+        $needCreditForOptimization = $totalNoAlt - $limitImages;
+    }
 }
 ?>
 <div class="imageseo-block">
@@ -55,28 +56,30 @@ if ($limitImages < $totalNoAlt) {
                 </div>
             </div>
         </div>
-        <hr class="imageseo-mt-2 imageseo-mb-2" /> 
-        <div class="imageseo-flex">
-            <div class="imageseo-mr-2">
-                <div class="imageseo-icons imageseo-icons--oval">
-                    <img src="<?php echo IMAGESEO_URL_DIST . '/images/star.svg'; ?>" alt="">
+        <?php if ($this->owner): ?>
+            <hr class="imageseo-mt-2 imageseo-mb-2" /> 
+            <div class="imageseo-flex">
+                <div class="imageseo-mr-2">
+                    <div class="imageseo-icons imageseo-icons--oval">
+                        <img src="<?php echo IMAGESEO_URL_DIST . '/images/star.svg'; ?>" alt="">
+                    </div>
+                </div>
+                <div class="fl-1">
+                    <p class="imageseo-mb-0"><strong><?php echo sprintf(__('%s credits left.', 'imageseo'), $limitImages); ?></strong></p>
+                    <p class="imageseo-mb-0"><?php echo sprintf(__('You will need %s more to optimize your website', 'imageseo'), $needCreditForOptimization); ?></strong></p>
+                    <div class="imageseo-loader imageseo-mt-2">
+                        <div class="imageseo-loader__step" style="width: <?php echo $usageCreditPercent; ?>%"></div>
+                    </div>
+                    <div class="imageseo-flex imageseo-mt-1">
+                        <div class="fl-1">
+                            <strong class="imageseo-color-blue"><?php echo sprintf(__('%s credits used', 'imageseo'), "$usageCreditPercent%"); ?></strong>
+                        </div>				
+                        <a href="https://app.imageseo.io/plan" target="_blank">
+                            <?php _e('Buy more credit', 'imageseo'); ?>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="fl-1">
-                <p class="imageseo-mb-0"><strong><?php echo sprintf(__('%s credits left.', 'imageseo'), $limitImages); ?></strong></p>
-                <p class="imageseo-mb-0"><?php echo sprintf(__('You will need %s more to optimize your website', 'imageseo'), $needCreditForOptimization); ?></strong></p>
-                <div class="imageseo-loader imageseo-mt-2">
-                    <div class="imageseo-loader__step" style="width: <?php echo $needPercentCreditForOptimization; ?>%"></div>
-                </div>
-                <div class="imageseo-flex imageseo-mt-1">
-                    <div class="fl-1">
-                        <strong class="imageseo-color-blue"><?php echo sprintf(__('%s completed', 'imageseo'), "$needPercentCreditForOptimization%"); ?></strong>
-                    </div>				
-                    <a href="https://app.imageseo.io/plan" target="_blank">
-                        <?php _e('Buy more credit', 'imageseo'); ?>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>

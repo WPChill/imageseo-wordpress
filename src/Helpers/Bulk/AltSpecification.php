@@ -47,7 +47,7 @@ class AltSpecification
         return [
             [
                 'id'          => self::FILL_ALL,
-                'label'       => __('All images', 'imageseo'),
+                'label'       => __('All alt', 'imageseo'),
             ],
             [
                 'id'          => self::FILL_ONLY_EMPTY,
