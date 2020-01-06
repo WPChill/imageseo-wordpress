@@ -11,6 +11,8 @@ class Alt
     public function __construct()
     {
         $this->reportImageService = imageseo_get_service('ReportImage');
+        $this->optionServices = imageseo_get_service('Option');
+        $this->tagsToStringServices = imageseo_get_service('TagsToString');
     }
 
     /**
@@ -26,7 +28,13 @@ class Alt
 
         $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
         if (!$report) {
-            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
+            try {
+                $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
+            } catch (\Exception $e) {
+                return [
+                    'success' => false,
+                ];
+            }
 
             if (!$response['success']) {
                 return $response;
@@ -35,7 +43,7 @@ class Alt
             $report = $response['result'];
         }
 
-        $this->updateAltAttachmentWithReport($attachmentId, $report);
+        $this->updateAltAttachmentWithReport($attachmentId);
 
         return [
             'success' => true,
@@ -46,35 +54,13 @@ class Alt
      * @param int   $attachmentId
      * @param array $report
      */
-    public function updateAltAttachmentWithReport($attachmentId, $report)
+    public function updateAltAttachmentWithReport($attachmentId)
     {
-        $alt = $this->getAltValueAttachmentWithReport($report);
-
-        $postId = wp_get_post_parent_id($attachmentId);
-        if ($postId) {
-            $alt = sprintf('%s - %s', get_the_title($postId), $alt);
-        }
-
-        $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId, $report);
+        $template = $this->optionServices->getOption('alt_template_default');
+        $alt = $this->tagsToStringServices->replace($template, $attachmentId);
+        $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId);
 
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
-    }
-
-    /**
-     * @param array $report
-     *
-     * @return string
-     */
-    public function getAltValueAttachmentWithReport($report)
-    {
-        $keysContext = $this->reportImageService->getAutoContextFromReport($report);
-
-        $alt = $keysContext;
-        if (array_key_exists('captions', $report) && !empty($report['captions'])) {
-            $alt = sprintf('%s - %s', $report['a_vision']['description']['captions'][0]['text'], $alt);
-        }
-
-        return apply_filters('imageseo_get_alt_value_attachment_with_report', ucfirst($alt), $report);
     }
 
     public function updateAlt($attachmentId, $alt)

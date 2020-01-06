@@ -4,8 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\AltTags;
-
 $options_available = [
     'active_alt_write_upload' => [
         'key'         => 'active_alt_write_upload',
@@ -23,8 +21,6 @@ $options_available = [
         'description' => __('Our Artificial lntelligence works in English. You can choose another language if you want. The ALT Tags, and filenames will be generated accordingly.', 'imageseo'),
     ],
 ];
-
-$tags = AltTags::getTags();
 
 $currentLanguage = ('free' === $this->owner['plan']['slug'] && 0 === $this->owner['bonus_stock_images']) ? 'en' : $this->options[$options_available['default_language_ia']['key']];
 

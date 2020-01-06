@@ -139,8 +139,6 @@ class RenameFile
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param int        $attachmentId
      * @param string     $newFilename
      * @param array|null $metadata
@@ -236,9 +234,8 @@ class RenameFile
     }
 
     /**
-     * @since 1.0.0
-     *
-     * @param int $attachmentId
+     * @param int        $attachmentId
+     * @param array|null $metadata
      *
      * @return bool
      */

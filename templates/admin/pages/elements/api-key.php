@@ -22,7 +22,7 @@ $options_available = [
     <div class="imageseo-flex">
         <div class="fl-2 imageseo-mr-1">
             <input 
-                type="<?php if (imageseo_allowed()): ?>text<?php else: ?>password<?php endif; ?>"
+                type="<?php if (imageseo_allowed()): ?>password<?php else: ?>text<?php endif; ?>"
                 name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['api_key']['key'])); ?>"
                 id="<?php echo esc_attr($options_available['api_key']['key']); ?>"
                 class="imageseo-input imageseo-h100" id="api-key"
