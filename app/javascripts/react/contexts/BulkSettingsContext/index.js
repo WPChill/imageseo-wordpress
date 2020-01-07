@@ -14,10 +14,6 @@ const initialState = {
 };
 
 function reducer(state, { type, payload }) {
-	console.group();
-	console.warn("Type Settings: ", type);
-	console.info("Payload Settings: ", payload);
-	console.groupEnd();
 	switch (type) {
 		case "UPDATE_OPTIONS":
 			return merge(state, payload);

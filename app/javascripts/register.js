@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				$("#api_key").val(data.user.project_create.api_key);
 				$("#js-imageseo-register #form-register").hide();
-				$("#js-imageseo-register h3").text(
-					"Great! You are registered and we have configured your API key"
+				$("#js-imageseo-register h3").html(
+					"You are registered and we have generated your API key. </br > Click on 'Validate your API Key'!"
 				);
 				Swal.fire({
 					title: "Great!",

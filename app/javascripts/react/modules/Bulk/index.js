@@ -50,10 +50,6 @@ function BulkWithProviders() {
 		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
 	);
 
-	console.log("[state]", state);
-	console.log("[state settings]", settings);
-	console.log("[state user]", userState);
-
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed =
 		get(state, "allIds", []).length -
@@ -86,7 +82,7 @@ function BulkWithProviders() {
 			Swal.fire({
 				title: "Oups !",
 				text:
-					"You may not have any credits left. We've stopped bulk optimization.",
+					"You have no credit left. We've stopped the bulk process.",
 				icon: "info",
 				confirmButtonText: "Close"
 			});
@@ -136,7 +132,7 @@ function BulkWithProviders() {
 				Swal.fire({
 					title: "Oups !",
 					text:
-						"You may not have any credits left. We've stopped bulk optimization.",
+						"You have no credit left. We've stopped the bulk process.",
 					icon: "info",
 					confirmButtonText: "Close"
 				});
@@ -436,20 +432,16 @@ function BulkWithProviders() {
 				)}
 				{openOptimization && !state.bulkFinish && (
 					<BlockFooter>
-						<h3>{state.allIds.length} images to optimize</h3>
+						<h3>
+							Forecast: with your current settings{" "}
+							{state.allIds.length} images will be optimized.
+						</h3>
 						<p>
-							You have {userImagesLeft} credits left in your
-							account and{" "}
-							<strong>
-								you are going to consume {numberCreditsNeed}{" "}
-								credits.
-							</strong>
+							You have {userImagesLeft} credit(s) left in your
+							account.{" "}
 						</p>
 						{get(state, "allIdsOptimized", []).length > 0 && (
-							<p>
-								There are already 10 optimizations that have
-								already been done
-							</p>
+							<p>10 optimizations have already been done!</p>
 						)}
 						{!state.bulkActive && (
 							<Button
@@ -460,7 +452,7 @@ function BulkWithProviders() {
 									handleStartBulk();
 								}}
 							>
-								Start New Bulk Optimization
+								Start a new bulk optimization
 							</Button>
 						)}
 						{numberCreditsNeed > userImagesLeft && (
@@ -489,7 +481,7 @@ function BulkWithProviders() {
 						>
 							<Col span={10}>
 								<h2>
-									Bulk running (
+									Bulk process (
 									{Object.values(state.attachments).length +
 										get(
 											IMAGESEO_DATA,
@@ -539,6 +531,12 @@ function BulkWithProviders() {
 							</BlockContentInner>
 						)}
 						<BulkResults />
+						{Object.values(state.reports).length > 8 &&
+							hasLimitExcedeed(userState.user_infos) && (
+								<BlockContentInner>
+									<LimitExcedeed />
+								</BlockContentInner>
+							)}
 					</Block>
 				</div>
 			)}

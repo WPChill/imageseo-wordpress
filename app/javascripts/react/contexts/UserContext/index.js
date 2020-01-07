@@ -7,10 +7,6 @@ const initialStateReducer = {
 };
 
 function reducer(state, { type, payload }) {
-	console.group();
-	console.warn("Type User: ", type);
-	console.info("Payload User: ", payload);
-	console.groupEnd();
 	switch (type) {
 		case "DECREASE_BONUS_STOCK_IMAGES":
 			return {

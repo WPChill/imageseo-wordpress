@@ -129,6 +129,11 @@
     display: flex;
     justify-content: center;
     flex-direction: column; }
+    #wrap-imageseo .imageseo-block--introduce h2,
+    #wrap-imageseo .imageseo-block--introduce p {
+      position: relative;
+      z-index: 100;
+      max-width: 65%; }
     #wrap-imageseo .imageseo-block--introduce h2 {
       margin-bottom: 0; }
   #wrap-imageseo .imageseo-block__image-introduce {

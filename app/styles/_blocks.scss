@@ -89,6 +89,12 @@
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
+		h2,
+		p {
+			position: relative;
+			z-index: 100;
+			max-width: 65%;
+		}
 		h2 {
 			margin-bottom: 0;
 		}

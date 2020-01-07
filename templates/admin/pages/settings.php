@@ -30,8 +30,8 @@ if ($percentLoose >= 2) {
                                 </div>
                             </div>
                             <div class="fl-1">
-                                <p class="imageseo-mb-0"><strong><?php _e('20% of users are coming from Google Image', 'imageseo'); ?></strong></p>
-                                <p><?php _e('You could grow your traffic by optimizing your images', 'imageseo'); ?></p>
+                                <p class="imageseo-mb-0"><strong><?php _e('SEO Fact : More than 20% of Google Organic Traffic comes from image searches', 'imageseo'); ?></strong></p>
+                                <p><?php _e('Start optimizing your image alt texts and names and grow your traffic!', 'imageseo'); ?></p>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,6 @@ if ($percentLoose >= 2) {
                     <div class="imageseo-block">
                         <div class="imageseo-block__inner imageseo-block__inner--head">
                             <h3><?php _e('Your API Key', 'imageseo'); ?></h3>
-                            <p><?php _e('Lorem ipsum.', 'imageseo'); ?></p>    
                         </div>
                         <div class="imageseo-block__inner">
                             <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/api-key.php'; ?>

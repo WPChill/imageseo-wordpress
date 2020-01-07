@@ -8,7 +8,6 @@ module.exports = {
 	entry: {
 		"media-upload": "./app/javascripts/media-upload.js",
 		bulk: "./app/javascripts/react/index.js",
-		"bulk-optimization": "./app/javascripts/bulk-optimization.js",
 		"api-key": "./app/javascripts/api-key.js",
 		register: "./app/javascripts/register.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",

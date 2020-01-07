@@ -22,8 +22,8 @@ function LimitExcedeed() {
 					</Col>
 					<Col flex="1">
 						<p style={{ margin: 0 }}>
-							This bulk have been automatically paused. You need
-							more credits to continue.
+							The bulk have been paused. You need more credits to
+							resume it.
 						</p>
 						{!isNaN(percentOptimized) && (
 							<p>

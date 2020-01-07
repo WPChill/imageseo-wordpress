@@ -36,15 +36,29 @@ abstract class AltFormat
     public static function getFormats()
     {
         $formats = [
-            self::ALT_SIMPLE,
-            self::ALT_POST_TITLE,
-            self::ALT_SITE_TITLE,
+            [
+                'format'      => self::ALT_SIMPLE,
+                'description' => __('We use Artificial Intelligence to generate SEO friendly keywords for your alternative texts. We recommend you to use this format for SEO.', 'imageseo'),
+            ],
+            [
+                'format'      => self::ALT_POST_TITLE,
+                'description' => __('We will use your post title and generate one SEO friendly keyword.', 'imageseo'),
+            ],
+            [
+                'format'      => self::ALT_SITE_TITLE,
+                'description' => [
+                    __('We will use your site title and generate one SEO friendly keyword.', 'imageseo'),
+                ],
+            ],
         ];
 
         if (
             is_plugin_active('woocommerce/woocommerce.php')
         ) {
-            $formats[] = self::ALT_PRODUCT_WOOCOMMERCE;
+            $formats[] = [
+                'format'      => self::ALT_PRODUCT_WOOCOMMERCE,
+                'description' => '',
+            ];
         }
 
         return apply_filters('imageseo_alt_formats', $formats);

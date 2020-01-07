@@ -42,11 +42,13 @@ function BulkSettings() {
 								htmlFor="wantValidateResult"
 								className="imageseo-label"
 							>
-								I want to validate the results
+								I want to validate the results manually.
 							</label>
 							<p>
-								If you want to check the result and validate
-								them before we overwrite the text
+								If you tick this boxe, you will have the
+								possibility to valide our alt texts and names
+								suggestion. You can stop the bulk, untick this
+								boxe and restart the bulk at any moment.
 							</p>
 						</IFlexNumber>
 					</IFlex>
@@ -54,7 +56,8 @@ function BulkSettings() {
 				<Row className="imageseo-mb-5">
 					<Col>
 						<label htmlFor="language" className="imageseo-label">
-							Language
+							In which language should we write your filenames and
+							alternative texts?
 						</label>
 						<select
 							value={settings.language}
@@ -82,7 +85,7 @@ function BulkSettings() {
 					</Col>
 				</Row>
 			</SCContentSettings>
-			<SubTitle>Alt tag settings</SubTitle>
+			<SubTitle>ALT text settings</SubTitle>
 			<SCContentSettings>
 				<div className="imageseo-mb-3">
 					<IFlex>
@@ -108,126 +111,123 @@ function BulkSettings() {
 								htmlFor="optimizeAlt"
 								className="imageseo-label"
 							>
-								Optimize alt tag
+								I want to fill out and optimize my ALT Texts for
+								SEO and Accessibility.
 							</label>
 						</IFlexNumber>
 					</IFlex>
-					{settings.optimizeAlt && (
-						<>
-							<Row className="imageseo-mt-3">
-								<Col span={6}>
-									<label
-										htmlFor="altFilter"
-										className="imageseo-label"
-									>
-										Images that will be optimized
-									</label>
-									<select
-										id="altFilter"
-										value={settings.altFilter}
-										onChange={event =>
-											dispatch({
-												type: "UPDATE_OPTION",
-												payload: {
-													key: "altFilter",
-													value: event.target.value
-												}
-											})
+					<Row className="imageseo-mt-3">
+						<Col span={8}>
+							<label
+								htmlFor="altFilter"
+								className="imageseo-label"
+							>
+								Which images do you want to optimize?
+							</label>
+							<select
+								id="altFilter"
+								value={settings.altFilter}
+								onChange={event =>
+									dispatch({
+										type: "UPDATE_OPTION",
+										payload: {
+											key: "altFilter",
+											value: event.target.value
 										}
-									>
-										{IMAGESEO_DATA.ALT_SPECIFICATION.map(
-											(item, key) => {
-												return (
-													<option
-														key={`alt_filter_${key}`}
-														value={item.id}
-													>
-														{item.label}
-													</option>
-												);
-											}
-										)}
-									</select>
-								</Col>
-								<Col span={6}>
-									<label
-										htmlFor="altFill"
-										className="imageseo-label"
-									>
-										Alt tag that will be optimized
-									</label>
-									<select
-										id="altFill"
-										value={settings.altFill}
-										onChange={event =>
-											dispatch({
-												type: "UPDATE_OPTION",
-												payload: {
-													key: "altFill",
-													value: event.target.value
-												}
-											})
-										}
-									>
-										{IMAGESEO_DATA.ALT_FILL_TYPE.map(
-											(item, key) => {
-												return (
-													<option
-														key={`alt_fill_${key}`}
-														value={item.id}
-													>
-														{item.label}
-													</option>
-												);
-											}
-										)}
-									</select>
-								</Col>
-							</Row>
-							<div className="imageseo-mt-3">
-								<div className="imageseo-label">Format</div>
-								{IMAGESEO_DATA.ALT_FORMATS.map(
-									(format, key) => {
+									})
+								}
+							>
+								{IMAGESEO_DATA.ALT_SPECIFICATION.map(
+									(item, key) => {
 										return (
-											<label
-												className="imageseo-radio imageseo-mt-2"
-												key={`format_${key}`}
+											<option
+												key={`alt_filter_${key}`}
+												value={item.id}
 											>
-												<input
-													type="radio"
-													name="formatAlt"
-													value={format}
-													checked={
-														format ===
-														settings.formatAlt
-													}
-													onChange={event => {
-														dispatch({
-															type:
-																"UPDATE_OPTION",
-															payload: {
-																key:
-																	"formatAlt",
-																value:
-																	event.target
-																		.value
-															}
-														});
-													}}
-												/>
-												<span className="imageseo-ml-1">
-													{format}
-												</span>
-											</label>
+												{item.label}
+											</option>
 										);
 									}
 								)}
-							</div>
-						</>
-					)}
+							</select>
+						</Col>
+						<Col span={8}>
+							<label htmlFor="altFill" className="imageseo-label">
+								Which alt texts do you want to optimize?
+							</label>
+							<select
+								id="altFill"
+								value={settings.altFill}
+								onChange={event =>
+									dispatch({
+										type: "UPDATE_OPTION",
+										payload: {
+											key: "altFill",
+											value: event.target.value
+										}
+									})
+								}
+							>
+								{IMAGESEO_DATA.ALT_FILL_TYPE.map(
+									(item, key) => {
+										return (
+											<option
+												key={`alt_fill_${key}`}
+												value={item.id}
+											>
+												{item.label}
+											</option>
+										);
+									}
+								)}
+							</select>
+						</Col>
+					</Row>
+					<div className="imageseo-mt-3">
+						<div className="imageseo-label">Format</div>
+						{IMAGESEO_DATA.ALT_FORMATS.map((value, key) => {
+							return (
+								<label
+									className="imageseo-radio imageseo-mt-2"
+									key={`format_${key}`}
+								>
+									<input
+										type="radio"
+										name="formatAlt"
+										value={value.format}
+										checked={
+											value.format === settings.formatAlt
+										}
+										onChange={event => {
+											dispatch({
+												type: "UPDATE_OPTION",
+												payload: {
+													key: "formatAlt",
+													value: event.target.value
+												}
+											});
+										}}
+									/>
+									<span className="imageseo-ml-1">
+										{value.format}
+									</span>
+									{value.description && (
+										<p
+											style={{
+												marginTop: 10,
+												fontSize: 14
+											}}
+										>
+											{value.description}
+										</p>
+									)}
+								</label>
+							);
+						})}
+					</div>
 				</div>
 			</SCContentSettings>
-			<SubTitle>Rename images settings</SubTitle>
+			<SubTitle>Image name settings</SubTitle>
 			<SCContentSettings>
 				<div className="imageseo-mb-3">
 					<IFlex>
@@ -253,11 +253,11 @@ function BulkSettings() {
 								htmlFor="optimizeFile"
 								className="imageseo-label"
 							>
-								Rename the files
+								I want to optimize my image names for SEO
 							</label>
 							<p>
-								May be a bit longer (10s/img) but is better for
-								SEO
+								It might slow the process (+10sec by images) but
+								it's really worth for SEO.
 							</p>
 						</IFlexNumber>
 					</IFlex>

@@ -179,7 +179,7 @@ function BulkResultsItem({ attachment }) {
 							<strong>{alt}</strong>
 							<br />
 							<BlockTableLineOldValue>
-								Currently alt tag : {attachment.alt}
+								Current alt text: : {attachment.alt}
 							</BlockTableLineOldValue>
 						</BlockTableLineItem>
 					</Col>
@@ -191,7 +191,7 @@ function BulkResultsItem({ attachment }) {
 							<strong>{filename}</strong>
 							<br />
 							<BlockTableLineOldValue>
-								Currently filename : {attachment.filename}
+								Current filename: {attachment.filename}
 							</BlockTableLineOldValue>
 						</BlockTableLineItem>
 					</Col>

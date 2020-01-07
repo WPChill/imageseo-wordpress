@@ -25,14 +25,8 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
         <div class="imageseo-flex imageseo-mb-3">
             <div class="fl-1 imageseo-mr-3">
                 <div class="imageseo-block imageseo-block--secondary imageseo-block--introduce">
-                    <h2><?php _e('What is a Bulk Optimization ?', 'imageseo'); ?></h2>
-                    <p>Start using imageSEO plugin by creating an account or adding an API KEY.</p>
-                </div>
-            </div>
-            <div class="fl-1">
-                <div class="imageseo-block imageseo-block--secondary imageseo-block--introduce">
-                    <h2>Welcome ! We’re proud to help you optimize your images</h2>
-                    <p>Start using imageSEO plugin by creating an account or adding an API KEY.</p>
+                    <h2><?php _e('What is a Bulk Optimization?', 'imageseo'); ?></h2>
+                    <p><?php _e('If you have been lazy with your image alt texts and names, you can start a bulk optimization. The plugin will get through your library content and optimize all the missing alternative texts.', 'imageseo'); ?></p>
                 </div>
             </div>
         </div>

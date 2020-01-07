@@ -17,10 +17,6 @@ const initialState = {
 };
 
 function reducer(state, { type, payload }) {
-	console.group();
-	console.warn("Type: ", type);
-	console.info("Payload: ", payload);
-	console.groupEnd();
 	switch (type) {
 		case "RESTART_BULK":
 			return {

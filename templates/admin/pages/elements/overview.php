@@ -23,7 +23,7 @@ if ($this->owner) {
     <div class="imageseo-block__inner imageseo-block__inner--head imageseo-block__inner--actions">
         <div class="imageseo-block__inner__title">
             <h3><?php _e('Your website overview', 'imageseo'); ?></h3>
-            <p><?php _e('And start optimizing your images.', 'imageseo'); ?></p>
+            <p><?php _e("You only need to create an account to get your API key. It's totally free.", 'imageseo'); ?></p>
         </div>
         <div class="imagese-block__inner__actions">
             <a href="<?php echo admin_url('admin.php?page=imageseo-optimization'); ?>" class="imageseo-btn imageseo-btn--simple">
@@ -39,9 +39,9 @@ if ($this->owner) {
                 </div>
             </div>
             <div class="fl-1">
-                <p class="imageseo-mb-0"><strong><?php echo sprintf(__('%s images in your library.', 'imageseo'), $total); ?></strong></p>
+                <p class="imageseo-mb-0"><strong><?php echo sprintf(__('There are %s images in your library.', 'imageseo'), $total); ?></strong></p>
                 <?php if (0 != $percentMissing): ?>
-                    <p class="imageseo-mb-0"><?php echo sprintf(__('Did you know that %s of your alternative texts are missing ?', 'imageseo'), "$percentMissing%"); ?></strong></p>
+                    <p class="imageseo-mb-0"><?php echo sprintf(__('Did you know that %s alternative texts are missing ?', 'imageseo'), "$percentMissing%"); ?></strong></p>
                 <?php endif; ?>
                 <div class="imageseo-loader imageseo-mt-2">
                     <div class="imageseo-loader__step" style="width: <?php echo $percentComplete; ?>%"></div>
@@ -50,9 +50,15 @@ if ($this->owner) {
                     <div class="fl-1">
                         <strong class="imageseo-color-blue"><?php echo sprintf(__('%s completed', 'imageseo'), "$percentComplete%"); ?></strong>
                     </div>
-                    <a href="<?php echo admin_url('admin.php?page=imageseo-optimization'); ?>">
-                        <?php _e('Launch bulk optimization', 'imageseo'); ?>
-                    </a>
+                    <div>
+                        <a href="<?php echo admin_url('admin.php?page=imageseo-optimization'); ?>">
+                            <?php _e('Launch a bulk optimization', 'imageseo'); ?>
+                        </a>
+                        <?php _e('or', 'imageseo'); ?>
+                        <a href="#mainform">
+                            <?php _e('optimize your images on upload', 'imageseo'); ?>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

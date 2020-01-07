@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 	<p>
 		<?php
             // translators: 1 HTML Tag, 2 HTML Tag
-            echo sprintf(esc_html__('ImageSEO is installed but not yet configured, you need to configure here : %s ImageSEO configuration page %s. The configuration takes only 1 minute! ', 'imageseo'), '<a href="aaa">', '</a>');
+            echo sprintf(esc_html__('Image SEO is installed but not configured yet. %s Go to the settings.%s It only takes 1 minute! ', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-settings') . '"">', '</a>');
         ?>
 	</p>
 </div>

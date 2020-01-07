@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$("#js-api-key button").on("click", function(e) {
 		e.preventDefault();
-		console.log("btich");
+
 		$("#js-api-key button").prop("disabled", "disabled");
 		$("#js-api-key button img").show();
 		$.ajax({

@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 <div id="js-imageseo-register" class="imageseo-block">
     <div class="imageseo-block__inner imageseo-block__inner--head">
         <h3><?php _e('Create an account!', 'imageseo'); ?></h3>
-        <p><?php _e('And start optimizing your images.', 'imageseo'); ?></p>    
+        <p><?php _e("It's free!", 'imageseo'); ?></p>    
     </div>
     
     <div class="imageseo-block__inner imageseo-block__inner">
