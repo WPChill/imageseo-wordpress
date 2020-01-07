@@ -77,7 +77,7 @@ class TagsToString
      *
      * @return array
      */
-    public function getTags($string): array
+    public function getTags($string)
     {
         preg_match_all(self::REGEX, $string, $matches);
 

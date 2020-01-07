@@ -126,7 +126,7 @@ function BulkWithProviders() {
 			const {
 				success,
 				data: { need_update_counter, report }
-			} = await generateReport(attachmentId);
+			} = await generateReport(attachmentId, settings.language);
 
 			if (!success) {
 				Swal.fire({
@@ -441,7 +441,10 @@ function BulkWithProviders() {
 							account.{" "}
 						</p>
 						{get(state, "allIdsOptimized", []).length > 0 && (
-							<p>10 optimizations have already been done!</p>
+							<p>
+								{get(state, "allIdsOptimized", []).length}{" "}
+								optimizations have already been done!
+							</p>
 						)}
 						{!state.bulkActive && (
 							<Button

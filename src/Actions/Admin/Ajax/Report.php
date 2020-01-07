@@ -16,9 +16,8 @@ class Report
      */
     public function __construct()
     {
-        $this->reportImageService = imageseo_get_service('ReportImage');
-        $this->altService = imageseo_get_service('Alt');
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->reportImageServices = imageseo_get_service('ReportImage');
+        $this->optionServices = imageseo_get_service('Option');
     }
 
     public function hooks()
@@ -28,18 +27,6 @@ class Report
         }
 
         add_action('wp_ajax_imageseo_generate_report', [$this, 'generateReport']);
-    }
-
-    /**
-     * @return int
-     */
-    protected function getAttachmentId()
-    {
-        if ('GET' === $_SERVER['REQUEST_METHOD']) {
-            return (int) $_GET['attachment_id'];
-        } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
-            return(int) $_POST['attachment_id'];
-        }
     }
 
     public function generateReport()
@@ -53,8 +40,9 @@ class Report
         }
 
         $attachmentId = (int) $_POST['attachmentId'];
+        $language = isset($_POST['language']) ? sanitize_text_field($_POST['language']) : $this->optionServices->getOption('default_language_ia');
 
-        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
 
         if ($report) {
             $report['ID'] = $attachmentId;
@@ -67,18 +55,11 @@ class Report
         }
 
         try {
-            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
+            $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId, ['force' => true], $language);
         } catch (\Exception $e) {
             wp_send_json_error([
-                'code' => 'error_generate_report',
-            ]);
-
-            return;
-        }
-
-        if (!$response['success']) {
-            wp_send_json_error([
-                'code' => 'error_generate_report',
+                'code'    => 'error_generate_report',
+                'message' => $e->getMessage(),
             ]);
 
             return;
@@ -90,31 +71,5 @@ class Report
             'need_update_counter' => true,
             'report'              => $report,
         ]);
-    }
-
-    /**
-     * @param array $query
-     *
-     * @return array
-     */
-    protected function generateReportAttachment($query = [])
-    {
-        if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
-            return [
-                'success' => false,
-            ];
-        }
-
-        $attachmentId = $this->getAttachmentId();
-
-        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
-        if ($report) {
-            return [
-                'success' => true,
-                'result'  => $report,
-            ];
-        }
-
-        return $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
     }
 }

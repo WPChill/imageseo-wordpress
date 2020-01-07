@@ -42,7 +42,7 @@ class ReportImage
      *
      * @return array
      */
-    public function generateReportByAttachmentId($attachmentId, $query = [])
+    public function generateReportByAttachmentId($attachmentId, $query = [], $language = null)
     {
         if (!apply_filters('imageseo_authorize_generate_report_attachment_id', true, $attachmentId)) {
             return;
@@ -61,25 +61,25 @@ class ReportImage
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang'     => $this->optionService->getOption('default_language_ia'),
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang'   => $this->optionService->getOption('default_language_ia'),
-                    'src'    => $filePath,
-                    'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
-                    'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'src'      => $filePath,
+                    'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                    'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang'   => $this->optionService->getOption('default_language_ia'),
-                'src'    => $filePath,
-                'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
-                'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
+                'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                'src'      => $filePath,
+                'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
             ], $query);
         }
 
