@@ -31,7 +31,7 @@ $options_available = [
             >
         </div>
         <div>
-            <button class="imageseo-btn imageseo-btn--simple" style="display:flex; align-items:center;">
+            <button class="imageseo-btn imageseo-btn--simple" style="display:flex; align-items:center;" id="js-api-key-button">
                 <img
                     src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
                     style="animation:imageseo-rotation 1s infinite linear; margin-right:10px; display:none;"

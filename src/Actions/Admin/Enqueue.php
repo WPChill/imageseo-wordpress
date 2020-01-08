@@ -39,8 +39,8 @@ class Enqueue
         }
 
         if (in_array($page, ['imageseo_page_imageseo-options'], true)) {
-            wp_enqueue_script('imageseo-admin-register-js', IMAGESEO_URL_DIST . '/register.js', ['jquery']);
-            wp_enqueue_script('imageseo-admin-api-key-js', IMAGESEO_URL_DIST . '/api-key.js', ['jquery']);
+            wp_enqueue_script('imageseo-admin-register-js', IMAGESEO_URL_DIST . '/register.js', ['jquery'], IMAGESEO_VERSION, true);
+            wp_enqueue_script('imageseo-admin-api-key-js', IMAGESEO_URL_DIST . '/api-key.js', ['jquery'], IMAGESEO_VERSION, true);
         }
     }
 }
