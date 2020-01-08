@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Exception\NoRenameFile;
+use ImageSeoWP\Helpers\AttachmentMeta;
 
 /**
  * @since 1.0.0
@@ -18,9 +18,8 @@ class Report
      */
     public function __construct()
     {
-        $this->reportImageService = imageseo_get_service('ReportImage');
-        $this->altService = imageseo_get_service('Alt');
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->reportImageServices = imageseo_get_service('ReportImage');
+        $this->optionServices = imageseo_get_service('Option');
     }
 
     public function hooks()
@@ -29,128 +28,52 @@ class Report
             return;
         }
 
-        add_action('wp_ajax_imageseo_report_attachment', [$this, 'ajaxReport']);
+        add_action('wp_ajax_imageseo_generate_report', [$this, 'generateReport']);
     }
 
-    /**
-     * @return int
-     */
-    protected function getAttachmentId()
+    public function generateReport()
     {
-        if ('GET' === $_SERVER['REQUEST_METHOD']) {
-            return (int) $_GET['attachment_id'];
-        } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
-            return(int) $_POST['attachment_id'];
-        }
-    }
+        if (!isset($_POST['attachmentId'])) {
+            wp_send_json_error([
+                'code' => 'missing_parameters',
+            ]);
 
-    /**
-     * @param array $query
-     *
-     * @return array
-     */
-    protected function generateReportAttachment($query = [])
-    {
-        if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
-            return [
-                'success' => false,
-            ];
+            return;
         }
 
-        $attachmentId = $this->getAttachmentId();
+        $attachmentId = (int) $_POST['attachmentId'];
+        $language = isset($_POST['language']) ? sanitize_text_field($_POST['language']) : $this->optionServices->getOption('default_language_ia');
 
-        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
-        if ($report) {
-            return [
-                'success' => true,
-                'result'  => $report,
-            ];
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+
+        $reportLanguage = get_post_meta($attachmentId, AttachmentMeta::LANGUAGE);
+
+        if ($report && $language === $reportLanguage) {
+            $report['ID'] = $attachmentId;
+            wp_send_json_success([
+                'need_update_counter' => false,
+                'report'              => $report,
+            ]);
+
+            return;
         }
-
-        return $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
-    }
-
-    public function ajaxReport()
-    {
-        $currentBulk = (int) $_POST['current'];
-        $total = (int) $_POST['total'];
 
         try {
-            $response = $this->generateReportAttachment();
+            $response = $this->reportImageServices->generateReportByAttachmentId($attachmentId, ['force' => true], $language);
         } catch (\Exception $e) {
             wp_send_json_error([
-                'code' => 'error_generate_report',
+                'code'    => 'error_generate_report',
+                'message' => $e->getMessage(),
             ]);
-            exit;
+
+            return;
         }
 
-        if (!$response['success']) {
-            wp_send_json_error($response);
-            exit;
-        }
-
-        $attachmentId = $this->getAttachmentId();
         $report = $response['result'];
-
-        $updateAlt = (isset($_POST['update_alt']) && 'true' === $_POST['update_alt']) ? true : false;
-        $updateAltNotEmpty = (isset($_POST['update_alt_not_empty']) && 'true' === $_POST['update_alt_not_empty']) ? true : false;
-        $renameFile = (isset($_POST['rename_file']) && 'true' === $_POST['rename_file']) ? true : false;
-        $currentAlt = $this->altService->getAlt($attachmentId);
-        $currentFile = wp_get_attachment_image_src($attachmentId, 'small');
-        $altGenerate = $this->altService->getAltValueAttachmentWithReport($report);
-
-        $currentNameFile = '';
-        if (!empty($currentFile)) {
-            $currentNameFile = basename($currentFile[0]);
-        }
-
-        if ($updateAlt || $updateAltNotEmpty) {
-            if (($updateAlt && !$currentAlt) || $updateAltNotEmpty) {
-                $this->altService->updateAltAttachmentWithReport($attachmentId, $report);
-            }
-        }
-
-        $newFilePath = false;
-        if ($renameFile) {
-            $this->renameFileService->renameAttachment($attachmentId);
-            $file = wp_get_attachment_image_src($attachmentId, 'small');
-            if (!empty($file)) {
-                $newFilePath = basename($file[0]);
-            }
-        }
-
-        $file = wp_get_attachment_image_src($attachmentId, 'small');
-
-        if ($currentBulk + 1 < $total) {
-            update_option('_imageseo_current_processed', $currentBulk);
-        } elseif ($currentBulk + 1 === $total) {
-            delete_option('_imageseo_current_processed');
-        }
-
-        $srcFile = '';
-        $nameFile = '';
-        if (!empty($file)) {
-            $srcFile = $file[0];
-            $nameFile = basename($srcFile);
-        }
-
-        if (!$newFilePath) {
-            $basenameWithoutExt = explode('.', $nameFile)[0];
-            try {
-                $newFilePath = sprintf('%s.%s', $this->renameFileService->getNameFileWithAttachmentId($attachmentId), explode('.', $nameFile)[1]);
-            } catch (NoRenameFile $e) {
-                $newFilePath = $nameFile;
-            }
-        }
-
+        $report['ID'] = $attachmentId;
         wp_send_json_success([
-            'src'               => $report['src'],
-            'current_alt'       => $currentAlt,
-            'alt_generate'      => $altGenerate,
-            'file_generate'     => $newFilePath,
-            'file'              => $srcFile,
-            'current_name_file' => $currentNameFile,
-            'name_file'         => $nameFile,
+            'need_update_counter' => true,
+            'report'              => $report,
         ]);
     }
 }

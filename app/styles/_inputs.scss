@@ -1,0 +1,14 @@
+&-input {
+	min-height: 44px;
+	border-radius: 4px;
+	border: solid 1px $greyShady;
+	background-color: #fafafc;
+	width: 100%;
+}
+
+&-radio {
+	display: block;
+	font-size: 16px;
+	color: $blackLight;
+	margin-bottom: 15px;
+}

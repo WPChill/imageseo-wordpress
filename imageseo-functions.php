@@ -1,16 +1,18 @@
 <?php
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
 use ImageSeoWP\Context;
 
 /**
- * Get a service
+ * Get a service.
+ *
  * @since 1.0.0
  *
  * @param string $service
+ *
  * @return object
  */
 function imageseo_get_service($service)
@@ -19,7 +21,8 @@ function imageseo_get_service($service)
 }
 
 /**
- * Get all options
+ * Get all options.
+ *
  * @since 1.0.0
  *
  * @return array
@@ -30,9 +33,12 @@ function imageseo_get_options()
 }
 
 /**
- * Get option
+ * Get option.
+ *
  * @since 1.0.0
+ *
  * @param string $key
+ *
  * @return any
  */
 function imageseo_get_option($key)
@@ -48,19 +54,25 @@ function imageseo_allowed()
     return imageseo_get_option('allowed');
 }
 
-
 function imageseo_generate_alt_attachment_id($attachmentId)
 {
     $reportImageService = imageseo_get_service('ReportImage');
-    $response = $reportImageServices->generateReportByAttachmentId($attachmentId);
+    try {
+        $response = $reportImageServices->generateReportByAttachmentId($attachmentId);
+    } catch (\Exception $e) {
+        return;
+    }
+
     if (!$response['success']) {
         return;
     }
 
-    $reportImageServices->updateAltAttachmentWithReport($attachmentId, $response['result']);
+    $reportImageServices->updateAltAttachmentWithReport($attachmentId);
 }
 
 function imageseo_rename_file_attachment_id($attachmentId, $metadata = null)
 {
-    return imageseo_get_service('RenameFile')->renameAttachment($attachmentId);
+    _deprecated_function(__FUNCTION__, '1.1', 'imageseo_rename_file_attachment_id()');
+
+    return null;
 }

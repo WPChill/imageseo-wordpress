@@ -30,10 +30,45 @@ class RenameFile
 
     protected function generateNameFromReport($attachmentId, $params = [])
     {
-        $value = $this->reportImageServices->getNameFileAttachmentWithId($attachmentId, $params);
+        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+
+        if (!$report) {
+            throw new NoRenameFile('No need to change');
+        }
+
+        $alts = $this->reportImageServices->getAltsFromReport($report);
+        $key = isset($params['key']) ? $params['key'] : 0;
+
+        $value = '';
+        if (isset($alts[$key])) {
+            $value = $alts[$key]['name'];
+        }
+
         $slugify = new Slugify(['separator' => $this->getDelimiter()]);
 
         return $slugify->slugify($value);
+    }
+
+    /**
+     * @param int $attachmentId
+     *
+     * @return string
+     */
+    public function getFilenameByAttachmentId($attachmentId)
+    {
+        $file = wp_get_attachment_image_src($attachmentId, 'small');
+
+        if (!$file) {
+            $file = wp_get_attachment_image_src($attachmentId);
+        }
+
+        if (!$file) {
+            return '';
+        }
+
+        $srcFile = $file[0];
+
+        return basename($srcFile);
     }
 
     /**
@@ -43,7 +78,7 @@ class RenameFile
      *
      * @return string
      */
-    public function getNameFileWithAttachmentId($attachmentId)
+    public function getNameFileWithAttachmentId($attachmentId, $excludeFilenames = [])
     {
         $newName = $this->generateNameFromReport($attachmentId);
 
@@ -60,55 +95,147 @@ class RenameFile
             $splitName[count($splitName) - 1], // Ext
             $this->getDelimiter(), // Delimiter,
             $attachmentId,
+            $excludeFilenames,
         ], $newName);
     }
 
     /**
-     * @since 1.0.0
-     *
+     * @param array  $data    (directory|extension|delimiter|attachmentId|excludeFilenames)
      * @param string $name
+     * @param int    $counter
      *
      * @return string
      */
     public function generateUniqueFilename($data, $name, $counter = 1)
     {
-        list($directory, $ext, $delimiter, $attachmentId) = $data;
+        list($directory, $ext, $delimiter, $attachmentId, $excludeFilenames) = $data;
 
-        $number_try_name = apply_filters('imageseo_number_try_name_file', 7);
+        $numberTryName = apply_filters('imageseo_number_try_name_file', 7);
 
-        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
+        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext)) && !in_array($name, $excludeFilenames, true)) {
             return $name;
         }
 
-        if ($counter < $number_try_name) {
+        if ($counter < $numberTryName) {
             $name = $this->generateNameFromReport($attachmentId, [
-                'max_percent' => 100 - ($counter * 10),
+                'key' => $counter,
             ]);
-
-            if ($name === get_bloginfo('title')) {
-                $name = $this->generateNameFromReport($attachmentId);
-            }
-        } elseif ($counter >= $number_try_name) {
+        } elseif ($counter >= $numberTryName) {
             $name = $this->generateNameFromReport($attachmentId);
+            $name = sprintf('%s%s%s', get_bloginfo('title'), $delimiter, $name);
         }
 
-        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext))) {
+        if (!file_exists(sprintf('%s%s.%s', $directory, $name, $ext)) && !in_array($name, $excludeFilenames, true)) {
             return $name;
         }
 
-        if ($counter < $number_try_name) {
+        if ($counter < $numberTryName) {
             return $this->generateUniqueFilename($data, $name, ++$counter);
         } else {
-            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, ($number_try_name + 2) - $counter), ++$counter);
+            return $this->generateUniqueFilename($data, sprintf('%s%s%s', $name, $delimiter, ($numberTryName + 2) - $counter), ++$counter);
         }
 
         return $name;
     }
 
     /**
-     * @since 1.0.0
+     * @param int        $attachmentId
+     * @param string     $newFilename
+     * @param array|null $metadata
      *
-     * @param int $attachmentId
+     * @return bool
+     */
+    public function updateFilename($attachmentId, $newFilename, $metadata = null)
+    {
+        $sourceUrl = wp_get_attachment_url($attachmentId);
+        $sourceMetadata = wp_get_attachment_metadata($attachmentId);
+
+        $filePath = get_attached_file($attachmentId);
+
+        if (!wp_mkdir_p(dirname($filePath))) {
+            return [
+                'success' => false,
+            ];
+        }
+
+        if (null === $metadata) {
+            $metadata = wp_get_attachment_metadata($attachmentId);
+        }
+        $postAttachment = get_post($attachmentId, ARRAY_A);
+        $basename = basename($filePath);
+        $splitName = explode('.', $basename);
+        unset($splitName[count($splitName) - 1]);
+        $basenameWithoutExt = implode('.', $splitName);
+        $directory = trailingslashit(dirname($filePath));
+        $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
+
+        // Rename file
+        @rename($filePath, $newFilePath);
+
+        // Prepare post
+        $postAttachment['post_title'] = $newFilename;
+        $postAttachment['post_name'] = $newFilename;
+
+        // Prepare metdata
+        if (isset($metadata['file']) && !empty($metadata['file'])) {
+            $metadata['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['file']);
+        }
+        if (isset($metadata['url']) && !empty($metadata['url']) && strlen($metadata['url']) > 4) {
+            $metadata['url'] = str_replace($basenameWithoutExt, $newFilename, $metadata['url']);
+        }
+
+        if (isset($metadata['sizes'])) {
+            foreach ($metadata['sizes'] as $key => $size) {
+                if (!isset($size['file'])) {
+                    continue;
+                }
+
+                $oldFile = $metadata['sizes'][$key]['file'];
+                $metadata['sizes'][$key]['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['sizes'][$key]['file']);
+
+                rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
+            }
+        }
+
+        $oldAttachedFile = get_post_meta($attachmentId, '_wp_attached_file', true);
+
+        update_attached_file($attachmentId, str_replace($basenameWithoutExt, $newFilename, $oldAttachedFile));
+        wp_update_attachment_metadata($attachmentId, $metadata);
+        clean_post_cache($attachmentId);
+        wp_update_post($postAttachment);
+
+        // Update GUID
+        $newGuid = str_replace($basenameWithoutExt, $newFilename, $postAttachment['guid']);
+
+        global $wpdb;
+        $query = $wpdb->prepare("UPDATE $wpdb->posts SET guid = '%s' WHERE ID = '%d'", $newGuid, $attachmentId);
+        $wpdb->query($query);
+        clean_post_cache($attachmentId);
+
+        $targetUrl = wp_get_attachment_url($attachmentId);
+
+        if (apply_filters('imageseo_replace_image_url_database', true)) {
+            $this->searchReplaceInDB([
+                'source_url'      => $sourceUrl,
+                'source_metadata' => $sourceMetadata,
+            ], [
+                'target_url'       => $targetUrl,
+                'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+            ]);
+        }
+
+        $this->updateRedirect($sourceUrl, $targetUrl);
+
+        return [
+            'success'  => true,
+            'metadata' => $metadata,
+            'post'     => $postAttachment,
+        ];
+    }
+
+    /**
+     * @param int        $attachmentId
+     * @param array|null $metadata
      *
      * @return bool
      */
@@ -193,13 +320,15 @@ class RenameFile
         clean_post_cache($attachmentId);
 
         $targetUrl = wp_get_attachment_url($attachmentId);
-        $this->searchReplaceInDB([
-            'source_url'      => $sourceUrl,
-            'source_metadata' => $sourceMetadata,
-        ], [
-            'target_url'       => $targetUrl,
-            'target_metadata'  => wp_get_attachment_metadata($attachmentId),
-        ]);
+        if (apply_filters('imageseo_replace_image_url_database', true)) {
+            $this->searchReplaceInDB([
+                'source_url'      => $sourceUrl,
+                'source_metadata' => $sourceMetadata,
+            ], [
+                'target_url'       => $targetUrl,
+                'target_metadata'  => wp_get_attachment_metadata($attachmentId),
+            ]);
+        }
 
         $this->updateRedirect($sourceUrl, $targetUrl);
 

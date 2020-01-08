@@ -42,7 +42,7 @@ class ReportImage
      *
      * @return array
      */
-    public function generateReportByAttachmentId($attachmentId, $query = [])
+    public function generateReportByAttachmentId($attachmentId, $query = [], $language = null)
     {
         if (!apply_filters('imageseo_authorize_generate_report_attachment_id', true, $attachmentId)) {
             return;
@@ -61,25 +61,25 @@ class ReportImage
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang'     => $this->optionService->getOption('default_language_ia'),
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang'   => $this->optionService->getOption('default_language_ia'),
-                    'src'    => $filePath,
-                    'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
-                    'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'src'      => $filePath,
+                    'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                    'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang'   => $this->optionService->getOption('default_language_ia'),
-                'src'    => $filePath,
-                'width'  => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
-                'height' => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
+                'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                'src'      => $filePath,
+                'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
+                'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
             ], $query);
         }
 
@@ -90,6 +90,7 @@ class ReportImage
         $report = $result['result'];
         update_post_meta($attachmentId, AttachmentMeta::DATE_REPORT, time());
         update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
+        update_post_meta($attachmentId, AttachmentMeta::LANGUAGE, $language);
 
         return $result;
     }
@@ -119,14 +120,18 @@ class ReportImage
         return $this->getValueAuto('alts', $report, $params);
     }
 
-    /**
-     * @param array $report
-     *
-     * @return string
-     */
-    public function getAutoRepresentationFromReport($report, $params = [])
+    public function getAltsFromReport($report)
     {
-        return $this->getValueAuto('labels', $report, $params);
+        $alts = [];
+        foreach ($report['alts'] as $alt) {
+            if (empty($alt['name'])) {
+                continue;
+            }
+
+            $alts[] = $alt;
+        }
+
+        return $alts;
     }
 
     /**
@@ -139,7 +144,7 @@ class ReportImage
     protected function getValueAuto($type, $report, $params = [])
     {
         if (!isset($params['min_percent'])) {
-            $params['min_percent'] = apply_filters('imageseo_get_value_auto_min_percent', 1, $type, $report);
+            $params['min_percent'] = apply_filters('imageseo_get_value_auto_min_percent', 10, $type, $report);
         }
         if (!isset($params['max_percent'])) {
             $params['max_percent'] = apply_filters('imageseo_get_value_auto_max_percent', 101, $type, $report);
