@@ -19,7 +19,7 @@ class MediaLibrary
         $this->optionService = imageseo_get_service('Option');
         $this->reportImageService = imageseo_get_service('ReportImage');
         $this->renameFileService = imageseo_get_service('RenameFile');
-        $this->altService = imageseo_get_service('Alt');
+        $this->altServices = imageseo_get_service('Alt');
     }
 
     public function hooks()
@@ -75,12 +75,17 @@ class MediaLibrary
             return;
         }
 
-        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
+        try {
+            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, ['force' => true]);
+        } catch (\Exception $e) {
+            return;
+        }
+
         if (!$response['success']) {
             return;
         }
 
-        $this->altService->updateAltAttachmentWithReport($attachmentId, $response['result']);
+        $this->altServices->updateAltAttachmentWithReport($attachmentId);
     }
 
     /**
@@ -103,7 +108,7 @@ class MediaLibrary
             return $metadata;
         }
 
-        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId);
+        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, ['force' => true]);
         if (!$response['success']) {
             return $metadata;
         }
@@ -254,14 +259,10 @@ class MediaLibrary
             return;
         }
 
-        $alt = wp_strip_all_tags($this->altService->getAlt($attachmentId));
+        $alt = wp_strip_all_tags($this->altServices->getAlt($attachmentId));
         $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId);
-        $autoWriteAlt = $this->optionService->getOption('active_alt_write_with_report');
 
-        $text = __('Generate alt', 'imageseo');
-        if ($haveAlreadyReport && !empty($alt)) {
-            $text = __('(Re) Rewrite alt', 'imageseo');
-        } ?>
+        $text = __('Generate alt automatically', 'imageseo'); ?>
         <div class="media-column-imageseo">
             <?php
             if (empty($alt)) {

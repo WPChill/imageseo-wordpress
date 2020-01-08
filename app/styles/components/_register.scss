@@ -1,0 +1,30 @@
+#form-register {
+	button {
+		display: block;
+		margin-top: 20px;
+		width: 100%;
+	}
+}
+
+.imageseo-separator {
+	height: 1px;
+	background-color: $greyShady;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	position: relative;
+	span {
+		position: absolute;
+		left: 50%;
+		width: 36px;
+		height: 36px;
+		background-color: #fff;
+		top: 50%;
+		margin-left: -18px;
+		margin-top: -18px;
+		color: $greyShady;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 16px;
+	}
+}

@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\TabsAdmin;
+use ImageSeoWP\Helpers\Pages;
 
 /**
  * @since 1.0.0
@@ -36,13 +36,13 @@ class PageAdmin
             'ImageSEO',
             'ImageSEO',
             'manage_options',
-            TabsAdmin::SETTINGS,
+            Pages::SETTINGS,
             [$this, 'pluginSettingsPage'],
             IMAGESEO_URL_DIST . '/images/favicon.png'
         );
 
         add_submenu_page(
-            TabsAdmin::SETTINGS,
+            Pages::SETTINGS,
             __('Settings', 'imageseo'),
             __('Settings', 'imageseo'),
             'manage_options',
@@ -50,7 +50,7 @@ class PageAdmin
             [$this, 'pluginSettingsPage']
         );
         add_submenu_page(
-            TabsAdmin::SETTINGS,
+            Pages::SETTINGS,
             __('Bulk Optimization', 'imageseo'),
             __('Bulk Optimization', 'imageseo'),
             'manage_options',
@@ -62,8 +62,8 @@ class PageAdmin
     public function menuOrderCount()
     {
         global $submenu;
-        if (isset($submenu[TabsAdmin::SETTINGS])) {
-            unset($submenu[TabsAdmin::SETTINGS][0]);
+        if (isset($submenu[Pages::SETTINGS])) {
+            unset($submenu[Pages::SETTINGS][0]);
         }
     }
 
@@ -72,8 +72,6 @@ class PageAdmin
      */
     public function pluginSettingsPage()
     {
-        $this->tabs = TabsAdmin::getFullTabs();
-        $this->tab_active = TabsAdmin::SETTINGS;
         $this->owner = $this->clientServices->getApiKeyOwner();
 
         if (isset($_GET['tab'])) { // phpcs:ignore
@@ -88,6 +86,8 @@ class PageAdmin
     public function optimizationPage()
     {
         $this->owner = $this->clientServices->getApiKeyOwner();
+        $this->languages = $this->clientServices->getLanguages();
+        $this->options = $this->optionServices->getOptions();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/optimization.php';
     }
 }

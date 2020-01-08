@@ -1,23 +1,114 @@
-&-block{
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(33, 43, 61, 0.1) 0px 3px 6px 0px, rgba(33, 43, 61, 0.05) 0px 0px 6px 0px;
-    margin-bottom: 20px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(200, 208, 221);
-    border-image: initial;
-    border-radius: 3px;
-    padding:15px;
-    margin-right: 15px;
-    height: 100%;
-    h3{
-        line-height: 1.5;
-    }
-    p{
-        font-size: 1.1em;
-    }
-    &--secondary{
-        background-image: radial-gradient(circle at top center, #0E214D 0%, $blueShady 100%);
-        color:#fff;
-    }
+&-block {
+	border-radius: 12px;
+	background-color: #ffffff;
+	height: 100%;
+	position: relative;
+	&__inner {
+		padding: 30px;
+		&--head {
+			border-bottom: 1px solid $greyShady;
+		}
+		&--actions {
+			display: flex;
+			.imageseo-block__inner {
+				&__title {
+					flex: 1;
+				}
+			}
+		}
+	}
+
+	&__table-head {
+		border-bottom: solid 1px $greyShady;
+		background-color: #fafafc;
+		&__item {
+			font-size: 16px;
+			font-weight: bold;
+			color: $blackLight;
+			padding: 10px 30px;
+		}
+	}
+	&__table-line {
+		border-bottom: solid 1px $greyShady;
+		&:last-child {
+			border-bottom: none;
+		}
+		&__item {
+			font-size: 16px;
+			color: $blackLight;
+			padding: 10px 30px;
+			line-height: 1.5;
+		}
+	}
+	&__footer {
+		padding: 30px;
+		border-top: 1px solid $greyShady;
+	}
+
+	&__subtitle {
+		font-size: 16px;
+		font-weight: bold;
+		color: $blue;
+		margin-bottom: 15px;
+	}
+	h2,
+	h3 {
+		line-height: 1.3;
+		margin-top: 0;
+		font-size: 24px;
+		font-weight: bold;
+		color: $blueShady;
+		margin-bottom: 10px;
+	}
+	p,
+	li {
+		font-size: 16px;
+		color: $blackLight;
+		line-height: 1.5;
+		margin-top: 5px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	ul {
+		list-style-type: disc;
+		margin-left: 20px;
+	}
+	&--secondary {
+		background-image: linear-gradient(97deg, #3139cc, #179ae6);
+		color: #fff;
+		p,
+		h2,
+		h3 {
+			color: #fff;
+		}
+	}
+	&--introduce {
+		padding: 30px;
+		height: 153px;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		h2,
+		p {
+			position: relative;
+			z-index: 100;
+			max-width: 65%;
+		}
+		h2 {
+			margin-bottom: 0;
+		}
+	}
+	&__image-introduce {
+		position: absolute;
+		right: 0;
+		top: 0;
+		object-fit: contain;
+	}
+	&__image-oval {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		object-fit: contain;
+	}
 }

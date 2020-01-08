@@ -10,7 +10,7 @@ class Register
 {
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_regoster', [$this, 'register']);
+        add_action('wp_ajax_imageseo_register', [$this, 'register']);
     }
 
     public function register()

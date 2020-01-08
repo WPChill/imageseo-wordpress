@@ -17,7 +17,7 @@ class MediaLibraryReport
     public function __construct()
     {
         $this->renameFileServices = imageseo_get_service('RenameFile');
-        $this->generateAltServices = imageseo_get_service('Alt');
+        $this->altServices = imageseo_get_service('Alt');
     }
 
     public function hooks()
@@ -44,13 +44,23 @@ class MediaLibraryReport
 
     public function adminPostGenerateAlt()
     {
-        $response = $this->generateAltServices->generateForAttachmentId($this->getAttachmentId());
+        $response = $this->altServices->generateForAttachmentId($this->getAttachmentId());
         wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
     }
 
     public function adminPostRenameAttachment()
     {
-        $this->renameFileServices->renameAttachment($this->getAttachmentId());
+        $attachmentId = $this->getAttachmentId();
+
+        try {
+            $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId);
+        } catch (NoRenameFile $e) {
+            wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+
+            return;
+        }
+
+        $this->renameFileServices->updateFilename($attachmentId, $filename);
         wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
     }
 }
