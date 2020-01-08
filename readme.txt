@@ -61,9 +61,9 @@ Step 2 : you need to [create an account on Image SEO](https://app.imageseo.io/re
 Step 3 : Enter and save your API Key in the plugin.
 Step 4 : Bulk your library / image gallery and improve your images for SEO ! 
 
-If you need more information about the importance of Images SEO, check that page : https://imageseo.io/images-alt-and-filenames-for-seo/
+If you need more information about the importance of Images SEO, check that page : [https://imageseo.io/images-alt-and-filenames-for-seo/](https://imageseo.io/images-alt-and-filenames-for-seo/)
 
-You can also read our blog if want to know more and be up to date about image SEO best practices : https://imageseo.io/blog
+You can also read our blog if want to know more and be up to date about image SEO best practices : [https://imageseo.io/blog](https://imageseo.io/blog)
 
 = How does Image SEO work ? =
 
@@ -86,7 +86,7 @@ Our WordPress SEO Plugin is a huge time-saver. It will improve your ranking on i
 
 = What about the Premium? =
 
-Image SEO is free for small websites (10 images optimization every month).We have monthly and one-shot premium plans starting from 4,99€ for for E-Commerce, Photographers, Marketplace, and SEO Specialists. We offer professional support to premium users and payment are secured by Stripe. Discover our pricing here : https://imageseo.io/pricing/
+Image SEO is free for small websites (10 images optimization every month).We have monthly and one-shot premium plans starting from 4,99€ for for E-Commerce, Photographers, Marketplace, and SEO Specialists. We offer professional support to premium users and payment are secured by Stripe. Discover our pricing here : [https://imageseo.io/pricing/](https://imageseo.io/pricing/)
 
 = Image SEO Ressources =
  
