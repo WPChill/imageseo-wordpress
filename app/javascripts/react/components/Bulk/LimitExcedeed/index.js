@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { isNaN } from "lodash";
+import { isNaN, get } from "lodash";
 import Block from "../../../ui/Block";
 import { BlockContentInner } from "../../../ui/Block/ContentInner";
 import { Row, Col } from "../../../ui/Flex";
@@ -10,7 +10,8 @@ function LimitExcedeed() {
 	const { state } = useContext(BulkProcessContext);
 
 	const percentOptimized = Math.round(
-		(Object.values(state.reports).length * 100) / state.allIds.length
+		(Object.values(state.reports).length * 100) /
+			get(state, "allIds", []).length
 	);
 
 	return (

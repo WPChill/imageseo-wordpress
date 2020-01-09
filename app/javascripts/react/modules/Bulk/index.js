@@ -190,7 +190,7 @@ function BulkWithProviders() {
 			return;
 		}
 
-		if (state.allIds.length === 0) {
+		if (get(state, "allIds", []).length === 0) {
 			Swal.fire({
 				title: "Oups !",
 				text: "There are no images to optimize",
@@ -317,8 +317,11 @@ function BulkWithProviders() {
 										)}
 										/
 										{
-											IMAGESEO_DATA.CURRENT_PROCESSED
-												.state.allIds.length
+											get(
+												IMAGESEO_DATA,
+												"CURRENT_PROCESSED.state.allIds",
+												[]
+											).length
 										}
 										)
 									</h2>
