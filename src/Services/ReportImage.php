@@ -82,7 +82,7 @@ class ReportImage
                 'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
             ], $query);
         }
-
+        
         if ($result && !$result['success']) {
             return $result;
         }

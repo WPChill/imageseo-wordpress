@@ -46,7 +46,7 @@ class Report
 
         $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
 
-        $reportLanguage = get_post_meta($attachmentId, AttachmentMeta::LANGUAGE);
+        $reportLanguage = get_post_meta($attachmentId, AttachmentMeta::LANGUAGE, true);
 
         if ($report && $language === $reportLanguage) {
             $report['ID'] = $attachmentId;
