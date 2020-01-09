@@ -302,100 +302,118 @@ function BulkWithProviders() {
 
 	return (
 		<>
-			{IMAGESEO_DATA.CURRENT_PROCESSED && !state.bulkActive && (
-				<div className="imageseo-mb-4">
-					<Block>
-						<BlockContentInner>
-							<Row align="center">
-								<Col flex="1">
-									<h2>
-										Paused Bulk Optimization (
-										{get(
-											IMAGESEO_DATA,
-											"CURRENT_PROCESSED.count_optimized",
-											0
-										)}
-										/
-										{
-											get(
+			{IMAGESEO_DATA.CURRENT_PROCESSED &&
+				get(IMAGESEO_DATA, "CURRENT_PROCESSED.state", false) &&
+				!state.bulkActive && (
+					<div className="imageseo-mb-4">
+						<Block>
+							<BlockContentInner>
+								<Row align="center">
+									<Col flex="1">
+										<h2>
+											Paused Bulk Optimization (
+											{get(
 												IMAGESEO_DATA,
-												"CURRENT_PROCESSED.state.allIds",
-												[]
-											).length
-										}
-										)
-									</h2>
-									<p>
-										Paused :{" "}
-										{format(
-											new Date(
-												IMAGESEO_DATA.CURRENT_PROCESSED.last_updated
-											),
-											"dd MMMM yyyy - HH:mm"
-										)}
-									</p>
-								</Col>
-								<Col auto>
-									<Button primary onClick={handleRestartBulk}>
-										Resume this bulk
-									</Button>
-								</Col>
-							</Row>
-							<div className="imageseo-mt-3">
-								<SubTitle>
-									Configuration of this optimization
-								</SubTitle>
-								<ul>
-									<li>
-										<strong>Manual Validation :</strong>{" "}
-										{IMAGESEO_DATA.CURRENT_PROCESSED
-											.settings.wantValidateResult
-											? "Yes"
-											: "No"}
-									</li>
-									<li>
-										<strong>Language :</strong>{" "}
-										{
-											find(IMAGESEO_DATA.LANGUAGES, {
-												code:
-													IMAGESEO_DATA
-														.CURRENT_PROCESSED
-														.settings.language
-											}).name
-										}
-									</li>
-									<li>
-										<strong>Optimize alt :</strong>{" "}
-										{IMAGESEO_DATA.CURRENT_PROCESSED
-											.settings.optimizeAlt
-											? "Yes"
-											: "No"}{" "}
-										{IMAGESEO_DATA.CURRENT_PROCESSED
-											.settings.optimizeAlt && (
-											<>
-												(Format :{" "}
-												{
-													IMAGESEO_DATA
-														.CURRENT_PROCESSED
-														.settings.formatAlt
-												}
-												)
-											</>
-										)}
-									</li>
-									<li>
-										<strong>Optimize filename :</strong>{" "}
-										{IMAGESEO_DATA.CURRENT_PROCESSED
-											.settings.optimizeFile
-											? "Yes"
-											: "No"}
-									</li>
-								</ul>
-							</div>
-						</BlockContentInner>
-					</Block>
-				</div>
-			)}
+												"CURRENT_PROCESSED.count_optimized",
+												0
+											)}
+											/
+											{
+												get(
+													IMAGESEO_DATA,
+													"CURRENT_PROCESSED.state.allIds",
+													[]
+												).length
+											}
+											)
+										</h2>
+										<p>
+											Paused :{" "}
+											{get(
+												IMAGESEO_DATA,
+												"CURRENT_PROCESSED.last_updated",
+												null
+											) === null
+												? format(
+														new Date(),
+														"dd MMMM yyyy - HH:mm"
+												  )
+												: format(
+														new Date(
+															get(
+																IMAGESEO_DATA,
+																"CURRENT_PROCESSED.last_updated",
+																null
+															)
+														),
+														"dd MMMM yyyy - HH:mm"
+												  )}
+										</p>
+									</Col>
+									<Col auto>
+										<Button
+											primary
+											onClick={handleRestartBulk}
+										>
+											Resume this bulk
+										</Button>
+									</Col>
+								</Row>
+								<div className="imageseo-mt-3">
+									<SubTitle>
+										Configuration of this optimization
+									</SubTitle>
+									<ul>
+										<li>
+											<strong>Manual Validation :</strong>{" "}
+											{IMAGESEO_DATA.CURRENT_PROCESSED
+												.settings.wantValidateResult
+												? "Yes"
+												: "No"}
+										</li>
+										<li>
+											<strong>Language :</strong>{" "}
+											{
+												find(IMAGESEO_DATA.LANGUAGES, {
+													code:
+														IMAGESEO_DATA
+															.CURRENT_PROCESSED
+															.settings.language
+												}).name
+											}
+										</li>
+										<li>
+											<strong>Optimize alt :</strong>{" "}
+											{IMAGESEO_DATA.CURRENT_PROCESSED
+												.settings.optimizeAlt
+												? "Yes"
+												: "No"}{" "}
+											{IMAGESEO_DATA.CURRENT_PROCESSED
+												.settings.optimizeAlt && (
+												<>
+													(Format :{" "}
+													{
+														IMAGESEO_DATA
+															.CURRENT_PROCESSED
+															.settings.formatAlt
+													}
+													)
+												</>
+											)}
+										</li>
+										<li>
+											<strong>Optimize filename :</strong>{" "}
+											{IMAGESEO_DATA.CURRENT_PROCESSED
+												.settings.optimizeFile
+												? "Yes"
+												: "No"}
+										</li>
+									</ul>
+								</div>
+							</BlockContentInner>
+						</Block>
+					</div>
+				)}
 			<Block>
 				<BlockContentInner
 					isHead
