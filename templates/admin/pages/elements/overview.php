@@ -12,12 +12,14 @@ $percentComplete = 100 - $percentMissing;
 
 $limitImages = ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']) - $this->owner['current_request_images'];
 $needCreditForOptimization = 0;
+
 if ($this->owner) {
-    $usageCreditPercent = ceil(($this->owner['bonus_stock_images'] + $this->owner['current_request_images']) * 100 / $this->owner['plan']['limit_images']);
+    $usageCreditPercent = ceil($this->owner['current_request_images'] * 100 / ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']));
     if ($limitImages < $totalNoAlt) {
         $needCreditForOptimization = $totalNoAlt - $limitImages;
     }
 }
+
 ?>
 <div class="imageseo-block">
     <div class="imageseo-block__inner imageseo-block__inner--head imageseo-block__inner--actions">
