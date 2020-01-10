@@ -35,8 +35,8 @@ Image SEO saves your time, improves your ranking on image keywords and allows yo
 
 Example of what our image SEO plugin does : 
 
-<strong>From</strong> : <img src="1235HDFRE.JPG " >
-<strong>To</strong> : <img src="Landscape.JPG" alt="Landscape of a beach in California" >
+<strong>From</strong> : `<img src="1235HDFRE.JPG ">`
+<strong>To</strong> : `<img src="Landscape.JPG" alt="Landscape of a beach in California">`
 
 We rename your medias for a better SEO. We help you to get rid of your bad image names that Search Engines (Google, Bing, Qwant) dislike. We also improve your website accessibility : image alternatives texts are optimized with relevant keywords to help users with screen readers.
  
