@@ -5,7 +5,7 @@ Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.1.0
+Stable tag: v1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,10 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
+= 1.1.1 (01-10-2020) =
+- Bugfix: Calculating the remaining credit percentage
+- Bugfix: Generate report attachement on manual action
+
 = 1.1.0 (01-08-2020) =
 - [NEW]: New design and global improvement of the plugin
 - Add: Ability to manually validate bulk results
@@ -231,29 +235,3 @@ To help us translate Image SEO in your language, contact us
 
 = 1.0.0 (02-04-2019) =
 - Initial version
-
-= 0.9.2-beta (02-02-2019) =
-- Remove : option rewrite alt. It's automatic now
-
-= 0.9.1-beta (01-29-2019) =
-- Miss version
-
-= 0.9.0-beta (01-27-2019) =
-- Changed : New endpoints library
-
-= 0.8.2-beta (01-16-2019) =
-- Improved : Checking the uniqueness of a file name
-
-= 0.8.1-beta (01-10-2019) =
-- Add : rename files
-- Bugfix: rewrite alt attribute
-
-= 0.7.0-beta (01-07-2019) =
-* Add : two options for rewrite alternative text
-
-= 0.6.0-beta (12-20-2018) =
-* Improve Bulk optimization
-* Add option active alt rewrite
-
-= 0.5.0-beta (12-19-2018) =
-* Init plugin
