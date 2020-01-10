@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Exception\NoRenameFile;
+
 /**
  * @since 1.0.0
  */
@@ -17,6 +19,7 @@ class MediaLibraryReport
     public function __construct()
     {
         $this->renameFileServices = imageseo_get_service('RenameFile');
+        $this->reportImageServices = imageseo_get_service('ReportImage');
         $this->altServices = imageseo_get_service('Alt');
     }
 
@@ -51,6 +54,8 @@ class MediaLibraryReport
     public function adminPostRenameAttachment()
     {
         $attachmentId = $this->getAttachmentId();
+
+        $this->reportImageServices->generateReportByAttachmentId($attachmentId);
 
         try {
             $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId);
