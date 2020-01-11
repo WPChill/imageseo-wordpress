@@ -242,27 +242,16 @@ class MediaLibrary
      */
     public function manageMediaColumns($columns)
     {
-        $columns['imageseo'] = __('ImageSEO', 'imageseo');
+        $columns['imageseo_alt'] = __('Alt', 'imageseo');
+        $columns['imageseo_filename'] = __('Filename', 'imageseo');
 
         return $columns;
     }
 
-    /**
-     * @since  1.0
-     *
-     * @param string $columnName    Name of the custom column.
-     * @param int    $attachment_id Attachment ID.
-     */
-    public function manageMediaCustomColumn($columnName, $attachmentId)
+    protected function renderAlt($attachmentId)
     {
-        if ('imageseo' !== $columnName) {
-            return;
-        }
-
         $alt = wp_strip_all_tags($this->altServices->getAlt($attachmentId));
-        $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId);
-
-        $text = __('Generate alt automatically', 'imageseo'); ?>
+        $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId); ?>
         <div class="media-column-imageseo">
             <?php
             if (empty($alt)) {
@@ -273,30 +262,77 @@ class MediaLibrary
                 </div>
                 <?php
             } ?>
-					<div class="media-column-imageseo--actions">
-						<a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
-							<?php echo __('Rename file', 'imageseo'); ?>
-						</a>
-						<a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_report_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
-							<?php echo $text; ?>
-						</a>
-					</div>
-				<div id="wrapper-imageseo-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-alt">
-					<input
-						type="text"
-						name="imageseo-alt"
-						data-id="<?php echo $attachmentId; ?>"
-						class="imageseo-alt-ajax large-text"
-						id="imageseo-alt-<?php echo $attachmentId; ?>"
-						value="<?php echo $alt; ?>"
-						placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
-					/>
-					<button class="button" data-id="<?php echo $attachmentId; ?>">
-						<span><?php _e('Submit', 'imageseo'); ?></span>
-						<div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
-					</button>
-				</div>
-			</div>
+					
+            <div id="wrapper-imageseo-alt-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-alt">
+                <input
+                    type="text"
+                    name="imageseo-alt"
+                    data-id="<?php echo $attachmentId; ?>"
+                    class="imageseo-alt-ajax large-text"
+                    id="imageseo-alt-<?php echo $attachmentId; ?>"
+                    value="<?php echo $alt; ?>"
+                    placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
+                />
+                <button class="button" data-id="<?php echo $attachmentId; ?>">
+                    <span><?php _e('Submit', 'imageseo'); ?></span>
+                    <div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
+                </button>
+            </div>
+            <br />
+            <a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+                <?php _e('Generate alt automatically', 'imageseo'); ?>
+            </a>
+        </div>
         <?php
+    }
+
+    public function renderFilename($attachmentId)
+    {
+        $filename = $this->renameFileService->getFilenameByAttachmentId($attachmentId);
+        $splitFilename = explode('.', $filename);
+        array_pop($splitFilename);
+        $filename = implode('-', $splitFilename);
+        $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId); ?>
+        <div class="media-column-imageseo">
+            <span class="text"><?php esc_html_e("Don't use a file extension but just the name.", 'imageseo'); ?>
+            <div id="wrapper-imageseo-filename-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-filename">
+                <input
+                    type="text"
+                    name="imageseo-filename"
+                    data-id="<?php echo $attachmentId; ?>"
+                    class="imageseo-filename-ajax large-text"
+                    id="imageseo-filename-<?php echo $attachmentId; ?>"
+                    value="<?php echo $filename; ?>"
+                    placeholder="<?php echo esc_html('Enter filename', 'imageseo'); ?>"
+                />
+                <button class="button" data-id="<?php echo $attachmentId; ?>">
+                    <span><?php _e('Submit', 'imageseo'); ?></span>
+                    <div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
+                </button>
+            </div>
+            <br />
+            <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+                <?php echo __('Rename file automatically', 'imageseo'); ?>
+            </a>
+        </div>
+        <?php
+    }
+
+    /**
+     * @since  1.0
+     *
+     * @param string $columnName    Name of the custom column.
+     * @param int    $attachment_id Attachment ID.
+     */
+    public function manageMediaCustomColumn($columnName, $attachmentId)
+    {
+        switch ($columnName) {
+            case 'imageseo_alt':
+                $this->renderAlt($attachmentId);
+                break;
+            case 'imageseo_filename':
+                $this->renderFilename($attachmentId);
+                break;
+        }
     }
 }

@@ -63,6 +63,10 @@ class Alt
         update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
     }
 
+    /**
+     * @param int    $attachmentId
+     * @param string $alt
+     */
     public function updateAlt($attachmentId, $alt)
     {
         update_post_meta($attachmentId, '_wp_attachment_image_alt', apply_filters('imageseo_update_alt', $alt, $attachmentId));
