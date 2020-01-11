@@ -53,7 +53,7 @@ function BulkSettings() {
 						</IFlexNumber>
 					</IFlex>
 				</div>
-				<Row className="imageseo-mb-5">
+				<Row className="imageseo-mb-3">
 					<Col>
 						<label htmlFor="language" className="imageseo-label">
 							In which language should we write your filenames and
@@ -81,6 +81,39 @@ function BulkSettings() {
 									</option>
 								);
 							})}
+						</select>
+					</Col>
+				</Row>
+				<Row className="imageseo-mb-5">
+					<Col span={8}>
+						<label htmlFor="altFilter" className="imageseo-label">
+							Which images do you want to optimize?
+						</label>
+						<select
+							id="altFilter"
+							value={settings.altFilter}
+							onChange={event =>
+								dispatch({
+									type: "UPDATE_OPTION",
+									payload: {
+										key: "altFilter",
+										value: event.target.value
+									}
+								})
+							}
+						>
+							{IMAGESEO_DATA.ALT_SPECIFICATION.map(
+								(item, key) => {
+									return (
+										<option
+											key={`alt_filter_${key}`}
+											value={item.id}
+										>
+											{item.label}
+										</option>
+									);
+								}
+							)}
 						</select>
 					</Col>
 				</Row>
@@ -119,40 +152,6 @@ function BulkSettings() {
 					{settings.optimizeAlt && (
 						<>
 							<Row className="imageseo-mt-3">
-								<Col span={8}>
-									<label
-										htmlFor="altFilter"
-										className="imageseo-label"
-									>
-										Which images do you want to optimize?
-									</label>
-									<select
-										id="altFilter"
-										value={settings.altFilter}
-										onChange={event =>
-											dispatch({
-												type: "UPDATE_OPTION",
-												payload: {
-													key: "altFilter",
-													value: event.target.value
-												}
-											})
-										}
-									>
-										{IMAGESEO_DATA.ALT_SPECIFICATION.map(
-											(item, key) => {
-												return (
-													<option
-														key={`alt_filter_${key}`}
-														value={item.id}
-													>
-														{item.label}
-													</option>
-												);
-											}
-										)}
-									</select>
-								</Col>
 								<Col span={8}>
 									<label
 										htmlFor="altFill"
