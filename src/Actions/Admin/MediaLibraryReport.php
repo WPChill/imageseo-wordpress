@@ -29,7 +29,7 @@ class MediaLibraryReport
             return;
         }
 
-        add_action('admin_post_imageseo_report_attachment', [$this, 'adminPostGenerateAlt']);
+        add_action('admin_post_imageseo_generate_alt', [$this, 'adminPostGenerateAlt']);
         add_action('admin_post_imageseo_rename_attachment', [$this, 'adminPostRenameAttachment']);
     }
 

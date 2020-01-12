@@ -304,6 +304,9 @@ function BulkWithProviders() {
 		<>
 			{IMAGESEO_DATA.CURRENT_PROCESSED &&
 				get(IMAGESEO_DATA, "CURRENT_PROCESSED.state", false) &&
+				get(IMAGESEO_DATA, "CURRENT_PROCESSED.count_optimized", 0) <
+					get(IMAGESEO_DATA, "CURRENT_PROCESSED.state.allIds", [])
+						.length &&
 				!state.bulkActive && (
 					<div className="imageseo-mb-4">
 						<Block>

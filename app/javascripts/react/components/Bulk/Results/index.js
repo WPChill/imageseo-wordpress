@@ -16,11 +16,11 @@ function BulkResults() {
 		<>
 			<BlockTableHead>
 				<Row>
-					<Col span={6}>
+					<Col span={3}>
 						<BlockTableHeadItem>Preview</BlockTableHeadItem>
 					</Col>
 					{settings.optimizeAlt && (
-						<Col span={6}>
+						<Col span={8}>
 							<BlockTableHeadItem>
 								Alternative text
 							</BlockTableHeadItem>
@@ -28,11 +28,11 @@ function BulkResults() {
 					)}
 
 					{settings.optimizeFile && (
-						<Col span={6}>
+						<Col span={8}>
 							<BlockTableHeadItem>Image name</BlockTableHeadItem>
 						</Col>
 					)}
-					<Col span={6}>
+					<Col span={5}>
 						<BlockTableHeadItem>Status</BlockTableHeadItem>
 					</Col>
 				</Row>

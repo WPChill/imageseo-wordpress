@@ -98,17 +98,19 @@ class Optimize
         }
 
         $splitFilename = explode('.', $filename);
-        if (1 === count($splitFilename)) {
+        if (1 === count($splitFilename)) { // Need to retrieve current extension
             $currentFilename = wp_get_attachment_image_src($attachmentId, 'full');
             $splitCurrentFilename = explode('.', $currentFilename[0]);
             $extension = $splitCurrentFilename[count($splitCurrentFilename) - 1];
         } else {
             $extension = $splitFilename[count($splitFilename) - 1];
+            array_pop($splitFilename);
+            $filename = implode('.', $splitFilename);
         }
 
         wp_send_json_success([
-            'filename'  => $filename,
-            'extension' => $extension,
+            'filename'                   => $filename,
+            'extension'                  => $extension,
         ]);
     }
 

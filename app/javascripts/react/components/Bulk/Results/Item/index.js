@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { get, isEmpty, isNil, memoize } from "lodash";
+import { get, isEmpty, isNil } from "lodash";
+import styled from "styled-components";
+import slugify from "slugify";
 
 import { Row, Col } from "../../../../ui/Flex";
 import BlockTableLine, {
@@ -22,12 +24,27 @@ import getFilenameWithoutExtension from "../../../../helpers/getFilenameWithoutE
 import getFilenamePreview from "../../../../helpers/getFilenamePreview";
 import { saveCurrentBulk } from "../../../../services/ajax/current-bulk";
 
+const SCEdit = styled.div`
+	margin-left: 10px;
+	border: solid 1px #c8d0dd;
+	padding: 4px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&:hover {
+		cursor: pointer;
+	}
+`;
+
 function BulkResultsItem({ attachment }) {
 	const { state, dispatch } = useContext(BulkProcessContext);
 	const { state: settings } = useContext(BulkSettingsContext);
 	const [loading, setLoading] = useState(true);
 	const [loadingHandleResult, setLoadingHandleResult] = useState(false);
 	const [fileinfos, setFileInfos] = useState("");
+	const [editAlt, setEditAlt] = useState(false);
+	const [editFilename, setEditFilename] = useState(false);
 	const [alt, setAlt] = useState("");
 	const [altOptimizationIsValid, setAltOptimizationIsValid] = useState(false);
 	const [
@@ -162,7 +179,7 @@ function BulkResultsItem({ attachment }) {
 	return (
 		<BlockTableLine key={`attachment_${attachment.ID}`}>
 			<Row align="center">
-				<Col span={6}>
+				<Col span={3}>
 					<BlockTableLineItem>
 						<BlockTableLineImage
 							src={get(
@@ -174,10 +191,53 @@ function BulkResultsItem({ attachment }) {
 					</BlockTableLineItem>
 				</Col>
 				{settings.optimizeAlt && (
-					<Col span={6}>
+					<Col span={8}>
 						<BlockTableLineItem>
-							<strong>{alt}</strong>
-							<br />
+							<Row align="center">
+								{editAlt && (
+									<input
+										type="text"
+										value={alt}
+										onChange={e => setAlt(e.target.value)}
+										style={{
+											flex: 1
+										}}
+									/>
+								)}
+								{!editAlt && (
+									<Col auto>
+										{!editAlt && <strong>{alt}</strong>}
+									</Col>
+								)}
+								<Col auto>
+									{!loading &&
+										settings.wantValidateResult &&
+										!editAlt && (
+											<SCEdit
+												onClick={() =>
+													setEditAlt(!editAlt)
+												}
+											>
+												<img
+													src={`${IMAGESEO_URL_DIST}/images/edit.svg`}
+												/>
+											</SCEdit>
+										)}
+									{!loading &&
+										settings.wantValidateResult &&
+										editAlt && (
+											<SCEdit
+												onClick={() => {
+													setEditAlt(!editAlt);
+												}}
+											>
+												<img
+													src={`${IMAGESEO_URL_DIST}/images/check.svg`}
+												/>
+											</SCEdit>
+										)}
+								</Col>
+							</Row>
 							<BlockTableLineOldValue>
 								Current alt text: : {attachment.alt}
 							</BlockTableLineOldValue>
@@ -186,17 +246,80 @@ function BulkResultsItem({ attachment }) {
 				)}
 
 				{settings.optimizeFile && (
-					<Col span={6}>
+					<Col span={8}>
 						<BlockTableLineItem>
-							<strong>{filename}</strong>
-							<br />
+							<Row align="center">
+								{editFilename && (
+									<input
+										type="text"
+										value={fileinfos.filename}
+										onChange={e => {
+											setFileInfos({
+												...fileinfos,
+												filename: e.target.value
+											});
+										}}
+										style={{
+											flex: 1
+										}}
+									/>
+								)}
+								{!editFilename && (
+									<Col auto>
+										{!editFilename && (
+											<strong>{filename}</strong>
+										)}
+									</Col>
+								)}
+								<Col auto>
+									{!loading &&
+										settings.wantValidateResult &&
+										!editFilename && (
+											<SCEdit
+												onClick={() =>
+													setEditFilename(
+														!editFilename
+													)
+												}
+											>
+												<img
+													src={`${IMAGESEO_URL_DIST}/images/edit.svg`}
+												/>
+											</SCEdit>
+										)}
+									{!loading &&
+										settings.wantValidateResult &&
+										editFilename && (
+											<SCEdit
+												onClick={() => {
+													setEditFilename(
+														!editFilename
+													);
+													setFileInfos({
+														...fileinfos,
+														filename: slugify(
+															fileinfos.filename,
+															{
+																replacement: "-"
+															}
+														)
+													});
+												}}
+											>
+												<img
+													src={`${IMAGESEO_URL_DIST}/images/check.svg`}
+												/>
+											</SCEdit>
+										)}
+								</Col>
+							</Row>
 							<BlockTableLineOldValue>
 								Current filename: {attachment.filename}
 							</BlockTableLineOldValue>
 						</BlockTableLineItem>
 					</Col>
 				)}
-				<Col span={6}>
+				<Col span={5}>
 					<BlockTableLineItem>
 						{!loading &&
 							(!isEmpty(filename) || !isEmpty(alt)) &&
