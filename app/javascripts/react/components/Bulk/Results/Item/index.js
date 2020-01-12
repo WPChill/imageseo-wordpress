@@ -300,7 +300,9 @@ function BulkResultsItem({ attachment }) {
 														filename: slugify(
 															fileinfos.filename,
 															{
-																replacement: "-"
+																replacement:
+																	"-",
+																remove: /[*+~.()'"!:@]/g
 															}
 														)
 													});

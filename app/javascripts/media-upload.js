@@ -1,3 +1,4 @@
+const slugify = require("slugify");
 jQuery(document).ready(function($) {
 	function imageseo_alt_field(attachment) {
 		const alt_text = $("#imageseo-alt-" + attachment).val();
@@ -10,7 +11,9 @@ jQuery(document).ready(function($) {
 			},
 			function() {
 				setTimeout(() => {
-					$(`#wrapper-imageseo-alt-${id} .imageseo-loading`).hide();
+					$(
+						`#wrapper-imageseo-alt-${attachment} .imageseo-loading`
+					).hide();
 					$(`#wrapper-imageseo-alt-${attachment} button span`).show();
 				}, 500);
 			}
@@ -44,13 +47,19 @@ jQuery(document).ready(function($) {
 		$("#wrapper-imageseo-filename-" + id + " button span").hide();
 		$("#wrapper-imageseo-filename-" + id + " .imageseo-loading").show();
 
-		const filename = $("#imageseo-filename-" + id).val();
+		const slugifyFilename = slugify($("#imageseo-filename-" + id).val(), {
+			replacement: "-",
+			remove: /[*+~.()'"!:@]/g
+		});
+
+		$("#imageseo-filename-" + id).val(slugifyFilename);
+
 		$.post(
 			ajaxurl,
 			{
 				action: "imageseo_optimize_filename",
 				attachmentId: id,
-				filename: filename
+				filename: slugifyFilename
 			},
 			function() {
 				setTimeout(() => {
