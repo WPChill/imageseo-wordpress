@@ -26,6 +26,11 @@ abstract class AltFormat
     /**
      * @var string
      */
+    const ALT_YOAST_FOCUS_KW = '[yoast_focus_keyword] - [keyword_1]';
+
+    /**
+     * @var string
+     */
     const ALT_PRODUCT_WOOCOMMERCE = '[product_title] - [keyword_1]';
 
     /**
@@ -46,9 +51,7 @@ abstract class AltFormat
             ],
             [
                 'format'      => self::ALT_SITE_TITLE,
-                'description' => [
-                    __('We will use your site title and generate one SEO friendly keyword.', 'imageseo'),
-                ],
+                'description' => __('We will use your site title and generate one SEO friendly keyword.', 'imageseo'),
             ],
         ];
 
@@ -58,6 +61,15 @@ abstract class AltFormat
             $formats[] = [
                 'format'      => self::ALT_PRODUCT_WOOCOMMERCE,
                 'description' => '',
+            ];
+        }
+
+        if (
+            is_plugin_active('wordpress-seo/wp-seo.php')
+        ) {
+            $formats[] = [
+                'format'      => self::ALT_YOAST_FOCUS_KW,
+                'description' => __('We will use your "Focus keyword" that you defined in your article linked to the image and generate SEO friendly keywords'),
             ];
         }
 
