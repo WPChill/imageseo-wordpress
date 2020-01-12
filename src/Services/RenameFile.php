@@ -214,7 +214,12 @@ class RenameFile
 
         $targetUrl = wp_get_attachment_url($attachmentId);
 
-        if (apply_filters('imageseo_replace_image_url_database', true)) {
+        $replaceImageUrlDatabase = true;
+        if (is_plugin_active('bb-plugin/fl-builder.php')) { // No compatible with Beaver Builder
+            $replaceImageUrlDatabase = false;
+        }
+
+        if (apply_filters('imageseo_replace_image_url_database', $replaceImageUrlDatabase)) {
             $this->searchReplaceInDB([
                 'source_url'      => $sourceUrl,
                 'source_metadata' => $sourceMetadata,
