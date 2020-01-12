@@ -1,11 +1,11 @@
 
-===  Image SEO - Auto ALT tags & filenames optimizer for Google Images & Pinterest ===
+===  Image SEO – Auto images alt text and name optimizer for Google images - WooCommerce friendly ===
 Contributors: gmulti
 Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.1.1
+Stable tag: v1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,12 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.1.2 (01-12-2020) =
+- Bugfix: Fixed query for bulk on empty alts
+- Improved: Ability to manually edit the results of the bulk (alt and filename)
+- [New]: You can rename the file names in your library
+- Improved: Added a new template for alt with Yoast's focus keywords
 
 = 1.1.1 (01-10-2020) =
 - Bugfix: Calculating the remaining credit percentage
