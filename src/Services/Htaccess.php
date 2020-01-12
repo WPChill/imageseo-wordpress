@@ -48,6 +48,10 @@ class Htaccess
                 continue;
             }
 
+            if (empty($key) || empty($value['target'])) {
+                continue;
+            }
+
             $targetExist = CleanUrl::removeScheme(CleanUrl::removeDomainFromFilename($value['target']));
             if (array_key_exists($targetExist, $text)) {
                 continue;
