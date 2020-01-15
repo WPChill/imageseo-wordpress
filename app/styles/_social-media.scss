@@ -1,0 +1,10 @@
+.imageseo-media {
+	&__layout {
+		&--card-left {
+			flex-direction: row;
+		}
+		&--card-right {
+			flex-direction: row-reverse;
+		}
+	}
+}
