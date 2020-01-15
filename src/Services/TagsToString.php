@@ -57,6 +57,12 @@ class TagsToString
             $params['number'] = $splitKeyword[1];
         }
 
+        if (false !== strpos($name, 'seopress_target_keyword')) {
+            $splitKeyword = explode('_', $name);
+            $name = 'seopress_target_keyword_X';
+            $params['number'] = $splitKeyword[3];
+        }
+
         if (!array_key_exists($name, $tagsAvailable)) {
             return '';
         }
