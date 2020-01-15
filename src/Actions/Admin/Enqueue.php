@@ -24,7 +24,7 @@ class Enqueue
      */
     public function adminEnqueueScripts($page)
     {
-        if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'imageseo_page_imageseo-settings',  'upload.php', 'post.php', 'imageseo_page_imageseo-options'], true)) {
+        if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options', 'imageseo_page_imageseo-social-media'], true)) {
             return;
         }
 
@@ -34,7 +34,7 @@ class Enqueue
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
         }
 
-        if (in_array($page, ['imageseo_page_imageseo-optimization'], true)) {
+        if (in_array($page, ['imageseo_page_imageseo-optimization', 'imageseo_page_imageseo-social-media'], true)) {
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery'], IMAGESEO_VERSION, true);
         }
 

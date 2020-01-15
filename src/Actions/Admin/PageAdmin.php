@@ -57,6 +57,14 @@ class PageAdmin
             'imageseo-optimization',
             [$this, 'optimizationPage']
         );
+        add_submenu_page(
+            Pages::SETTINGS,
+            __('Social media', 'imageseo'),
+            __('Social media', 'imageseo'),
+            'manage_options',
+            'imageseo-social-media',
+            [$this, 'socialMedia']
+        );
     }
 
     public function menuOrderCount()
@@ -89,5 +97,10 @@ class PageAdmin
         $this->languages = $this->clientServices->getLanguages();
         $this->options = $this->optionServices->getOptions();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/optimization.php';
+    }
+
+    public function socialMedia()
+    {
+        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/social-media.php';
     }
 }
