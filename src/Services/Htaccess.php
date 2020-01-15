@@ -58,7 +58,7 @@ class Htaccess
             }
 
             // /wp-content/uploads/2019/12/example.jpg http://example.local/wp-content/uploads/2019/12/new-image.jpg'
-            $text[$key] = sprintf('RedirectPermanent %s %s', $key, $value['target']);
+            $text[$key] = sprintf('RedirectPermanent %s %s', $key, str_replace(' ', '%20', $value['target']));
         }
 
         // End of mod_rewrite
