@@ -60,9 +60,14 @@ function BulkResultsItem({ attachment }) {
 
 		const fetchOptimization = async () => {
 			if (settings.optimizeAlt && isEmpty(alt)) {
+				const template =
+					settings.formatAlt === "CUSTOM_FORMAT"
+						? settings.formatAltCustom
+						: settings.formatAlt;
+
 				const { success, data: newAlt } = await previewAlt(
 					attachment.ID,
-					settings.formatAlt
+					template
 				);
 
 				if (isEmpty(newAlt)) {

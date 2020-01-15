@@ -7,6 +7,7 @@ const initialState = {
 	language: IMAGESEO_DATA.OPTIONS.default_language_ia,
 	optimizeAlt: false,
 	formatAlt: null,
+	formatAltCustom: "",
 	altFilter: find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id,
 	altFill: find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id,
 	optimizeFile: false,

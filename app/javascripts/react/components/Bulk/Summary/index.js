@@ -25,7 +25,13 @@ function BulkSummary() {
 					<strong>Optimize alt :</strong>{" "}
 					{settings.optimizeAlt ? "Yes" : "No"}{" "}
 					{settings.optimizeAlt && (
-						<>(Format : {settings.formatAlt})</>
+						<>
+							(Format :{" "}
+							{settings.formatAlt === "CUSTOM_FORMAT"
+								? settings.formatAltCustom
+								: settings.formatAlt}
+							)
+						</>
 					)}
 				</li>
 				<li>

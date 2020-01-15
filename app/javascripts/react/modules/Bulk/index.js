@@ -395,11 +395,18 @@ function BulkWithProviders() {
 												.settings.optimizeAlt && (
 												<>
 													(Format :{" "}
-													{
-														IMAGESEO_DATA
-															.CURRENT_PROCESSED
-															.settings.formatAlt
-													}
+													{IMAGESEO_DATA
+														.CURRENT_PROCESSED
+														.settings.formatAlt ===
+													"CUSTOM_FORMAT"
+														? IMAGESEO_DATA
+																.CURRENT_PROCESSED
+																.settings
+																.formatAltCustom
+														: IMAGESEO_DATA
+																.CURRENT_PROCESSED
+																.settings
+																.formatAlt}
 													)
 												</>
 											)}
