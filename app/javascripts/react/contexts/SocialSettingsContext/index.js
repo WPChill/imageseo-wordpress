@@ -21,8 +21,8 @@ const SocialSettingsContextProvider = ({ children }) => {
 	const getInitialState = () => {
 		return {
 			layout: "CARD_LEFT",
-			textColor: "#000",
-			contentBackgroundColor: "#000",
+			textColor: "#000000",
+			contentBackgroundColor: "#ffffff",
 			backgroundImage: null
 		};
 	};

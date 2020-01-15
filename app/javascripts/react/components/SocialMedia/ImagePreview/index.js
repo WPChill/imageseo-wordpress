@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { isNull } from "lodash";
 import styled from "styled-components";
+import classNames from "classnames";
+
 import { SocialSettingsContext } from "../../../contexts/SocialSettingsContext";
 
 const SCContainer = styled.div`
@@ -48,8 +50,14 @@ function SocialMediaImagePreview() {
 		<>
 			<SCContainer
 				id="imageseo-preview-image"
+				className={classNames({
+					"imageseo-media__layout--card-left":
+						settings.layout === "CARD_LEFT",
+					"imageseo-media__layout--card-right":
+						settings.layout === "CARD_RIGHT"
+				})}
 				style={{
-					backgroundColor: "#fff"
+					backgroundColor: settings.contentBackgroundColor
 				}}
 			>
 				<SCContainerImage
@@ -65,7 +73,9 @@ function SocialMediaImagePreview() {
 				/>
 
 				<SCContainerContent>
-					<SCTitle>Let's go bobby</SCTitle>
+					<SCTitle style={{ color: settings.textColor }}>
+						Let's go bobby
+					</SCTitle>
 				</SCContainerContent>
 			</SCContainer>
 		</>
