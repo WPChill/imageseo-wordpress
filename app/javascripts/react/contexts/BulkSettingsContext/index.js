@@ -1,18 +1,5 @@
-import React, { createContext, useState, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
 import { find, merge } from "lodash";
-
-const initialState = {
-	smallImages: false,
-	wantValidateResult: false,
-	language: IMAGESEO_DATA.OPTIONS.default_language_ia,
-	optimizeAlt: false,
-	formatAlt: null,
-	formatAltCustom: "",
-	altFilter: find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id,
-	altFill: find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id,
-	optimizeFile: false,
-	restartBulk: false
-};
 
 function reducer(state, { type, payload }) {
 	switch (type) {
@@ -33,7 +20,21 @@ function reducer(state, { type, payload }) {
 const BulkSettingsContext = createContext(null);
 
 const BulkSettingsContextProvider = ({ children }) => {
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const getInitialState = () => {
+		return {
+			smallImages: false,
+			wantValidateResult: false,
+			language: IMAGESEO_DATA.OPTIONS.default_language_ia,
+			optimizeAlt: false,
+			formatAlt: null,
+			formatAltCustom: "",
+			altFilter: find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id,
+			altFill: find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id,
+			optimizeFile: false,
+			restartBulk: false
+		};
+	};
+	const [state, dispatch] = useReducer(reducer, getInitialState());
 
 	return (
 		<BulkSettingsContext.Provider
