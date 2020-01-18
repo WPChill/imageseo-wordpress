@@ -8,6 +8,27 @@ if (!defined('ABSPATH')) {
 
 class UploadImage
 {
+    public function saveImageFromUrl($url, $title)
+    {
+        $file = [];
+        $file['name'] = $title . '.jpg';
+        $file['tmp_name'] = download_url($url);
+
+        if (is_wp_error($file['tmp_name'])) {
+            @unlink($file['tmp_name']);
+
+            return;
+        }
+
+        $attachmentId = media_handle_sideload($file, $post_id);
+
+        if (is_wp_error($attachmentId)) {
+            @unlink($file['tmp_name']);
+        } else {
+            $image = wp_get_attachment_url($attachmentId);
+        }
+    }
+
     /**
      * Save the image on the server.
      */
@@ -41,6 +62,16 @@ class UploadImage
             'guid'           => $upload_dir['url'] . '/' . basename($filename),
         ];
 
-        return wp_insert_attachment($attachment, $upload_dir['path'] . '/' . $filename);
+        $pathFilename = $upload_dir['path'] . '/' . $filename;
+
+        $attachId = wp_insert_attachment($attachment, $pathFilename);
+
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $attach_data = wp_generate_attachment_metadata($attachId, $pathFilename);
+
+        wp_update_attachment_metadata($attachId, $attach_data);
+
+        return true;
     }
 }

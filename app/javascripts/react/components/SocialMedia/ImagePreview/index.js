@@ -5,26 +5,6 @@ import classNames from "classnames";
 
 import { SocialSettingsContext } from "../../../contexts/SocialSettingsContext";
 
-const SCContainer = styled.div`
-	display: flex;
-	height: 300px;
-`;
-
-const SCContainerImage = styled.div`
-	flex: 2;
-`;
-
-const SCContainerContent = styled.div`
-	flex: 1;
-	padding: 20px;
-`;
-
-const SCTitle = styled.div`
-	font-size: 30px;
-	color: #000;
-	line-height: 1.5;
-`;
-
 const toDataUrl = (url, callback) => {
 	var xhr = new XMLHttpRequest();
 	xhr.onload = function() {
@@ -48,36 +28,44 @@ function SocialMediaImagePreview() {
 	);
 	return (
 		<>
-			<SCContainer
+			<div
 				id="imageseo-preview-image"
-				className={classNames({
-					"imageseo-media__layout--card-left":
-						settings.layout === "CARD_LEFT",
-					"imageseo-media__layout--card-right":
-						settings.layout === "CARD_RIGHT"
-				})}
+				className={classNames(
+					{
+						"imageseo-media__layout--card-left":
+							settings.layout === "CARD_LEFT",
+						"imageseo-media__layout--card-right":
+							settings.layout === "CARD_RIGHT"
+					},
+					"imageseo-media__container",
+					"imageseo-media__container--preview"
+				)}
 				style={{
 					backgroundColor: settings.contentBackgroundColor
 				}}
 			>
-				<SCContainerImage
+				<div
+					className="imageseo-media__container__image"
 					style={{
 						backgroundColor: "#ccc",
 						backgroundImage: isNull(backgroundImage)
 							? null
-							: `url(${backgroundImage}`,
+							: `url(${backgroundImage})`,
 						backgroundPosition: "center center",
 						backgroundSize: "cover",
 						backgroundRepeat: "no-repeat"
 					}}
 				/>
 
-				<SCContainerContent>
-					<SCTitle style={{ color: settings.textColor }}>
+				<div className="imageseo-media__container__content">
+					<div
+						className="imageseo-media__content__title"
+						style={{ color: settings.textColor }}
+					>
 						Let's go bobby
-					</SCTitle>
-				</SCContainerContent>
-			</SCContainer>
+					</div>
+				</div>
+			</div>
 		</>
 	);
 }

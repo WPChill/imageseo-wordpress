@@ -76,3 +76,8 @@ function imageseo_rename_file_attachment_id($attachmentId, $metadata = null)
 
     return null;
 }
+
+function imageseo_get_api_key()
+{
+    return imageseo_get_option('api_key');
+}
