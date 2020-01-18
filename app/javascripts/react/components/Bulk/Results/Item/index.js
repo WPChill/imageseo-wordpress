@@ -106,7 +106,6 @@ function BulkResultsItem({ attachment }) {
 			}
 
 			setLoading(false);
-			saveCurrentBulk(settings, state, state.currentProcess + 1);
 		};
 
 		fetchOptimization();

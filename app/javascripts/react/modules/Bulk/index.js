@@ -35,7 +35,10 @@ import Loader from "../../ui/Loader";
 import { Col, Row } from "../../ui/Flex";
 import generateReport from "../../services/ajax/generate-report";
 import SubTitle from "../../ui/Block/Subtitle";
-import { deleteCurrentBulk } from "../../services/ajax/current-bulk";
+import {
+	deleteCurrentBulk,
+	saveCurrentBulk
+} from "../../services/ajax/current-bulk";
 import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 
 function BulkWithProviders() {
@@ -100,9 +103,14 @@ function BulkWithProviders() {
 			});
 		};
 
+		saveCurrentBulk(settings, state, state.currentProcess + 1);
+
 		// No attachement
 		if (isNull(attachmentId)) {
 			dispatch({ type: "FINISH_BULK" });
+			setTimeout(() => {
+				deleteCurrentBulk();
+			}, 2000);
 			return;
 		}
 
