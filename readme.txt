@@ -5,7 +5,7 @@ Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.1.2
+Stable tag: v1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,13 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.1.3 (01-18-2020) =
+- [New] : Possibility to use a custom template to rename alternative texts
+- [New] : Shortcode compatible with SEOPress
+- Improved: Improved bulk performance
+- Bugfix: Support for filename spaces in htaccess
+- Bugfix: Fixed SQL query for empty alts
 
 = 1.1.2 (01-12-2020) =
 - Bugfix: Fixed query for bulk on empty alts
