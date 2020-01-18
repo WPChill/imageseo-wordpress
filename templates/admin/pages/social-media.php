@@ -15,5 +15,10 @@ if (!defined('ABSPATH')) {
             <input type="hidden" value="imageseo_generate_image" name="action">
             <button type="submit">Upload image</button>
         </form>
+
+
+        <a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_test_test')); ?>" class="button button-primary">
+                <?php _e('zfezfezfezfzey', 'imageseo'); ?>
+            </a>
     </div>
 </div>

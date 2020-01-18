@@ -37,7 +37,6 @@
 		"classnames": "^2.2.6",
 		"date-fns": "^2.8.1",
 		"downloadjs": "^1.4.7",
-		"html-to-image": "^0.1.1",
 		"react": "^16.12.0",
 		"react-color": "^2.18.0",
 		"react-dom": "^16.12.0",

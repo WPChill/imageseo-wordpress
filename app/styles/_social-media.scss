@@ -1,10 +1,47 @@
 .imageseo-media {
+	&__container {
+		display: flex;
+		&--preview {
+			height: 300px;
+		}
+		&__image {
+			flex: 2;
+		}
+
+		&__content {
+			flex: 1;
+			padding: 20px;
+		}
+		&--open-graph {
+			width: 1200px;
+			height: 630px;
+		}
+		&--pinterest {
+			width: 1000px;
+			height: 1500px;
+		}
+		&--instagram {
+			width: 1080px;
+			height: 1920px;
+		}
+		&--instagram-square {
+			width: 1000px;
+			height: 1000px;
+		}
+	}
 	&__layout {
 		&--card-left {
 			flex-direction: row;
 		}
 		&--card-right {
 			flex-direction: row-reverse;
+		}
+	}
+	&__content {
+		&__title {
+			font-size: 30px;
+			color: #000;
+			line-height: 1.5;
 		}
 	}
 }

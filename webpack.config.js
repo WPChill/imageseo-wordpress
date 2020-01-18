@@ -9,6 +9,7 @@ module.exports = {
 		"media-upload": "./app/javascripts/media-upload.js",
 		bulk: "./app/javascripts/react/index.js",
 		"api-key": "./app/javascripts/api-key.js",
+		"generate-image": "./app/javascripts/generate-image.js",
 		register: "./app/javascripts/register.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		"admin-css": "./app/styles/admin.scss"
