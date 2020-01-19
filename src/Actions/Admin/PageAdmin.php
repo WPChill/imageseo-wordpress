@@ -101,6 +101,8 @@ class PageAdmin
 
     public function socialMedia()
     {
+        $this->owner = $this->clientServices->getApiKeyOwner();
+        $this->options = $this->optionServices->getOptions();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/social-media.php';
     }
 }

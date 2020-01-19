@@ -21,6 +21,16 @@ class Option
         'default_language_ia'           => 'en',
         'alt_template_default'          => AltFormat::ALT_SIMPLE,
         'social_media_post_types'       => [],
+        'social_media_type'             => [],
+        'social_media_settings'         => [
+            'layout'                 => 'CARD_LEFT',
+            'textColor'              => '#000000',
+            'contentBackgroundColor' => '#ffffff',
+            'starColor'              => '#F8CA00',
+            'visibilitySubTitle'     => true,
+            'visibilityRating'       => true,
+            'defaultBgImg'           => IMAGESEO_URL_DIST . '/images/default_image.png',
+        ],
     ];
 
     /**

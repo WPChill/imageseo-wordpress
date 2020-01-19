@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { toJpeg } from "html-to-image";
+
 import { SketchPicker } from "react-color";
 import styled from "styled-components";
-
+import Swal from "sweetalert2";
 import { Row, Col } from "../../ui/Flex";
 import SocialMediaImagePreview from "../../components/SocialMedia/ImagePreview";
 import Block from "../../ui/Block";
@@ -14,6 +14,9 @@ import SocialSettingsContextProvider, {
 } from "../../contexts/SocialSettingsContext";
 import SubTitle from "../../ui/Block/Subtitle";
 import IFlex, { IFlexNumber } from "../../ui/IFlex";
+import BlockFooter from "../../ui/Block/Footer";
+import Button from "../../ui/Button";
+import { saveSocialMediaSettings } from "../../services/ajax/social-media-settings";
 
 const SCPicker = styled.div`
 	width: 40px;
@@ -80,6 +83,16 @@ function SocialMediaWithProviders() {
 		if (starColorPickerOpen) {
 			setStarColorPickerOpen(false);
 		}
+	};
+
+	const handleSaveSocialMediaSettings = async () => {
+		await saveSocialMediaSettings(settings);
+		Swal.fire({
+			title: "Great!",
+			text: "Your options have been saved",
+			icon: "success",
+			confirmButtonText: "Close"
+		});
 	};
 
 	return (
@@ -421,6 +434,15 @@ function SocialMediaWithProviders() {
 							/>
 						</SCContentSettings>
 					</BlockContentInner>
+					<BlockFooter>
+						<Button
+							primary
+							style={{ fontSize: 20 }}
+							onClick={handleSaveSocialMediaSettings}
+						>
+							Save configuration
+						</Button>
+					</BlockFooter>
 				</Block>
 			</Col>
 			<Col span={13}>

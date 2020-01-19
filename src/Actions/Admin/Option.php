@@ -69,19 +69,45 @@ class Option
      */
     public function sanitizeOptions($options)
     {
-        if (!isset($_POST['action']) || 'update' !== $_POST['action']) {
+        if (!isset($_POST['action']) || ('update' !== $_POST['action'] && 'imageseo_social_media_settings_save' !== $_POST['action'] && 'imageseo_valid_api_key' !== $_POST['action'])) {
             return $options;
         }
 
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
 
-        $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
-        $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
-        $newOptions['default_language_ia'] = isset($options['default_language_ia']) ? $options['default_language_ia'] : 'en';
-        $newOptions['social_media_post_types'] = isset($options['social_media_post_types']) ? $options['social_media_post_types'] : [];
+        switch ($_POST['action']) {
+            case 'update':
+                $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
+                $newOptions['active_rename_write_upload'] = isset($options['active_rename_write_upload']) ? 1 : 0;
+                $newOptions['default_language_ia'] = isset($options['default_language_ia']) ? $options['default_language_ia'] : 'en';
+                $newOptions['social_media_post_types'] = isset($options['social_media_post_types']) ? $options['social_media_post_types'] : [];
+                $newOptions['social_media_type'] = isset($options['social_media_type']) ? $options['social_media_type'] : [];
 
-        set_transient('imageseo_success_settings', 1, 60);
+                set_transient('imageseo_success_settings', 1, 60);
+                break;
+            case 'imageseo_valid_api_key':
+                $newOptions['api_key'] = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : $options['api_key'];
+                break;
+            case 'imageseo_social_media_settings_save':
+                $keys = ['layout',
+                    'textColor',
+                    'contentBackgroundColor',
+                    'starColor',
+                    'defaultBgImg', ];
+                $keysBool = ['visibilitySubTitle',
+                    'visibilityRating', ];
+
+                foreach ($keys as $key) {
+                    $newOptions['social_media_settings'][$key] = isset($_POST[$key]) ? sanitize_text_field($_POST[$key]) : $options['social_media_settings'][$key];
+                }
+
+                foreach ($keysBool as $key) {
+                    $newOptions['social_media_settings'][$key] = isset($_POST[$key]) && 'true' === $_POST[$key] ? true : false;
+                }
+
+                break;
+        }
 
         return $newOptions;
     }

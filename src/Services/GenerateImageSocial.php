@@ -51,12 +51,17 @@ class GenerateImageSocial
             'guid'           => $result['url'],
         ];
 
-        $attachmenthId = wp_insert_attachment($attachment, $result['file']);
+        $attachmentId = wp_insert_attachment($attachment, $result['file']);
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        $attachmentData = wp_generate_attachment_metadata($attachmenthId, $result['file']);
+        $attachmentData = wp_generate_attachment_metadata($attachmentId, $result['file']);
 
-        wp_update_attachment_metadata($attachmenthId, $attachmentData);
+        wp_update_attachment_metadata($attachmentId, $attachmentData);
+
+        return [
+            'file_infos'    => $result,
+            'attachment_id' => $attachmentId,
+        ];
     }
 }
