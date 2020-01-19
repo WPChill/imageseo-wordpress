@@ -14,6 +14,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once __DIR__ . '/../../imageseo-php/vendor/autoload.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 use ImageSeoWP\Context;
@@ -27,7 +28,8 @@ define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-define('IMAGESEO_API_URL', 'https://api.imageseo.io');
+// define('IMAGESEO_API_URL', 'https://api.imageseo.io');
+define('IMAGESEO_API_URL', 'http://devapi.imageseo.ngrok.io');
 
 define('IMAGESEO_DIRURL', plugin_dir_url(__FILE__));
 define('IMAGESEO_URL_DIST', IMAGESEO_DIRURL . 'dist');

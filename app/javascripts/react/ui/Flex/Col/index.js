@@ -13,8 +13,8 @@ const SCCol = styled(SCResponsive)`
         
     ${props =>
 		!isNil(props.gutter) && props.gutter > 0
-			? `margin:${props.gutter}px;`
-			: `margin:${props.theme.gutter}px;`}
+			? `margin-left:${props.gutter}px; margin-right:${props.gutter}px;`
+			: `margin-left:${props.theme.gutter}px; margin-right:${props.theme.gutter}px;`}
 
     ${props =>
 		!isNil(props.span) && props.span > 0
@@ -48,7 +48,10 @@ const SCCol = styled(SCResponsive)`
 
 
     ${props => !isNil(props.flex) && `flex:${props.flex}`}
-    ${props => !isNil(props.auto) && `width:auto`}
+	${props => !isNil(props.auto) && `width:auto`}
+	&:first-child{
+		margin-left:0;
+	}
 `;
 
 function Col({ style = {}, children, ...rest }) {

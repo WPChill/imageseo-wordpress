@@ -1,6 +1,7 @@
 .imageseo-media {
 	&__container {
 		display: flex;
+		box-shadow: 0 10px 18px 0 rgba(0, 0, 0, 0.1);
 		&--preview {
 			height: 300px;
 		}
@@ -10,7 +11,9 @@
 
 		&__content {
 			flex: 1;
-			padding: 20px;
+			padding: 25px;
+			display: flex;
+			flex-direction: column;
 		}
 		&--open-graph {
 			width: 1200px;
@@ -42,6 +45,18 @@
 			font-size: 30px;
 			color: #000;
 			line-height: 1.5;
+		}
+		&__sub-title {
+			font-size: 20px;
+			color: #000;
+			line-height: 1.5;
+			padding-top: 15px;
+		}
+		&__stars {
+			margin-top: auto;
+			svg {
+				margin-right: 5px;
+			}
 		}
 	}
 }

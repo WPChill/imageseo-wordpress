@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { isNull } from "lodash";
 import styled from "styled-components";
 import classNames from "classnames";
@@ -22,10 +22,12 @@ const toDataUrl = (url, callback) => {
 function SocialMediaImagePreview() {
 	const { state: settings } = useContext(SocialSettingsContext);
 	const [backgroundImage, setBackgroundImage] = useState(null);
-	toDataUrl(
-		"http://imageseo.local/wp-content/uploads/2020/01/recrutement-developpeur-2-1024x768-1.jpg",
-		base64 => setBackgroundImage(base64)
-	);
+
+	useEffect(() => {
+		toDataUrl(settings.defaultBgImg, base64 => setBackgroundImage(base64));
+	}, [settings.defaultBgImg]);
+
+	const stars = [1, 2, 3, 4, 5];
 	return (
 		<>
 			<div
@@ -62,7 +64,33 @@ function SocialMediaImagePreview() {
 						className="imageseo-media__content__title"
 						style={{ color: settings.textColor }}
 					>
-						Let's go bobby
+						Lorem ipsum (post_title)
+					</div>
+					<div
+						className="imageseo-media__content__sub-title"
+						style={{ color: settings.textColor }}
+					>
+						Sub title (like price)
+					</div>
+					<div className="imageseo-media__content__stars">
+						{stars.map((itm, key) => {
+							return (
+								<svg
+									key={`star_${key}`}
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill={`${settings.starColor}`}
+									stroke={`${settings.starColor}`}
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+								</svg>
+							);
+						})}
 					</div>
 				</div>
 			</div>

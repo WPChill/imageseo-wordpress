@@ -65,8 +65,15 @@ if ($percentLoose >= 2) {
         </div>
         
         <form method="post" id="mainform" action="<?php echo esc_url(admin_url('options.php')); ?>">
+            <div class="imageseo-flex">
+                <div class="fl-1 imageseo-mr-3">
+                    <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/settings.php'; ?>
+                </div>
+                <div class="fl-1">
+                    <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/social-media.php'; ?>
+                </div>
+            </div>
             <?php
-            include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/settings.php';
 
             settings_fields(IMAGESEO_OPTION_GROUP);
             submit_button();

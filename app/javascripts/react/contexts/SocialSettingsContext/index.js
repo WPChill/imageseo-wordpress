@@ -23,7 +23,11 @@ const SocialSettingsContextProvider = ({ children }) => {
 			layout: "CARD_LEFT",
 			textColor: "#000000",
 			contentBackgroundColor: "#ffffff",
-			backgroundImage: null
+			starColor: "#F8CA00",
+			backgroundImage: null,
+			visibilitySubTitle: true,
+			visibilityRating: true,
+			defaultBgImg: `${IMAGESEO_URL_DIST}/images/default_image.png`
 		};
 	};
 	const [state, dispatch] = useReducer(reducer, getInitialState());

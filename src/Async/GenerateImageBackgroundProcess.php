@@ -24,11 +24,8 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
         $word = str_word_count(strip_tags($post->post_content));
         $minutes = floor($word / 200);
 
-        wp_remote_post(site_url(sprintf('imageseo/generate-social-media/%s', $item['id'])), [
-            'method'      => 'POST',
-            'body'        => [
-                'api_key' => imageseo_get_api_key(),
-            ],
+        imageseo_get_service('GenerateImageSocial')->generate($post->post_title, [
+            'title' => $post->post_title,
         ]);
 
         return false;
