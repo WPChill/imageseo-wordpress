@@ -12,6 +12,8 @@ import BlockContentInner, {
 import SocialSettingsContextProvider, {
 	SocialSettingsContext
 } from "../../contexts/SocialSettingsContext";
+import SubTitle from "../../ui/Block/Subtitle";
+import IFlex, { IFlexNumber } from "../../ui/IFlex";
 
 const SCPicker = styled.div`
 	width: 40px;
@@ -23,6 +25,11 @@ const SCPicker = styled.div`
 	}
 `;
 
+const SCContentSettings = styled.div`
+	border-left: 1px solid #3139cc;
+	padding-left: 15px;
+`;
+
 function SocialMediaWithProviders() {
 	const { state: settings, dispatch } = useContext(SocialSettingsContext);
 	const [currentTextColor, setCurrentTextColor] = useState(
@@ -31,52 +38,53 @@ function SocialMediaWithProviders() {
 	const [currentBackgroundColor, setCurrentBackgroundColor] = useState(
 		settings.contentBackgroundColor
 	);
+	const [currentStarColor, setCurrentStarColor] = useState(
+		settings.starColor
+	);
+
 	const [textColorPickerOpen, setTextColorPickerOpen] = useState(false);
 	const [backgroundColorPickerOpen, setBackgroundColorPickerOpen] = useState(
 		false
 	);
+	const [starColorPickerOpen, setStarColorPickerOpen] = useState(false);
 
-	const handleClickTextColorPicker = () => {
-		setTextColorPickerOpen(true);
-		document.addEventListener("keydown", handleKeyDownTextColorPicker);
+	const handleOpenColorPicker = type => {
+		switch (type) {
+			case "textColor":
+				setTextColorPickerOpen(true);
+				break;
+			case "contentBackgroundColor":
+				setBackgroundColorPickerOpen(true);
+				break;
+			case "starColor":
+				setStarColorPickerOpen(true);
+				break;
+		}
+		document.addEventListener("keydown", handleKeyDownColorPicker);
 	};
 
-	const handleCloseTextColorPicker = () => {
-		document.removeEventListener("keydown", handleKeyDownTextColorPicker);
-		setTextColorPickerOpen(false);
-	};
-
-	const handleKeyDownTextColorPicker = e => {
+	const handleKeyDownColorPicker = e => {
 		if (e.charCode == 13 || e.keyCode == 13) {
-			handleCloseTextColorPicker();
+			handleCloseColorPicker();
 		}
 	};
 
-	const handleClickBackgroundColorPicker = () => {
-		setBackgroundColorPickerOpen(true);
-		document.addEventListener(
-			"keydown",
-			handleKeyDownBackgroundColorPicker
-		);
-	};
-
-	const handleCloseBackgroundColorPicker = () => {
-		document.removeEventListener(
-			"keydown",
-			handleKeyDownBackgroundColorPicker
-		);
-		setBackgroundColorPickerOpen(false);
-	};
-
-	const handleKeyDownBackgroundColorPicker = e => {
-		if (e.charCode == 13 || e.keyCode == 13) {
-			handleCloseBackgroundColorPicker();
+	const handleCloseColorPicker = () => {
+		document.removeEventListener("keydown", handleKeyDownColorPicker);
+		if (textColorPickerOpen) {
+			setTextColorPickerOpen(false);
+		}
+		if (backgroundColorPickerOpen) {
+			setBackgroundColorPickerOpen(false);
+		}
+		if (starColorPickerOpen) {
+			setStarColorPickerOpen(false);
 		}
 	};
 
 	return (
 		<Row>
-			<Col span={12}>
+			<Col span={11} gutter={16}>
 				<Block>
 					<BlockContentInner isHead>
 						<BlockContentInnerTitle>
@@ -84,144 +92,348 @@ function SocialMediaWithProviders() {
 						</BlockContentInnerTitle>
 					</BlockContentInner>
 					<BlockContentInner>
-						<div className="imageseo-mb-3">
-							<label htmlFor="layout" className="imageseo-label">
-								Layout
+						<SubTitle>Look & Feel</SubTitle>
+						<SCContentSettings>
+							<div className="imageseo-mb-3">
+								<label
+									htmlFor="layout"
+									className="imageseo-label"
+								>
+									Layout
+								</label>
+								<select
+									id="layout"
+									value={settings.layout}
+									onChange={event =>
+										dispatch({
+											type: "UPDATE_OPTION",
+											payload: {
+												key: "layout",
+												value: event.target.value
+											}
+										})
+									}
+								>
+									<option value="CARD_LEFT">Card left</option>
+									<option value="CARD_RIGHT">
+										Card right
+									</option>
+								</select>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<SCPicker
+											style={{
+												backgroundColor: currentTextColor
+											}}
+											onClick={() =>
+												handleOpenColorPicker(
+													"textColor"
+												)
+											}
+										/>
+										{textColorPickerOpen && (
+											<div
+												style={{
+													position: "absolute",
+													zIndex: "2"
+												}}
+											>
+												<div
+													style={{
+														position: "fixed",
+														top: "0px",
+														right: "0px",
+														bottom: "0px",
+														left: "0px"
+													}}
+													onClick={
+														handleCloseColorPicker
+													}
+												/>
+												<SketchPicker
+													disableAlpha={true}
+													color={currentTextColor}
+													onChange={color =>
+														setCurrentTextColor(
+															color.hex
+														)
+													}
+													onChangeComplete={color => {
+														dispatch({
+															type:
+																"UPDATE_OPTION",
+															payload: {
+																key:
+																	"textColor",
+																value: color.hex
+															}
+														});
+													}}
+												/>
+											</div>
+										)}
+									</div>
+									<IFlexNumber number={1}>
+										<label className="imageseo-label">
+											Text color
+										</label>
+										<p>
+											You can change the color of all the
+											text on the card
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<SCPicker
+											style={{
+												backgroundColor: currentBackgroundColor
+											}}
+											onClick={() =>
+												handleOpenColorPicker(
+													"contentBackgroundColor"
+												)
+											}
+										/>
+										{backgroundColorPickerOpen && (
+											<div
+												style={{
+													position: "absolute",
+													zIndex: "2"
+												}}
+											>
+												<div
+													style={{
+														position: "fixed",
+														top: "0px",
+														right: "0px",
+														bottom: "0px",
+														left: "0px"
+													}}
+													onClick={
+														handleCloseColorPicker
+													}
+												/>
+												<SketchPicker
+													disableAlpha={true}
+													color={
+														currentBackgroundColor
+													}
+													onChange={color =>
+														setCurrentBackgroundColor(
+															color.hex
+														)
+													}
+													onChangeComplete={color => {
+														dispatch({
+															type:
+																"UPDATE_OPTION",
+															payload: {
+																key:
+																	"contentBackgroundColor",
+																value: color.hex
+															}
+														});
+													}}
+												/>
+											</div>
+										)}
+									</div>
+									<IFlexNumber number={1}>
+										<label className="imageseo-label">
+											Background color
+										</label>
+										<p>
+											You can change the background color
+											of all the text on the card
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<SCPicker
+											style={{
+												backgroundColor: currentStarColor
+											}}
+											onClick={() =>
+												handleOpenColorPicker(
+													"starColor"
+												)
+											}
+										/>
+										{starColorPickerOpen && (
+											<div
+												style={{
+													position: "absolute",
+													zIndex: "2"
+												}}
+											>
+												<div
+													style={{
+														position: "fixed",
+														top: "0px",
+														right: "0px",
+														bottom: "0px",
+														left: "0px"
+													}}
+													onClick={
+														handleCloseColorPicker
+													}
+												/>
+												<SketchPicker
+													disableAlpha={true}
+													color={currentStarColor}
+													onChange={color =>
+														setCurrentStarColor(
+															color.hex
+														)
+													}
+													onChangeComplete={color => {
+														dispatch({
+															type:
+																"UPDATE_OPTION",
+															payload: {
+																key:
+																	"starColor",
+																value: color.hex
+															}
+														});
+													}}
+												/>
+											</div>
+										)}
+									</div>
+									<IFlexNumber number={1}>
+										<label className="imageseo-label">
+											Star color
+										</label>
+										<p>You can change the star color</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+						</SCContentSettings>
+						<SubTitle>Visibility</SubTitle>
+						<SCContentSettings>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilitySubTitle"
+											id="visibilitySubTitle"
+											checked={
+												settings.visibilitySubTitle
+											}
+											value={settings.visibilitySubTitle}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key:
+															"visibilitySubTitle",
+														value: !settings.visibilitySubTitle
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilitySubTitle"
+											className="imageseo-label"
+										>
+											I want to get the subtitle
+										</label>
+										<p>
+											If you tick this boxe, we will add
+											the reading time of an article or
+											its price depending on the page.
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilityRating"
+											id="visibilityRating"
+											checked={settings.visibilityRating}
+											value={settings.visibilityRating}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key: "visibilityRating",
+														value: !settings.visibilityRating
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilityRating"
+											className="imageseo-label"
+										>
+											I want to get the star rating
+										</label>
+										<p>
+											If you tick this boxe, we will add
+											the stars linked to a review of your
+											product for example.
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+						</SCContentSettings>
+						<SubTitle>Photos</SubTitle>
+						<SCContentSettings>
+							<label
+								htmlFor="defaultBgImg"
+								className="imageseo-label"
+							>
+								Default background image :
 							</label>
-							<select
-								id="layout"
-								value={settings.layout}
-								onChange={event =>
+							<input
+								type="url"
+								name="defaultBgImg"
+								id="defaultBgImg"
+								value={settings.defaultBgImg}
+								style={{ width: "100%" }}
+								placeholder="Please, use an URL"
+								onChange={e =>
 									dispatch({
 										type: "UPDATE_OPTION",
 										payload: {
-											key: "layout",
-											value: event.target.value
+											key: "defaultBgImg",
+											value: e.target.value
 										}
 									})
 								}
-							>
-								<option value="CARD_LEFT">Card left</option>
-								<option value="CARD_RIGHT">Card right</option>
-							</select>
-						</div>
-						<div className="imageseo-mb-3">
-							<label htmlFor="layout" className="imageseo-label">
-								Text color
-							</label>
-							<SCPicker
-								style={{
-									backgroundColor: currentTextColor
-								}}
-								onClick={handleClickTextColorPicker}
 							/>
-							{textColorPickerOpen && (
-								<div
-									style={{
-										position: "absolute",
-										zIndex: "2"
-									}}
-								>
-									<div
-										style={{
-											position: "fixed",
-											top: "0px",
-											right: "0px",
-											bottom: "0px",
-											left: "0px"
-										}}
-										onClick={handleCloseTextColorPicker}
-									/>
-									<SketchPicker
-										disableAlpha={true}
-										color={currentTextColor}
-										onChange={color =>
-											setCurrentTextColor(color.hex)
-										}
-										onChangeComplete={color => {
-											dispatch({
-												type: "UPDATE_OPTION",
-												payload: {
-													key: "textColor",
-													value: color.hex
-												}
-											});
-										}}
-									/>
-								</div>
-							)}
-						</div>
-						<div className="imageseo-mb-3">
-							<label htmlFor="layout" className="imageseo-label">
-								Background color
-							</label>
-							<SCPicker
-								style={{
-									backgroundColor: currentBackgroundColor
-								}}
-								onClick={handleClickBackgroundColorPicker}
-							/>
-							{backgroundColorPickerOpen && (
-								<div
-									style={{
-										position: "absolute",
-										zIndex: "2"
-									}}
-								>
-									<div
-										style={{
-											position: "fixed",
-											top: "0px",
-											right: "0px",
-											bottom: "0px",
-											left: "0px"
-										}}
-										onClick={
-											handleCloseBackgroundColorPicker
-										}
-									/>
-									<SketchPicker
-										disableAlpha={true}
-										color={currentTextColor}
-										onChange={color =>
-											setCurrentBackgroundColor(color.hex)
-										}
-										onChangeComplete={color => {
-											dispatch({
-												type: "UPDATE_OPTION",
-												payload: {
-													key:
-														"contentBackgroundColor",
-													value: color.hex
-												}
-											});
-										}}
-									/>
-								</div>
-							)}
-						</div>
-						<button
-							onClick={() => {
-								toJpeg(
-									document.getElementById(
-										"imageseo-preview-image"
-									),
-									{
-										width: 1200,
-										height: 630
-									}
-								).then(function(dataUrl) {
-									jQuery("#image_base64").val(dataUrl);
-								});
-							}}
-						>
-							Generate
-						</button>
+						</SCContentSettings>
 					</BlockContentInner>
 				</Block>
 			</Col>
-			<Col span={12}>
-				<SocialMediaImagePreview />
+			<Col span={13}>
+				<Block style={{ height: "auto" }}>
+					<BlockContentInner isHead>
+						<BlockContentInnerTitle>
+							<h2>Preview</h2>
+						</BlockContentInnerTitle>
+					</BlockContentInner>
+					<BlockContentInner>
+						<SocialMediaImagePreview />
+					</BlockContentInner>
+				</Block>
 			</Col>
 		</Row>
 	);

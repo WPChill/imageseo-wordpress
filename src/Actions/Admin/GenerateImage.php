@@ -12,7 +12,7 @@ class GenerateImage
 {
     public function __construct()
     {
-        $this->uploadImageServices = imageseo_get_service('UploadImage');
+        $this->optionServices = imageseo_get_service('Option');
         $this->process = new GenerateImageBackgroundProcess();
     }
 
@@ -27,10 +27,16 @@ class GenerateImage
 
     public function generateSocialMedia($post_id, $post, $update)
     {
-        // error_log('WP INSERT POST : ' . $post_id);
-        // if (wp_is_post_revision($post_id)) {
-        //     return;
-        // }
+        if (wp_is_post_revision($post_id)) {
+            return;
+        }
+
+        $postTypesAuthorized = $this->optionServices->getOption('social_media_post_types');
+        if (!in_array($post->post_type, $postTypesAuthorized, true)) {
+            return;
+        }
+
+        error_log('WP INSERT POST : ' . $post->post_type);
 
         // $this->process->push_to_queue([
         //     'id' => $post_id,

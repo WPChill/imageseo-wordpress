@@ -16,10 +16,20 @@
 	@import "components/index";
 
 	#submit {
-		@extend .imageseo-btn;
-		color: $blueShady;
-		line-height: 1.2;
-		background-color: $blueCoral;
+		margin: 0 !important;
+		transition: all 0.1s ease-in 0s !important;
+		display: inline-block !important;
+		border: none !important;
+		border-radius: 4px !important;
+		padding: 14px 30px !important;
+		cursor: pointer !important;
+		text-decoration: none !important;
+		opacity: 1 !important;
+		font-weight: bold !important;
+		font-size: 20px !important;
+		color: $blueShady !important;
+		line-height: 1.2 !important;
+		background-color: $blueCoral !important;
 	}
 }
 

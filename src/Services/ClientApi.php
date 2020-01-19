@@ -69,4 +69,16 @@ class ClientApi
 
         return $response['result'];
     }
+
+    /**
+     * @param array $data
+     *
+     * @return Image
+     */
+    public function generateSocialMediaImage($data)
+    {
+        list($body) = $this->getClient()->getResource('SocialMedia')->generateSocialMediaImage($data);
+
+        return $body;
+    }
 }

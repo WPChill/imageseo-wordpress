@@ -20,6 +20,7 @@ class Option
         'active_rename_write_upload'    => 0,
         'default_language_ia'           => 'en',
         'alt_template_default'          => AltFormat::ALT_SIMPLE,
+        'social_media_post_types'       => [],
     ];
 
     /**
