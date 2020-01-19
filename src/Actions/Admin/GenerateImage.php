@@ -22,12 +22,20 @@ class GenerateImage
             return;
         }
 
-        add_action('wp_insert_post', [$this, 'generateSocialMedia'], 10, 3);
+        add_action('transition_post_status', [$this, 'generateSocialMedia'], 10, 3);
     }
 
-    public function generateSocialMedia($post_id, $post, $update)
+    public function generateSocialMedia($new_status, $old_status, $post)
     {
-        if (wp_is_post_revision($post_id)) {
+        if (defined('REST_REQUEST') && REST_REQUEST) {
+            return;
+        }
+
+        if ('publish' !== $new_status || 'publish' === $old_status) {
+            return;
+        }
+
+        if (wp_is_post_revision($post->ID)) {
             return;
         }
 
@@ -36,12 +44,10 @@ class GenerateImage
             return;
         }
 
-        error_log('WP INSERT POST : ' . $post->post_type);
+        $this->process->push_to_queue([
+            'id' => $post->ID,
+        ]);
 
-        // $this->process->push_to_queue([
-        //     'id' => $post_id,
-        // ]);
-
-        // $this->process->save()->dispatch();
+        $this->process->save()->dispatch();
     }
 }

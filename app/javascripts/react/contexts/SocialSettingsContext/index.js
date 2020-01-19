@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { merge } from "lodash";
+import { merge, get } from "lodash";
 
 function reducer(state, { type, payload }) {
 	switch (type) {
@@ -20,16 +20,32 @@ const SocialSettingsContext = createContext(null);
 const SocialSettingsContextProvider = ({ children }) => {
 	const getInitialState = () => {
 		return {
-			layout: "CARD_LEFT",
-			textColor: "#000000",
-			contentBackgroundColor: "#ffffff",
-			starColor: "#F8CA00",
-			backgroundImage: null,
-			visibilitySubTitle: true,
-			visibilityRating: true,
-			defaultBgImg: `${IMAGESEO_URL_DIST}/images/default_image.png`
+			layout: get(IMAGESEO_DATA, "SETTINGS.layout", "CARD_LEFT"),
+			textColor: get(IMAGESEO_DATA, "SETTINGS.textColor", "#000000"),
+			contentBackgroundColor: get(
+				IMAGESEO_DATA,
+				"SETTINGS.contentBackgroundColor",
+				"#ffffff"
+			),
+			starColor: get(IMAGESEO_DATA, "SETTINGS.starColor", "#F8CA00"),
+			visibilitySubTitle: get(
+				IMAGESEO_DATA,
+				"SETTINGS.visibilitySubTitle",
+				true
+			),
+			visibilityRating: get(
+				IMAGESEO_DATA,
+				"SETTINGS.visibilityRating",
+				true
+			),
+			defaultBgImg: get(
+				IMAGESEO_DATA,
+				"SETTINGS.defaultBgImg",
+				`${IMAGESEO_URL_DIST}/images/default_image.png`
+			)
 		};
 	};
+
 	const [state, dispatch] = useReducer(reducer, getInitialState());
 
 	return (
