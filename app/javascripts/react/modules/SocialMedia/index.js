@@ -415,6 +415,11 @@ function SocialMediaWithProviders() {
 							>
 								Default background image :
 							</label>
+							<p>
+								This image will only be used if your content
+								does not contain images.
+							</p>
+							<span>URL : </span>
 							<input
 								type="url"
 								name="defaultBgImg"

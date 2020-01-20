@@ -24,6 +24,10 @@ class SocialMediaHead
             $this->compatibilityYoast();
 
             return;
+        } elseif (is_plugin_active('wp-seopress/seopress.php')) {
+            $this->compatibilitySEOPress();
+
+            return;
         }
 
         add_action('wp_head', [$this, 'openGraph'], 1);
@@ -52,6 +56,70 @@ class SocialMediaHead
         add_filter('wpseo_og_og_image_width', [$this, 'getWidthOpenGraph']);
         add_filter('wpseo_og_og_image_height', [$this, 'getHeightOpenGraph']);
         add_filter('wpseo_twitter_image', [$this, 'getImageUrlOpenGraph']);
+    }
+
+    public function compatibilitySEOpress()
+    {
+        add_filter('seopress_social_og_thumb', [$this, 'replaceOG']);
+        add_filter('seopress_social_twitter_card_thumb', [$this, 'replaceTwitter']);
+        add_filter('seopress_social_twitter_card_summary', [$this, 'replaceTwitterCard']);
+    }
+
+    public function replaceOG($html)
+    {
+        $regexIMG = "#(\"|\')og:image(\"|\') content=(\"|\')(?<imgUrl>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexIMG, $html, $matches);
+        if (empty($matches['imgUrl'])) {
+            return $html;
+        }
+
+        $regexWIDTH = "#(\"|\')og:image:width(\"|\') content=(\"|\')(?<width>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexWIDTH, $html, $matchesWidth);
+        $regexHEIGHT = "#(\"|\')og:image:height(\"|\') content=(\"|\')(?<height>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexHEIGHT, $html, $matchesHeight);
+
+        $imgUrl = $matches['imgUrl'][0];
+        $width = $matchesWidth['width'][0];
+        $width = $matchesHeight['height'][0];
+
+        $html = str_replace($imgUrl, $this->getImageUrlOpenGraph(), $html);
+        $html = str_replace($width, $this->getWidthOpenGraph(), $html);
+        $html = str_replace($height, $this->getHeightOpenGraph(), $html);
+
+        return $html;
+    }
+
+    public function replaceTwitter($html)
+    {
+        $regexIMG = "#(\"|\')twitter:image(\"|\') content=(\"|\')(?<imgUrl>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexIMG, $html, $matches);
+        $imgUrl = $matches['imgUrl'][0];
+
+        if (!empty($matches['imgUrl'])) {
+            $html = str_replace($imgUrl, $this->getImageUrlOpenGraph(), $html);
+        }
+
+        $regexIMG = "#(\"|\')twitter:image:src(\"|\') content=(\"|\')(?<imgUrl>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexIMG, $html, $matches);
+        $imgUrl = $matches['imgUrl'][0];
+        if (!empty($matches['imgUrl'])) {
+            $html = str_replace($imgUrl, $this->getImageUrlOpenGraph(), $html);
+        }
+
+        return $html;
+    }
+
+    public function replaceTwitterCard($html)
+    {
+        $regexTwitterCard = "#(\"|\')twitter:card(\"|\') content=(\"|\')(?<card>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
+        preg_match_all($regexTwitterCard, $html, $matches);
+
+        $card = $matches['card'][0];
+        if (!empty($matches['card'])) {
+            $html = str_replace($card, 'summary_large_image', $html);
+        }
+
+        return $html;
     }
 
     protected function getAttachmentId($type)

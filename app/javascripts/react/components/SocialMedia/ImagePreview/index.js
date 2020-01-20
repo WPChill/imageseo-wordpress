@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { isNull } from "lodash";
-import styled from "styled-components";
 import classNames from "classnames";
 
 import { SocialSettingsContext } from "../../../contexts/SocialSettingsContext";
@@ -66,32 +65,36 @@ function SocialMediaImagePreview() {
 					>
 						Lorem ipsum (post_title)
 					</div>
-					<div
-						className="imageseo-media__content__sub-title"
-						style={{ color: settings.textColor }}
-					>
-						Sub title (like price)
-					</div>
-					<div className="imageseo-media__content__stars">
-						{stars.map((itm, key) => {
-							return (
-								<svg
-									key={`star_${key}`}
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill={`${settings.starColor}`}
-									stroke={`${settings.starColor}`}
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-								</svg>
-							);
-						})}
-					</div>
+					{settings.visibilitySubTitle && (
+						<div
+							className="imageseo-media__content__sub-title"
+							style={{ color: settings.textColor }}
+						>
+							Sub title (like price)
+						</div>
+					)}
+					{settings.visibilityRating && (
+						<div className="imageseo-media__content__stars">
+							{stars.map((itm, key) => {
+								return (
+									<svg
+										key={`star_${key}`}
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill={`${settings.starColor}`}
+										stroke={`${settings.starColor}`}
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+									</svg>
+								);
+							})}
+						</div>
+					)}
 				</div>
 			</div>
 		</>
