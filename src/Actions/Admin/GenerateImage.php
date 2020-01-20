@@ -23,6 +23,30 @@ class GenerateImage
         }
 
         add_action('transition_post_status', [$this, 'generateSocialMedia'], 10, 3);
+        add_action('admin_post_imageseo_generate_manual_social_media', [$this, 'generateSocialMediaManually']);
+    }
+
+    public function generateSocialMediaManually()
+    {
+        if (!isset($_GET['post_id'])) {
+            wp_redirect(admin_url('edit.php'));
+
+            return;
+        }
+
+        $post = get_post($_GET['post_id']);
+        $postTypesAuthorized = $this->optionServices->getOption('social_media_post_types');
+        if (!in_array($post->post_type, $postTypesAuthorized, true)) {
+            return;
+        }
+
+        $this->process->push_to_queue([
+            'id' => $_GET['post_id'],
+        ]);
+
+        $this->process->save()->dispatch();
+
+        wp_redirect(admin_url('edit.php'));
     }
 
     public function generateSocialMedia($new_status, $old_status, $post)

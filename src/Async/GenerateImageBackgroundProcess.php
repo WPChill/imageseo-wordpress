@@ -20,16 +20,25 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
     protected function getSubTitle($post)
     {
         switch ($post->post_type) {
+            case 'product':
+                if (!function_exists('wc_get_product')) {
+                    return '';
+                }
+
+                $product = wc_get_product($post->ID);
+
+                return html_entity_decode(sprintf('%s%s', $product->get_price(), get_woocommerce_currency_symbol()));
+                break;
             default:
                 return sprintf(__('%s min read', 'imageseo'), $this->getMinutes($post->post_content));
         }
     }
 
-    protected function getVisibilityRating($post)
+    protected function getVisibilityRating($post, $settings)
     {
         switch ($post->post_type) {
             case 'product':
-
+                return $settings['visibilityRating'];
             default:
                 return false;
         }
@@ -55,11 +64,20 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
         $siteTitle = get_bloginfo('name');
         $subTitle = $this->getSubTitle($post);
 
-        foreach ($medias as $media) {
-            $filename = apply_filters('imageseo_filename_social_media_image', sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media), $item['id'], $media);
-            $featuredImgUrl = get_the_post_thumbnail_url(get_the_ID(), 'full');
+        $visibilityRating = $this->getVisibilityRating($post, $settings);
 
-            if ($featuredImgUrl) {
+        $nbGoodStars = 0;
+        if ($visibilityRating && function_exists('wc_get_product')) {
+            $product = wc_get_product($post->ID);
+            $nbGoodStars = ceil($product->get_average_rating());
+        }
+
+        foreach ($medias as $media) {
+            $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
+            $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);
+            $featuredImgUrl = get_the_post_thumbnail_url($item['id'], 'full');
+
+            if (!$featuredImgUrl) {
                 $featuredImgUrl = $settings['defaultBgImg'];
             }
 
@@ -71,9 +89,10 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
                 'contentBackgroundColor'   => str_replace('#', '', $settings['contentBackgroundColor']),
                 'starColor'                => str_replace('#', '', $settings['starColor']),
                 'visibilitySubTitle'       => $settings['visibilitySubTitle'],
-                'visibilityRating'         => $settings['visibilityRating'],
+                'visibilityRating'         => $visibilityRating,
                 'layout'                   => $settings['layout'],
                 'bgImgUrl'                 => $featuredImgUrl,
+                'nbGoodStars'              => $nbGoodStars,
             ]);
 
             if (isset($result['attachment_id'])) {
