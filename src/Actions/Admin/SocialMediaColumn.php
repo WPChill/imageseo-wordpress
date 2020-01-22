@@ -59,9 +59,9 @@ class SocialMediaColumn
                 $process = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
                 if (!$url && !$process) {
                     ?>
-                    <p><?php _e('No image', 'imageseo'); ?></p>
+                    <p><?php _e('No social image', 'imageseo'); ?></p>
                     <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
-                        <?php _e('Generate image', 'imageseo'); ?>
+                        <?php _e('Generate', 'imageseo'); ?>
                     </a>
                     <?php
                 } elseif (!$url && $process) {
@@ -81,7 +81,7 @@ class SocialMediaColumn
                     </div>
                     
                     <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
-                        <?php _e('Regenerate image', 'imageseo'); ?>
+                        <?php _e('Regenerate', 'imageseo'); ?>
                     </a><?php
                 }
                 break;

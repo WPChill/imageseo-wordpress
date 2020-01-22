@@ -30,11 +30,21 @@ $socialMedias = SocialMedia::getSocialMedias();
         <h3><?php _e('Settings - Social media', 'imageseo'); ?></h3>
         <p><?php echo sprintf(__('These options concern the generation of images for social media. If you want to configure your images, %sgo to the social media option page.%s', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
     </div>
-    <div class="imageseo-block__inner">        
+    <div class="imageseo-block__inner">
+        <div class="imageseo-block imageseo-block--secondary imageseo-mb-1">
+            <div class="imageseo-block__inner" style="padding:15px;">
+                <p>
+                    <strong><?php _e('If you are working locally : '); ?></strong>
+                    <?php _e('We do not advise you to enable the feature . We will not have access to your images locally and you will have to regenerate them to get good images.', 'imageseo'); ?>
+                </p>
+            </div>
+        </div>
         <div>
-            <label class="imageseo-label">
-                <?php echo esc_html($options_available['social_media_post_types']['label']); ?>
-            </label>
+            <p>
+                <strong>
+                    <?php echo esc_html($options_available['social_media_post_types']['label']); ?>
+                </strong>
+            </p>
             <p><?php echo $options_available['social_media_post_types']['description']; //phpcs:ignore?></p>
 
             <?php foreach ($postTypes as $postType): ?>
@@ -51,9 +61,11 @@ $socialMedias = SocialMedia::getSocialMedias();
             <?php endforeach; ?>
         </div>
         <div class="imageseo-mt-4">
-            <label class="imageseo-label">
-                <?php echo esc_html($options_available['social_media_type']['label']); ?>
-            </label>
+            <p>
+                <strong>
+                    <?php echo esc_html($options_available['social_media_type']['label']); ?>
+                </strong>
+            </p>
             <p><?php echo $options_available['social_media_type']['description']; //phpcs:ignore?></p>
 
             <?php foreach ($socialMedias as $media): ?>
