@@ -53,21 +53,34 @@ class SocialMediaColumn
     {
         switch ($column) {
             case 'imageseo_social_media':
+                $postType = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
+                $adminGenerateUrl = admin_url(sprintf('admin-post.php?action=imageseo_generate_manual_social_media&post_id=%s&post_type=%s', $postId, $postType));
                 $url = $this->getPreviewImageUrlSocialMedia($postId);
-                if (!$url) {
+                $process = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
+                if (!$url && !$process) {
                     ?>
                     <p><?php _e('No image', 'imageseo'); ?></p>
-                    <a href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_generate_manual_social_media&post_id=' . $postId)); ?>" class="button">
+                    <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
                         <?php _e('Generate image', 'imageseo'); ?>
                     </a>
                     <?php
-                } else {
+                } elseif (!$url && $process) {
                     ?>
+                     <img
+                        src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
+                        style="animation:imageseo-rotation 1s infinite linear;"
+                    />
+                    <?php _e('Current loading... Reload the page.', 'imageseo'); ?>
+                    <?php
+                } elseif ($url) {
+                    if ($process) {
+                        delete_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
+                    } ?>
                     <div>
-                        <img src="<?php echo $url; ?>" width="100" height="100" style="object-fit:contain;" />
+                        <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>
                     
-                    <a href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_generate_manual_social_media&post_id=' . $postId)); ?>" class="button" style="display:inline-block;">
+                    <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
                         <?php _e('Regenerate image', 'imageseo'); ?>
                     </a><?php
                 }

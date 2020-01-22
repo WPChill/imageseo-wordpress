@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { isNull } from "lodash";
+import { isNull, isEmpty } from "lodash";
 import classNames from "classnames";
 
 import { SocialSettingsContext } from "../../../contexts/SocialSettingsContext";
@@ -16,6 +16,18 @@ const toDataUrl = (url, callback) => {
 	xhr.open("GET", url);
 	xhr.responseType = "blob";
 	xhr.send();
+};
+
+const hexToRGB = (hex, alpha) => {
+	var r = parseInt(hex.slice(1, 3), 16),
+		g = parseInt(hex.slice(3, 5), 16),
+		b = parseInt(hex.slice(5, 7), 16);
+
+	if (alpha) {
+		return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+	} else {
+		return "rgb(" + r + ", " + g + ", " + b + ")";
+	}
 };
 
 function SocialMediaImagePreview() {
@@ -58,7 +70,25 @@ function SocialMediaImagePreview() {
 					}}
 				/>
 
-				<div className="imageseo-media__container__content">
+				<div
+					className={classNames(
+						{
+							"imageseo-media__container__content--center":
+								settings.textAlignment === "center",
+							"imageseo-media__container__content--top":
+								settings.textAlignment === "top",
+							"imageseo-media__container__content--bottom":
+								settings.textAlignment === "bottom"
+						},
+						"imageseo-media__container__content"
+					)}
+				>
+					{!isEmpty(settings.logoUrl) && (
+						<img
+							className="imageseo-media__content__logo"
+							src={settings.logoUrl}
+						/>
+					)}
 					<div
 						className="imageseo-media__content__title"
 						style={{ color: settings.textColor }}
@@ -70,8 +100,22 @@ function SocialMediaImagePreview() {
 							className="imageseo-media__content__sub-title"
 							style={{ color: settings.textColor }}
 						>
-							Sub title (like price)
+							Sub title (like price or author)
 						</div>
+					)}
+					{settings.visibilitySubTitleTwo && (
+						<div
+							className="imageseo-media__content__sub-title-two"
+							style={{ color: hexToRGB(settings.textColor, 0.5) }}
+						>
+							Sub title 2 (like reading time)
+						</div>
+					)}
+					{settings.visibilityAvatar && (
+						<img
+							className="imageseo-media__content__avatar"
+							src={`${IMAGESEO_URL_DIST}/images/avatar-default.jpg`}
+						/>
 					)}
 					{settings.visibilityRating && (
 						<div className="imageseo-media__content__stars">

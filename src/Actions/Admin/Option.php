@@ -93,10 +93,13 @@ class Option
                 $keys = ['layout',
                     'textColor',
                     'contentBackgroundColor',
+                    'textAlignment',
                     'starColor',
-                    'defaultBgImg', ];
-                $keysBool = ['visibilitySubTitle',
-                    'visibilityRating', ];
+                    'defaultBgImg',
+                    'logoUrl',
+                ];
+
+                $keysBool = ['visibilitySubTitle', 'visibilitySubTitleTwo', 'visibilityAvatar', 'visibilityRating'];
 
                 foreach ($keys as $key) {
                     $newOptions['social_media_settings'][$key] = isset($_POST[$key]) ? sanitize_text_field($_POST[$key]) : $options['social_media_settings'][$key];

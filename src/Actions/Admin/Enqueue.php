@@ -13,11 +13,21 @@ class Enqueue
     public function hooks()
     {
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
+        add_action('admin_enqueue_scripts', [$this, 'adminEnqueueCSS']);
+    }
+
+    public function adminEnqueueCSS($page)
+    {
+        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global-css.css', [], IMAGESEO_VERSION);
+
+        if (!in_array($page, ['edit.php', 'toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options', 'imageseo_page_imageseo-social-media'], true)) {
+            return;
+        }
+
+        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin-css.css', [], IMAGESEO_VERSION);
     }
 
     /**
-     * Register CSS and JS.
-     *
      * @see admin_enqueue_scripts
      *
      * @param string $page
@@ -27,8 +37,6 @@ class Enqueue
         if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options', 'imageseo_page_imageseo-social-media'], true)) {
             return;
         }
-
-        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin-css.css', [], IMAGESEO_VERSION);
 
         if (in_array($page, ['upload.php'], true)) {
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
