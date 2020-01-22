@@ -27,21 +27,53 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 
                 $product = wc_get_product($post->ID);
 
-                return html_entity_decode(sprintf('%s%s', $product->get_price(), get_woocommerce_currency_symbol()));
+                $subTitle = html_entity_decode(sprintf('%s%s', $product->get_price(), get_woocommerce_currency_symbol()));
                 break;
             default:
-                return sprintf(__('%s min read', 'imageseo'), $this->getMinutes($post->post_content));
+                $subTitle = get_the_author_meta('display_name', $post->post_author);
+                break;
         }
+
+        return apply_filters('imageseo_get_sub_title_social_media', $subTitle, $post);
+    }
+
+    protected function getSubTitleTwo($post)
+    {
+        switch ($post->post_type) {
+            case 'product':
+                if (!function_exists('wc_get_product')) {
+                    return '';
+                }
+
+                $product = wc_get_product($post->ID);
+
+                $subTitle = $product->get_review_count();
+                break;
+            default:
+                $subTitle = sprintf(__('%s min read', 'imageseo'), $this->getMinutes($post->post_content));
+                break;
+        }
+
+        return apply_filters('imageseo_get_sub_title_two_social_media', $subTitle, $post);
     }
 
     protected function getVisibilityRating($post, $settings)
     {
         switch ($post->post_type) {
             case 'product':
-                return $settings['visibilityRating'];
+                $visibility = $settings['visibilityRating'];
+                break;
             default:
-                return false;
+                $visibility = false;
+                break;
         }
+
+        return apply_filters('imageseo_get_visibility_rating', $visibility, $post);
+    }
+
+    protected function getAvatarUrl($post)
+    {
+        return apply_filters('imageseo_get_avatar_url', get_avatar_url($post->post_author));
     }
 
     /**
@@ -63,6 +95,7 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 
         $siteTitle = get_bloginfo('name');
         $subTitle = $this->getSubTitle($post);
+        $subTitleTwo = $this->getSubTitleTwo($post);
 
         $visibilityRating = $this->getVisibilityRating($post, $settings);
 
@@ -71,28 +104,37 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             $product = wc_get_product($post->ID);
             $nbGoodStars = ceil($product->get_average_rating());
         }
+        $avatarUrl = $this->getAvatarUrl($post);
 
+        $featuredImgUrl = get_the_post_thumbnail_url($item['id'], 'full');
+
+        if (!$featuredImgUrl) {
+            $featuredImgUrl = $settings['defaultBgImg'];
+        }
+
+        set_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']), 1, 20);
         foreach ($medias as $media) {
             $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
             $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);
-            $featuredImgUrl = get_the_post_thumbnail_url($item['id'], 'full');
-
-            if (!$featuredImgUrl) {
-                $featuredImgUrl = $settings['defaultBgImg'];
-            }
 
             $result = imageseo_get_service('GenerateImageSocial')->generate($filename, [
-                'title'                    => $post->post_title,
-                'subTitle'                 => $subTitle,
-                'layout'                   => $settings['layout'],
-                'textColor'                => str_replace('#', '', $settings['textColor']),
-                'contentBackgroundColor'   => str_replace('#', '', $settings['contentBackgroundColor']),
-                'starColor'                => str_replace('#', '', $settings['starColor']),
-                'visibilitySubTitle'       => $settings['visibilitySubTitle'],
-                'visibilityRating'         => $visibilityRating,
-                'layout'                   => $settings['layout'],
-                'bgImgUrl'                 => $featuredImgUrl,
-                'nbGoodStars'              => $nbGoodStars,
+                'title'                            => $post->post_title,
+                'subTitle'                         => $subTitle,
+                'subTitleTwo'                      => $subTitleTwo,
+                'layout'                           => $settings['layout'],
+                'textColor'                        => str_replace('#', '', $settings['textColor']),
+                'contentBackgroundColor'           => str_replace('#', '', $settings['contentBackgroundColor']),
+                'starColor'                        => str_replace('#', '', $settings['starColor']),
+                'visibilitySubTitle'               => $settings['visibilitySubTitle'],
+                'visibilitySubTitleTwo'            => $settings['visibilitySubTitleTwo'],
+                'visibilityAvatar'                 => $settings['visibilityAvatar'],
+                'visibilityRating'                 => $visibilityRating,
+                'layout'                           => $settings['layout'],
+                'textAlignment'                    => $settings['textAlignment'],
+                'logoUrl'                          => $settings['logoUrl'],
+                'avatarUrl'                        => $avatarUrl,
+                'bgImgUrl'                         => $featuredImgUrl,
+                'nbGoodStars'                      => $nbGoodStars,
             ]);
 
             if (isset($result['attachment_id'])) {

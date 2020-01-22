@@ -33,15 +33,31 @@ const SocialSettingsContextProvider = ({ children }) => {
 				"SETTINGS.visibilitySubTitle",
 				true
 			),
+			visibilitySubTitleTwo: get(
+				IMAGESEO_DATA,
+				"SETTINGS.visibilitySubTitleTwo",
+				true
+			),
+			visibilityAvatar: get(
+				IMAGESEO_DATA,
+				"SETTINGS.visibilityAvatar",
+				true
+			),
 			visibilityRating: get(
 				IMAGESEO_DATA,
 				"SETTINGS.visibilityRating",
-				true
+				false
 			),
 			defaultBgImg: get(
 				IMAGESEO_DATA,
 				"SETTINGS.defaultBgImg",
 				`${IMAGESEO_URL_DIST}/images/default_image.png`
+			),
+			textAlignment: get(IMAGESEO_DATA, "SETTINGS.textAlignment", "top"),
+			logoUrl: get(
+				IMAGESEO_DATA,
+				"SETTINGS.logoUrl",
+				`${IMAGESEO_URL_DIST}/images/default_logo.png`
 			)
 		};
 	};

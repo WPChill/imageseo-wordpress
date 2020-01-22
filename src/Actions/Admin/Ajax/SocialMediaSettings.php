@@ -21,14 +21,20 @@ class SocialMediaSettings
     public function save()
     {
         $socialSettings = [
-            'layout'                 => sanitize_text_field($_POST['layout']),
-            'textColor'              => sanitize_text_field($_POST['textColor']),
-            'contentBackgroundColor' => sanitize_text_field($_POST['contentBackgroundColor']),
-            'starColor'              => sanitize_text_field($_POST['starColor']),
-            'defaultBgImg'           => sanitize_text_field($_POST['defaultBgImg']),
-            'visibilitySubTitle'     => isset($_POST['visibilitySubTitle']) ? true : false,
-            'visibilityRating'       => isset($_POST['visibilityRating']) ? true : false,
+            'layout'                     => sanitize_text_field($_POST['layout']),
+            'textColor'                  => sanitize_text_field($_POST['textColor']),
+            'contentBackgroundColor'     => sanitize_text_field($_POST['contentBackgroundColor']),
+            'starColor'                  => sanitize_text_field($_POST['starColor']),
+            'defaultBgImg'               => sanitize_text_field($_POST['defaultBgImg']),
+            'textAlignment'              => sanitize_text_field($_POST['textAlignment']),
+            'logoUrl'                    => sanitize_text_field($_POST['logoUrl']),
+            'visibilitySubTitle'         => isset($_POST['visibilitySubTitle']) ? true : false,
+            'visibilitySubTitleTwo'      => isset($_POST['visibilitySubTitleTwo']) ? true : false,
+            'visibilityRating'           => isset($_POST['visibilityRating']) ? true : false,
+            'visibilityAvatar'           => isset($_POST['visibilityAvatar']) ? true : false,
         ];
+
+        error_log(serialize($socialSettings));
 
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);

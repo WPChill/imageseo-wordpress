@@ -11,7 +11,8 @@ module.exports = {
 		"api-key": "./app/javascripts/api-key.js",
 		register: "./app/javascripts/register.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
-		"admin-css": "./app/styles/admin.scss"
+		"admin-css": "./app/styles/admin.scss",
+		"admin-global-css": "./app/styles/admin-global.scss"
 	},
 	output: {
 		path: __dirname + "/dist",
@@ -56,7 +57,10 @@ module.exports = {
 		new ExtractTextPlugin({
 			filename: "css/[name].css"
 		}),
-		new CopyWebpackPlugin([{ from: "app/images", to: "images" }])
+		new CopyWebpackPlugin([
+			{ from: "app/images", to: "images" },
+			{ from: "app/fonts", to: "fonts" }
+		])
 	],
 	resolve: {
 		extensions: [".js", ".jsx"]

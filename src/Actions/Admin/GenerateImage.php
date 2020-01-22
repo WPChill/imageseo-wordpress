@@ -28,8 +28,14 @@ class GenerateImage
 
     public function generateSocialMediaManually()
     {
+        $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
+        $redirectUrl = admin_url('edit.php');
+        if ('post' !== $postType) {
+            $redirectUrl .= '?post_type=' . $postType;
+        }
+
         if (!isset($_GET['post_id'])) {
-            wp_redirect(admin_url('edit.php'));
+            wp_redirect($redirectUrl);
 
             return;
         }
@@ -46,7 +52,7 @@ class GenerateImage
 
         $this->process->save()->dispatch();
 
-        wp_redirect(admin_url('edit.php'));
+        wp_redirect($redirectUrl);
     }
 
     public function generateSocialMedia($new_status, $old_status, $post)

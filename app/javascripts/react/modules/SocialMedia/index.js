@@ -134,6 +134,31 @@ function SocialMediaWithProviders() {
 								</select>
 							</div>
 							<div className="imageseo-mb-3">
+								<label
+									htmlFor="textAlignment"
+									className="imageseo-label"
+								>
+									Text alignment
+								</label>
+								<select
+									id="textAlignment"
+									value={settings.textAlignment}
+									onChange={event =>
+										dispatch({
+											type: "UPDATE_OPTION",
+											payload: {
+												key: "textAlignment",
+												value: event.target.value
+											}
+										})
+									}
+								>
+									<option value="top">Top</option>
+									<option value="center">Center</option>
+									<option value="bottom">Bottom</option>
+								</select>
+							</div>
+							<div className="imageseo-mb-3">
 								<IFlex>
 									<div className="imageseo-mr-2">
 										<SCPicker
@@ -365,8 +390,48 @@ function SocialMediaWithProviders() {
 										</label>
 										<p>
 											If you tick this boxe, we will add
+											price product or author depending on
+											the page.
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilitySubTitleTwo"
+											id="visibilitySubTitleTwo"
+											checked={
+												settings.visibilitySubTitleTwo
+											}
+											value={
+												settings.visibilitySubTitleTwo
+											}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key:
+															"visibilitySubTitleTwo",
+														value: !settings.visibilitySubTitleTwo
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilitySubTitleTwo"
+											className="imageseo-label"
+										>
+											I want to get the subtitle 2
+										</label>
+										<p>
+											If you tick this boxe, we will add
 											the reading time of an article or
-											its price depending on the page.
+											the number of reviews.
 										</p>
 									</IFlexNumber>
 								</IFlex>
@@ -401,42 +466,105 @@ function SocialMediaWithProviders() {
 										<p>
 											If you tick this boxe, we will add
 											the stars linked to a review of your
-											product for example.
+											product for example.{" "}
+											<strong>
+												(Only use for WooCommerce
+												Product)
+											</strong>
 										</p>
 									</IFlexNumber>
 								</IFlex>
 							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilityAvatar"
+											id="visibilityAvatar"
+											checked={settings.visibilityAvatar}
+											value={settings.visibilityAvatar}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key: "visibilityAvatar",
+														value: !settings.visibilityAvatar
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilityAvatar"
+											className="imageseo-label"
+										>
+											I want to see avatar
+										</label>
+										<p>(Only use for post content)</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
 						</SCContentSettings>
-						<SubTitle>Photos</SubTitle>
+						<SubTitle>Images</SubTitle>
 						<SCContentSettings>
-							<label
-								htmlFor="defaultBgImg"
-								className="imageseo-label"
-							>
-								Default background image :
-							</label>
-							<p>
-								This image will only be used if your content
-								does not contain images.
-							</p>
-							<span>URL : </span>
-							<input
-								type="url"
-								name="defaultBgImg"
-								id="defaultBgImg"
-								value={settings.defaultBgImg}
-								style={{ width: "100%" }}
-								placeholder="Please, use an URL"
-								onChange={e =>
-									dispatch({
-										type: "UPDATE_OPTION",
-										payload: {
-											key: "defaultBgImg",
-											value: e.target.value
-										}
-									})
-								}
-							/>
+							<div className="imageseo-mb-3">
+								<label
+									htmlFor="logoUrl"
+									className="imageseo-label"
+								>
+									Your logo :
+								</label>
+								<span>URL : </span>
+								<input
+									type="url"
+									name="logoUrl"
+									id="logoUrl"
+									value={settings.logoUrl}
+									style={{ width: "100%" }}
+									placeholder="Please, use an URL"
+									onChange={e =>
+										dispatch({
+											type: "UPDATE_OPTION",
+											payload: {
+												key: "logoUrl",
+												value: e.target.value
+											}
+										})
+									}
+								/>
+							</div>
+							<div className="imageseo-mb-3">
+								<label
+									htmlFor="defaultBgImg"
+									className="imageseo-label"
+								>
+									Default background image :
+								</label>
+								<p>
+									This image will only be used if your content
+									does not contain images.
+								</p>
+								<span>URL : </span>
+								<input
+									type="url"
+									name="defaultBgImg"
+									id="defaultBgImg"
+									value={settings.defaultBgImg}
+									style={{ width: "100%" }}
+									placeholder="Please, use an URL"
+									onChange={e =>
+										dispatch({
+											type: "UPDATE_OPTION",
+											payload: {
+												key: "defaultBgImg",
+												value: e.target.value
+											}
+										})
+									}
+								/>
+							</div>
 						</SCContentSettings>
 					</BlockContentInner>
 					<BlockFooter>
@@ -451,13 +579,28 @@ function SocialMediaWithProviders() {
 				</Block>
 			</Col>
 			<Col span={13}>
-				<Block style={{ height: "auto" }}>
-					<BlockContentInner isHead>
+				<Block
+					style={{
+						height: "auto",
+						position: "sticky",
+						top: "42px",
+						background: "none"
+					}}
+				>
+					<BlockContentInner
+						isHead
+						style={{
+							backgroundColor: "#fff",
+							borderRadius: "12px"
+						}}
+					>
 						<BlockContentInnerTitle>
 							<h2>Preview</h2>
 						</BlockContentInnerTitle>
 					</BlockContentInner>
-					<BlockContentInner>
+					<BlockContentInner
+						style={{ paddingLeft: 0, paddingRight: 0 }}
+					>
 						<SocialMediaImagePreview />
 					</BlockContentInner>
 				</Block>
