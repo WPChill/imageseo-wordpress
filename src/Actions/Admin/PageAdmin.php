@@ -38,7 +38,7 @@ class PageAdmin
             'manage_options',
             Pages::SETTINGS,
             [$this, 'pluginSettingsPage'],
-           'dashicons-imageseo-logo',
+           'dashicons-imageseo-logo'
         );
 
         add_submenu_page(

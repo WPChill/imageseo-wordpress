@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { get, isEmpty, isNil } from "lodash";
 import styled from "styled-components";
-import slugify from "slugify";
 
 import { Row, Col } from "../../../../ui/Flex";
 import BlockTableLine, {
@@ -13,16 +12,13 @@ import {
 	BulkProcessContext,
 	selectors
 } from "../../../../contexts/BulkProcessContext";
-import { previewAlt, updateAlt } from "../../../../services/ajax/update-alt";
-import {
-	previewFilename,
-	renameFilename
-} from "../../../../services/ajax/rename-file";
+import { updateAlt } from "../../../../services/ajax/update-alt";
+import { renameFilename } from "../../../../services/ajax/rename-file";
 import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
 import Button from "../../../../ui/Button";
 import getFilenameWithoutExtension from "../../../../helpers/getFilenameWithoutExtension";
 import getFilenamePreview from "../../../../helpers/getFilenamePreview";
-import { saveCurrentBulk } from "../../../../services/ajax/current-bulk";
+import { previewDataReport } from "../../../../services/ajax/preview-data-report";
 
 const SCEdit = styled.div`
 	margin-left: 10px;
@@ -58,48 +54,57 @@ function BulkResultsItem({ attachment }) {
 			return;
 		}
 
+		if (
+			!isNil(state.altPreviews[attachment.ID]) &&
+			!isNil(state.filePreviews[attachment.ID])
+		) {
+			return;
+		}
+
 		const fetchOptimization = async () => {
+			const excludeFilenames = selectors.getAllFilenamesPreview(state);
+			const template =
+				settings.formatAlt === "CUSTOM_FORMAT"
+					? settings.formatAltCustom
+					: settings.formatAlt;
+
+			const { success, data } = await previewDataReport(
+				attachment.ID,
+				template,
+				excludeFilenames
+			);
+
 			if (settings.optimizeAlt && isEmpty(alt)) {
-				const template =
-					settings.formatAlt === "CUSTOM_FORMAT"
-						? settings.formatAltCustom
-						: settings.formatAlt;
-
-				const { success, data: newAlt } = await previewAlt(
-					attachment.ID,
-					template
-				);
-
-				if (isEmpty(newAlt)) {
+				if (isEmpty(data.alt)) {
 					setAlt(null);
 				} else if (success) {
-					setAlt(newAlt);
+					setAlt(data.alt);
 					dispatch({
 						type: "ADD_ALT_PREVIEW",
 						payload: {
 							ID: attachment.ID,
-							alt: newAlt
+							alt: data.alt
 						}
 					});
 				}
 			}
 
 			if (settings.optimizeFile && isEmpty(fileinfos)) {
-				const filenames = selectors.getAllFilenamesPreview(state);
-				const { data: newFileinfos } = await previewFilename(
-					attachment.ID,
-					filenames
-				);
-
-				if (isEmpty(newFileinfos.filename)) {
+				if (isEmpty(data.filename)) {
 					setFileInfos(null);
 				} else {
-					setFileInfos(newFileinfos);
+					setFileInfos({
+						filename: data.filename,
+						extension: data.extension
+					});
 					dispatch({
 						type: "ADD_FILENAME_PREVIEW",
 						payload: {
 							ID: attachment.ID,
-							file: newFileinfos
+							file: {
+								filename: data.filename,
+								extension: data.extension
+							}
 						}
 					});
 				}
