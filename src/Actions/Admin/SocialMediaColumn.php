@@ -25,6 +25,28 @@ class SocialMediaColumn
             add_filter('manage_' . $postType . '_posts_columns', [$this, 'addColumn']);
             add_action('manage_' . $postType . '_posts_custom_column', [$this, 'previewSocialMediaImage'], 10, 2);
         }
+
+        add_action('add_meta_boxes', [$this, 'addMetaBoxPreviewSocialImage']);
+    }
+
+    public function addMetaBoxPreviewSocialImage()
+    {
+        $postTypes = $this->optionService->getOption('social_media_post_types');
+        foreach ($postTypes as $postType) {
+            add_meta_box(
+                'imageseo_preview_social_image',
+                __('Social Media Image', 'imageseo'),
+                [$this, 'renderPreviewSocialImage'],
+                $postType,
+                'advanced',
+                'high'
+            );
+        }
+    }
+
+    public function renderPreviewSocialImage()
+    {
+        echo 'here bobby';
     }
 
     public function addColumn($columns)
