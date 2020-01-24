@@ -26,14 +26,6 @@ class AdminBar
         }
 
         add_action('admin_bar_menu', [$this, 'adminBarMenu'], 99);
-        add_action('wp_ajax_get_info_user', [$this, 'getInfoUser']);
-    }
-
-    public function getInfoUser()
-    {
-        $html = 'ImageSEO - User';
-
-        wp_send_json_success($html);
     }
 
     public function adminBarMenu()

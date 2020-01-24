@@ -20,6 +20,13 @@ class SocialMediaSettings
 
     public function save()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         $socialSettings = [
             'layout'                     => sanitize_text_field($_POST['layout']),
             'textColor'                  => sanitize_text_field($_POST['textColor']),
@@ -33,8 +40,6 @@ class SocialMediaSettings
             'visibilityRating'           => isset($_POST['visibilityRating']) ? true : false,
             'visibilityAvatar'           => isset($_POST['visibilityAvatar']) ? true : false,
         ];
-
-        error_log(serialize($socialSettings));
 
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);

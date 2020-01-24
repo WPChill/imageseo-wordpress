@@ -20,12 +20,6 @@ class Alt
      */
     public function generateForAttachmentId($attachmentId, $query = [])
     {
-        if (!isset($_GET['attachment_id']) && !isset($_POST['attachment_id'])) {
-            return [
-                'success' => false,
-            ];
-        }
-
         $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
         if (!$report) {
             try {

@@ -18,6 +18,7 @@ class SocialMediaColumn
         if (!imageseo_allowed()) {
             return;
         }
+        $this->limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
 
         $postTypes = $this->optionService->getOption('social_media_post_types');
         foreach ($postTypes as $postType) {
@@ -55,14 +56,26 @@ class SocialMediaColumn
             case 'imageseo_social_media':
                 $postType = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
                 $adminGenerateUrl = admin_url(sprintf('admin-post.php?action=imageseo_generate_manual_social_media&post_id=%s&post_type=%s', $postId, $postType));
+                $adminGenerateUrl = wp_nonce_url($adminGenerateUrl, 'imageseo_generate_manual_social_media');
+
                 $url = $this->getPreviewImageUrlSocialMedia($postId);
                 $process = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
                 if (!$url && !$process) {
                     ?>
                     <p><?php _e('No social image', 'imageseo'); ?></p>
-                    <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
-                        <?php _e('Generate', 'imageseo'); ?>
-                    </a>
+                    <?php if (!$this->limitExcedeed): ?>
+                        <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
+                            <?php _e('Generate', 'imageseo'); ?>
+                        </a>
+                    <?php else: ?>
+                        <a
+                            class="imageseo-btn--simple imageseo-btn--small-padding imageseo-btn"
+                            target="_blank"
+                            href="https://app.imageseo.io/plan"
+                        >
+                            <?php _e('Get more credits', 'imageseo'); ?>
+                        </a>
+                    <?php endif; ?>
                     <?php
                 } elseif (!$url && $process) {
                     ?>
@@ -80,9 +93,12 @@ class SocialMediaColumn
                         <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>
                     
-                    <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
-                        <?php _e('Regenerate', 'imageseo'); ?>
-                    </a><?php
+                    <?php if (!$this->limitExcedeed): ?>
+                        <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
+                            <?php _e('Regenerate', 'imageseo'); ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php
                 }
                 break;
         }

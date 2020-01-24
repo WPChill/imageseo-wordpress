@@ -49,10 +49,11 @@ class ValidationApiKey
         $newOptions = wp_parse_args($options, $optionsBdd);
 
         try {
-            $owner = $this->clientServices->getApiKeyOwner($apiKey);
+            $owner = $this->clientServices->getOwnerByApiKey($apiKey);
             if ($owner) {
                 $newOptions['allowed'] = true;
                 $newOptions['api_key'] = $apiKey;
+                $this->optionServices->setOptions($newOptions);
             }
         } catch (\Exception $e) {
             wp_send_json_error([
@@ -60,8 +61,6 @@ class ValidationApiKey
             ]);
             exit;
         }
-
-        $this->optionServices->setOptions($newOptions);
 
         wp_send_json_success([
             'user'    => $owner,

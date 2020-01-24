@@ -84,7 +84,7 @@ class MediaLibraryReport
         try {
             $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId);
         } catch (NoRenameFile $e) {
-            wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+            wp_redirect($redirectUrl);
 
             return;
         }

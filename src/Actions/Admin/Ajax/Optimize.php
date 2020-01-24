@@ -158,6 +158,13 @@ class Optimize
 
     public function getPreviewFilename()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['attachmentId'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',

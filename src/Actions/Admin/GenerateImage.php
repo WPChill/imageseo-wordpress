@@ -28,10 +28,32 @@ class GenerateImage
 
     public function generateSocialMediaManually()
     {
+        $redirectUrl = admin_url('edit.php');
+        if ('post' !== $postType) {
+            $redirectUrl .= '?post_type=' . $postType;
+        }
+
+        if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_generate_manual_social_media')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
         $redirectUrl = admin_url('edit.php');
         if ('post' !== $postType) {
             $redirectUrl .= '?post_type=' . $postType;
+        }
+
+        $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
+        if ($limitExcedeed) {
+            wp_redirect($redirectUrl);
         }
 
         if (!isset($_GET['post_id'])) {

@@ -6,14 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * @since 1.0.0
- */
 class MediaLibrary
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
@@ -43,25 +37,17 @@ class MediaLibrary
         // add_action('admin_menu', [$this, 'addMediaPage']);
     }
 
-    /**
-     * @since 1.0.0
-     */
     public function addMediaPage()
     {
         add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [$this, 'adminMediaFiles']);
     }
 
-    /**
-     * @since 1.0.0
-     */
     public function adminMediaFiles()
     {
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/media_library.php';
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param int $postId
      */
     public function addAltOnUpload($attachmentId)
@@ -110,8 +96,6 @@ class MediaLibrary
     }
 
     /**
-     * @since 1.0.9
-     *
      * @param array $metadata
      * @param int   $attachmentId
      *
@@ -142,11 +126,15 @@ class MediaLibrary
         return $metadata;
     }
 
-    /**
-     * @since 2.1.0
-     */
     public function ajaxAltUpdate()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         $postId = absint($_POST['post_id']);
         $alt = wp_strip_all_tags($_POST['alt']);
 
@@ -154,8 +142,6 @@ class MediaLibrary
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param array  $formFields
      * @param object $post
      *
@@ -232,9 +218,6 @@ class MediaLibrary
         return $post;
     }
 
-    /**
-     * @since 1.0.0
-     */
     public function metaboxReport()
     {
         add_meta_box(
@@ -247,8 +230,6 @@ class MediaLibrary
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param object $post
      */
     public function viewMetaboxReport($post)
@@ -258,8 +239,6 @@ class MediaLibrary
 
     /**
      * Activate array.
-     *
-     * @since 1.0.0
      */
     public function manageMediaColumns($columns)
     {
