@@ -45,7 +45,7 @@ class ClientApi
      *
      * @return array
      */
-    public function getApiKeyOwner($apiKey = null)
+    public function getOwnerByApiKey($apiKey = null)
     {
         $response = $this->getClient($apiKey)->getResource('Projects')->getOwner();
         if (!$response['success']) {
