@@ -71,6 +71,13 @@ class QueryImages
 
     public function query()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         $filters = [];
         try {
             $filters = (isset($_POST['filters'])) ? json_decode(stripslashes($_POST['filters']), true) : [];

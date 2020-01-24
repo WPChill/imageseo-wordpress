@@ -24,7 +24,7 @@ class Enqueue
      */
     public function adminEnqueueScripts($page)
     {
-        if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'upload.php', 'post.php', 'imageseo_page_imageseo-options'], true)) {
+        if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'imageseo_page_imageseo-optimization', 'imageseo_page_imageseo-settings',  'upload.php', 'post.php', 'imageseo_page_imageseo-options'], true)) {
             return;
         }
 
@@ -38,7 +38,7 @@ class Enqueue
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery'], IMAGESEO_VERSION, true);
         }
 
-        if (in_array($page, ['imageseo_page_imageseo-options'], true)) {
+        if (in_array($page, ['imageseo_page_imageseo-options', 'toplevel_page_' . Pages::SETTINGS], true)) {
             wp_enqueue_script('imageseo-admin-register-js', IMAGESEO_URL_DIST . '/register.js', ['jquery'], IMAGESEO_VERSION, true);
             wp_enqueue_script('imageseo-admin-api-key-js', IMAGESEO_URL_DIST . '/api-key.js', ['jquery'], IMAGESEO_VERSION, true);
         }

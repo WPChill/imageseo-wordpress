@@ -15,6 +15,13 @@ class Register
 
     public function register()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['email']) || !isset($_POST['password'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',

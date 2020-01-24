@@ -7,7 +7,10 @@ if (!defined('ABSPATH')) {
 $total = imageseo_get_service('QueryImages')->getTotalImages();
 $totalNoAlt = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
 
-$percentMissing = ceil(($totalNoAlt * 100) / $total);
+$percentMissing = 0;
+if (0 < $total) {
+    $percentMissing = ceil(($totalNoAlt * 100) / $total);
+}
 $percentComplete = 100 - $percentMissing;
 
 $limitImages = ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']) - $this->owner['current_request_images'];
@@ -49,7 +52,7 @@ if ($this->owner) {
                     <div class="imageseo-loader__step" style="width: <?php echo $percentComplete; ?>%"></div>
                 </div>
                 <div class="imageseo-flex imageseo-mt-1">
-                    <div class="fl-1">
+                    <div class="fl-1 imageseo-mr-2">
                         <strong class="imageseo-color-blue"><?php echo sprintf(__('%s completed', 'imageseo'), "$percentComplete%"); ?></strong>
                     </div>
                     <div>

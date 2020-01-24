@@ -30,6 +30,13 @@ class Optimize
 
     public function saveCurrentBulk()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['settings']) || !isset($_POST['state']) || !isset($_POST['countOptimized'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
@@ -51,12 +58,26 @@ class Optimize
 
     public function deleteCurrentBulk()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         delete_option('_imageseo_current_processed');
         wp_send_json_success();
     }
 
     public function getPreviewAlt()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['attachmentId']) || !isset($_POST['altTemplate'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
@@ -74,6 +95,13 @@ class Optimize
 
     public function getPreviewFilename()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['attachmentId'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
@@ -116,6 +144,13 @@ class Optimize
 
     public function optimizeAlt()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['attachmentId']) || !isset($_POST['alt'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
@@ -134,6 +169,13 @@ class Optimize
 
     public function optimizeFilename()
     {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         if (!isset($_POST['attachmentId']) || !isset($_POST['filename'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',

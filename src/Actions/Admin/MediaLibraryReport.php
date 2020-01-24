@@ -47,12 +47,36 @@ class MediaLibraryReport
 
     public function adminPostGenerateAlt()
     {
+        $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
+
+        if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_generate_alt')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
         $response = $this->altServices->generateForAttachmentId($this->getAttachmentId());
-        wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+        wp_redirect($redirectUrl);
     }
 
     public function adminPostRenameAttachment()
     {
+        $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
+
+        if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_rename_attachment')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
         $attachmentId = $this->getAttachmentId();
 
         $this->reportImageServices->generateReportByAttachmentId($attachmentId);
@@ -66,6 +90,6 @@ class MediaLibraryReport
         }
 
         $this->renameFileServices->updateFilename($attachmentId, $filename);
-        wp_redirect(admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit'));
+        wp_redirect($redirectUrl);
     }
 }

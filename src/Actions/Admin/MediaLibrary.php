@@ -279,7 +279,7 @@ class MediaLibrary
                 </button>
             </div>
             <br />
-            <a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+            <a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId), 'imageseo_generate_alt')); ?>" class="button button-primary">
                 <?php _e('Generate alt automatically', 'imageseo'); ?>
             </a>
         </div>
@@ -311,7 +311,7 @@ class MediaLibrary
                 </button>
             </div>
             <br />
-            <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId)); ?>" class="button button-primary">
+            <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
                 <?php echo __('Rename file automatically', 'imageseo'); ?>
             </a>
         </div>
