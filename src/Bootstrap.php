@@ -2,53 +2,57 @@
 
 namespace ImageSeoWP;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
 /**
- * Init plugin
- *
- * @since 1.0.0
+ * Init plugin.
  */
 class Bootstrap
 {
     /**
-     * List actions WordPress
-     * @since 1.0.0
+     * List actions WordPress.
+     *
+     *
      * @var array
      */
     protected $actions = [];
 
     /**
-     * List class services
-     * @since 1.0.0
+     * List class services.
+     *
+     *
      * @var array
      */
     protected $services = [];
 
     /**
-     * Set actions
+     * Set actions.
      *
-     * @since 1.0.0
+     *
      * @param array $actions
+     *
      * @return Bootstrap
      */
     public function setActions($actions)
     {
         $this->actions = $actions;
+
         return $this;
     }
 
     public function setAction($action)
     {
         $this->actions[] = $action;
+
         return $this;
     }
 
     /**
-     * Get services
-     * @since 1.0.0
+     * Get services.
+     *
+     *
      * @return array
      */
     public function getActions()
@@ -57,9 +61,11 @@ class Bootstrap
     }
 
     /**
-     * Set services
-     * @since 1.0.0
+     * Set services.
+     *
+     *
      * @param array $services
+     *
      * @return Bootstrap
      */
     public function setServices($services)
@@ -67,28 +73,32 @@ class Bootstrap
         foreach ($services as $service) {
             $this->setService($service);
         }
+
         return $this;
     }
 
     /**
-     * Set a service
-     * @since 1.0.0
+     * Set a service.
+     *
+     *
      * @param string $service
+     *
      * @return Bootstrap
      */
     public function setService($service)
     {
         $name = explode('\\', $service);
         end($name);
-        $key                             = key($name);
-        $this->services[ $name[ $key ] ] = $service;
+        $key = key($name);
+        $this->services[$name[$key]] = $service;
+
         return $this;
     }
 
-
     /**
-     * Get services
-     * @since 1.0.0
+     * Get services.
+     *
+     *
      * @return array
      */
     public function getServices()
@@ -97,29 +107,33 @@ class Bootstrap
     }
 
     /**
-     * Get one service by classname
-     * @since 1.0.0
+     * Get one service by classname.
+     *
+     *
      * @param string $name
+     *
      * @return object
      */
     public function getService($name)
     {
-        if (! array_key_exists($name, $this->services)) {
+        try {
+            if (!array_key_exists($name, $this->services)) {
+                return null;
+                // @TODO : Throw exception
+            }
+
+            if (is_string($this->services[$name])) {
+                $this->services[$name] = new $this->services[$name]();
+            }
+
+            return $this->services[$name];
+        } catch (\Exception $th) {
             return null;
-            // @TODO : Throw exception
         }
-
-        if (is_string($this->services[ $name ])) {
-            $this->services[ $name ] = new $this->services[ $name ]();
-        }
-
-        return $this->services[ $name ];
     }
 
     /**
-     * Init plugin
-     * @since 1.0.0
-     * @return void
+     * Init plugin.
      */
     public function initPlugin()
     {
@@ -132,26 +146,25 @@ class Bootstrap
     }
 
     /**
-     * Activate plugin
-     * @since 1.0.0
-     * @return void
-     */
+     * Activate plugin.     */
     public function activatePlugin()
     {
-        foreach ($this->actions as $action) {
-            $action = new $action();
-            if (! method_exists($action, 'activate')) {
-                continue;
-            }
+        try {
+            foreach ($this->actions as $action) {
+                $action = new $action();
+                if (!method_exists($action, 'activate')) {
+                    continue;
+                }
 
-            $action->activate();
+                $action->activate();
+            }
+        } catch (\Exception $th) {
+            // No need
         }
     }
 
     /**
-     * Deactivate plugin
-     * @since 1.0.0
-     * @return void
+     * Deactivate plugin.
      */
     public function deactivatePlugin()
     {

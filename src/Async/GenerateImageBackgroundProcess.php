@@ -85,10 +85,17 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
      */
     protected function task($item)
     {
+        $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
+        if ($limitExcedeed) {
+            return;
+        }
+
         $post = get_post($item['id']);
         if (!$post) {
             return;
         }
+
+        set_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']), 1, 20);
 
         $medias = imageseo_get_service('Option')->getOption('social_media_type');
         $settings = imageseo_get_service('Option')->getOption('social_media_settings');
@@ -112,7 +119,6 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             $featuredImgUrl = $settings['defaultBgImg'];
         }
 
-        set_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']), 1, 20);
         foreach ($medias as $media) {
             $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
             $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);
@@ -139,6 +145,19 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 
             if (isset($result['attachment_id'])) {
                 update_post_meta($item['id'], sprintf('_imageseo_social_media_image_%s', $media), $result['attachment_id']);
+                delete_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']));
+            }
+
+            $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
+            if (!$isAlreadyGenerate) {
+                update_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
+
+                $client = imageseo_get_service('ClientApi')->getClient();
+                $url = $client->getOptions()['host'] . '/v1/external/projects/credits';
+                $client->getHttpClient()->request(
+                    'POST',
+                    $url
+                );
             }
         }
 

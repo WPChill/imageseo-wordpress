@@ -13,9 +13,6 @@ use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFile
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');
@@ -72,8 +69,6 @@ class RenameFile
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param int $attachmentId
      *
      * @return string

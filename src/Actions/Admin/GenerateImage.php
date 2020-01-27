@@ -77,13 +77,13 @@ class GenerateImage
         wp_redirect($redirectUrl);
     }
 
-    public function generateSocialMedia($new_status, $old_status, $post)
+    public function generateSocialMedia($newStatus, $oldStatus, $post)
     {
         if (defined('REST_REQUEST') && REST_REQUEST) {
             return;
         }
 
-        if ('publish' !== $new_status || 'publish' === $old_status) {
+        if ('publish' !== $newStatus) {
             return;
         }
 

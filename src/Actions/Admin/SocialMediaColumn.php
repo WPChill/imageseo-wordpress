@@ -11,6 +11,7 @@ class SocialMediaColumn
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
+        $this->imageSocialService = imageseo_get_service('ImageSocial');
     }
 
     public function hooks()
@@ -38,7 +39,7 @@ class SocialMediaColumn
                 __('Social Media Image', 'imageseo'),
                 [$this, 'renderPreviewSocialImage'],
                 $postType,
-                'advanced',
+                'side',
                 'high'
             );
         }
@@ -46,7 +47,7 @@ class SocialMediaColumn
 
     public function renderPreviewSocialImage()
     {
-        echo 'here bobby';
+        include_once IMAGESEO_TEMPLATES_ADMIN_METABOXES . '/social-media-preview.php';
     }
 
     public function addColumn($columns)
@@ -54,22 +55,6 @@ class SocialMediaColumn
         $columns = ['imageseo_social_media' => '<span class="dashicons dashicons-format-image"></span><span style="padding-left:10px">Social</span>'] + $columns;
 
         return $columns;
-    }
-
-    public function getPreviewImageUrlSocialMedia($postId)
-    {
-        $medias = $this->optionService->getOption('social_media_type');
-
-        foreach ($medias as $media) {
-            $id = get_post_meta($postId, sprintf('_imageseo_social_media_image_%s', $media), true);
-            if (!$id) {
-                continue;
-            }
-
-            return wp_get_attachment_image_url($id, 'medium');
-        }
-
-        return false;
     }
 
     public function previewSocialMediaImage($column, $postId)
@@ -80,7 +65,7 @@ class SocialMediaColumn
                 $adminGenerateUrl = admin_url(sprintf('admin-post.php?action=imageseo_generate_manual_social_media&post_id=%s&post_type=%s', $postId, $postType));
                 $adminGenerateUrl = wp_nonce_url($adminGenerateUrl, 'imageseo_generate_manual_social_media');
 
-                $url = $this->getPreviewImageUrlSocialMedia($postId);
+                $url = $this->imageSocialService->getPreviewImageUrlSocialMedia($postId);
                 $process = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
                 if (!$url && !$process) {
                     ?>
@@ -108,9 +93,7 @@ class SocialMediaColumn
                     <?php _e('Current loading... Reload the page.', 'imageseo'); ?>
                     <?php
                 } elseif ($url) {
-                    if ($process) {
-                        delete_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
-                    } ?>
+                    ?>
                     <div>
                         <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>

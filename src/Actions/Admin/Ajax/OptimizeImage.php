@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use ImageSeoWP\Exception\NoRenameFile;
 
-class Optimize
+class OptimizeImage
 {
     public function __construct()
     {

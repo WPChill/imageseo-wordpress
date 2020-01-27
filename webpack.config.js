@@ -10,6 +10,7 @@ module.exports = {
 		bulk: "./app/javascripts/react/index.js",
 		"api-key": "./app/javascripts/api-key.js",
 		register: "./app/javascripts/register.js",
+		"generate-social-media": "./app/javascripts/generate-social-media.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		"admin-css": "./app/styles/admin.scss",
 		"admin-global-css": "./app/styles/admin-global.scss"
