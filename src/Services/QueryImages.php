@@ -103,6 +103,13 @@ class QueryImages
             return $this->numberImageNonOptimizeAlt;
         }
 
+        $total = get_option('imageseo_get_number_image_non_optimize_alt');
+        if ($total) {
+            $this->numberImageNonOptimizeAlt = $total;
+
+            return $total;
+        }
+
         global $wpdb;
         $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID) 
             FROM {$wpdb->posts} 
@@ -112,9 +119,11 @@ class QueryImages
             AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
             AND ( ( {$wpdb->postmeta}.meta_key = '_wp_attachment_image_alt' AND {$wpdb->postmeta}.meta_value = '' ) OR mt1.post_id IS NULL ) 
             AND {$wpdb->posts}.post_type = 'attachment' 
-            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private'))";
+            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit'))";
 
         $this->numberImageNonOptimizeAlt = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_number_image_non_optimize_alt', $sqlQuery));
+
+        update_option('imageseo_get_number_image_non_optimize_alt', $this->numberImageNonOptimizeAlt);
 
         return $this->numberImageNonOptimizeAlt;
     }
@@ -128,6 +137,13 @@ class QueryImages
             return $this->totalImages;
         }
 
+        $total = get_option('imageseo_get_total_images');
+        if ($total) {
+            $this->totalImages = $total;
+
+            return $total;
+        }
+
         global $wpdb;
 
         $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)  
@@ -135,9 +151,11 @@ class QueryImages
             WHERE 1=1 
             AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
             AND {$wpdb->posts}.post_type = 'attachment' 
-            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private'))";
+            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit' ))";
 
         $this->totalImages = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_total_images', $sqlQuery));
+
+        update_option('imageseo_get_total_images', $this->totalImages);
 
         return $this->totalImages;
     }

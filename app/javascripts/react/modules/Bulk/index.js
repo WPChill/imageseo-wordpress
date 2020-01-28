@@ -455,7 +455,7 @@ function BulkWithProviders() {
 						<img
 							src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
 							style={{
-								width: 125,
+								width: 100,
 								marginRight: 10,
 								animation:
 									"imageseo-rotation 1s infinite linear"
