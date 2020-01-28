@@ -1,5 +1,5 @@
 
-===  Image SEO – Auto images alt text and name optimizer for Google images - WooCommerce friendly ===
+===  Image SEO - Auto images alt text and name optimizer for Google images - WooCommerce friendly ===
 Contributors: gmulti
 Tags: alt, alt tag, image seo, media, replace image
 Requires at least: 4.6
@@ -19,7 +19,7 @@ Don’t feel guilty: nobody enjoys writing images alt text, meta titles, pintere
  
 Our Image SEO plugin works in all the major languages and is compatible with all the major image formats (JPEG, PNG, WebP).
 
-[Get your API Key and try with your own images !](https://app.imageseo.io/register-wordpress)
+[Get your API Key and try with your own images!](https://app.imageseo.io/register-wordpress)
 
 = What Image SEO Optimizer does ? =
 
