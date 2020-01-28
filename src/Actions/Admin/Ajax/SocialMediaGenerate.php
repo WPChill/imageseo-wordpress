@@ -74,6 +74,7 @@ class SocialMediaGenerate
         }
 
         $postId = (int) $_POST['post_id'];
+        $this->imageSocialService->setCurrentProcess($postId);
 
         $this->process->push_to_queue([
             'id' => $postId,

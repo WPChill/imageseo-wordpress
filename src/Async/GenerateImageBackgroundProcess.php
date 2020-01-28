@@ -17,6 +17,11 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
         return $minutes;
     }
 
+    /**
+     * @param object $post
+     *
+     * @return string
+     */
     protected function getSubTitle($post)
     {
         switch ($post->post_type) {
@@ -37,6 +42,11 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
         return apply_filters('imageseo_get_sub_title_social_media', $subTitle, $post);
     }
 
+    /**
+     * @param object $post
+     *
+     * @return string
+     */
     protected function getSubTitleTwo($post)
     {
         switch ($post->post_type) {
@@ -95,7 +105,7 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             return;
         }
 
-        set_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']), 1, 20);
+        $transientCurrentProcess = get_transient('_imageseo_filename_social_process', 1, 20);
 
         $medias = imageseo_get_service('Option')->getOption('social_media_type');
         $settings = imageseo_get_service('Option')->getOption('social_media_settings');
@@ -145,7 +155,8 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 
             if (isset($result['attachment_id'])) {
                 update_post_meta($item['id'], sprintf('_imageseo_social_media_image_%s', $media), $result['attachment_id']);
-                delete_transient(sprintf('_imageseo_filename_social_process_%s', $item['id']));
+                unset($transientCurrentProcess[$item['id']]);
+                set_transient('_imageseo_filename_social_process', $transientCurrentProcess, 60);
             }
 
             $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);

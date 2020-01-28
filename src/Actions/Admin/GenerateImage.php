@@ -13,6 +13,7 @@ class GenerateImage
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
+        $this->imageSocialService = imageseo_get_service('ImageSocial');
         $this->process = new GenerateImageBackgroundProcess();
     }
 
@@ -62,14 +63,16 @@ class GenerateImage
             return;
         }
 
-        $post = get_post($_GET['post_id']);
+        $post = get_post((int) $_GET['post_id']);
         $postTypesAuthorized = $this->optionServices->getOption('social_media_post_types');
         if (!in_array($post->post_type, $postTypesAuthorized, true)) {
             return;
         }
 
+        $this->imageSocialService->setCurrentProcess($post->ID);
+
         $this->process->push_to_queue([
-            'id' => $_GET['post_id'],
+            'id' => $post->ID,
         ]);
 
         $this->process->save()->dispatch();
@@ -95,6 +98,8 @@ class GenerateImage
         if (!in_array($post->post_type, $postTypesAuthorized, true)) {
             return;
         }
+
+        $this->imageSocialService->setCurrentProcess($post->ID);
 
         $this->process->push_to_queue([
             'id' => $post->ID,

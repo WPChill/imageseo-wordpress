@@ -8,6 +8,8 @@ if (!defined('ABSPATH')) {
 
 class ImageSocial
 {
+    protected $transientProcess = null;
+
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
@@ -33,6 +35,28 @@ class ImageSocial
         return false;
     }
 
+    public function getTransientProcess()
+    {
+        if ($this->transientProcess) {
+            return $this->transientProcess;
+        }
+
+        $this->transientProcess = get_transient('_imageseo_filename_social_process');
+
+        return $this->transientProcess;
+    }
+
+    public function setCurrentProcess($postId)
+    {
+        $transient = $this->getTransientProcess();
+        if (!$transient) {
+            $transient = [];
+        }
+        $transient[$postId] = 1;
+
+        set_transient('_imageseo_filename_social_process', $transient, 60);
+    }
+
     /**
      * @param int $postId
      *
@@ -40,8 +64,11 @@ class ImageSocial
      */
     public function isCurrentProcess($postId)
     {
-        $transient = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
+        $transient = $this->getTransientProcess();
+        if (!$transient) {
+            return false;
+        }
 
-        return $transient ? true : false;
+        return array_key_exists($postId, $transient);
     }
 }

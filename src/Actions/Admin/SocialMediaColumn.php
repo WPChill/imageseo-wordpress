@@ -66,8 +66,8 @@ class SocialMediaColumn
                 $adminGenerateUrl = wp_nonce_url($adminGenerateUrl, 'imageseo_generate_manual_social_media');
 
                 $url = $this->imageSocialService->getPreviewImageUrlSocialMedia($postId);
-                $process = get_transient(sprintf('_imageseo_filename_social_process_%s', $postId));
-                if (!$url && !$process) {
+
+                if (!$url && !$this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
                     <p><?php _e('No social image', 'imageseo'); ?></p>
                     <?php if (!$this->limitExcedeed): ?>
@@ -84,7 +84,7 @@ class SocialMediaColumn
                         </a>
                     <?php endif; ?>
                     <?php
-                } elseif (!$url && $process) {
+                } elseif (!$url && $this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
                      <img
                         src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
@@ -93,7 +93,15 @@ class SocialMediaColumn
                     <?php _e('Current loading... Reload the page.', 'imageseo'); ?>
                     <?php
                 } elseif ($url) {
-                    ?>
+                    if ($this->imageSocialService->isCurrentProcess($postId)):
+                        ?>
+                         <img
+                            src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
+                            style="animation:imageseo-rotation 1s infinite linear;"
+                        />
+                        <?php _e('Current regeneration...', 'imageseo'); ?>
+                        <?php
+                    endif; ?>
                     <div>
                         <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>
