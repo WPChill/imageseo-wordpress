@@ -23,7 +23,7 @@ if ($percentLoose < 2) {
                 </div>
             </div>
             <div class="fl-1">
-                <p><?php echo sprintf(__('Estimated time if you had to fill in your alternative texts and replace your file names <strong>%s</strong> minutes. ', 'imageseo'), $minutes); ?>
+                <p><?php echo sprintf(__('Estimated time if you had to fill out your alternative texts and manually rewrite your file names <strong>%s</strong> minutes. ', 'imageseo'), $minutes); ?>
                 <p><?php echo sprintf(__('We could certainly do it in <strong>%s</strong>. ', 'imageseo'), $stringTimeEstimated); ?>
             </div>
         </div>

@@ -98,6 +98,13 @@ $currentLanguage = ('free' === $this->owner['plan']['slug'] && 0 === $this->owne
                 <p><?php echo $options_available['default_language_ia']['description']; //phpcs:ignore?></p>
             </div>
         </div>
+        <div class="imageseo-block imageseo-block--secondary imageseo-mt-1">
+            <div class="imageseo-block__inner" style="padding:15px;">
+                <p style="margin:0px;">
+                    <?php _e('We will consume one credit for each image optimized.', 'imageseo'); ?>
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 

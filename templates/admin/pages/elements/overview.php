@@ -27,8 +27,7 @@ if ($this->owner) {
 <div class="imageseo-block">
     <div class="imageseo-block__inner imageseo-block__inner--head imageseo-block__inner--actions">
         <div class="imageseo-block__inner__title">
-            <h3><?php _e('Your website overview', 'imageseo'); ?></h3>
-            <p><?php _e("You only need to create an account to get your API key. It's totally free.", 'imageseo'); ?></p>
+            <h3><?php _e('Website overview', 'imageseo'); ?></h3>
         </div>
         <div class="imagese-block__inner__actions">
             <a href="<?php echo admin_url('admin.php?page=imageseo-optimization'); ?>" class="imageseo-btn imageseo-btn--simple">
@@ -77,7 +76,7 @@ if ($this->owner) {
                 </div>
                 <div class="fl-1">
                     <p class="imageseo-mb-0"><strong><?php echo sprintf(__('%s credits left.', 'imageseo'), $limitImages); ?></strong></p>
-                    <p class="imageseo-mb-0"><?php echo sprintf(__('You will need %s more to optimize your website', 'imageseo'), $needCreditForOptimization); ?></strong></p>
+                    <p class="imageseo-mb-0"><?php echo sprintf(__('You will need %s credit to optimize all your image alt texts and names.', 'imageseo'), $needCreditForOptimization); ?></strong></p>
                     <div class="imageseo-loader imageseo-mt-2">
                         <div class="imageseo-loader__step" style="width: <?php echo $usageCreditPercent; ?>%"></div>
                     </div>

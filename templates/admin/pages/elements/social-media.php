@@ -9,8 +9,8 @@ if (!defined('ABSPATH')) {
 $options_available = [
     'social_media_post_types' => [
         'key'         => 'social_media_post_types',
-        'label'       => __('On which type of posts do you want to enable automatic generation of a social media image? ', 'imageseo'),
-        'description' => __('Check the publications you are interested in.', 'imageseo'),
+        'label'       => __('Do you want to enable the automatic generation of Social Media Card for your:', 'imageseo'),
+        'description' => __('', 'imageseo'),
     ],
     'social_media_type' => [
         'key'         => 'social_media_type',
@@ -27,18 +27,10 @@ $socialMedias = SocialMedia::getSocialMedias();
 
 <div class="imageseo-block">
     <div class="imageseo-block__inner imageseo-block__inner--head">
-        <h3><?php _e('Settings - Social media', 'imageseo'); ?></h3>
-        <p><?php echo sprintf(__('These options concern the generation of images for social media. If you want to configure your images, %sgo to the social media option page.%s', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
+        <h3><?php _e('Settings – Social Media Cards Generator', 'imageseo'); ?></h3>
+        <p><?php echo sprintf(__('These settings concern the generation of nice preview cards for Facebook, Twitter and LinkedIn. To define the template of your Social Media Cards, %sgo on Social Media Cards.%s', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
     </div>
     <div class="imageseo-block__inner">
-        <div class="imageseo-block imageseo-block--secondary imageseo-mb-1">
-            <div class="imageseo-block__inner" style="padding:15px;">
-                <p>
-                    <strong><?php _e('If you are working locally : '); ?></strong>
-                    <?php _e('We do not advise you to enable the feature . We will not have access to your images locally and you will have to regenerate them to get good images.', 'imageseo'); ?>
-                </p>
-            </div>
-        </div>
         <div>
             <p>
                 <strong>
@@ -80,6 +72,14 @@ $socialMedias = SocialMedia::getSocialMedias();
                     <?php echo $media['label']; ?>
                 </label>
             <?php endforeach; ?>
+            <p><?php echo sprintf(__('Please make sure that %syou have created a template%s and that your post and or page have a picture!', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
+        </div>
+        <div class="imageseo-block imageseo-block--secondary imageseo-mt-1">
+            <div class="imageseo-block__inner" style="padding:15px;">
+                <p style="margin:0px;">
+                    <?php _e('We will consume one credit by Socia Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn).', 'imageseo'); ?>
+                </p>
+            </div>
         </div>
     </div>
 </div>

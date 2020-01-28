@@ -101,7 +101,7 @@ function SocialMediaWithProviders() {
 				<Block>
 					<BlockContentInner isHead>
 						<BlockContentInnerTitle>
-							<h2>Social Media</h2>
+							<h2>Social Media Card Template</h2>
 						</BlockContentInnerTitle>
 					</BlockContentInner>
 					<BlockContentInner>
@@ -217,10 +217,6 @@ function SocialMediaWithProviders() {
 										<label className="imageseo-label">
 											Text color
 										</label>
-										<p>
-											You can change the color of all the
-											text on the card
-										</p>
 									</IFlexNumber>
 								</IFlex>
 							</div>
@@ -349,14 +345,13 @@ function SocialMediaWithProviders() {
 									</div>
 									<IFlexNumber number={1}>
 										<label className="imageseo-label">
-											Star color
+											Stars color
 										</label>
-										<p>You can change the star color</p>
 									</IFlexNumber>
 								</IFlex>
 							</div>
 						</SCContentSettings>
-						<SubTitle>Visibility</SubTitle>
+						<SubTitle>Data displayed</SubTitle>
 						<SCContentSettings>
 							<div className="imageseo-mb-3">
 								<IFlex>
@@ -386,7 +381,8 @@ function SocialMediaWithProviders() {
 											htmlFor="visibilitySubTitle"
 											className="imageseo-label"
 										>
-											I want to get the subtitle
+											Author or Product price (WooCommerce
+											only) - Subtitle
 										</label>
 										<p>
 											If you tick this boxe, we will add
@@ -426,7 +422,8 @@ function SocialMediaWithProviders() {
 											htmlFor="visibilitySubTitleTwo"
 											className="imageseo-label"
 										>
-											I want to get the subtitle 2
+											Reading time or Number of reviews
+											(WooCommerce only) - Subtitle 2
 										</label>
 										<p>
 											If you tick this boxe, we will add
@@ -461,7 +458,7 @@ function SocialMediaWithProviders() {
 											htmlFor="visibilityRating"
 											className="imageseo-label"
 										>
-											I want to get the star rating
+											Stars rating
 										</label>
 										<p>
 											If you tick this boxe, we will add
@@ -500,7 +497,7 @@ function SocialMediaWithProviders() {
 											htmlFor="visibilityAvatar"
 											className="imageseo-label"
 										>
-											I want to see avatar
+											Display the author avatar
 										</label>
 										<p>(Only use for post content)</p>
 									</IFlexNumber>
@@ -543,8 +540,8 @@ function SocialMediaWithProviders() {
 									Default background image :
 								</label>
 								<p>
-									This image will only be used if your content
-									does not contain images.
+									This image will only be used if your
+									page/article doesn’t have image
 								</p>
 								<span>URL : </span>
 								<input
