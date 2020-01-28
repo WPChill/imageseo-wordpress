@@ -52,6 +52,7 @@ function BulkWithProviders() {
 	const [openOptimization, setOpenOptimization] = useState(
 		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
 	);
+	const [loadingImages, setLoadingImages] = useState(false);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed =
@@ -174,6 +175,7 @@ function BulkWithProviders() {
 	}, [state.attachments]);
 
 	const handleQueryImages = async (filters = {}) => {
+		setLoadingImages(true);
 		const { success, data } = await queryImages(filters);
 		if (!success || !data) {
 			return;
@@ -184,6 +186,7 @@ function BulkWithProviders() {
 			type: "UPDATE_ALL_IDS_OPTIMIZED",
 			payload: data.ids_optimized
 		});
+		setLoadingImages(false);
 	};
 
 	// Start a new bulk
@@ -433,6 +436,33 @@ function BulkWithProviders() {
 					</div>
 				)}
 			<Block>
+				{loadingImages && (
+					<div
+						style={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							width: "100%",
+							height: "100%",
+							backgroundColor: "rgba(0,0,0,0.2)",
+							zIndex: 500,
+							borderRadius: 12,
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center"
+						}}
+					>
+						<img
+							src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
+							style={{
+								width: 125,
+								marginRight: 10,
+								animation:
+									"imageseo-rotation 1s infinite linear"
+							}}
+						/>
+					</div>
+				)}
 				<BlockContentInner
 					isHead
 					withAction

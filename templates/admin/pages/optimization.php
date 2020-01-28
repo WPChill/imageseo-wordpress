@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
 $currentProcessed = get_option('_imageseo_current_processed');
 
 $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
-$totalAltOptimize = imageseo_get_service('QueryImages')->getNumberImageOptimizeAlt();
 
 $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
 
@@ -41,7 +40,6 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
     const IMAGESEO_DATA = {
         CURRENT_PROCESSED: <?php echo wp_json_encode($currentProcessed); ?>,
         TOTAL_ALT_NO_OPTIMIZE : <?php echo $totalAltNoOptimize; ?>,
-        TOTAL_ALT_OPTIMIZE : <?php echo $totalAltOptimize; ?>,
         PERCENT_TRAFFIC_LOOSE : <?php echo $percentLoose; ?>,
         LIMIT_IMAGES: <?php echo $limitImages; ?>,
         USER_INFOS: <?php echo wp_json_encode($this->owner); ?>,

@@ -10,6 +10,10 @@ use ImageSeoWP\Helpers\AttachmentMeta;
 
 class QueryImages
 {
+    protected $numberImageNonOptimizeAlt = 0;
+
+    protected $totalImages = 0;
+
     public function getPostByAttachmentId($attachmentId)
     {
         global $wpdb;
@@ -95,27 +99,24 @@ class QueryImages
      */
     public function getNumberImageNonOptimizeAlt()
     {
-        $args = [
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'post_status'    => ['publish', 'pending', 'future', 'private', 'inherit'],
-            'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
-            'meta_query'     => [
-                'relation' => 'OR',
-                [
-                    'key'     => '_wp_attachment_image_alt',
-                    'value'   => '',
-                    'compare' => '=',
-                ],
-                [
-                    'key'     => '_wp_attachment_image_alt',
-                    'compare' => 'NOT EXISTS',
-                ],
-            ],
-        ];
-        $query = new \WP_Query($args);
+        if ($this->numberImageNonOptimizeAlt) {
+            return $this->numberImageNonOptimizeAlt;
+        }
 
-        return $query->found_posts;
+        global $wpdb;
+        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID) 
+            FROM {$wpdb->posts} 
+            LEFT JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id ) 
+            LEFT JOIN {$wpdb->postmeta} AS mt1 ON ({$wpdb->posts}.ID = mt1.post_id AND mt1.meta_key = '_wp_attachment_image_alt' ) 
+            WHERE 1=1 
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
+            AND ( ( {$wpdb->postmeta}.meta_key = '_wp_attachment_image_alt' AND {$wpdb->postmeta}.meta_value = '' ) OR mt1.post_id IS NULL ) 
+            AND {$wpdb->posts}.post_type = 'attachment' 
+            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private'))";
+
+        $this->numberImageNonOptimizeAlt = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_number_image_non_optimize_alt', $sqlQuery));
+
+        return $this->numberImageNonOptimizeAlt;
     }
 
     /**
@@ -123,37 +124,21 @@ class QueryImages
      */
     public function getTotalImages()
     {
-        $args = [
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'post_status'    => ['publish', 'pending', 'future', 'private', 'inherit'],
-            'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
-        ];
-        $query = new \WP_Query($args);
+        if ($this->totalImages) {
+            return $this->totalImages;
+        }
 
-        return $query->found_posts;
-    }
+        global $wpdb;
 
-    /**
-     * @return int
-     */
-    public function getNumberImageOptimizeAlt()
-    {
-        $args = [
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'post_status'    => ['publish', 'pending', 'future', 'private', 'inherit'],
-            'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
-            'meta_query'     => [
-                [
-                    'key'     => '_wp_attachment_image_alt',
-                    'value'   => '',
-                    'compare' => '!=',
-                ],
-            ],
-        ];
-        $query = new \WP_Query($args);
+        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)  
+            FROM {$wpdb->posts} 
+            WHERE 1=1 
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
+            AND {$wpdb->posts}.post_type = 'attachment' 
+            AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private'))";
 
-        return $query->found_posts;
+        $this->totalImages = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_total_images', $sqlQuery));
+
+        return $this->totalImages;
     }
 }

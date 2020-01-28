@@ -8,9 +8,6 @@ if (!defined('ABSPATH')) {
 
 class Register
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
