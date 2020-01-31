@@ -105,7 +105,7 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             return;
         }
 
-        $transientCurrentProcess = get_transient('_imageseo_filename_social_process', 1, 20);
+        $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
 
         $medias = imageseo_get_service('Option')->getOption('social_media_type');
         $settings = imageseo_get_service('Option')->getOption('social_media_settings');
@@ -156,7 +156,7 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             if (isset($result['attachment_id'])) {
                 update_post_meta($item['id'], sprintf('_imageseo_social_media_image_%s', $media), $result['attachment_id']);
                 unset($transientCurrentProcess[$item['id']]);
-                set_transient('_imageseo_filename_social_process', $transientCurrentProcess, 60);
+                set_transient('_imageseo_filename_social_process', $transientCurrentProcess, 20);
             }
 
             $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);

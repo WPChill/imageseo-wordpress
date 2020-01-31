@@ -1,13 +1,14 @@
 <?php
 /*
-Plugin Name: ImageSEO
-Plugin URI: http://wordpress.org/plugins/imageseo/
+Plugin Name: Image SEO
+Plugin URI: https://imageseo.io
 Description: Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
-Author: ImageSEO
+Author: Image SEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 1.1.4
+Version: 1.2.0
+License: GPLv2
 */
 
 if (!defined('ABSPATH')) {

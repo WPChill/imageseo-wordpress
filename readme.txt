@@ -2,10 +2,10 @@
 ===  Image SEO - Auto images alt text and name optimizer for Google images - WooCommerce friendly ===
 Contributors: gmulti
 Tags: alt, alt tag, image seo, media, replace image
-Requires at least: 4.6
+Requires at least: 4.7+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.1.4
+Stable tag: v1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,12 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.2.0 (01-31-2020) =
+- [NEW]: Social card optimizer. We automatically generate images for social networks.
+- Improved: Performance bulk optimization for alt and media filename. 
+- Improved: Performance query SQL . 
+- Bugfix: Support spaces (first element) in htaccess
 
 = 1.1.4 (01-24-2020) =
 - Improved: security
