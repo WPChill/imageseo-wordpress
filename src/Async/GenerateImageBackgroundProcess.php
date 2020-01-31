@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Async;
 
+use ImageSeoWP\Helpers\SocialMedia;
+
 class GenerateImageBackgroundProcess extends WPBackgroundProcess
 {
     protected $action = 'imageseo_generate_image_background_process';
@@ -105,7 +107,10 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             return;
         }
 
-        $medias = imageseo_get_service('Option')->getOption('social_media_type');
+        $medias = [
+            SocialMedia::OPEN_GRAPH['name'],
+        ];
+
         $settings = imageseo_get_service('Option')->getOption('social_media_settings');
 
         $siteTitle = get_bloginfo('name');
@@ -131,8 +136,6 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
         $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
 
         foreach ($medias as $media) {
-            set_time_limit(30);
-
             $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
             $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);
 
