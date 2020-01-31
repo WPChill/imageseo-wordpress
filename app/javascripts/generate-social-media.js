@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				success: () => {
 					handlePingCurrent = setInterval(
 						pingCurrentProcess,
-						1500,
+						2500,
 						$(this).data("id")
 					);
 				}

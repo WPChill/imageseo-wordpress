@@ -9,7 +9,6 @@ use ImageSeoWP\Context;
 /**
  * Get a service.
  *
- * @since 1.0.0
  *
  * @param string $service
  *
@@ -19,11 +18,22 @@ function imageseo_get_service($service)
 {
     return Context::getContext()->getService($service);
 }
+/**
+ * Get an action.
+ *
+ *
+ * @param string $service
+ *
+ * @return object
+ */
+function imageseo_get_action($action)
+{
+    return Context::getContext()->getAction($action);
+}
 
 /**
  * Get all options.
  *
- * @since 1.0.0
  *
  * @return array
  */
@@ -35,7 +45,6 @@ function imageseo_get_options()
 /**
  * Get option.
  *
- * @since 1.0.0
  *
  * @param string $key
  *

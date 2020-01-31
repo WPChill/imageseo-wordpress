@@ -103,7 +103,7 @@ class SocialMediaColumn
                         <?php
                     endif; ?>
                     <div>
-                        <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
+                        <img src="<?php echo $url; ?>?_empty_cache=true" width="100" style="object-fit:contain;" />
                     </div>
                     
                     <?php if (!$this->limitExcedeed): ?>
