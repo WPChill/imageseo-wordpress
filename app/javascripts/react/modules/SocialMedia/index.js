@@ -105,6 +105,156 @@ function SocialMediaWithProviders() {
 						</BlockContentInnerTitle>
 					</BlockContentInner>
 					<BlockContentInner>
+						<SubTitle>Data displayed</SubTitle>
+						<SCContentSettings>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilitySubTitle"
+											id="visibilitySubTitle"
+											checked={
+												settings.visibilitySubTitle
+											}
+											value={settings.visibilitySubTitle}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key:
+															"visibilitySubTitle",
+														value: !settings.visibilitySubTitle
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilitySubTitle"
+											className="imageseo-label"
+										>
+											Author or Product price (WooCommerce
+											only) - Subtitle
+										</label>
+										<p>
+											Show the price product or author
+											depending on the page
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilitySubTitleTwo"
+											id="visibilitySubTitleTwo"
+											checked={
+												settings.visibilitySubTitleTwo
+											}
+											value={
+												settings.visibilitySubTitleTwo
+											}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key:
+															"visibilitySubTitleTwo",
+														value: !settings.visibilitySubTitleTwo
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilitySubTitleTwo"
+											className="imageseo-label"
+										>
+											Reading time or Number of reviews
+											(WooCommerce only) - Subtitle 2
+										</label>
+										<p>
+											Show the reading time of an article
+											or the number of reviews.
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilityRating"
+											id="visibilityRating"
+											checked={settings.visibilityRating}
+											value={settings.visibilityRating}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key: "visibilityRating",
+														value: !settings.visibilityRating
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilityRating"
+											className="imageseo-label"
+										>
+											Stars rating
+										</label>
+										<p>
+											Show the stars linked to a review of
+											your product for example.{" "}
+											<strong>
+												(Only use for WooCommerce
+												Product)
+											</strong>
+										</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+							<div className="imageseo-mb-3">
+								<IFlex>
+									<div className="imageseo-mr-2">
+										<input
+											type="checkbox"
+											name="visibilityAvatar"
+											id="visibilityAvatar"
+											checked={settings.visibilityAvatar}
+											value={settings.visibilityAvatar}
+											onChange={() =>
+												dispatch({
+													type: "UPDATE_OPTION",
+													payload: {
+														key: "visibilityAvatar",
+														value: !settings.visibilityAvatar
+													}
+												})
+											}
+										/>
+									</div>
+									<IFlexNumber number={1}>
+										<label
+											htmlFor="visibilityAvatar"
+											className="imageseo-label"
+										>
+											Display the author avatar
+										</label>
+										<p>Only use for post content</p>
+									</IFlexNumber>
+								</IFlex>
+							</div>
+						</SCContentSettings>
 						<SubTitle>Look & Feel</SubTitle>
 						<SCContentSettings>
 							<div className="imageseo-mb-3">
@@ -159,7 +309,11 @@ function SocialMediaWithProviders() {
 								</select>
 							</div>
 							<div className="imageseo-mb-3">
-								<IFlex>
+								<IFlex
+									style={{
+										alignItems: "center"
+									}}
+								>
 									<div className="imageseo-mr-2">
 										<SCPicker
 											style={{
@@ -221,7 +375,11 @@ function SocialMediaWithProviders() {
 								</IFlex>
 							</div>
 							<div className="imageseo-mb-3">
-								<IFlex>
+								<IFlex
+									style={{
+										alignItems: "center"
+									}}
+								>
 									<div className="imageseo-mr-2">
 										<SCPicker
 											style={{
@@ -281,229 +439,80 @@ function SocialMediaWithProviders() {
 										<label className="imageseo-label">
 											Background color
 										</label>
-										<p>
-											You can change the background color
-											of all the text on the card
-										</p>
 									</IFlexNumber>
 								</IFlex>
 							</div>
-							<div className="imageseo-mb-3">
-								<IFlex>
-									<div className="imageseo-mr-2">
-										<SCPicker
-											style={{
-												backgroundColor: currentStarColor
-											}}
-											onClick={() =>
-												handleOpenColorPicker(
-													"starColor"
-												)
-											}
-										/>
-										{starColorPickerOpen && (
-											<div
+							{settings.visibilityRating && (
+								<div className="imageseo-mb-3">
+									<IFlex
+										style={{
+											alignItems: "center"
+										}}
+									>
+										<div className="imageseo-mr-2">
+											<SCPicker
 												style={{
-													position: "absolute",
-													zIndex: "2"
+													backgroundColor: currentStarColor
 												}}
-											>
+												onClick={() =>
+													handleOpenColorPicker(
+														"starColor"
+													)
+												}
+											/>
+											{starColorPickerOpen && (
 												<div
 													style={{
-														position: "fixed",
-														top: "0px",
-														right: "0px",
-														bottom: "0px",
-														left: "0px"
+														position: "absolute",
+														zIndex: "2"
 													}}
-													onClick={
-														handleCloseColorPicker
-													}
-												/>
-												<SketchPicker
-													disableAlpha={true}
-													color={currentStarColor}
-													onChange={color =>
-														setCurrentStarColor(
-															color.hex
-														)
-													}
-													onChangeComplete={color => {
-														dispatch({
-															type:
-																"UPDATE_OPTION",
-															payload: {
-																key:
-																	"starColor",
-																value: color.hex
-															}
-														});
-													}}
-												/>
-											</div>
-										)}
-									</div>
-									<IFlexNumber number={1}>
-										<label className="imageseo-label">
-											Stars color
-										</label>
-									</IFlexNumber>
-								</IFlex>
-							</div>
+												>
+													<div
+														style={{
+															position: "fixed",
+															top: "0px",
+															right: "0px",
+															bottom: "0px",
+															left: "0px"
+														}}
+														onClick={
+															handleCloseColorPicker
+														}
+													/>
+													<SketchPicker
+														disableAlpha={true}
+														color={currentStarColor}
+														onChange={color =>
+															setCurrentStarColor(
+																color.hex
+															)
+														}
+														onChangeComplete={color => {
+															dispatch({
+																type:
+																	"UPDATE_OPTION",
+																payload: {
+																	key:
+																		"starColor",
+																	value:
+																		color.hex
+																}
+															});
+														}}
+													/>
+												</div>
+											)}
+										</div>
+										<IFlexNumber number={1}>
+											<label className="imageseo-label">
+												Stars color
+											</label>
+										</IFlexNumber>
+									</IFlex>
+								</div>
+							)}
 						</SCContentSettings>
-						<SubTitle>Data displayed</SubTitle>
-						<SCContentSettings>
-							<div className="imageseo-mb-3">
-								<IFlex>
-									<div className="imageseo-mr-2">
-										<input
-											type="checkbox"
-											name="visibilitySubTitle"
-											id="visibilitySubTitle"
-											checked={
-												settings.visibilitySubTitle
-											}
-											value={settings.visibilitySubTitle}
-											onChange={() =>
-												dispatch({
-													type: "UPDATE_OPTION",
-													payload: {
-														key:
-															"visibilitySubTitle",
-														value: !settings.visibilitySubTitle
-													}
-												})
-											}
-										/>
-									</div>
-									<IFlexNumber number={1}>
-										<label
-											htmlFor="visibilitySubTitle"
-											className="imageseo-label"
-										>
-											Author or Product price (WooCommerce
-											only) - Subtitle
-										</label>
-										<p>
-											If you tick this boxe, we will add
-											price product or author depending on
-											the page.
-										</p>
-									</IFlexNumber>
-								</IFlex>
-							</div>
-							<div className="imageseo-mb-3">
-								<IFlex>
-									<div className="imageseo-mr-2">
-										<input
-											type="checkbox"
-											name="visibilitySubTitleTwo"
-											id="visibilitySubTitleTwo"
-											checked={
-												settings.visibilitySubTitleTwo
-											}
-											value={
-												settings.visibilitySubTitleTwo
-											}
-											onChange={() =>
-												dispatch({
-													type: "UPDATE_OPTION",
-													payload: {
-														key:
-															"visibilitySubTitleTwo",
-														value: !settings.visibilitySubTitleTwo
-													}
-												})
-											}
-										/>
-									</div>
-									<IFlexNumber number={1}>
-										<label
-											htmlFor="visibilitySubTitleTwo"
-											className="imageseo-label"
-										>
-											Reading time or Number of reviews
-											(WooCommerce only) - Subtitle 2
-										</label>
-										<p>
-											If you tick this boxe, we will add
-											the reading time of an article or
-											the number of reviews.
-										</p>
-									</IFlexNumber>
-								</IFlex>
-							</div>
-							<div className="imageseo-mb-3">
-								<IFlex>
-									<div className="imageseo-mr-2">
-										<input
-											type="checkbox"
-											name="visibilityRating"
-											id="visibilityRating"
-											checked={settings.visibilityRating}
-											value={settings.visibilityRating}
-											onChange={() =>
-												dispatch({
-													type: "UPDATE_OPTION",
-													payload: {
-														key: "visibilityRating",
-														value: !settings.visibilityRating
-													}
-												})
-											}
-										/>
-									</div>
-									<IFlexNumber number={1}>
-										<label
-											htmlFor="visibilityRating"
-											className="imageseo-label"
-										>
-											Stars rating
-										</label>
-										<p>
-											If you tick this boxe, we will add
-											the stars linked to a review of your
-											product for example.{" "}
-											<strong>
-												(Only use for WooCommerce
-												Product)
-											</strong>
-										</p>
-									</IFlexNumber>
-								</IFlex>
-							</div>
-							<div className="imageseo-mb-3">
-								<IFlex>
-									<div className="imageseo-mr-2">
-										<input
-											type="checkbox"
-											name="visibilityAvatar"
-											id="visibilityAvatar"
-											checked={settings.visibilityAvatar}
-											value={settings.visibilityAvatar}
-											onChange={() =>
-												dispatch({
-													type: "UPDATE_OPTION",
-													payload: {
-														key: "visibilityAvatar",
-														value: !settings.visibilityAvatar
-													}
-												})
-											}
-										/>
-									</div>
-									<IFlexNumber number={1}>
-										<label
-											htmlFor="visibilityAvatar"
-											className="imageseo-label"
-										>
-											Display the author avatar
-										</label>
-										<p>(Only use for post content)</p>
-									</IFlexNumber>
-								</IFlex>
-							</div>
-						</SCContentSettings>
+
 						<SubTitle>Images</SubTitle>
 						<SCContentSettings>
 							<div className="imageseo-mb-3">

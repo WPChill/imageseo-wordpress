@@ -51,16 +51,16 @@ class PageAdmin
         );
         add_submenu_page(
             Pages::SETTINGS,
-            __('Bulk Optimization', 'imageseo'),
-            __('Bulk Optimization', 'imageseo'),
+            __('Alt & Name Optimizer', 'imageseo'),
+            __('Alt & Name Optimizer', 'imageseo'),
             'manage_options',
             'imageseo-optimization',
             [$this, 'optimizationPage']
         );
         add_submenu_page(
             Pages::SETTINGS,
-            __('Social media', 'imageseo'),
-            __('Social media', 'imageseo'),
+            __('Social Card Optimizer', 'imageseo'),
+            __('Social Card Optimizer', 'imageseo'),
             'manage_options',
             'imageseo-social-media',
             [$this, 'socialMedia']

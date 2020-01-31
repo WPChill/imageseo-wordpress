@@ -101,7 +101,7 @@ $currentLanguage = ('free' === $this->owner['plan']['slug'] && 0 === $this->owne
         <div class="imageseo-block imageseo-block--secondary imageseo-mt-1">
             <div class="imageseo-block__inner" style="padding:15px;">
                 <p style="margin:0px;">
-                    <?php _e('We will consume one credit for each image optimized.', 'imageseo'); ?>
+                    <?php _e('You will consume one credit for each image optimized.', 'imageseo'); ?>
                 </p>
             </div>
         </div>

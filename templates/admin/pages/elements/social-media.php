@@ -21,6 +21,7 @@ $options_available = [
 
 $postTypes = imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia();
 $socialMedias = SocialMedia::getSocialMedias();
+
 ?>
 
 
@@ -52,32 +53,11 @@ $socialMedias = SocialMedia::getSocialMedias();
                 </label>
             <?php endforeach; ?>
         </div>
-        <div class="imageseo-mt-4">
-            <p>
-                <strong>
-                    <?php echo esc_html($options_available['social_media_type']['label']); ?>
-                </strong>
-            </p>
-            <p><?php echo $options_available['social_media_type']['description']; //phpcs:ignore?></p>
 
-            <?php foreach ($socialMedias as $media): ?>
-                <label for="imageseo_post_type_<?php echo $media['name']; ?>" class="imageseo-label imageseo-mb-2">
-                    <input
-                        name="<?php echo esc_attr(sprintf('%s[%s]', IMAGESEO_SLUG, $options_available['social_media_type']['key'])); ?>[]"
-                        type="checkbox"
-                        id="imageseo_post_type_<?php echo $media['name']; ?>"
-                        value="<?php echo $media['name']; ?>"
-                        <?php checked(in_array($media['name'], $this->options[$options_available['social_media_type']['key']], true), 1); ?>
-                    >
-                    <?php echo $media['label']; ?>
-                </label>
-            <?php endforeach; ?>
-            <p><?php echo sprintf(__('Please make sure that %syou have created a template%s and that your post and or page have a picture!', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
-        </div>
         <div class="imageseo-block imageseo-block--secondary imageseo-mt-1">
             <div class="imageseo-block__inner" style="padding:15px;">
                 <p style="margin:0px;">
-                    <?php _e('We will consume one credit by Socia Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn).', 'imageseo'); ?>
+                    <?php _e('You will consume one credit by Socia Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn).', 'imageseo'); ?>
                 </p>
             </div>
         </div>

@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\AltFormat;
+use ImageSeoWP\Helpers\SocialMedia;
 
 class Option
 {
@@ -16,12 +17,16 @@ class Option
     protected $optionsDefault = [
         'api_key'                       => '',
         'allowed'                       => false,
-        'active_alt_write_upload'       => 0,
-        'active_rename_write_upload'    => 0,
+        'active_alt_write_upload'       => 1,
+        'active_rename_write_upload'    => 1,
         'default_language_ia'           => 'en',
         'alt_template_default'          => AltFormat::ALT_SIMPLE,
-        'social_media_post_types'       => [],
-        'social_media_type'             => [],
+        'social_media_post_types'       => [
+            'post',
+        ],
+        'social_media_type'             => [
+            SocialMedia::OPEN_GRAPH['name'],
+        ],
         'social_media_settings'         => [
             'layout'                    => 'CARD_LEFT',
             'textColor'                 => '#000000',
