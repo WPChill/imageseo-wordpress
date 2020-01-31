@@ -52,6 +52,7 @@ $socialMedias = SocialMedia::getSocialMedias();
                     <?php echo $postType->label; ?>
                 </label>
             <?php endforeach; ?>
+            <p><?php echo sprintf(__('Please make sure that %syou have created a template%s and that your post and or page have a picture!', 'imageseo'), '<a href="' . admin_url('admin.php?page=imageseo-social-media') . '"">', '</a>'); ?></p>    
         </div>
 
         <div class="imageseo-block imageseo-block--secondary imageseo-mt-1">
