@@ -108,7 +108,7 @@ class SocialMediaColumn
                     
                     <?php if (!$this->limitExcedeed): ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
-                            <?php _e('Regenerate', 'imageseo'); ?>
+                            <?php _e('Update', 'imageseo'); ?>
                         </a>
                     <?php endif; ?>
                     <?php

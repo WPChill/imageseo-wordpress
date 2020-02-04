@@ -23,7 +23,7 @@ if (!$url && !$process) {
     
     <?php
 } else {
-        $text = __('Regenerate', 'imageseo'); ?>
+        $text = __('Update', 'imageseo'); ?>
     <img id="imageseo-social-media-image" src="<?php echo $url; ?>" />
     
     <?php

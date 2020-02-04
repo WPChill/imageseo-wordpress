@@ -7,7 +7,7 @@ Author: Image SEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2
 */
 
@@ -22,13 +22,13 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '1.2.0');
+define('IMAGESEO_VERSION', '1.2.1');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-define('IMAGESEO_API_URL', 'https://api-imageseo-zeitv2.now.sh');
+define('IMAGESEO_API_URL', 'https://api.imageseo.io');
 
 define('IMAGESEO_DIRURL', plugin_dir_url(__FILE__));
 define('IMAGESEO_URL_DIST', IMAGESEO_DIRURL . 'dist');
