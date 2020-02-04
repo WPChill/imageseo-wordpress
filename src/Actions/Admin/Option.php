@@ -87,7 +87,7 @@ class Option
                 set_transient('imageseo_success_settings', 1, 60);
                 break;
             case 'imageseo_valid_api_key':
-                $newOptions['api_key'] = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : $options['api_key'];
+                $newOptions['api_key'] = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
                 break;
             case 'imageseo_social_media_settings_save':
                 $keys = ['layout',

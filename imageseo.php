@@ -28,7 +28,7 @@ define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-define('IMAGESEO_API_URL', 'https://api.imageseo.io');
+define('IMAGESEO_API_URL', 'https://api-imageseo-zeitv2.now.sh');
 
 define('IMAGESEO_DIRURL', plugin_dir_url(__FILE__));
 define('IMAGESEO_URL_DIST', IMAGESEO_DIRURL . 'dist');

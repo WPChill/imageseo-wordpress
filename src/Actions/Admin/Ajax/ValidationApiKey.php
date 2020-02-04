@@ -54,6 +54,10 @@ class ValidationApiKey
                 $newOptions['allowed'] = true;
                 $newOptions['api_key'] = $apiKey;
                 $this->optionServices->setOptions($newOptions);
+            } else {
+                $newOptions['allowed'] = false;
+                $newOptions['api_key'] = '';
+                $this->optionServices->setOptions($newOptions);
             }
         } catch (\Exception $e) {
             wp_send_json_error([
