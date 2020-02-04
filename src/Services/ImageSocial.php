@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Helpers\SocialMedia;
+
 class ImageSocial
 {
     protected $transientProcess = null;
@@ -21,8 +23,9 @@ class ImageSocial
      */
     public function getPreviewImageUrlSocialMedia($postId, $size = 'medium')
     {
-        $medias = $this->optionService->getOption('social_media_type');
-
+        $medias = [
+            SocialMedia::OPEN_GRAPH['name'],
+        ];
         foreach ($medias as $media) {
             $id = get_post_meta($postId, sprintf('_imageseo_social_media_image_%s', $media), true);
             if (!$id) {

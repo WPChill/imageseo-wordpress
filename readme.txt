@@ -1,4 +1,3 @@
-
 ===  Image SEO Optimizer - auto images alt text, name and open graph tag - WooCommerce friendly ===
 Contributors: gmulti
 Tags: image seo, alt, alt text, open graph, seo

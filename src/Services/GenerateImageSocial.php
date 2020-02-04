@@ -38,6 +38,10 @@ class GenerateImageSocial
             $data['media'] = SocialMedia::OPEN_GRAPH['name'];
         }
 
+        if (apply_filters('imageseo_generate_social_mute_report_on_upload', true)) {
+            imageseo_get_action('\ImageSeoWP\Actions\Admin\MediaLibrary')->muteOnUpload();
+        }
+
         $image = $this->clientApiService->generateSocialMediaImage($data);
 
         $filenameWithExtension = $filename . '.jpg';
@@ -57,7 +61,8 @@ class GenerateImageSocial
 
         $attachmentData = wp_generate_attachment_metadata($attachmentId, $result['file']);
 
-        wp_update_attachment_metadata($attachmentId, $attachmentData);
+        $now = new \DateTime('now');
+        wp_update_attachment_metadata($attachmentId, array_merge($attachmentData, ['is_social' => true, 'last_updated' => $now->getTimestamp()]));
 
         return [
             'file_infos'    => $result,

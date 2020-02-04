@@ -44,7 +44,7 @@ class Bootstrap
 
     public function setAction($action)
     {
-        $this->actions[] = $action;
+        $this->actions[$action] = $action;
 
         return $this;
     }
@@ -58,6 +58,29 @@ class Bootstrap
     public function getActions()
     {
         return $this->actions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return object
+     */
+    public function getAction($name)
+    {
+        try {
+            if (!array_key_exists($name, $this->actions)) {
+                return null;
+                // @TODO : Throw exception
+            }
+
+            if (is_string($this->actions[$name])) {
+                $this->actions[$name] = new $this->actions[$name]();
+            }
+
+            return $this->actions[$name];
+        } catch (\Exception $th) {
+            return null;
+        }
     }
 
     /**
@@ -137,8 +160,8 @@ class Bootstrap
      */
     public function initPlugin()
     {
-        foreach ($this->actions as $action) {
-            $action = new $action();
+        foreach ($this->actions as $key => $action) {
+            $action = $this->getAction($key);
             if (method_exists($action, 'hooks')) {
                 $action->hooks();
             }
