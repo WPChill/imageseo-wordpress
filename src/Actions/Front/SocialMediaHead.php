@@ -134,12 +134,20 @@ class SocialMediaHead
         if (!$this->canActiveSocialMedia()) {
             return $url;
         }
+
         $id = $this->getAttachmentId(SocialMedia::OPEN_GRAPH['name']);
         if (!$id) {
             return $url;
         }
 
-        return wp_get_attachment_image_url($id, 'full');
+        $metadata = wp_get_attachment_metadata($id);
+        $url = wp_get_attachment_image_url($id, 'full');
+
+        if (isset($metadata['last_updated'])) {
+            return sprintf('%s?last_updated=%s', $url, $metadata['last_updated']);
+        }
+
+        return $url;
     }
 
     public function getWidthOpenGraph($width = null)

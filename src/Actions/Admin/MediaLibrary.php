@@ -37,6 +37,12 @@ class MediaLibrary
         // add_action('admin_menu', [$this, 'addMediaPage']);
     }
 
+    public function muteOnUpload()
+    {
+        remove_action('add_attachment', [$this, 'addAltOnUpload']);
+        remove_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
+    }
+
     public function addMediaPage()
     {
         add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [$this, 'adminMediaFiles']);

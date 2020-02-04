@@ -156,6 +156,29 @@ class Bootstrap
     }
 
     /**
+     * @param string $name
+     *
+     * @return object
+     */
+    public function getAction($name)
+    {
+        try {
+            if (!array_key_exists($name, $this->actions)) {
+                return null;
+                // @TODO : Throw exception
+            }
+
+            if (is_string($this->actions[$name])) {
+                $this->actions[$name] = new $this->actions[$name]();
+            }
+
+            return $this->actions[$name];
+        } catch (\Exception $th) {
+            return null;
+        }
+    }
+
+    /**
      * Init plugin.
      */
     public function initPlugin()

@@ -37,7 +37,7 @@ class Option
             'visibilityRating'          => false,
             'visibilityAvatar'          => true,
             'logoUrl'                   => IMAGESEO_URL_DIST . '/images/favicon.png',
-            'defaultBgImg'              => IMAGESEO_URL_DIST . '/images/default_image.png',
+            'defaultBgImg'              => IMAGESEO_URL_DIST . '/images/default_logo.png',
         ],
     ];
 

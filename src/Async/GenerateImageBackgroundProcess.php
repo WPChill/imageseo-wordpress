@@ -107,8 +107,6 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             return;
         }
 
-        $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
-
         $medias = [
             SocialMedia::OPEN_GRAPH['name'],
         ];
@@ -133,9 +131,17 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
             $featuredImgUrl = $settings['defaultBgImg'];
         }
 
+        $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
+        $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
+
         foreach ($medias as $media) {
             $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
             $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);
+
+            if ($isAlreadyGenerate) {
+                $currentAttachmentId = get_post_meta($item['id'], sprintf('_imageseo_social_media_image_%s', $media), true);
+                wp_delete_attachment($currentAttachmentId, true);
+            }
 
             $result = imageseo_get_service('GenerateImageSocial')->generate($filename, [
                 'title'                            => $post->post_title,
@@ -163,7 +169,6 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
                 set_transient('_imageseo_filename_social_process', $transientCurrentProcess, 20);
             }
 
-            $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
             if (!$isAlreadyGenerate) {
                 update_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
 
