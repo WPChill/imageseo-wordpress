@@ -66,9 +66,6 @@ function imageseo_php_min_compatibility()
     include_once IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php';
 }
 
-/**
- * @since 1.0.0
- */
 function imageseo_plugin_activate()
 {
     if (!imageseo_is_compatible()) {
@@ -80,9 +77,6 @@ function imageseo_plugin_activate()
     Context::getContext()->activatePlugin();
 }
 
-/**
- * @since 1.0.0
- */
 function imageseo_plugin_deactivate()
 {
     require_once __DIR__ . '/imageseo-functions.php';
@@ -90,9 +84,6 @@ function imageseo_plugin_deactivate()
     Context::getContext()->deactivatePlugin();
 }
 
-/**
- * @since 1.0.0
- */
 function imageseo_plugin_uninstall()
 {
     delete_option(IMAGESEO_SLUG);
@@ -100,8 +91,6 @@ function imageseo_plugin_uninstall()
 
 /**
  * Load ImageSEO.
- *
- * @since 1.0.0
  */
 function imageseo_plugin_loaded()
 {

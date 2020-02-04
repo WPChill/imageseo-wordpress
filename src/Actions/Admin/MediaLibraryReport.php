@@ -8,14 +8,8 @@ if (!defined('ABSPATH')) {
 
 use ImageSeoWP\Exception\NoRenameFile;
 
-/**
- * @since 1.0.0
- */
 class MediaLibraryReport
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->renameFileServices = imageseo_get_service('RenameFile');

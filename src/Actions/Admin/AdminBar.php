@@ -6,14 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * @since 1.0.0
- */
 class AdminBar
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');

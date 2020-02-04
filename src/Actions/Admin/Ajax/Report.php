@@ -8,14 +8,8 @@ if (!defined('ABSPATH')) {
 
 use ImageSeoWP\Helpers\AttachmentMeta;
 
-/**
- * @since 1.0.0
- */
 class Report
 {
-    /**
-     * @since 1.0.0
-     */
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');

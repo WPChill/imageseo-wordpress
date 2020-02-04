@@ -203,9 +203,6 @@ class MediaLibrary
         return $formFields;
     }
 
-    /**
-     * @since 1.0.8
-     */
     public function saveDataPinterest($post, $attachment)
     {
         if (isset($attachment['imageseo-data-pin-description'])) {
@@ -325,8 +322,6 @@ class MediaLibrary
     }
 
     /**
-     * @since  1.0
-     *
      * @param string $columnName    Name of the custom column.
      * @param int    $attachment_id Attachment ID.
      */
