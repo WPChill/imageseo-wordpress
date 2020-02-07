@@ -33,8 +33,8 @@ class PageAdmin
     public function pluginMenu()
     {
         add_menu_page(
-            'ImageSEO',
-            'ImageSEO',
+            'Image SEO',
+            'Image SEO',
             'manage_options',
             Pages::SETTINGS,
             [$this, 'pluginSettingsPage'],
