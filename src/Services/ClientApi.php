@@ -47,7 +47,11 @@ class ClientApi
      */
     public function getOwnerByApiKey($apiKey = null)
     {
-        $response = $this->getClient($apiKey)->getResource('Projects')->getOwner();
+        try {
+            $response = $this->getClient($apiKey)->getResource('Projects')->getOwner();
+        } catch (\Exception $e) {
+            return null;
+        }
         if (!$response['success']) {
             return null;
         }
@@ -63,6 +67,7 @@ class ClientApi
         $apiKey = $this->optionService->getOption('api_key');
 
         $response = $this->getClient($apiKey)->getResource('Languages')->getLanguages();
+
         if (!$response['success']) {
             return null;
         }

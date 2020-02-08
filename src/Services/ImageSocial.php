@@ -17,6 +17,16 @@ class ImageSocial
         $this->optionService = imageseo_get_service('Option');
     }
 
+    public function getPreviewImageIdSocialMedia($postId)
+    {
+        $id = get_post_meta($postId, sprintf('_imageseo_social_media_image_%s', SocialMedia::OPEN_GRAPH['name']), true);
+        if (!$id) {
+            return null;
+        }
+
+        return $id;
+    }
+
     /**
      * @param int    $postId
      * @param string $size
@@ -40,7 +50,7 @@ class ImageSocial
 
     public function getTransientProcess()
     {
-        if ($this->transientProcess) {
+        if (null !== $this->transientProcess) {
             return $this->transientProcess;
         }
 

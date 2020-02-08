@@ -19,7 +19,6 @@ class SocialMediaColumn
         if (!imageseo_allowed()) {
             return;
         }
-        $this->limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
 
         $postTypes = $this->optionService->getOption('social_media_post_types');
         foreach ($postTypes as $postType) {
@@ -61,16 +60,22 @@ class SocialMediaColumn
     {
         switch ($column) {
             case 'imageseo_social_media':
+                $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
+
                 $postType = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
                 $adminGenerateUrl = admin_url(sprintf('admin-post.php?action=imageseo_generate_manual_social_media&post_id=%s&post_type=%s', $postId, $postType));
                 $adminGenerateUrl = wp_nonce_url($adminGenerateUrl, 'imageseo_generate_manual_social_media');
 
                 $url = $this->imageSocialService->getPreviewImageUrlSocialMedia($postId);
+                $metadata = wp_get_attachment_metadata($this->imageSocialService->getPreviewImageIdSocialMedia($postId));
+                if (isset($metadata['last_updated']) && $url) {
+                    $url = sprintf('%s?last_updated=%s&_empty_cache=true', $url, $metadata['last_updated']);
+                }
 
                 if (!$url && !$this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
                     <p><?php _e('No social image', 'imageseo'); ?></p>
-                    <?php if (!$this->limitExcedeed): ?>
+                    <?php if (!$limitExcedeed): ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
                             <?php _e('Generate', 'imageseo'); ?>
                         </a>
@@ -103,10 +108,10 @@ class SocialMediaColumn
                         <?php
                     endif; ?>
                     <div>
-                        <img src="<?php echo $url; ?>?_empty_cache=true" width="100" style="object-fit:contain;" />
+                        <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>
                     
-                    <?php if (!$this->limitExcedeed): ?>
+                    <?php if (!$limitExcedeed): ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
                             <?php _e('Update', 'imageseo'); ?>
                         </a>
