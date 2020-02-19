@@ -22,7 +22,7 @@ $options_available = [
     ],
 ];
 
-$currentLanguage = ('free' === $this->owner['plan']['slug'] && 0 === $this->owner['bonus_stock_images']) ? 'en' : $this->options[$options_available['default_language_ia']['key']];
+$currentLanguage = (isset($this->options[$options_available['default_language_ia']['key']])) ? $this->options[$options_available['default_language_ia']['key']] : 'en';
 
 ?>
 
