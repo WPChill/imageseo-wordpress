@@ -347,7 +347,7 @@ class RenameFile
      */
     public function updateRedirect($sourceUrl, $targetUrl)
     {
-        $data = get_transient('_imageseo_redirect_images');
+        $data = get_option('_imageseo_redirect_images');
         if (false === $data) {
             $data = [];
         }
@@ -358,7 +358,7 @@ class RenameFile
         }
 
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
-        set_transient('_imageseo_redirect_images', $data, WEEK_IN_SECONDS * 2);
+        update_option('_imageseo_redirect_images', $data);
 
         if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
             $content = $this->htaccessServices->generate();
