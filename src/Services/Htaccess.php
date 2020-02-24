@@ -38,25 +38,28 @@ class Htaccess
         $text[] = '# Created by ImageSEO';
         $text[] = '';
 
-        // mod_rewrite section
-        $text[] = '<IfModule mod_rewrite.c>';
+        if (!empty($data)) {
+            // mod_rewrite section
+            $text[] = '<IfModule mod_rewrite.c>';
 
-        foreach ($data as $key => $value) {
-            if (empty($key) || empty($value['target'])) {
-                continue;
+            foreach ($data as $key => $value) {
+                if (empty($key) || empty($value['target'])) {
+                    continue;
+                }
+
+                $targetExist = CleanUrl::removeScheme(CleanUrl::removeDomainFromFilename($value['target']));
+                if (array_key_exists($targetExist, $text)) {
+                    continue;
+                }
+
+                // /wp-content/uploads/2019/12/example.jpg http://example.local/wp-content/uploads/2019/12/new-image.jpg'
+                $text[$key] = sprintf('RedirectPermanent %s %s', str_replace(' ', '%20', $key), str_replace(' ', '%20', $value['target']));
             }
 
-            $targetExist = CleanUrl::removeScheme(CleanUrl::removeDomainFromFilename($value['target']));
-            if (array_key_exists($targetExist, $text)) {
-                continue;
-            }
-
-            // /wp-content/uploads/2019/12/example.jpg http://example.local/wp-content/uploads/2019/12/new-image.jpg'
-            $text[$key] = sprintf('RedirectPermanent %s %s', str_replace(' ', '%20', $key), str_replace(' ', '%20', $value['target']));
+            // End of mod_rewrite
+            $text[] = '</IfModule>';
         }
 
-        // End of mod_rewrite
-        $text[] = '</IfModule>';
         $text[] = '';
 
         // End of redirection section

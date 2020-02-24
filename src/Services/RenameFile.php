@@ -140,8 +140,15 @@ class RenameFile
      *
      * @return bool
      */
-    public function updateFilename($attachmentId, $newFilename, $metadata = null)
+    public function updateFilename($attachmentId, $newFilename, $metadata = null, $options = ['backup' => false, 'onUpload' => false])
     {
+        if (!isset($options['backup'])) {
+            $options['backup'] = false;
+        }
+        if (!isset($options['onUpload'])) {
+            $options['onUpload'] = false;
+        }
+
         $sourceUrl = wp_get_attachment_url($attachmentId);
         $sourceMetadata = wp_get_attachment_metadata($attachmentId);
 
@@ -224,118 +231,25 @@ class RenameFile
             ]);
         }
 
-        $this->updateRedirect($sourceUrl, $targetUrl);
+        if (!$options['backup'] && !$options['onUpload']) {
+            $this->updateRedirect($sourceUrl, $targetUrl);
+        }
+
+        if ($options['backup']) {
+            $this->backupRedirect($targetUrl);
+        }
+
+        if (!$options['onUpload']) {
+            update_post_meta($attachmentId, '_imageseo_rename_file_backup', [
+                'backup_url'       => $sourceUrl,
+                'backup_filename'  => $basenameWithoutExt,
+            ]);
+        }
 
         return [
             'success'  => true,
             'metadata' => $metadata,
             'post'     => $postAttachment,
-        ];
-    }
-
-    /**
-     * @param int        $attachmentId
-     * @param array|null $metadata
-     *
-     * @return bool
-     */
-    public function renameAttachment($attachmentId, $metadata = null)
-    {
-        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
-        if (!$report) {
-            $this->reportImageServices->generateReportByAttachmentId($attachmentId);
-        }
-
-        $sourceUrl = wp_get_attachment_url($attachmentId);
-        $sourceMetadata = wp_get_attachment_metadata($attachmentId);
-
-        $filePath = get_attached_file($attachmentId);
-
-        if (!wp_mkdir_p(dirname($filePath))) {
-            return [
-                'success' => false,
-            ];
-        }
-
-        try {
-            $newFilename = $this->getNameFileWithAttachmentId($attachmentId);
-        } catch (NoRenameFile $e) {
-            return [
-                'success' => true,
-            ];
-        }
-
-        if (null === $metadata) {
-            $metadata = wp_get_attachment_metadata($attachmentId);
-        }
-        $post = get_post($attachmentId, ARRAY_A);
-        $basename = basename($filePath);
-        $splitName = explode('.', $basename);
-        unset($splitName[count($splitName) - 1]);
-        $basenameWithoutExt = implode('.', $splitName);
-        $directory = trailingslashit(dirname($filePath));
-        $newFilePath = str_replace($basenameWithoutExt, $newFilename, $filePath);
-
-        // Rename file
-        @rename($filePath, $newFilePath);
-
-        // Prepare post
-        $post['post_title'] = $newFilename;
-        $post['post_name'] = $newFilename;
-
-        // Prepare metdata
-        if (isset($metadata['file']) && !empty($metadata['file'])) {
-            $metadata['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['file']);
-        }
-        if (isset($metadata['url']) && !empty($metadata['url']) && strlen($metadata['url']) > 4) {
-            $metadata['url'] = str_replace($basenameWithoutExt, $newFilename, $metadata['url']);
-        }
-
-        if (isset($metadata['sizes'])) {
-            foreach ($metadata['sizes'] as $key => $size) {
-                if (!isset($size['file'])) {
-                    continue;
-                }
-
-                $oldFile = $metadata['sizes'][$key]['file'];
-                $metadata['sizes'][$key]['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['sizes'][$key]['file']);
-
-                rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
-            }
-        }
-
-        $oldAttachedFile = get_post_meta($attachmentId, '_wp_attached_file', true);
-
-        update_attached_file($attachmentId, str_replace($basenameWithoutExt, $newFilename, $oldAttachedFile));
-        wp_update_attachment_metadata($attachmentId, $metadata);
-        clean_post_cache($attachmentId);
-        wp_update_post($post);
-
-        // Update GUID
-        $newGuid = str_replace($basenameWithoutExt, $newFilename, $post['guid']);
-
-        global $wpdb;
-        $query = $wpdb->prepare("UPDATE $wpdb->posts SET guid = '%s' WHERE ID = '%d'", $newGuid, $attachmentId);
-        $wpdb->query($query);
-        clean_post_cache($attachmentId);
-
-        $targetUrl = wp_get_attachment_url($attachmentId);
-        if (apply_filters('imageseo_replace_image_url_database', true)) {
-            $this->searchReplaceInDB([
-                'source_url'      => $sourceUrl,
-                'source_metadata' => $sourceMetadata,
-            ], [
-                'target_url'       => $targetUrl,
-                'target_metadata'  => wp_get_attachment_metadata($attachmentId),
-            ]);
-        }
-
-        $this->updateRedirect($sourceUrl, $targetUrl);
-
-        return [
-            'success'  => true,
-            'metadata' => $metadata,
-            'post'     => $post,
         ];
     }
 
@@ -358,6 +272,30 @@ class RenameFile
         }
 
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
+        update_option('_imageseo_redirect_images', $data);
+
+        if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
+            $content = $this->htaccessServices->generate();
+            $this->htaccessServices->save($content);
+        }
+    }
+
+    /**
+     * @param string $targetUrl
+     */
+    public function backupRedirect($targetUrl)
+    {
+        $data = get_option('_imageseo_redirect_images');
+        if (false === $data) {
+            $data = [];
+        }
+
+        $targetParse = wp_parse_url($targetUrl);
+        if (!array_key_exists('path', $targetParse)) {
+            return;
+        }
+
+        unset($data[$targetParse['path']]);
         update_option('_imageseo_redirect_images', $data);
 
         if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {

@@ -13,7 +13,7 @@ class MediaLibrary
         $this->optionService = imageseo_get_service('Option');
         $this->reportImageService = imageseo_get_service('ReportImage');
         $this->renameFileService = imageseo_get_service('RenameFile');
-        $this->altServices = imageseo_get_service('Alt');
+        $this->altService = imageseo_get_service('Alt');
     }
 
     public function hooks()
@@ -23,8 +23,6 @@ class MediaLibrary
         }
 
         add_filter('manage_media_columns', [$this, 'manageMediaColumns']);
-        add_filter('attachment_fields_to_edit', [$this, 'fieldsEdit'], 999, 2);
-        add_action('attachment_fields_to_save', [$this, 'saveDataPinterest'], 10, 2);
         add_action('manage_media_custom_column', [$this, 'manageMediaCustomColumn'], 10, 2);
 
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
@@ -40,16 +38,6 @@ class MediaLibrary
     {
         remove_action('add_attachment', [$this, 'addAltOnUpload']);
         remove_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
-    }
-
-    public function addMediaPage()
-    {
-        add_media_page('Image SEO', 'Image SEO', 'manage_options', 'imageseo_media_files', [$this, 'adminMediaFiles']);
-    }
-
-    public function adminMediaFiles()
-    {
-        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/media_library.php';
     }
 
     /**
@@ -77,7 +65,7 @@ class MediaLibrary
             return;
         }
 
-        $this->altServices->updateAltAttachmentWithReport($attachmentId);
+        $this->altService->updateAltAttachmentWithReport($attachmentId);
     }
 
     /**
@@ -89,7 +77,7 @@ class MediaLibrary
             return;
         }
 
-        $alt = $this->altServices->getAlt($attachmentId);
+        $alt = $this->altService->getAlt($attachmentId);
         if (empty($alt)) {
             $total = get_option('imageseo_get_number_image_non_optimize_alt');
             if ($total) {
@@ -112,7 +100,7 @@ class MediaLibrary
             return;
         }
 
-        $alt = $this->altServices->getAlt($attachmentId);
+        $alt = $this->altService->getAlt($attachmentId);
         if (empty($alt)) {
             $total = get_option('imageseo_get_number_image_non_optimize_alt');
             if ($total) {
@@ -149,9 +137,17 @@ class MediaLibrary
             return $metadata;
         }
 
-        $result = $this->renameFileService->renameAttachment($attachmentId, $metadata);
-        if (array_key_exists('metadata', $result)) {
-            $metadata = $result['metadata'];
+        $this->reportImageService->generateReportByAttachmentId($attachmentId);
+
+        try {
+            $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
+            $result = $this->renameFileService->updateFilename($attachmentId, $filename, $metadata, ['backup' => false, 'onUpload' => true]);
+            if (array_key_exists('metadata', $result)) {
+                $metadata = $result['metadata'];
+            }
+
+            return $metadata;
+        } catch (NoRenameFile $e) {
         }
 
         return $metadata;
@@ -170,80 +166,6 @@ class MediaLibrary
         $alt = wp_strip_all_tags($_POST['alt']);
 
         update_post_meta($postId, '_wp_attachment_image_alt', $alt);
-    }
-
-    /**
-     * @param array  $formFields
-     * @param object $post
-     *
-     * @return array
-     */
-    public function fieldsEdit($formFields, $post)
-    {
-        global $pagenow;
-
-        $formFields['imageseo-data-pin-description'] = [
-            'label'         => __('Pinterest description', 'imageseo'),
-            'input'         => 'textarea',
-            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_description', true),
-            'show_in_edit'  => true,
-            'show_in_modal' => true,
-            'helps'         => '&lt;img src="#" data-pin-description="My description" /&gt;',
-        ];
-        $formFields['imageseo-data-pin-url'] = [
-            'label'         => __('Pinterest URL', 'imageseo'),
-            'input'         => 'text',
-            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_url', true),
-            'show_in_edit'  => true,
-            'show_in_modal' => true,
-            'helps'         => '&lt;img src="#" data-pin-url="https://imageseo.io" /&gt;',
-        ];
-        $formFields['imageseo-data-pin-id'] = [
-            'label'         => __('Pinterest ID', 'imageseo'),
-            'input'         => 'text',
-            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_id', true),
-            'show_in_edit'  => true,
-            'show_in_modal' => true,
-            'helps'         => '&lt;img src="#" data-pin-id="id-pin" /&gt;',
-        ];
-        $formFields['imageseo-data-pin-media'] = [
-            'label'         => __('Pinterest Media', 'imageseo'),
-            'input'         => 'text',
-            'value' 		      => get_post_meta($post->ID, '_imageseo_data_pin_media', true),
-            'show_in_edit'  => true,
-            'show_in_modal' => true,
-            'helps'         => '&lt;img src="#"  data-pin-media="https://example.com/my-image.jpg" /&gt;',
-        ];
-
-        if ('post.php' !== $pagenow) {
-            $formFields['imageseo-has-report'] = [
-                'label'         => __('ImageSEO Report', 'imageseo'),
-                'input'         => 'html',
-                'html'          => '<a id="imageseo-' . $post->ID . '" href="' . esc_url(admin_url('post.php?post=' . $post->ID . '&action=edit')) . '" class="button">' . __('View report', 'imageseo') . '</a>',
-                'show_in_edit'  => true,
-                'show_in_modal' => true,
-            ];
-        }
-
-        return $formFields;
-    }
-
-    public function saveDataPinterest($post, $attachment)
-    {
-        if (isset($attachment['imageseo-data-pin-description'])) {
-            update_post_meta($post['ID'], '_imageseo_data_pin_description', $attachment['imageseo-data-pin-description']);
-        }
-        if (isset($attachment['imageseo-data-pin-url'])) {
-            update_post_meta($post['ID'], '_imageseo_data_pin_url', $attachment['imageseo-data-pin-url']);
-        }
-        if (isset($attachment['imageseo-data-pin-id'])) {
-            update_post_meta($post['ID'], '_imageseo_data_pin_id', $attachment['imageseo-data-pin-id']);
-        }
-        if (isset($attachment['imageseo-data-pin-media'])) {
-            update_post_meta($post['ID'], '_imageseo_data_pin_media', $attachment['imageseo-data-pin-media']);
-        }
-
-        return $post;
     }
 
     public function metaboxReport()
@@ -278,7 +200,7 @@ class MediaLibrary
 
     protected function renderAlt($attachmentId)
     {
-        $alt = wp_strip_all_tags($this->altServices->getAlt($attachmentId));
+        $alt = wp_strip_all_tags($this->altService->getAlt($attachmentId));
         $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId); ?>
         <div class="media-column-imageseo">
             <?php

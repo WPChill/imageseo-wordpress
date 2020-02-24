@@ -4,6 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$tab = isset($_GET['tab']) ? $_GET['tab'] : null;
+
+switch ($tab) {
+   case 'support':
+        include_once __DIR__ . '/_support.php';
+
+        return;
+    break;
+}
+
 $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
 $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
 $classesBlock = ['fl-1'];
