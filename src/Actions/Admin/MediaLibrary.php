@@ -32,9 +32,8 @@ class MediaLibrary
         add_action('admin_init', [$this, 'metaboxReport']);
         add_action('add_attachment', [$this, 'addAltOnUpload']);
         add_action('add_attachment', [$this, 'updateCount'], 100);
+        add_action('delete_attachment', [$this, 'updateDeleteCount'], 100);
         add_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
-
-        // add_action('admin_menu', [$this, 'addMediaPage']);
     }
 
     public function muteOnUpload()
@@ -81,6 +80,9 @@ class MediaLibrary
         $this->altServices->updateAltAttachmentWithReport($attachmentId);
     }
 
+    /**
+     * @param int $attachmentId
+     */
     public function updateCount($attachmentId)
     {
         if (!wp_attachment_is_image($attachmentId)) {
@@ -98,6 +100,29 @@ class MediaLibrary
         $total = get_option('imageseo_get_total_images');
         if ($total) {
             update_option('imageseo_get_total_images', (int) $total + 1);
+        }
+    }
+
+    /**
+     * @param int $attachmentId
+     */
+    public function updateDeleteCount($attachmentId)
+    {
+        if (!wp_attachment_is_image($attachmentId)) {
+            return;
+        }
+
+        $alt = $this->altServices->getAlt($attachmentId);
+        if (empty($alt)) {
+            $total = get_option('imageseo_get_number_image_non_optimize_alt');
+            if ($total) {
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1);
+            }
+        }
+
+        $total = get_option('imageseo_get_total_images');
+        if ($total) {
+            update_option('imageseo_get_total_images', (int) $total - 1);
         }
     }
 
