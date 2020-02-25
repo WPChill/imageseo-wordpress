@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Async\QueryImagesNoAltBackgroundProcess;
+
 class Alt
 {
     public function __construct()
@@ -13,6 +15,7 @@ class Alt
         $this->reportImageService = imageseo_get_service('ReportImage');
         $this->optionServices = imageseo_get_service('Option');
         $this->tagsToStringServices = imageseo_get_service('TagsToString');
+        $this->processQueryImagesNoAlt = new QueryImagesNoAltBackgroundProcess();
     }
 
     /**
@@ -54,7 +57,7 @@ class Alt
         $alt = $this->tagsToStringServices->replace($template, $attachmentId);
         $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId);
 
-        update_post_meta($attachmentId, '_wp_attachment_image_alt', $alt);
+        $this->updateAlt($attachmentId, $alt);
     }
 
     /**
@@ -64,6 +67,11 @@ class Alt
     public function updateAlt($attachmentId, $alt)
     {
         update_post_meta($attachmentId, '_wp_attachment_image_alt', apply_filters('imageseo_update_alt', $alt, $attachmentId));
+
+        $this->processQueryImagesNoAlt->push_to_queue([
+            'query_images_no_alt' => true,
+        ]);
+        $this->processQueryImagesNoAlt->save()->dispatch();
     }
 
     /**

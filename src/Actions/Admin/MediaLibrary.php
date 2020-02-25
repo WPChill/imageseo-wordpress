@@ -165,7 +165,7 @@ class MediaLibrary
         $postId = absint($_POST['post_id']);
         $alt = wp_strip_all_tags($_POST['alt']);
 
-        update_post_meta($postId, '_wp_attachment_image_alt', $alt);
+        imageseo_get_service('Alt')->updateAlt($postId, $alt);
     }
 
     public function metaboxReport()
