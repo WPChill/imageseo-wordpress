@@ -64,14 +64,20 @@ class Alt
      * @param int    $attachmentId
      * @param string $alt
      */
-    public function updateAlt($attachmentId, $alt)
+    public function updateAlt($attachmentId, $alt, $options = ['updateCounter' => true])
     {
+        if (!isset($options['updateCounter'])) {
+            $options['updateCounter'] = true;
+        }
+
         update_post_meta($attachmentId, '_wp_attachment_image_alt', apply_filters('imageseo_update_alt', $alt, $attachmentId));
 
-        $this->processQueryImagesNoAlt->push_to_queue([
-            'query_images_no_alt' => true,
-        ]);
-        $this->processQueryImagesNoAlt->save()->dispatch();
+        if ($options['updateCounter']) {
+            $this->processQueryImagesNoAlt->push_to_queue([
+                'query_images_no_alt' => true,
+            ]);
+            $this->processQueryImagesNoAlt->save()->dispatch();
+        }
     }
 
     /**

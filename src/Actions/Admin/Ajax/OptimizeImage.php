@@ -210,7 +210,14 @@ class OptimizeImage
         $attachmentId = (int) $_POST['attachmentId'];
         $alt = sanitize_text_field($_POST['alt']);
 
-        $this->altServices->updateAlt($attachmentId, $alt);
+        $this->altServices->updateAlt($attachmentId, $alt, ['updateCounter' => false]);
+
+        if (!empty($alt)) {
+            $total = get_option('imageseo_get_number_image_non_optimize_alt');
+            if ($total) {
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1, false);
+            }
+        }
 
         wp_send_json_success();
     }
