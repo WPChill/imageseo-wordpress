@@ -97,17 +97,27 @@ class QueryImages
     /**
      * @return int
      */
-    public function getNumberImageNonOptimizeAlt()
+    public function getNumberImageNonOptimizeAlt($options = ['withCache' => true, 'forceQuery' => false])
     {
-        if ($this->numberImageNonOptimizeAlt) {
+        if (!isset($options['withCache'])) {
+            $options['withCache'] = true;
+        }
+
+        if (!isset($options['forceQuery'])) {
+            $options['forceQuery'] = false;
+        }
+
+        if ($this->numberImageNonOptimizeAlt && $options['withCache']) {
             return $this->numberImageNonOptimizeAlt;
         }
 
-        $total = get_option('imageseo_get_number_image_non_optimize_alt');
-        if ($total) {
-            $this->numberImageNonOptimizeAlt = $total;
+        if (!$options['forceQuery']) {
+            $total = get_option('imageseo_get_number_image_non_optimize_alt');
+            if ($total) {
+                $this->numberImageNonOptimizeAlt = $total;
 
-            return $total;
+                return $total;
+            }
         }
 
         global $wpdb;
@@ -123,7 +133,7 @@ class QueryImages
 
         $this->numberImageNonOptimizeAlt = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_number_image_non_optimize_alt', $sqlQuery));
 
-        update_option('imageseo_get_number_image_non_optimize_alt', $this->numberImageNonOptimizeAlt);
+        update_option('imageseo_get_number_image_non_optimize_alt', $this->numberImageNonOptimizeAlt, false);
 
         return $this->numberImageNonOptimizeAlt;
     }
@@ -131,18 +141,29 @@ class QueryImages
     /**
      * @return int
      */
-    public function getTotalImages()
+    public function getTotalImages($options = ['withCache' => true, 'forceQuery' => false])
     {
-        if ($this->totalImages) {
+        if (!isset($options['withCache'])) {
+            $options['withCache'] = true;
+        }
+
+        if (!isset($options['forceQuery'])) {
+            $options['forceQuery'] = false;
+        }
+
+        if ($this->totalImages && $options['withCache']) {
             return $this->totalImages;
         }
 
-        $total = get_option('imageseo_get_total_images');
-        if ($total) {
-            $this->totalImages = $total;
-
-            return $total;
+        if (!$options['forceQuery']) {
+            $total = get_option('imageseo_get_total_images');
+            if ($total) {
+                $this->totalImages = $total;
+    
+                return $total;
+            }
         }
+
 
         global $wpdb;
 
@@ -155,7 +176,7 @@ class QueryImages
 
         $this->totalImages = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_total_images', $sqlQuery));
 
-        update_option('imageseo_get_total_images', $this->totalImages);
+        update_option('imageseo_get_total_images', $this->totalImages, false);
 
         return $this->totalImages;
     }

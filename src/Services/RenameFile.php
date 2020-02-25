@@ -272,7 +272,7 @@ class RenameFile
         }
 
         $data[$sourceParse['path']] = ['target' => $targetUrl, 'date_add' => time()];
-        update_option('_imageseo_redirect_images', $data);
+        update_option('_imageseo_redirect_images', $data, false);
 
         if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
             $content = $this->htaccessServices->generate();
@@ -296,7 +296,7 @@ class RenameFile
         }
 
         unset($data[$targetParse['path']]);
-        update_option('_imageseo_redirect_images', $data);
+        update_option('_imageseo_redirect_images', $data, false);
 
         if (ServerSoftware::isApache() && $this->htaccessServices->isWritable()) {
             $content = $this->htaccessServices->generate();

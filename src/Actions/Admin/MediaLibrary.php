@@ -81,13 +81,13 @@ class MediaLibrary
         if (empty($alt)) {
             $total = get_option('imageseo_get_number_image_non_optimize_alt');
             if ($total) {
-                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total + 1);
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total + 1, false);
             }
         }
 
         $total = get_option('imageseo_get_total_images');
         if ($total) {
-            update_option('imageseo_get_total_images', (int) $total + 1);
+            update_option('imageseo_get_total_images', (int) $total + 1, false);
         }
     }
 
@@ -104,13 +104,13 @@ class MediaLibrary
         if (empty($alt)) {
             $total = get_option('imageseo_get_number_image_non_optimize_alt');
             if ($total) {
-                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1);
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1, false);
             }
         }
 
         $total = get_option('imageseo_get_total_images');
         if ($total) {
-            update_option('imageseo_get_total_images', (int) $total - 1);
+            update_option('imageseo_get_total_images', (int) $total - 1, false);
         }
     }
 

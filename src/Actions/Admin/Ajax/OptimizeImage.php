@@ -52,7 +52,7 @@ class OptimizeImage
             'state'           => json_decode(stripslashes($_POST['state'])),
             'count_optimized' => (int) $_POST['countOptimized'],
             'last_updated'    => $now->format('Y-m-d H:i:s'),
-        ]);
+        ], false);
 
         wp_send_json_success();
     }

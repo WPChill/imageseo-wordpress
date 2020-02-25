@@ -75,7 +75,6 @@ class Option
 
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
-
         switch ($_POST['action']) {
             case 'update':
                 $newOptions['active_alt_write_upload'] = isset($options['active_alt_write_upload']) ? 1 : 0;
