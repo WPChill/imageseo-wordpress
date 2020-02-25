@@ -6,8 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Async\QueryImagesNoAltBackgroundProcess;
-
 class Alt
 {
     public function __construct()
@@ -15,7 +13,6 @@ class Alt
         $this->reportImageService = imageseo_get_service('ReportImage');
         $this->optionServices = imageseo_get_service('Option');
         $this->tagsToStringServices = imageseo_get_service('TagsToString');
-        $this->processQueryImagesNoAlt = new QueryImagesNoAltBackgroundProcess();
     }
 
     /**
@@ -64,19 +61,22 @@ class Alt
      * @param int    $attachmentId
      * @param string $alt
      */
-    public function updateAlt($attachmentId, $alt, $options = ['updateCounter' => true])
+    public function updateAlt($attachmentId, $alt)
     {
-        if (!isset($options['updateCounter'])) {
-            $options['updateCounter'] = true;
-        }
-
+        $currentAlt = $this->getAlt($attachmentId);
         update_post_meta($attachmentId, '_wp_attachment_image_alt', apply_filters('imageseo_update_alt', $alt, $attachmentId));
 
-        if ($options['updateCounter']) {
-            $this->processQueryImagesNoAlt->push_to_queue([
-                'query_images_no_alt' => true,
-            ]);
-            $this->processQueryImagesNoAlt->save()->dispatch();
+        // Update counter
+        if (empty($currentAlt) && !empty($alt)) { // Empty => Not empty
+            $total = get_option('imageseo_get_number_image_non_optimize_alt');
+            if ($total) {
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1, false);
+            }
+        } elseif (empty($alt)) { // No alt
+            $total = get_option('imageseo_get_number_image_non_optimize_alt');
+            if ($total) {
+                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total + 1, false);
+            }
         }
     }
 

@@ -101,11 +101,10 @@ class MediaLibrary
         }
 
         $alt = $this->altService->getAlt($attachmentId);
-        if (empty($alt)) {
-            $total = get_option('imageseo_get_number_image_non_optimize_alt');
-            if ($total) {
-                update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1, false);
-            }
+
+        $total = get_option('imageseo_get_number_image_non_optimize_alt');
+        if ($total) {
+            update_option('imageseo_get_number_image_non_optimize_alt', (int) $total - 1, false);
         }
 
         $total = get_option('imageseo_get_total_images');
