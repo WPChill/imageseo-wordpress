@@ -26,14 +26,11 @@ class AdminBar
     {
         global $wp_admin_bar;
 
-        $title = '<span class="ab-icon icon-seopress-seopress"></span> ' . __('SEO', 'wp-seopress');
-        $title = apply_filters('seopress_adminbar_icon', $title);
-
         $wp_admin_bar->add_menu([
             'parent'    => false,
             'id'        => 'imageseo',
             'title'     => 'ImageSEO',
-            'href'      => admin_url('admin.php?page=imageseo-settings'),
+            'href'      => admin_url('admin.php?page=imageseo-options'),
         ]);
 
         if (!is_admin()) {

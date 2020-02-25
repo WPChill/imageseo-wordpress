@@ -24,7 +24,7 @@ class Support
 
     public function backupAttachment()
     {
-        $redirectUrl = admin_url('admin.php?page=imageseo-settings&tab=support');
+        $redirectUrl = admin_url('admin.php?page=imageseo-options&tab=support');
 
         if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_backup_attachment')) {
             wp_redirect($redirectUrl);
@@ -62,7 +62,7 @@ class Support
 
     public function resetHtaccess()
     {
-        $redirectUrl = admin_url('admin.php?page=imageseo-settings&tab=support');
+        $redirectUrl = admin_url('admin.php?page=imageseo-options&tab=support');
 
         if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_reset_htaccess')) {
             wp_redirect($redirectUrl);

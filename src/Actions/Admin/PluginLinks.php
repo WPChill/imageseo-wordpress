@@ -19,7 +19,7 @@ class PluginLinks
             return $links;
         }
 
-        $settings = sprintf('<a href="%s">%s</a>', admin_url('admin.php?page=imageseo-settings'), __('Settings', 'imageseo'));
+        $settings = sprintf('<a href="%s">%s</a>', admin_url('admin.php?page=imageseo-options'), __('Settings', 'imageseo'));
         $documentation = sprintf('<a href="%s" target="_blank">%s</a>', 'https://imageseo.io/getting-started-wordpress/', __('Docs', 'imageseo'));
         $premium = sprintf('<a href="%s" style="font-weight:bold" target="_blank">%s</a>', 'https://app.imageseo.io/plan', __('Become PREMIUM !', 'imageseo'));
 

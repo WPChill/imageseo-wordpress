@@ -64,6 +64,20 @@ if ($this->owner) {
                         </a>
                     </div>
                 </div>
+                <br />
+                <?php
+                    $urlRecount = admin_url('admin-post.php?action=imageseo_recount_images');
+                    $urlRecount = wp_nonce_url($urlRecount, 'imageseo_recount_images');
+                ?>
+                <a href="<?php echo $urlRecount; ?>" style="display:flex; align-items:center;">
+                    <?php if (false !== get_transient('imageseo_process_query_count_images')): ?>
+                        <img
+                            src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
+                            style="animation:imageseo-rotation 1s infinite linear; margin-right:10px;"
+                        />
+                    <?php endif; ?>
+                    <?php _e('Recalculating the images counter', 'imageseo'); ?>
+                </a>
             </div>
         </div>
         <?php if ($this->owner): ?>
@@ -85,6 +99,7 @@ if ($this->owner) {
                             <strong class="imageseo-color-blue"><?php echo sprintf(__('%s credits used', 'imageseo'), "$usageCreditPercent%"); ?></strong>
                         </div>				
                         <a href="https://app.imageseo.io/plan" target="_blank">
+                            
                             <?php _e('Buy more credit', 'imageseo'); ?>
                         </a>
                     </div>

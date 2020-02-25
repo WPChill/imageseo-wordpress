@@ -87,6 +87,7 @@ function imageseo_plugin_deactivate()
 function imageseo_plugin_uninstall()
 {
     delete_option(IMAGESEO_SLUG);
+    delete_option('imageseo_version');
 }
 
 /**

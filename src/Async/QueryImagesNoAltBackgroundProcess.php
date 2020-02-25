@@ -20,6 +20,8 @@ class QueryImagesNoAltBackgroundProcess extends WPBackgroundProcess
             'withCache' => false,
         ]);
 
+        delete_transient('imageseo_process_query_count_images');
+
         return false;
     }
 }
