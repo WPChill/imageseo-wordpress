@@ -69,6 +69,37 @@ class QueryImages
         return $sqlQuery;
     }
 
+    public function buildSqlQueryWooCommerce($options)
+    {
+        global $wpdb;
+        $sqlQuery = 'SELECT pm2.post_id as ID ';
+        $sqlQuery .= "FROM {$wpdb->posts} p ";
+
+        if ($options['only_optimized']) {
+            $sqlQuery .= "INNER JOIN {$wpdb->postmeta} AS pmOptimized ON ( p.ID = pmOptimized.post_id ) ";
+        }
+
+        $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} pm ON (
+            pm.post_id = p.ID
+            AND pm.meta_value IS NOT NULL
+            AND pm.meta_key = '_thumbnail_id'
+        ) ";
+        $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} pm2 ON (
+            pm.meta_value = pm2.post_id 
+            AND pm2.meta_key = '_wp_attached_file' 
+            AND pm2.meta_value IS NOT NULL
+        ) ";
+
+        $sqlQuery .= 'WHERE 1=1 ';
+        $sqlQuery .= "AND p.post_status='publish' AND p.post_type='product' ";
+
+        if ($options['only_optimized']) {
+            $sqlQuery .= "AND ( pmOptimized.meta_key = '_imageseo_report' ) ";
+        }
+
+        return $sqlQuery;
+    }
+
     public function query()
     {
         if (!current_user_can('manage_options')) {
@@ -87,16 +118,32 @@ class QueryImages
 
         global $wpdb;
 
-        $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => false]));
-        $ids = $wpdb->get_results($query, ARRAY_N);
-        if (!empty($ids)) {
-            $ids = call_user_func_array('array_merge', $ids);
-        }
+        if (AltSpecification::WOO_PRODUCT_IMAGE === $filters['alt_filter']) {
+            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => false]));
+            $ids = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($ids)) {
+                $ids = call_user_func_array('array_merge', $ids);
+            }
 
-        $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => true]));
-        $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-        if (!empty($idsOptimized)) {
-            $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
+            $ids = array_merge($ids, $this->queryImages->getWooCommerceIdsGallery());
+
+            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => true]));
+            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($idsOptimized)) {
+                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
+            }
+        } else {
+            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => false]));
+            $ids = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($ids)) {
+                $ids = call_user_func_array('array_merge', $ids);
+            }
+
+            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => true]));
+            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($idsOptimized)) {
+                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
+            }
         }
 
         wp_send_json_success([

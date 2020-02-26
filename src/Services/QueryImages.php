@@ -14,6 +14,31 @@ class QueryImages
 
     protected $totalImages = 0;
 
+    public function getWooCommerceIdsGallery()
+    {
+        global $wpdb;
+        $sqlQuery = "SELECT pm.meta_value
+            FROM {$wpdb->posts} p 
+            INNER JOIN {$wpdb->postmeta} pm ON (
+                pm.post_id = p.id
+                AND pm.meta_value IS NOT NULL
+                AND pm.meta_key = '_product_image_gallery'
+        )";
+
+        $result = $wpdb->get_results($sqlQuery, ARRAY_N);
+        if (empty($result)) {
+            return [];
+        }
+
+        $ids = [];
+        foreach ($result as $item) {
+            $idsGallery = array_filter(explode(',', $item[0]));
+            $ids = array_merge($ids, $idsGallery);
+        }
+
+        return array_unique($ids);
+    }
+
     public function getPostByAttachmentId($attachmentId)
     {
         global $wpdb;
@@ -159,11 +184,10 @@ class QueryImages
             $total = get_option('imageseo_get_total_images');
             if ($total) {
                 $this->totalImages = $total;
-    
+
                 return $total;
             }
         }
-
 
         global $wpdb;
 
