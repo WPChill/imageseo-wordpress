@@ -104,7 +104,9 @@ const StepOne = ({ onClickClose, handleEndChurn = null }) => {
 						)}
 					</div>
 				</Checkbox>
-				<Text className="mt-2 mb-2">Message :</Text>
+				<Text style={{ marginTop: 15, marginBottom: 10 }}>
+					Message :
+				</Text>
 				<Textarea
 					name="message"
 					onChange={handleInputChange}
