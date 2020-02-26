@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 <div id="wrap-imageseo">
     <div class="wrap">
+        <h1 class="imageseo__page-title"><?php _e('Social Card Optimizer', 'imageseo'); ?></h1>
         <div class="imageseo-flex imageseo-mb-3">
             <div class="fl-1 imageseo-mr-3">
                 <div class="imageseo-block imageseo-block--secondary imageseo-block--introduce">

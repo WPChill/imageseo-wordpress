@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-function Button({ simple, primary, large, children, style, ...rest }) {
+function Button({ simple, primary, large, children, style, loading, ...rest }) {
 	return (
 		<button
 			className={classNames(

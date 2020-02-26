@@ -8,6 +8,8 @@ module.exports = {
 	entry: {
 		"media-upload": "./app/javascripts/media-upload.js",
 		bulk: "./app/javascripts/react/index.js",
+		"deactivate-intent":
+			"./app/javascripts/react/deactivate-intent.module.js",
 		"api-key": "./app/javascripts/api-key.js",
 		register: "./app/javascripts/register.js",
 		"generate-social-media": "./app/javascripts/generate-social-media.js",
