@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "@babel/polyfill/noConflict";
 import DeactivateIntent from "./modules/DeactivateIntent";
 
 const element = document.querySelector(

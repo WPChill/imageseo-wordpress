@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "@babel/polyfill/noConflict";
 import Bulk from "./modules/Bulk";
 import { ThemeProvider } from "styled-components";
 import SocialMedia from "./modules/SocialMedia";

@@ -136,7 +136,7 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 1.2.3 (02-25-2020) =
+= 1.2.4 (02-25-2020) =
 - Bugfix: Updating the cache on the image counter
 - Improved: Background image counter processing (performance improvement)
 - Improved : Possibility to go back on a file name change
