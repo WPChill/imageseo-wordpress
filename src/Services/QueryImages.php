@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\AttachmentMeta;
+use ImageSeoWP\Helpers\Bulk\AltSpecification;
 
 class QueryImages
 {
@@ -14,7 +15,7 @@ class QueryImages
 
     protected $totalImages = 0;
 
-    public function getWooCommerceIdsGallery()
+    public function getWooCommerceIdsGallery($options)
     {
         global $wpdb;
         $sqlQuery = "SELECT pm.meta_value
@@ -33,10 +34,24 @@ class QueryImages
         $ids = [];
         foreach ($result as $item) {
             $idsGallery = array_filter(explode(',', $item[0]));
+
             $ids = array_merge($ids, $idsGallery);
         }
 
-        return array_unique($ids);
+        $ids = array_unique($ids);
+
+        if (AltSpecification::FILL_ONLY_EMPTY !== $options['alt_fill']) {
+            return $ids;
+        }
+
+        foreach ($ids as $key => $id) {
+            $alt = imageseo_get_service('Alt')->getAlt($id);
+            if (!empty($alt)) {
+                unset($ids[$key]);
+            }
+        }
+
+        return $ids;
     }
 
     public function getPostByAttachmentId($attachmentId)

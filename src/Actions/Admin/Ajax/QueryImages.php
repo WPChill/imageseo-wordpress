@@ -90,12 +90,31 @@ class QueryImages
             AND pm2.meta_value IS NOT NULL
         ) ";
 
+        switch ($options['alt_fill']) {
+            case AltSpecification::FILL_ONLY_EMPTY:
+                $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOnlyEmpty2 ON (pm2.post_id = pmOnlyEmpty2.post_id AND pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' ) ";
+
+                break;
+        }
+
         $sqlQuery .= 'WHERE 1=1 ';
         $sqlQuery .= "AND p.post_status='publish' AND p.post_type='product' ";
+
+        switch ($options['alt_fill']) {
+            case AltSpecification::FILL_ONLY_EMPTY:
+                $sqlQuery .= "AND ( 
+                    ( pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty2.meta_value = '' ) 
+                    OR 
+                    pmOnlyEmpty2.post_id IS NULL
+                  )  ";
+                break;
+        }
 
         if ($options['only_optimized']) {
             $sqlQuery .= "AND ( pmOptimized.meta_key = '_imageseo_report' ) ";
         }
+
+        $sqlQuery .= 'GROUP BY p.ID ';
 
         return $sqlQuery;
     }
@@ -125,7 +144,7 @@ class QueryImages
                 $ids = call_user_func_array('array_merge', $ids);
             }
 
-            $ids = array_merge($ids, $this->queryImages->getWooCommerceIdsGallery());
+            $ids = array_merge($ids, $this->queryImages->getWooCommerceIdsGallery($filters));
 
             $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => true]));
             $idsOptimized = $wpdb->get_results($query, ARRAY_N);
