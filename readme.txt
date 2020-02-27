@@ -30,8 +30,8 @@ Our Image SEO plugin works in all the major languages and is compatible with all
 
 Image SEO helps to grow your organic and social traffic. We optimize your media library and your image gallery for Search Engines and Social Media using Artificial Intelligence.
 
-* On-upload : automatically fills out your images alternative texts (ALT tag or ALT text) when you upload them in the Library;
-* On-upload: AAutomatically rewrites your image and photo names when you upload them in the Library ;
+* On-upload : Automatically fills out your images alternative texts (ALT tag or ALT text) when you upload them in the Library;
+* On-upload: Automatically rewrites your image and photo names when you upload them in the Library ;
 * On-upload: Generate amazing social cards for Twitter, Facebook, LinkedIn and Pinterest for you post and articles.
 * Bulk : automatically rewrites with SEO friendly content all the alt text and names of the images available in your library;
 * Checks: that all your images have an alternative text;

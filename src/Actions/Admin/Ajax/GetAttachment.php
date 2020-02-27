@@ -37,6 +37,13 @@ class GetAttachment
         $attachmentId = (int) $_POST['attachmentId'];
 
         $attachment = get_post($attachmentId, ARRAY_A);
+        if (!$attachment) {
+            wp_send_json_error([
+                'code' => 'not_exist',
+            ]);
+            exit;
+        }
+
         $metadata = wp_get_attachment_metadata($attachmentId);
         $attachment['metadata'] = wp_get_attachment_metadata($attachmentId);
         $attachment['thumbnail'] = wp_get_attachment_image_src($attachmentId, 'thumbnail');

@@ -97,11 +97,17 @@ function BulkWithProviders() {
 		const attachmentId = getAttachmentIdWithProcess(state);
 		const fetchAttachment = async attachmentId => {
 			const { data: attachment } = await getAttachement(attachmentId);
-
-			dispatch({
-				type: "ADD_ATTACHMENT",
-				payload: attachment
-			});
+			if (get(attachment, "code", false) === "not_exist") {
+				dispatch({
+					type: "ATTACHMENT_NOT_FOUND",
+					payload: attachmentId
+				});
+			} else {
+				dispatch({
+					type: "ADD_ATTACHMENT",
+					payload: attachment
+				});
+			}
 		};
 
 		saveCurrentBulk(settings, state, state.currentProcess + 1);

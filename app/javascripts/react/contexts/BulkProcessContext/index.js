@@ -1,4 +1,4 @@
-import { reduce, isEmpty, memoize, uniq } from "lodash";
+import { reduce, isEmpty, memoize, uniq, omit } from "lodash";
 import React, { useReducer, createContext } from "react";
 import getFilenameWithoutExtension from "../../helpers/getFilenameWithoutExtension";
 import getFilenamePreview from "../../helpers/getFilenamePreview";
@@ -82,6 +82,19 @@ function reducer(state, { type, payload }) {
 			return {
 				...state,
 				currentProcess: null
+			};
+		case "ATTACHMENT_NOT_FOUND":
+			const {
+				[payload]: removeAttachmentId,
+				...rest
+			} = state.attachments;
+			console.log("Rest : ", rest);
+			return {
+				...state,
+				currentProcess: state.currentProcess + 1,
+				attachments: {
+					...rest
+				}
 			};
 		case "ADD_ATTACHMENT":
 			return {
