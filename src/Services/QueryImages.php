@@ -15,6 +15,36 @@ class QueryImages
 
     protected $totalImages = 0;
 
+    public function getImagesNoAltByListIds($ids)
+    {
+        global $wpdb;
+        $sqlQuery = 'SELECT p.ID ';
+        $sqlQuery .= "FROM {$wpdb->posts} p ";
+        $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOnlyEmpty ON ( p.ID = pmOnlyEmpty.post_id ) ";
+        $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOnlyEmpty2 ON (p.ID = pmOnlyEmpty2.post_id AND pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' ) ";
+
+        // == WHERE
+        $sqlQuery .= 'WHERE 1=1 ';
+        $sqlQuery .= "AND p.ID IN ($ids) ";
+        $sqlQuery .= "AND ( 
+            ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' ) 
+            OR 
+            pmOnlyEmpty2.post_id IS NULL
+            )  ";
+
+        $sqlQuery .= "AND (p.post_mime_type = 'image/jpeg' OR p.post_mime_type = 'image/gif' OR p.post_mime_type = 'image/jpg' OR p.post_mime_type = 'image/png') ";
+        $sqlQuery .= "AND p.post_type = 'attachment' ";
+        $sqlQuery .= "AND ((p.post_status = 'publish' OR p.post_status = 'future' OR p.post_status = 'pending' OR p.post_status = 'inherit' OR p.post_status = 'private')) ";
+        $sqlQuery .= 'GROUP BY p.ID';
+
+        $result = $wpdb->get_results($sqlQuery, ARRAY_N);
+        if (empty($result)) {
+            return [];
+        }
+
+        return call_user_func_array('array_merge', $result);
+    }
+
     public function getWooCommerceIdsGallery($options)
     {
         global $wpdb;
@@ -44,14 +74,7 @@ class QueryImages
             return $ids;
         }
 
-        foreach ($ids as $key => $id) {
-            $alt = imageseo_get_service('Alt')->getAlt($id);
-            if (!empty($alt)) {
-                unset($ids[$key]);
-            }
-        }
-
-        return $ids;
+        return $this->getImagesNoAltByListIds(implode(', ', $ids));
     }
 
     public function getPostByAttachmentId($attachmentId)
