@@ -55,7 +55,7 @@ function BulkResultsItem({ attachment }) {
 		}
 
 		if (
-			!isNil(state.altPreviews[attachment.ID]) &&
+			!isNil(state.altPreviews[attachment.ID]) ||
 			!isNil(state.filePreviews[attachment.ID])
 		) {
 			return;
