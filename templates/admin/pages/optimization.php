@@ -2,6 +2,7 @@
 
 use ImageSeoWP\Helpers\AltFormat;
 use ImageSeoWP\Helpers\Bulk\AltSpecification;
+use ImageSeoWP\Helpers\ServerSoftware;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -15,6 +16,21 @@ $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($to
 
 $currentProcess = get_option('_imageseo_current_processed', 0);
 $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
+
+$beaverBuilder = false;
+if (is_plugin_active('bb-plugin/fl-builder.php')) { // No compatible with Beaver Builder
+    $beaverBuilder = true;
+}
+
+$elementor = false;
+if (is_plugin_active('elementor/elementor.php') || is_plugin_active('elementor-pro/elementor-pro.php')) { // No compatible with Elementor
+    $elementor = true;
+}
+
+$divi = false;
+if (class_exists('DiviExtension')) { // No compatible with Divi
+    $divi = true;
+}
 
 ?>
 
@@ -47,6 +63,12 @@ $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_
         OPTIONS : <?php echo wp_json_encode($this->options); ?>,
         ALT_FORMATS : <?php echo wp_json_encode(AltFormat::getFormats()); ?>,
         ALT_SPECIFICATION : <?php echo wp_json_encode(AltSpecification::getMetas()); ?>,
-        ALT_FILL_TYPE : <?php echo wp_json_encode(AltSpecification::getFillType()); ?>
+        ALT_FILL_TYPE : <?php echo wp_json_encode(AltSpecification::getFillType()); ?>,
+        INFOS: {
+            BEAVER_BUILDER : <?php echo $beaverBuilder ? 'true' : 'false'; ?>,
+            ELEMENTOR : <?php echo $elementor ? 'true' : 'false'; ?>,
+            DIVI : <?php echo $divi ? 'true' : 'false'; ?>,
+            IS_NGINX : <?php echo ServerSoftware::isNginx() ? 'true' : 'false'; ?>,
+        }
     }
 </script>

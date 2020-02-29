@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Async;
 
+defined('ABSPATH') or die('Cheatin&#8217; uh?');
+
 class QueryImagesNoAltBackgroundProcess extends WPBackgroundProcess
 {
     protected $action = 'imageseo_query_images_no_alt_background_process';

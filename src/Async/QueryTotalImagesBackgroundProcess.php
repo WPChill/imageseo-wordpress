@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Async;
 
+defined('ABSPATH') or die('Cheatin&#8217; uh?');
+
 class QueryTotalImagesBackgroundProcess extends WPBackgroundProcess
 {
     protected $action = 'imageseo_query_total_images_background_process';

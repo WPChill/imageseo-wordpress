@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Async;
 
+defined('ABSPATH') or die('Cheatin&#8217; uh?');
+
 use ImageSeoWP\Helpers\SocialMedia;
 
 class GenerateImageBackgroundProcess extends WPBackgroundProcess

@@ -4,6 +4,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// global $wpdb;
+
+// $sqlQuery = "SELECT pm.*, p.post_type
+//     FROM {$wpdb->postmeta} pm
+//     INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+//     WHERE 1=1
+//     AND pm.meta_key = '_wp_old_slug'
+//     AND p.post_type= 'attachment'
+//     AND (p.post_mime_type = 'image/jpeg' OR p.post_mime_type = 'image/gif' OR p.post_mime_type = 'image/jpg' OR p.post_mime_type = 'image/png')
+//     ";
+
 $backupAttachmentUrl = wp_nonce_url(add_query_arg(
     [
         'action' => 'imageseo_backup_attachment',

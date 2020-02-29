@@ -28,66 +28,61 @@ class MediaLibrary
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
         add_action('admin_init', [$this, 'metaboxReport']);
-        add_action('add_attachment', [$this, 'addAltOnUpload']);
-        add_action('add_attachment', [$this, 'updateCount'], 100);
+        add_filter('wp_generate_attachment_metadata', [$this, 'createProcessOnUpload'], 10, 2);
         add_action('delete_attachment', [$this, 'updateDeleteCount'], 100);
-        add_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
     }
 
     public function muteOnUpload()
     {
-        remove_action('add_attachment', [$this, 'addAltOnUpload']);
-        remove_filter('wp_generate_attachment_metadata', [$this, 'renameFileOnUpload'], 10, 2);
+        remove_filter('wp_generate_attachment_metadata', [$this, 'createProcessOnUpload'], 10, 2);
     }
 
-    /**
-     * @param int $postId
-     */
-    public function addAltOnUpload($attachmentId)
+    public function createProcessOnUpload($metadata, $attachmentId)
     {
         if (!wp_attachment_is_image($attachmentId)) {
-            return;
+            return $metadata;
         }
 
-        $activeWriteReport = $this->optionService->getOption('active_alt_write_upload');
+        $activeAltOnUpload = $this->optionService->getOption('active_alt_write_upload');
+        $activeRenameOnUpload = $this->optionService->getOption('active_rename_write_upload');
 
-        if (!$activeWriteReport) {
-            return;
+        $total = get_option('imageseo_get_total_images');
+        if ($total) {
+            update_option('imageseo_get_total_images', (int) $total + 1, false);
         }
 
-        try {
-            $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, ['force' => true]);
-        } catch (\Exception $e) {
-            return;
-        }
-
-        if (!$response['success']) {
-            return;
-        }
-
-        $this->altService->updateAltAttachmentWithReport($attachmentId);
-    }
-
-    /**
-     * @param int $attachmentId
-     */
-    public function updateCount($attachmentId)
-    {
-        if (!wp_attachment_is_image($attachmentId)) {
-            return;
-        }
-
-        $alt = $this->altService->getAlt($attachmentId);
-        if (empty($alt)) {
+        if (!$activeAltOnUpload) {
             $total = get_option('imageseo_get_number_image_non_optimize_alt');
             if ($total) {
                 update_option('imageseo_get_number_image_non_optimize_alt', (int) $total + 1, false);
             }
         }
 
-        $total = get_option('imageseo_get_total_images');
-        if ($total) {
-            update_option('imageseo_get_total_images', (int) $total + 1, false);
+        if (!$activeAltOnUpload && !$activeRenameOnUpload) {
+            return $metadata;
+        }
+
+        try {
+            $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true]);
+        } catch (\Exception $e) {
+            return $metadata;
+        }
+
+        if ($activeAltOnUpload) {
+            $this->altService->updateAltAttachmentWithReport($attachmentId);
+        }
+
+        if ($activeRenameOnUpload) {
+            try {
+                $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
+                $result = $this->renameFileService->updateFilename($attachmentId, $filename, $metadata, ['backup' => false, 'onUpload' => true]);
+                if (array_key_exists('metadata', $result)) {
+                    $metadata = $result['metadata'];
+                }
+
+                return $metadata;
+            } catch (NoRenameFile $e) {
+            }
         }
     }
 
@@ -111,45 +106,6 @@ class MediaLibrary
         if ($total) {
             update_option('imageseo_get_total_images', (int) $total - 1, false);
         }
-    }
-
-    /**
-     * @param array $metadata
-     * @param int   $attachmentId
-     *
-     * @return array
-     */
-    public function renameFileOnUpload($metadata, $attachmentId)
-    {
-        if (!wp_attachment_is_image($attachmentId)) {
-            return $metadata;
-        }
-
-        $activeWriteReport = $this->optionService->getOption('active_rename_write_upload');
-
-        if (!$activeWriteReport) {
-            return $metadata;
-        }
-
-        $response = $this->reportImageService->generateReportByAttachmentId($attachmentId, ['force' => true]);
-        if (!$response['success']) {
-            return $metadata;
-        }
-
-        $this->reportImageService->generateReportByAttachmentId($attachmentId);
-
-        try {
-            $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
-            $result = $this->renameFileService->updateFilename($attachmentId, $filename, $metadata, ['backup' => false, 'onUpload' => true]);
-            if (array_key_exists('metadata', $result)) {
-                $metadata = $result['metadata'];
-            }
-
-            return $metadata;
-        } catch (NoRenameFile $e) {
-        }
-
-        return $metadata;
     }
 
     public function ajaxAltUpdate()
@@ -192,7 +148,7 @@ class MediaLibrary
     public function manageMediaColumns($columns)
     {
         $columns['imageseo_alt'] = __('Alt', 'imageseo');
-        $columns['imageseo_filename'] = __('Filename', 'imageseo');
+        // $columns['imageseo_filename'] = __('Filename', 'imageseo');
 
         return $columns;
     }

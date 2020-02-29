@@ -195,7 +195,10 @@ class RenameFile
                 $oldFile = $metadata['sizes'][$key]['file'];
                 $metadata['sizes'][$key]['file'] = str_replace($basenameWithoutExt, $newFilename, $metadata['sizes'][$key]['file']);
 
-                rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
+                try {
+                    @rename($directory . $oldFile, $directory . $metadata['sizes'][$key]['file']);
+                } catch (\Exception $e) {
+                }
             }
         }
 
