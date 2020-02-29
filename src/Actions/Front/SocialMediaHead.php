@@ -34,6 +34,10 @@ class SocialMediaHead
             return;
         }
 
+        if (is_home() || is_front_page()) {
+            return;
+        }
+
         add_action('wp_head', [$this, 'openGraph'], 1);
     }
 

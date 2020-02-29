@@ -20,7 +20,7 @@ Don’t feel guilty: nobody enjoys writing images alt text, meta titles, pintere
 
 The plugin also allows to manually edit images names. 
 
-Our image optimization plugin is compatible with WooCommerce, NextGen Gallery, Yoast, SEOPress, All in one SEO, Divi and Elementor and all the major theme builders and plugin.
+Our image optimization plugin is compatible with WooCommerce, NextGen Gallery, Yoast, SEOPress, All in one SEO, and all the major plugin.
 
 Our Image SEO plugin works in all the major languages and is compatible with all the major image formats (JPEG, PNG, WebP, GIF, etc.).
 
@@ -127,7 +127,7 @@ Not yet, we leave it to our friends from Imagify.
 
 = Does Image SEO integrates with other plugins? =
 
-We are compatible with almost every plugin including : Featured Images, WooCommerce, NextGen Photo Gallery, Responsive Photo Gallery, FooGallery, Custom Post Type Images and page builders like Elementor, Origin, Divi, etc. ImageSEO also works with every image version : – full-sized optimized image, – full-sized WebP image, – optimized thumbnails, – WebP thumbnails.
+We are compatible with almost every plugin including : Featured Images, WooCommerce, NextGen Photo Gallery, Responsive Photo Gallery, FooGallery, Custom Post Type Images. ImageSEO also works with every image version : – full-sized optimized image, – full-sized WebP image, – optimized thumbnails, – WebP thumbnails.
 
 = Is Image SEO available in my language? =
 
