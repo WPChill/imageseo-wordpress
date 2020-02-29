@@ -28,6 +28,10 @@ class SocialMediaHead
             $this->compatibilitySEOPress();
 
             return;
+        } elseif (is_plugin_active('seo-by-rank-math/rank-math.php')) {
+            $this->compatibilityRankMath();
+
+            return;
         }
 
         add_action('wp_head', [$this, 'openGraph'], 1);
@@ -47,6 +51,24 @@ class SocialMediaHead
         }
 
         return true;
+    }
+
+    public function compatibilityRankMath()
+    {
+        add_filter('rank_math/opengraph/facebook/add_images', function ($image) {
+            $image->add_image($this->getImageUrlOpenGraph());
+
+            return $image;
+        });
+        add_filter('rank_math/opengraph/twitter/add_images', function ($image) {
+            $image->add_image($this->getImageUrlOpenGraph());
+
+            return $image;
+        });
+
+        add_filter('rank_math/opengraph/facebook/image', [$this, 'getImageUrlOpenGraph']);
+        add_filter('rank_math/opengraph/facebppl/og_image_secure_url', [$this, 'getImageUrlOpenGraph']);
+        add_filter('rank_math/opengraph/twitter/image', [$this, 'getImageUrlOpenGraph']);
     }
 
     public function compatibilityYoast()
