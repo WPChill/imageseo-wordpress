@@ -136,6 +136,11 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
+= 1.2.5 (03-01-2020) =
+- New: Social card compatible with Rank Math
+- Remove bulk filename
+- Improved: Process rename and alt on upload file
+
 = 1.2.4 (02-26-2020) =
 - Bugfix: Updating the cache on the image counter
 - Improved: Background image counter processing (performance improvement)
