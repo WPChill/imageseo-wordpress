@@ -81,7 +81,6 @@ We use Artificial Intelligences (AI) and Machine Learning (ML) to analyze your i
 Image SEO optimize your Media Library and your image gallery for Search Engines and Social Media using Artificial Intelligence.
 
 * Automatically fill out your images alternative texts (ALT Attribute for IMG) when you upload them in the library;
-* Optimize and rewrite all your image and photo filenames (Bulk Optimization);
 * Optimize your images data attributes for Pinterest, Facebook and Twitter (hashtag, description, URL, ID, Media, data-pin description, data-pin-media, data-pin-id);
 * See how many alternative texts are missing ;
 * Compatibility and support for Featured Images;
@@ -119,7 +118,7 @@ An alt tag, also known as "alt attribute" and "alt description," is an HTML 
 
 = Do I lose my alts if I downgrade my plan ? =
 
-Of course not ! You will keep the alt texts and filenames we generated for you.
+Of course not ! You will keep the alt texts we generated for you.
 
 = Do you provide image compression ? =
 
