@@ -289,7 +289,7 @@ function BulkSettings() {
 					)}
 				</div>
 			</SCContentSettings>
-			<SubTitle>Image name settings</SubTitle>
+			{/* <SubTitle>Image name settings</SubTitle>
 			<SCContentSettings>
 				<div className="imageseo-mb-3">
 					{get(blockOptimizeFile, "true", 0) > 0 && (
@@ -391,9 +391,9 @@ function BulkSettings() {
 								it's really worth for SEO.
 							</p>
 						</IFlexNumber>
-					</IFlex>
-				</div>
+					</IFlex></div>
 			</SCContentSettings>
+				 */}
 		</>
 	);
 }
