@@ -21,10 +21,10 @@ class OptimizeImage
     public function hooks()
     {
         add_action('wp_ajax_imageseo_preview_optimize_alt', [$this, 'getPreviewAlt']);
-        add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
+        // add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
         add_action('wp_ajax_imageseo_preview_data_report', [$this, 'getPreviewDataReport']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
-        add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
+        // add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
         add_action('wp_ajax_imageseo_save_current_bulk', [$this, 'saveCurrentBulk']);
         add_action('wp_ajax_imageseo_delete_current_bulk', [$this, 'deleteCurrentBulk']);
     }
@@ -113,20 +113,20 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-        $excludeFilenames = [];
-        try {
-            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
-        } catch (\Exception $e) {
-            $excludeFilenames = [];
-        }
+        // $excludeFilenames = [];
+        // try {
+        //     $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
+        // } catch (\Exception $e) {
+        //     $excludeFilenames = [];
+        // }
 
-        list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
+        // list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
         $template = sanitize_text_field($_POST['altTemplate']);
         $alt = $this->tagsToStringServices->replace($template, $attachmentId);
 
         wp_send_json_success([
-            'filename'  => $filename,
-            'extension' => $extension,
+            // 'filename'  => $filename,
+            // 'extension' => $extension,
             'alt'       => $alt,
         ]);
     }
