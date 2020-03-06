@@ -428,13 +428,6 @@ function BulkWithProviders() {
 												</>
 											)}
 										</li>
-										<li>
-											<strong>Optimize filename :</strong>{" "}
-											{IMAGESEO_DATA.CURRENT_PROCESSED
-												.settings.optimizeFile
-												? "Yes"
-												: "No"}
-										</li>
 									</ul>
 								</div>
 							</BlockContentInner>

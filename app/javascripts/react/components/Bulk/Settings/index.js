@@ -14,11 +14,11 @@ const SCContentSettings = styled.div`
 
 function BulkSettings() {
 	const { state: settings, dispatch } = useContext(BulkSettingsContext);
-	const blockOptimizeFile = countBy(
-		IMAGESEO_DATA.INFOS,
-		item => item === true
-	);
-	console.log(blockOptimizeFile);
+	// const blockOptimizeFile = countBy(
+	// 	IMAGESEO_DATA.INFOS,
+	// 	item => item === true
+	// );
+
 	return (
 		<>
 			<SubTitle>Global settings</SubTitle>
