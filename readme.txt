@@ -136,7 +136,7 @@ To help us translate Image SEO in your language, contact us
 == Changelog ==
 
 = 1.2.6 (03-08-2020) =
-- Improved : Remove cache reportso that the data is always up to date
+- Improved : Remove cache report so that the data is always up to date
 - Improved : Image query improvement
 
 = 1.2.5 (03-01-2020) =
