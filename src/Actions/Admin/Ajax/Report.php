@@ -6,8 +6,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Helpers\AttachmentMeta;
-
 class Report
 {
     public function __construct()
@@ -47,9 +45,7 @@ class Report
 
         $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
 
-        $reportLanguage = get_post_meta($attachmentId, AttachmentMeta::LANGUAGE, true);
-
-        if ($report && $language === $reportLanguage) {
+        if (apply_filters('imageseo_get_report_cache', false)) {
             $report['ID'] = $attachmentId;
             wp_send_json_success([
                 'need_update_counter' => false,

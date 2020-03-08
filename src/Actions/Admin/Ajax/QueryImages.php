@@ -166,8 +166,8 @@ class QueryImages
         }
 
         wp_send_json_success([
-            'ids'           => $ids,
-            'ids_optimized' => $idsOptimized,
+            'ids'           => array_values(array_filter($ids)),
+            'ids_optimized' => array_values(array_filter($idsOptimized)),
         ]);
     }
 }
