@@ -1,10 +1,10 @@
 ===  Image SEO Optimizer - auto images alt text, name and open graph tag - WooCommerce friendly ===
 Contributors: gmulti
 Tags: image seo, alt, alt text, open graph, seo
-Requires at least: 4.7+
+Requires at least: 4.8+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.2.5
+Stable tag: v1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,10 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.2.6 (03-08-2020) =
+- Improved : Remove cache reportso that the data is always up to date
+- Improved : Image query improvement
 
 = 1.2.5 (03-01-2020) =
 - New: Social card compatible with Rank Math
