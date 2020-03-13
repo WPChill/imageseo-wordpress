@@ -21,10 +21,10 @@ class OptimizeImage
     public function hooks()
     {
         add_action('wp_ajax_imageseo_preview_optimize_alt', [$this, 'getPreviewAlt']);
-        // add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
+        add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
         add_action('wp_ajax_imageseo_preview_data_report', [$this, 'getPreviewDataReport']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
-        // add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
+        add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
         add_action('wp_ajax_imageseo_save_current_bulk', [$this, 'saveCurrentBulk']);
         add_action('wp_ajax_imageseo_delete_current_bulk', [$this, 'deleteCurrentBulk']);
     }
