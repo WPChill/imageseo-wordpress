@@ -19,7 +19,7 @@ class RewriteRuleFilename
     {
         add_action('init', [$this, 'rewriteRule']);
         add_filter('query_vars', [$this, 'addQueryVars']);
-        add_action('template_redirect', [$this, 'redirectMediaFile']);
+        add_action('parse_query', [$this, 'redirectMediaFile']);
     }
 
     public function rewriteRule()
@@ -49,7 +49,7 @@ class RewriteRuleFilename
         return $queryVars;
     }
 
-    public function scaled_image_path($attachment_id, $size = 'thumbnail')
+    public function scaledImagePath($attachment_id, $size = 'thumbnail')
     {
         $file = get_attached_file($attachment_id, true);
         if (empty($size) || 'full' === $size) {
@@ -73,7 +73,6 @@ class RewriteRuleFilename
             wp_redirect(site_url());
             die;
         }
-
         $maxAge = apply_filters('imageseo_rename_file_max_age', 86400);
         $lastModifiedTime = filemtime($path);
         $etag = md5_file($path);
@@ -127,7 +126,7 @@ class RewriteRuleFilename
             die;
         }
 
-        $attachmentPath = $this->scaled_image_path($attachment->ID, $data[$fullFilename]['size']);
+        $attachmentPath = $this->scaledImagePath($attachment->ID, $data[$fullFilename]['size']);
 
         if (!$attachmentPath || !file_exists($attachmentPath)) {
             header(sprintf('Content-type: %s', $attachment->post_mime_type));
