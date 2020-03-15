@@ -148,7 +148,7 @@ class MediaLibrary
     public function manageMediaColumns($columns)
     {
         $columns['imageseo_alt'] = __('Alt', 'imageseo');
-        $columns['imageseo_filename'] = __('Filename', 'imageseo');
+        $columns['imageseo_filename'] = __('Filename ImageSEO', 'imageseo');
 
         return $columns;
     }
@@ -193,13 +193,21 @@ class MediaLibrary
 
     public function renderFilename($attachmentId)
     {
-        $filename = $this->renameFileService->getFilenameByAttachmentId($attachmentId);
-        $splitFilename = explode('.', $filename);
-        array_pop($splitFilename);
-        $filename = implode('-', $splitFilename);
-        $haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId); ?>
+        $filenameByImageSEO = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($attachmentId);
+
+        $filename = '';
+        if (!empty($filenameByImageSEO)) {
+            foreach ($filenameByImageSEO as $key => $value) {
+                if ('full' !== $value['size']) {
+                    continue;
+                }
+                $splitFilename = explode('.', $key);
+                $extension = array_pop($splitFilename);
+                $filename = implode('-', $splitFilename);
+            }
+        } ?>
         <div class="media-column-imageseo">
-            <span class="text"><?php esc_html_e("Don't use a file extension but just the name.", 'imageseo'); ?>
+            <span class="text" style="margin-bottom:5px; display:block;"><?php esc_html_e('Choose a new file name.', 'imageseo'); ?></span>
             <div id="wrapper-imageseo-filename-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-filename">
                 <input
                     type="text"
@@ -214,7 +222,13 @@ class MediaLibrary
                     <span><?php _e('Submit', 'imageseo'); ?></span>
                     <div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
                 </button>
+
             </div>
+            <?php if (!empty($filename)): ?>
+                <a target="_blank" href="<?php echo site_url(sprintf('/medias/images/%s.%s', $filename, $extension)); ?>" style="margin:5px 0px; display:block;">
+                    <?php _e('View Image', 'imageseo'); ?>
+                </a>
+            <?php endif; ?>
             <br />
             <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
                 <?php echo __('Rename file automatically', 'imageseo'); ?>
