@@ -110,6 +110,27 @@ function BulkResultsItem({ attachment }) {
 				}
 			}
 
+			if (settings.optimizeFile && isEmpty(fileinfos)) {
+				if (isEmpty(data.filename)) {
+					setFileInfos(null);
+				} else {
+					setFileInfos({
+						filename: data.filename,
+						extension: data.extension
+					});
+					dispatch({
+						type: "ADD_FILENAME_PREVIEW",
+						payload: {
+							ID: attachment.ID,
+							file: {
+								filename: data.filename,
+								extension: data.extension
+							}
+						}
+					});
+				}
+			}
+
 			setLoading(false);
 		};
 
@@ -248,7 +269,7 @@ function BulkResultsItem({ attachment }) {
 								</Col>
 							</Row>
 							<BlockTableLineOldValue>
-								Current alt text: : {attachment.alt}
+								Current alt text: {attachment.alt}
 							</BlockTableLineOldValue>
 						</BlockTableLineItem>
 					</Col>

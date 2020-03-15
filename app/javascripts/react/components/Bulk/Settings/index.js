@@ -14,10 +14,10 @@ const SCContentSettings = styled.div`
 
 function BulkSettings() {
 	const { state: settings, dispatch } = useContext(BulkSettingsContext);
-	// const blockOptimizeFile = countBy(
-	// 	IMAGESEO_DATA.INFOS,
-	// 	item => item === true
-	// );
+	const blockOptimizeFile = countBy(
+		IMAGESEO_DATA.INFOS,
+		item => item === true
+	);
 
 	return (
 		<>
@@ -289,73 +289,9 @@ function BulkSettings() {
 					)}
 				</div>
 			</SCContentSettings>
-			{/* <SubTitle>Image name settings</SubTitle>
+			<SubTitle>Image name settings</SubTitle>
 			<SCContentSettings>
 				<div className="imageseo-mb-3">
-					{get(blockOptimizeFile, "true", 0) > 0 && (
-						<div
-							style={{
-								borderRadius: 4,
-								backgroundColor: "#e64c2e",
-								padding: 15,
-								marginBottom: 10
-							}}
-						>
-							{IMAGESEO_DATA.INFOS.IS_NGINX &&
-							get(blockOptimizeFile, "true", 0) === 1 ? (
-								<>
-									<p
-										style={{
-											marginTop: 0,
-											marginBottom: 0,
-											color: "#fff"
-										}}
-									>
-										Warning: your server is hosted on a
-										Nginx. If you rename the files, we won't
-										be able to redirect 301 of your images.
-										In any case, we fill in the redirection
-										rules in your .htaccess file.
-									</p>
-								</>
-							) : (
-								<>
-									<p
-										style={{
-											marginTop: 0,
-											marginBottom: 0,
-											color: "#fff"
-										}}
-									>
-										We're sorry but for security reasons, we
-										prefer not to allow you to enable the
-										option to rename files.
-									</p>
-									<p
-										style={{
-											color: "#fff",
-											marginBottom: 0
-										}}
-									>
-										It looks like you are using a page
-										builder and they work differently than
-										WordPress. If we rename the files, we
-										may break your images on your site.
-									</p>
-									<p
-										style={{
-											marginBottom: 0,
-											color: "#fff"
-										}}
-									>
-										If you still want to take the risk, the
-										support team can help you:
-										support@imageseo.io.
-									</p>
-								</>
-							)}
-						</div>
-					)}
 					<IFlex>
 						<div className="imageseo-mr-2">
 							<input
@@ -391,9 +327,9 @@ function BulkSettings() {
 								it's really worth for SEO.
 							</p>
 						</IFlexNumber>
-					</IFlex></div>
+					</IFlex>
+				</div>
 			</SCContentSettings>
-				 */}
 		</>
 	);
 }

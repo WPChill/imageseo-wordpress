@@ -148,7 +148,7 @@ class MediaLibrary
     public function manageMediaColumns($columns)
     {
         $columns['imageseo_alt'] = __('Alt', 'imageseo');
-        // $columns['imageseo_filename'] = __('Filename', 'imageseo');
+        $columns['imageseo_filename'] = __('Filename', 'imageseo');
 
         return $columns;
     }
