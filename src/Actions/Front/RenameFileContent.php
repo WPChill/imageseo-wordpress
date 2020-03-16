@@ -20,7 +20,7 @@ class RenameFileContent
      */
     protected function no_translate_action_ajax()
     {
-        $action_ajax_no_translate = apply_filters('weglot_ajax_no_translate', [
+        $action_ajax_no_translate = apply_filters('imageseo_ajax_no_translate', [
             'add-menu-item', // WP Core
             'query-attachments', // WP Core
             'avia_ajax_switch_menu_walker', // Enfold theme
