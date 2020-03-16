@@ -159,18 +159,17 @@ class RenameFileContent
                 continue;
             }
 
-            $filenames = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($attachmentId);
+            $filenames = $this->renameFileService->getAllFilenamesByImageSEO($attachmentId);
             if (empty($filenames)) {
                 continue;
             }
-
-            // list($filenameWithoutExtension, $extension) = explode('.', $filename);
 
             $metadata = wp_get_attachment_metadata($attachmentId);
 
             foreach ($filenames as $filename) {
                 $srcBySize = wp_get_attachment_image_src($attachmentId, $filename['size']);
-                $content = str_replace($srcBySize[0], $filename['url'], $content);
+                $fullFilename = sprintf('%s.%s', $filename['filename_without_extension'], $filename['extension']);
+                $content = str_replace($srcBySize[0], $this->renameFileService->getLinkFileImageSEO($fullFilename), $content);
             }
         }
 

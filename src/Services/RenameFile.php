@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 use Cocur\Slugify\Slugify;
 use ImageSeoWP\Exception\NoRenameFile;
+use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFile
 {
@@ -167,12 +168,18 @@ class RenameFile
      */
     public function updateFilename($attachmentId, $newFilename)
     {
-        $urls = [$newFilename => [
-            'size'     => 'full',
-            'url'      => site_url(sprintf('/medias/images/%s', $newFilename)),
-        ]];
+        $this->deleteOldFilenameImageSeo($attachmentId);
 
         list($filenameWithoutExtension, $extension) = explode('.', $newFilename);
+
+        update_post_meta($attachmentId, '_imageseo_new_filename', $filenameWithoutExtension);
+
+        update_post_meta($attachmentId, sprintf('_imageseo_filename_%s', $filenameWithoutExtension), [
+            'size'                        => 'full',
+            'extension'                   => $extension,
+            'filename_without_extension'  => $filenameWithoutExtension,
+            'url'                         => $this->getLinkFileImageSEO($newFilename),
+        ]);
 
         $metadata = wp_get_attachment_metadata($attachmentId);
         if (isset($metadata['sizes'])) {
@@ -180,15 +187,19 @@ class RenameFile
                 if (!isset($size['file'])) {
                     continue;
                 }
-                $filenameSize = sprintf('%s-%sx%s.%s', $filenameWithoutExtension, $size['width'], $size['height'], $extension);
-                $urls[$filenameSize] = [
-                    'size'     => $key,
-                    'url'      => site_url(sprintf('/medias/images/%s', $filenameSize)),
-                ];
+                $keyFilename = sprintf('%s-%sx%s', $filenameWithoutExtension, $size['width'], $size['height']);
+                $filenameSize = sprintf('%s.%s', $keyFilename, $extension);
+
+                update_post_meta($attachmentId, sprintf('_imageseo_filename_%s', $keyFilename), [
+                    'size'                        => $key,
+                    'extension'                   => $extension,
+                    'filename_without_extension'  => $keyFilename,
+                    'url'                         => $this->getLinkFileImageSEO($filenameSize),
+                ]);
             }
         }
 
-        update_post_meta($attachmentId, '_imageseo_new_filename', $urls);
+        delete_option('imageseo_link_rename_files');
     }
 
     public function getFilenameByImageSEOWithAttachmentId($attachmentId)
@@ -196,15 +207,55 @@ class RenameFile
         return get_post_meta($attachmentId, '_imageseo_new_filename', true);
     }
 
+    public function getAllFilenamesByImageSEO($attachmentId)
+    {
+        global $wpdb;
+
+        $sqlQuery = "SELECT {$wpdb->postmeta}.meta_value
+            FROM {$wpdb->postmeta} 
+            WHERE 1=1
+            AND {$wpdb->postmeta}.meta_key LIKE '%_imageseo_filename_%'
+            AND {$wpdb->postmeta}.post_id = '$attachmentId'
+        ";
+
+        $values = $wpdb->get_results($sqlQuery, ARRAY_N);
+        if (empty($values)) {
+            return null;
+        }
+
+        $values = call_user_func_array('array_merge', $values);
+        $values = array_map('unserialize', $values);
+
+        return $values;
+    }
+
+    public function getFilenameDataImageSEOWithAttachmentId($attachmentId, $filename)
+    {
+        return get_post_meta($attachmentId, sprintf('_imageseo_filename_%s', $filename), true);
+    }
+
+    public function deleteOldFilenameImageSeo($attachmentId)
+    {
+        global $wpdb;
+
+        $sqlQuery = "DELETE FROM {$wpdb->postmeta} 
+            WHERE 1=1 
+            AND {$wpdb->postmeta}.post_id = '$attachmentId'
+            AND {$wpdb->postmeta}.meta_key LIKE '%_imageseo_filename%'
+        ";
+
+        $wpdb->query($sqlQuery);
+    }
+
     public function getAttachmentIdByFilenameImageSeo($filename)
     {
         global $wpdb;
 
+        $metaKey = sprintf('_imageseo_filename_%s', $filename);
         $sqlQuery = "SELECT {$wpdb->posts}.*
             FROM {$wpdb->posts} 
-            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '_imageseo_new_filename' ) 
+            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '$metaKey' ) 
             WHERE 1=1 
-            AND {$wpdb->postmeta}.meta_value LIKE '%{$filename}%' 
             LIMIT 1
         ";
 
@@ -214,5 +265,16 @@ class RenameFile
         }
 
         return $posts[0];
+    }
+
+    public function getLinkFileImageSEO($filename)
+    {
+        if (ServerSoftware::isNginx()) {
+            $splitFilename = explode('.', $filename);
+            array_pop($splitFilename);
+            $filename = implode('.', $splitFilename);
+        }
+
+        return site_url(sprintf('/medias/images/%s', $filename));
     }
 }

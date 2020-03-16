@@ -47,7 +47,7 @@ class MediaLibraryReport
             }
         } ?>
     		<input type="text" readonly class="widefat"  value="<?php echo $filename; ?>" />
-		    <a target="_blank" href="<?php echo site_url(sprintf('/medias/images/%s', $filename)); ?>"><?php _e('View image', 'imageseo'); ?></a>
+		    <a target="_blank" href="<?php echo $this->renameFileService->getLinkFileImageSEO($filename); ?>"><?php _e('View image', 'imageseo'); ?></a>
         <?php
     }
 

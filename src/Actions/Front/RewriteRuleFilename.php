@@ -103,30 +103,29 @@ class RewriteRuleFilename
         }
 
         $filename = get_query_var('attachment_filename');
-        $extension = get_query_var('extension');
-        $fullFilename = $filename . $extension;
 
-        if (isset($links[$fullFilename])) {
-            $this->renderImage($links[$fullFilename]['path'], $links[$fullFilename]['content-type']);
+        if (isset($links[$filename])) {
+            $this->renderImage($links[$filename]['path'], $links[$filename]['content-type']);
             die;
         }
 
-        $attachment = $this->renameFileService->getAttachmentIdByFilenameImageSeo($fullFilename);
+        $attachment = $this->renameFileService->getAttachmentIdByFilenameImageSeo($filename);
+
         if (!$attachment) {
             wp_redirect(home_url());
 
             return;
         }
 
-        $data = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($attachment->ID);
+        $data = $this->renameFileService->getFilenameDataImageSEOWithAttachmentId($attachment->ID, $filename);
 
-        if (!isset($data[$fullFilename])) {
+        if (!isset($data['size'])) {
             header(sprintf('Content-type: %s', $attachment->post_mime_type));
             readfile($attachment->guid);
             die;
         }
 
-        $attachmentPath = $this->scaledImagePath($attachment->ID, $data[$fullFilename]['size']);
+        $attachmentPath = $this->scaledImagePath($attachment->ID, $data['size']);
 
         if (!$attachmentPath || !file_exists($attachmentPath)) {
             header(sprintf('Content-type: %s', $attachment->post_mime_type));
@@ -134,7 +133,7 @@ class RewriteRuleFilename
             die;
         }
 
-        $links[$fullFilename] = [
+        $links[$filename] = [
             'content-type' => $attachment->post_mime_type,
             'path'         => $attachmentPath,
         ];
