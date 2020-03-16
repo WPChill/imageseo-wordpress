@@ -43,6 +43,9 @@ class MediaLibrary
             return $metadata;
         }
 
+        $file = explode('.', basename($metadata['file']));
+        $extension = array_pop($file);
+
         $activeAltOnUpload = $this->optionService->getOption('active_alt_write_upload');
         $activeRenameOnUpload = $this->optionService->getOption('active_rename_write_upload');
 
@@ -75,15 +78,14 @@ class MediaLibrary
         if ($activeRenameOnUpload) {
             try {
                 $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
-                $result = $this->renameFileService->updateFilename($attachmentId, $filename, $metadata, ['backup' => false, 'onUpload' => true]);
-                if (array_key_exists('metadata', $result)) {
-                    $metadata = $result['metadata'];
+                if (!empty($filename)) {
+                    $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
                 }
-
-                return $metadata;
             } catch (NoRenameFile $e) {
             }
         }
+
+        return $metadata;
     }
 
     /**
@@ -219,7 +221,7 @@ class MediaLibrary
             </div>
             <span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo $attachmentId; ?>"></span>
             <?php if (!empty($filename)): ?>
-                <a target="_blank" href="<?php echo $data['url']; ?>" style="margin:5px 0px; display:block;">
+                <a target="_blank" href="<?php echo $this->renameFileService->getLinkFileImageSEO(sprintf('%s.%s', $data['filename_without_extension'], $data['extension'])); ?>" style="margin:5px 0px; display:block;">
                     <?php _e('View Image', 'imageseo'); ?>
                 </a>
             <?php endif; ?>
