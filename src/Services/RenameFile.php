@@ -66,6 +66,13 @@ class RenameFile
         return basename($srcFile);
     }
 
+    public function getExtensionFilenameByAttachmentId($attachmentId)
+    {
+        $splitFilename = explode('.', $this->getFilenameByAttachmentId($attachmentId));
+
+        return array_pop($splitFilename);
+    }
+
     /**
      * @param int $attachmentId
      *

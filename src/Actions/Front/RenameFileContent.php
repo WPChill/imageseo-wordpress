@@ -58,15 +58,15 @@ class RenameFileContent
             return;
         }
 
-        if (!apply_filters('imageseo_frontend_active_rename_file', true)) {
-            return;
-        }
-
         add_action('init', [$this, 'updateContentFile'], 12);
     }
 
     public function updateContentFile()
     {
+        if (!apply_filters('imageseo_frontend_active_rename_file', true)) {
+            return;
+        }
+
         $file = apply_filters('imageseo_debug_file', IMAGESEO_DIR . '/content.html');
 
         if (defined('IMAGESEO_DEBUG') && IMAGESEO_DEBUG && file_exists($file)) {
@@ -149,7 +149,6 @@ class RenameFileContent
         $matchesSrc = array_unique($matches['src']);
 
         foreach ($matchesSrc as $src) {
-
             if (false === strpos($src, 'wp-content/uploads')) {
                 continue;
             }
