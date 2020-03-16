@@ -143,6 +143,12 @@ function BulkResultsItem({ attachment }) {
 		if (!settings.optimizeFile || isEmpty(fileinfos) || isNil(fileinfos)) {
 			return;
 		}
+		console.log(
+			"Update [filenameOptimizationIsValid] :",
+			filenameOptimizationIsValid
+		);
+		console.log("attachment.ID:", attachment.ID);
+		console.log("fileinfos:", fileinfos);
 
 		const fetchUpdateFile = async () => {
 			await renameFilename(
@@ -248,7 +254,7 @@ function BulkResultsItem({ attachment }) {
 								</Col>
 							</Row>
 							<BlockTableLineOldValue>
-								Current alt text: : {attachment.alt}
+								Current alt text: {attachment.alt}
 							</BlockTableLineOldValue>
 						</BlockTableLineItem>
 					</Col>

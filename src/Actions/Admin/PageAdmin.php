@@ -51,8 +51,8 @@ class PageAdmin
         );
         add_submenu_page(
             Pages::SETTINGS,
-            __('Alt Optimizer', 'imageseo'),
-            __('Alt Optimizer', 'imageseo'),
+            __('Alt & Name Optimizer', 'imageseo'),
+            __('Alt & Name Optimizer', 'imageseo'),
             'manage_options',
             'imageseo-optimization',
             [$this, 'optimizationPage']

@@ -34,6 +34,10 @@ function BulkSummary() {
 						</>
 					)}
 				</li>
+				<li>
+					<strong>Optimize filename :</strong>{" "}
+					{settings.optimizeFile ? "Yes" : "No"}
+				</li>
 			</ul>
 		</>
 	);

@@ -12,19 +12,18 @@ class OptimizeImage
 {
     public function __construct()
     {
-        $this->tagsToStringServices = imageseo_get_service('TagsToString');
-        $this->reportImageServices = imageseo_get_service('ReportImage');
-        $this->renameFileServices = imageseo_get_service('RenameFile');
-        $this->altServices = imageseo_get_service('Alt');
+        $this->tagsToStringService = imageseo_get_service('TagsToString');
+        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->altService = imageseo_get_service('Alt');
     }
 
     public function hooks()
     {
         add_action('wp_ajax_imageseo_preview_optimize_alt', [$this, 'getPreviewAlt']);
-        // add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
+        add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
         add_action('wp_ajax_imageseo_preview_data_report', [$this, 'getPreviewDataReport']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
-        // add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
+        add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
         add_action('wp_ajax_imageseo_save_current_bulk', [$this, 'saveCurrentBulk']);
         add_action('wp_ajax_imageseo_delete_current_bulk', [$this, 'deleteCurrentBulk']);
     }
@@ -89,7 +88,7 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
         $template = sanitize_text_field($_POST['altTemplate']);
-        $alt = $this->tagsToStringServices->replace($template, $attachmentId);
+        $alt = $this->tagsToStringService->replace($template, $attachmentId);
 
         wp_send_json_success($alt);
     }
@@ -113,20 +112,20 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-        // $excludeFilenames = [];
-        // try {
-        //     $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
-        // } catch (\Exception $e) {
-        //     $excludeFilenames = [];
-        // }
+        $excludeFilenames = [];
+        try {
+            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
+        } catch (\Exception $e) {
+            $excludeFilenames = [];
+        }
 
-        // list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
+        list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
         $template = sanitize_text_field($_POST['altTemplate']);
-        $alt = $this->tagsToStringServices->replace($template, $attachmentId);
+        $alt = $this->tagsToStringService->replace($template, $attachmentId);
 
         wp_send_json_success([
-            // 'filename'  => $filename,
-            // 'extension' => $extension,
+            'filename'  => $filename,
+            'extension' => $extension,
             'alt'       => $alt,
         ]);
     }
@@ -134,9 +133,9 @@ class OptimizeImage
     protected function getFilenameForPreview($attachmentId, $excludeFilenames = [])
     {
         try {
-            $filename = $this->renameFileServices->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
+            $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
         } catch (NoRenameFile $e) {
-            $filename = $this->renameFileServices->getFilenameByAttachmentId($attachmentId);
+            $filename = $this->renameFileService->getFilenameByAttachmentId($attachmentId);
         }
 
         $splitFilename = explode('.', $filename);
@@ -210,9 +209,9 @@ class OptimizeImage
         $attachmentId = (int) $_POST['attachmentId'];
         $alt = sanitize_text_field($_POST['alt']);
 
-        $currentAlt = $this->altServices->getAlt($attachmentId);
+        $currentAlt = $this->altService->getAlt($attachmentId);
 
-        $this->altServices->updateAlt($attachmentId, $alt);
+        $this->altService->updateAlt($attachmentId, $alt);
 
         wp_send_json_success();
     }
@@ -238,11 +237,16 @@ class OptimizeImage
         $filename = sanitize_text_field($_POST['filename']);
 
         try {
-            $this->renameFileServices->updateFilename($attachmentId, $filename);
+            $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
+            $filename = $this->renameFileService->validateUniqueFilename($attachmentId, $filename);
+
+            $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         } catch (\Exception $e) {
             wp_send_json_error();
         }
 
-        wp_send_json_success();
+        wp_send_json_success([
+            'filename' => $filename,
+        ]);
     }
 }
