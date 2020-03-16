@@ -94,13 +94,15 @@ class RenameFile
             throw new NoRenameFile('No need to change');
         }
 
-        return $this->generateUniqueFilename([
+        $generateUniqueFilename = $this->generateUniqueFilename([
             trailingslashit(dirname($filePath)), // Directory
             $splitName[count($splitName) - 1], // Ext
             $this->getDelimiter(), // Delimiter,
             $attachmentId,
             $excludeFilenames,
         ], $newName);
+
+        return $this->validateUniqueFilename($attachmentId, $generateUniqueFilename);
     }
 
     /**
@@ -144,10 +146,6 @@ class RenameFile
 
     public function validateUniqueFilename($attachmentId, $filename, $i = 2)
     {
-        if ($i > 8) {
-            return $this->getNameFileWithAttachmentId($attachmentId);
-        }
-
         if (2 === $i && !$this->getAttachmentIdByFilenameImageSeo($filename)) {
             return $filename;
         }
