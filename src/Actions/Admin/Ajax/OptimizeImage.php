@@ -113,20 +113,20 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-        // $excludeFilenames = [];
-        // try {
-        //     $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
-        // } catch (\Exception $e) {
-        //     $excludeFilenames = [];
-        // }
+        $excludeFilenames = [];
+        try {
+            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
+        } catch (\Exception $e) {
+            $excludeFilenames = [];
+        }
 
-        // list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
+        list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
         $template = sanitize_text_field($_POST['altTemplate']);
         $alt = $this->tagsToStringServices->replace($template, $attachmentId);
 
         wp_send_json_success([
-            // 'filename'  => $filename,
-            // 'extension' => $extension,
+            'filename'  => $filename,
+            'extension' => $extension,
             'alt'       => $alt,
         ]);
     }
