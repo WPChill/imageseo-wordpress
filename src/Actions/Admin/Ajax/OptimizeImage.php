@@ -238,11 +238,15 @@ class OptimizeImage
 
         try {
             $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
+            $filename = $this->renameFileService->validateUniqueFilename($attachmentId, $filename);
+
             $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         } catch (\Exception $e) {
             wp_send_json_error();
         }
 
-        wp_send_json_success();
+        wp_send_json_success([
+            'filename' => $filename,
+        ]);
     }
 }

@@ -13,9 +13,7 @@ class RenameFile
 {
     public function __construct()
     {
-        $this->reportImageServices = imageseo_get_service('ReportImage');
-        $this->optionServices = imageseo_get_service('Option');
-        $this->htaccessServices = imageseo_get_service('Htaccess');
+        $this->reportImageService = imageseo_get_service('ReportImage');
     }
 
     protected function getDelimiter()
@@ -25,13 +23,13 @@ class RenameFile
 
     protected function generateNameFromReport($attachmentId, $params = [])
     {
-        $report = $this->reportImageServices->getReportByAttachmentId($attachmentId);
+        $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
 
         if (!$report) {
             throw new NoRenameFile('No need to change');
         }
 
-        $alts = $this->reportImageServices->getAltsFromReport($report);
+        $alts = $this->reportImageService->getAltsFromReport($report);
         $key = isset($params['key']) ? $params['key'] : 0;
 
         $value = '';
@@ -66,6 +64,11 @@ class RenameFile
         return basename($srcFile);
     }
 
+    /**
+     * @param int $attachmentId
+     *
+     * @return string
+     */
     public function getExtensionFilenameByAttachmentId($attachmentId)
     {
         $splitFilename = explode('.', $this->getFilenameByAttachmentId($attachmentId));
@@ -74,7 +77,8 @@ class RenameFile
     }
 
     /**
-     * @param int $attachmentId
+     * @param int   $attachmentId
+     * @param array $excludeFilenames
      *
      * @return string
      */
@@ -136,6 +140,25 @@ class RenameFile
         }
 
         return $name;
+    }
+
+    public function validateUniqueFilename($attachmentId, $filename, $i = 2)
+    {
+        if ($i > 8) {
+            return $this->getNameFileWithAttachmentId($attachmentId);
+        }
+
+        if (2 === $i && !$this->getAttachmentIdByFilenameImageSeo($filename)) {
+            return $filename;
+        }
+
+        $newFilename = sprintf('%s-%s', $filename, $i);
+
+        if (!$this->getAttachmentIdByFilenameImageSeo($newFilename)) {
+            return $newFilename;
+        }
+
+        return $this->validateUniqueFilename($attachmentId, $filename, ++$i);
     }
 
     /**

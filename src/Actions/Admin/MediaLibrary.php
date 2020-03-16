@@ -224,6 +224,7 @@ class MediaLibrary
                 </button>
 
             </div>
+            <span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo $attachmentId; ?>"></span>
             <?php if (!empty($filename)): ?>
                 <a target="_blank" href="<?php echo site_url(sprintf('/medias/images/%s.%s', $filename, $extension)); ?>" style="margin:5px 0px; display:block;">
                     <?php _e('View Image', 'imageseo'); ?>

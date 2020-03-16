@@ -61,7 +61,19 @@ jQuery(document).ready(function($) {
 				attachmentId: id,
 				filename: slugifyFilename
 			},
-			function() {
+			function({ success, data }) {
+				if (success) {
+					$(`#imageseo-filename-${id}`).val(data.filename);
+					if (data.filename !== slugifyFilename) {
+						$(`#imageseo-message-${id}`).text(
+							"We had to change the name because a file already exists on the one you tried."
+						);
+					} else {
+						$(`#imageseo-message-${id}`).text("");
+					}
+				} else {
+					$(`#imageseo-message-${id}`).text("");
+				}
 				setTimeout(() => {
 					$(
 						`#wrapper-imageseo-filename-${id} .imageseo-loading`
