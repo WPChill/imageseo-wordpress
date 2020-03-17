@@ -104,6 +104,17 @@ class RewriteRuleFilename
 
         $filename = get_query_var('attachment_filename');
 
+        if (defined('IMAGIFY_SLUG')) {
+            $extension = get_query_var('extension');
+            if ('.webp' === $extension) {
+                $splitFilename = explode('.', $filename);
+                $extensionSplit = array_pop($splitFilename);
+                if (in_array($extensionSplit, ['jpg', 'jpeg', 'png', 'gif'])) {
+                    $filename = implode('.', $splitFilename);
+                }
+            }
+        }
+
         if (isset($links[$filename])) {
             $this->renderImage($links[$filename]['path'], $links[$filename]['content-type']);
             die;

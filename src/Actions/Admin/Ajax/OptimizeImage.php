@@ -236,6 +236,14 @@ class OptimizeImage
         $attachmentId = (int) $_POST['attachmentId'];
         $filename = sanitize_text_field($_POST['filename']);
 
+        if (empty($filename)) {
+            $this->renameFileService->removeFilename($attachmentId);
+            wp_send_json_success([
+                'filename' => $filename,
+            ]);
+
+            return;
+        }
         try {
             $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
             $filename = $this->renameFileService->validateUniqueFilename($attachmentId, $filename);

@@ -160,6 +160,13 @@ class RenameFile
         return $this->validateUniqueFilename($attachmentId, $filename, ++$i);
     }
 
+    public function removeFilename($attachmentId)
+    {
+        $this->deleteOldFilenameImageSeo($attachmentId);
+
+        delete_post_meta($attachmentId, '_imageseo_new_filename');
+    }
+
     /**
      * @param int    $attachmentId
      * @param string $newFilename
@@ -169,6 +176,14 @@ class RenameFile
     public function updateFilename($attachmentId, $newFilename)
     {
         $this->deleteOldFilenameImageSeo($attachmentId);
+
+        if (empty($newFilename)) {
+            delete_post_meta($attachmentId, '_imageseo_new_filename');
+
+            return;
+        }
+
+        delete_option('imageseo_link_rename_files');
 
         list($filenameWithoutExtension, $extension) = explode('.', $newFilename);
 
@@ -198,8 +213,6 @@ class RenameFile
                 ]);
             }
         }
-
-        delete_option('imageseo_link_rename_files');
     }
 
     public function getFilenameByImageSEOWithAttachmentId($attachmentId)
