@@ -19,7 +19,7 @@ class RewriteRuleFilename
     {
         add_action('init', [$this, 'rewriteRule']);
         add_filter('query_vars', [$this, 'addQueryVars']);
-        add_action('parse_query', [$this, 'redirectMediaFile']);
+        add_action('template_redirect', [$this, 'redirectMediaFile']);
     }
 
     public function rewriteRule()
