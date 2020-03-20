@@ -29,6 +29,63 @@ class Content
         add_filter('wp_get_attachment_image_attributes', [$this, 'postThumbnailAttributes'], 10, 2);
     }
 
+    public function getAttachmentIdByUrl($url)
+    {
+        $post_id = attachment_url_to_postid($url);
+
+        if (!$post_id) {
+            $dir = wp_upload_dir();
+            $path = $url;
+            if (0 === strpos($path, $dir['baseurl'] . '/')) {
+                $path = substr($path, strlen($dir['baseurl'] . '/'));
+            }
+
+            if (preg_match('/^(.*)(\-\d*x\d*)(\.\w{1,})/i', $path, $matches)) {
+                $url = $dir['baseurl'] . '/' . $matches[1] . $matches[3];
+                $post_id = attachment_url_to_postid($url);
+            }
+        }
+
+        return (int) $post_id;
+    }
+
+    public function genericContent($content)
+    {
+        $regex = '#<img[^>]* alt=(?:\"|\')(?<alt>([^"]*))(?:\"|\')[^>]*>#mU';
+
+        preg_match_all($regex, $content, $matches);
+
+        $matchesTag = $matches[0];
+        $matchesAlt = $matches['alt'];
+        if (empty($matchesAlt)) {
+            return $content;
+        }
+
+        $regexSrc = '#<img[^>]* src=(?:\"|\')(?<src>([^"]*))(?:\"|\')[^>]*>#mU';
+
+        foreach ($matchesAlt as $key => $alt) {
+            if (!empty($alt)) {
+                continue;
+            }
+            $contentMatch = $matchesTag[$key];
+
+            preg_match($regexSrc, $contentMatch, $matchSrc);
+            $src = $matchSrc['src'];
+            if (empty($src)) {
+                continue;
+            }
+
+            $attachmentId = $this->getAttachmentIdByUrl($src);
+            $contentToReplace = $this->updateAltContent($contentMatch, $attachmentId);
+
+            if ($contentMatch !== $contentToReplace) {
+                $content = str_replace($contentMatch, $contentToReplace, $content);
+            }
+        }
+
+        return $content;
+    }
+
     /**
      * @param string $content
      * @param int    $attachmentId
@@ -83,7 +140,7 @@ class Content
         preg_match_all($regex, $contentFilter, $matches);
 
         if (empty($matches[0])) {
-            return $contentFilter;
+            return $this->genericContent($contentFilter);
         }
 
         $ids = $matches[2];
