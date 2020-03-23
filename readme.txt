@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.2.7
+Stable tag: v1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,13 +135,17 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
+= 1.2.8 (03-23-2020) =
+- Improved: Add compatibility rename file with Imagify
+- [NEW]: We can replace the alts in fro on any type of content (Elementor, Beaver Builder, etc...).
+
 = 1.2.7 (03-16-2020) =
 - [NEW] : New process to rename images. Completely safe!
 - Improved : Checking for images that no longer exist in the library during bulk
 
 = 1.2.6 (03-08-2020) =
-- Improved : Remove cache report so that the data is always up to date
-- Improved : Image query improvement
+- Improved: Remove cache report so that the data is always up to date
+- Improved: Image query improvement
 
 = 1.2.5 (03-01-2020) =
 - New: Social card compatible with Rank Math
@@ -151,7 +155,7 @@ To help us translate Image SEO in your language, contact us
 = 1.2.4 (02-26-2020) =
 - Bugfix: Updating the cache on the image counter
 - Improved: Background image counter processing (performance improvement)
-- Improved : Possibility to go back on a file name change
+- Improved: Possibility to go back on a file name change
 - Remove useless files
 - Removing autoload from some options
 - Removing the duration of permanent image redirections (htaccess)
@@ -180,8 +184,8 @@ To help us translate Image SEO in your language, contact us
 - Improved: design
 
 = 1.1.3 (01-18-2020) =
-- [New] : Possibility to use a custom template to rename alternative texts
-- [New] : Shortcode compatible with SEOPress
+- [New]: Possibility to use a custom template to rename alternative texts
+- [New]: Shortcode compatible with SEOPress
 - Improved: Improved bulk performance
 - Bugfix: Support for filename spaces in htaccess
 - Bugfix: Fixed SQL query for empty alts
@@ -219,8 +223,8 @@ To help us translate Image SEO in your language, contact us
 - Bugfix: Consideration of images that have never had an alt (=empty) in media library filters
 
 = 1.0.18 (12-01-2019) =
-- New : You can register an account directly in the plugin
-- Improved : Improvement of the overview
+- New: You can register an account directly in the plugin
+- Improved: Improvement of the overview
 
 = 1.0.17 (11-17-2019) =
 - New: You can filter your library according to the filling of your alternative texts
@@ -228,23 +232,23 @@ To help us translate Image SEO in your language, contact us
 - Improved: Help to choose your image credit needs
 
 = 1.0.16 (10-14-2019) =
-- Improved : Adding features for developers
-- Bugfix : Unlocking the translation for "one time" purchases
+- Improved: Adding features for developers
+- Bugfix: Unlocking the translation for "one time" purchases
 
 = 1.0.15 (09-17-2019) =
 - Bugfix: Consideration of additional credits on the meter purchased separately
-- Improved : Automatic support for images hosted on a bucket
+- Improved: Automatic support for images hosted on a bucket
 
 = 1.0.14 (06-14-2019) =
-- Bugfix : Separation of the 2 bulk options during the alts update 
-- Improved : Support for unnecessary"."" in upload file names
+- Bugfix: Separation of the 2 bulk options during the alts update 
+- Improved: Support for unnecessary"."" in upload file names
 
 = 1.0.13 (05-24-2019) =
-- Bugfix : Rename file on bulk optimization
-- Improved : Use cache request to avoid consuming too many images
+- Bugfix: Rename file on bulk optimization
+- Improved: Use cache request to avoid consuming too many images
 
 = 1.0.12 (05-11-2019) =
-- Bugfix : Error when replacing the file name if the account was full
+- Bugfix: Error when replacing the file name if the account was full
 - Improved : Admin notice if the configuration is not completed
 
 = 1.0.11 (05-03-2019) =
