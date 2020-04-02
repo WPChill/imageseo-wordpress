@@ -13,7 +13,11 @@ if (0 < $total) {
 }
 $percentComplete = 100 - $percentMissing;
 
-$limitImages = ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']) - $this->owner['current_request_images'];
+$limitImages = 10;
+if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
+    $limitImages = ($this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images']) - $this->owner['current_request_images'];
+}
+
 $needCreditForOptimization = 0;
 
 if ($this->owner) {

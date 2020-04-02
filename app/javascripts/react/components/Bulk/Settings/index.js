@@ -14,10 +14,6 @@ const SCContentSettings = styled.div`
 
 function BulkSettings() {
 	const { state: settings, dispatch } = useContext(BulkSettingsContext);
-	const blockOptimizeFile = countBy(
-		IMAGESEO_DATA.INFOS,
-		item => item === true
-	);
 
 	return (
 		<>
@@ -298,10 +294,6 @@ function BulkSettings() {
 								type="checkbox"
 								name="optimizeFile"
 								id="optimizeFile"
-								disabled={
-									get(blockOptimizeFile, "true", 0) === 1 &&
-									get(blockOptimizeFile, "true", 0) > 0
-								}
 								value={settings.optimizeFile}
 								onChange={() =>
 									dispatch({
