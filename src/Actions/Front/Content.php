@@ -17,6 +17,13 @@ class Content
 
     public function hooks()
     {
+        $file = apply_filters('imageseo_debug_file', IMAGESEO_DIR . '/content.html');
+
+        if (defined('IMAGESEO_DEBUG_ALT') && IMAGESEO_DEBUG_ALT && file_exists($file)) {
+            $this->contentImagesAttribute(file_get_contents($file));
+            die;
+        }
+
         if (!imageseo_allowed()) {
             return;
         }
@@ -136,23 +143,29 @@ class Content
      */
     public function contentImagesAttribute($contentFilter)
     {
-        $regex = "#<!-- wp:image([^\>]+?)?id\":(.*?)} -->([\s\S]*)<!-- \/wp:image#mU";
+        $regex = "#<!-- wp:image[^>]* (?<json>(?:\{)(?:[\s\S]*)(?:\})) -->([\s\S]*)<!-- \/wp:image#mU";
         preg_match_all($regex, $contentFilter, $matches);
 
-        if (empty($matches[0])) {
+        if (empty($matches['json'])) {
             return $this->genericContent($contentFilter);
         }
 
-        $ids = $matches[2];
-        $contents = $matches[3];
+        $jsons = $matches['json'];
+        $contents = $matches[2];
 
         $regexImg = "#<img([^\>]+?)?alt=(\"|\')([\s\S]*)(\"|\')([^\>]+?)?>#U";
 
-        foreach ($ids as $key => $id) {
-            preg_match_all($regexImg, $contents[$key], $matches);
-            $alt = $matches[3][0];
+        foreach ($jsons as $key => $json) {
+            $dataJson = json_decode(stripslashes($json), true);
+            if (null === $dataJson || !isset($dataJson['id'])) {
+                continue;
+            }
+            $id = $dataJson['id'];
 
-            $contentMatch = $matches[0][0];
+            preg_match_all($regexImg, $contents[$key], $matchesAlts);
+            $alt = $matchesAlts[3][0];
+
+            $contentMatch = $matchesAlts[0][0];
 
             $contentReplace = $this->updatePinterestContent($contentMatch, $id);
             $contentReplace = $this->updateAltContent($contentReplace, $id);

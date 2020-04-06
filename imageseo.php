@@ -25,6 +25,7 @@ define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
 define('IMAGESEO_VERSION', '1.2.9');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_DEBUG', false);
+define('IMAGESEO_DEBUG_ALT', false);
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
