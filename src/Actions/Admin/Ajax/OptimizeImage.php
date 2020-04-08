@@ -234,7 +234,7 @@ class OptimizeImage
         }
 
         $attachmentId = (int) $_POST['attachmentId'];
-        $filename = sanitize_text_field($_POST['filename']);
+        $filename = sanitize_title($_POST['filename']);
 
         if (empty($filename)) {
             $this->renameFileService->removeFilename($attachmentId);
@@ -244,6 +244,7 @@ class OptimizeImage
 
             return;
         }
+
         try {
             $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
             $filename = $this->renameFileService->validateUniqueFilename($attachmentId, $filename);
