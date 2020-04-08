@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.2.9
+Stable tag: v1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,10 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.2.10 (08-02-2020) =
+- Bugfix: Fix parser to insert pinterest metas
+- Bugfix: Sanitize title of filenames to avoid spaces
 
 = 1.2.9 (04-02-2020) =
 - Bugfix: Error notice PHP for users who have not added their API key
