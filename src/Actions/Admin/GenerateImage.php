@@ -30,6 +30,7 @@ class GenerateImage
     public function generateSocialMediaManually()
     {
         $redirectUrl = admin_url('edit.php');
+        $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
         if ('post' !== $postType) {
             $redirectUrl .= '?post_type=' . $postType;
         }
@@ -46,7 +47,6 @@ class GenerateImage
             exit;
         }
 
-        $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
         $redirectUrl = admin_url('edit.php');
         if ('post' !== $postType) {
             $redirectUrl .= '?post_type=' . $postType;
