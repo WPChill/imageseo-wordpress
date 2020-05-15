@@ -72,7 +72,7 @@ class MediaLibrary
         }
 
         if ($activeAltOnUpload) {
-            $this->altService->updateAltAttachmentWithReport($attachmentId, true);
+            $this->altService->updateAltAttachmentWithReport($attachmentId);
         }
 
         if ($activeRenameOnUpload) {

@@ -169,9 +169,7 @@ class RenameFileContent
             foreach ($filenames as $filename) {
                 $srcBySize = wp_get_attachment_image_src($attachmentId, $filename['size']);
                 $fullFilename = sprintf('%s.%s', $filename['filename_without_extension'], $filename['extension']);
-                $srcBySizeFilter = apply_filters('imageseo_rename_file_content', $srcBySize[0], $attachmentId);
-                $srcReplace = apply_filters('imageseo_rename_file_contenr_replace', trailingslashit($this->renameFileService->getLinkFileImageSEO($fullFilename)), $attachmentId);
-                $content = str_replace($srcBySizeFilter, $srcReplace, $content);
+                $content = str_replace($srcBySize[0], $this->renameFileService->getLinkFileImageSEO($fullFilename), $content);
             }
         }
 

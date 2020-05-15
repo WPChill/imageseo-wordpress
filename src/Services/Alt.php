@@ -45,12 +45,12 @@ class Alt
     }
 
     /**
-     * @param int  $attachmentId
-     * @param bool $onUpload
+     * @param int   $attachmentId
+     * @param array $report
      */
-    public function updateAltAttachmentWithReport($attachmentId, $onUpload = false)
+    public function updateAltAttachmentWithReport($attachmentId)
     {
-        $template = apply_filters('imageseo_template_update_alt', $this->optionServices->getOption('alt_template_default'), $attachmentId, $onUpload);
+        $template = $this->optionServices->getOption('alt_template_default');
         $alt = $this->tagsToStringServices->replace($template, $attachmentId);
         $alt = apply_filters('imageseo_update_alt_attachment_value', $alt, $attachmentId);
 
