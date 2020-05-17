@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Exception\NoRenameFile;
+use ImageSeoWP\Async\BulkImageBackgroundProcess;
 
 class OptimizeImage
 {
@@ -15,20 +16,20 @@ class OptimizeImage
         $this->tagsToStringService = imageseo_get_service('TagsToString');
         $this->renameFileService = imageseo_get_service('RenameFile');
         $this->altService = imageseo_get_service('Alt');
+        $this->bulkProcess = new BulkImageBackgroundProcess();
     }
 
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_preview_optimize_alt', [$this, 'getPreviewAlt']);
-        add_action('wp_ajax_imageseo_preview_optimize_filename', [$this, 'getPreviewFilename']);
         add_action('wp_ajax_imageseo_preview_data_report', [$this, 'getPreviewDataReport']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
-        add_action('wp_ajax_imageseo_save_current_bulk', [$this, 'saveCurrentBulk']);
-        add_action('wp_ajax_imageseo_delete_current_bulk', [$this, 'deleteCurrentBulk']);
+
+        add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
+        add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
     }
 
-    public function saveCurrentBulk()
+    public function dispatchBulk()
     {
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
@@ -37,7 +38,7 @@ class OptimizeImage
             exit;
         }
 
-        if (!isset($_POST['settings']) || !isset($_POST['state']) || !isset($_POST['countOptimized'])) {
+        if (!isset($_POST['data'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
             ]);
@@ -45,18 +46,29 @@ class OptimizeImage
             return;
         }
 
-        $now = new \DateTime('now');
-        update_option('_imageseo_current_processed', [
-            'settings'        => json_decode(stripslashes($_POST['settings'])),
-            'state'           => json_decode(stripslashes($_POST['state'])),
-            'count_optimized' => (int) $_POST['countOptimized'],
-            'last_updated'    => $now->format('Y-m-d H:i:s'),
-        ], false);
+        $this->settings = [
+            'formatAlt'          => $_POST['formatAlt'],
+            'formatAltCustom'    => 'CUSTOM_FORMAT' === $_POST['formatAltCustom'] ? true : false,
+            'language'           => $_POST['language'],
+            'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
+            'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
+            'wantValidateResult' => 'true' === $_POST['wantValidateResult'] ? true : false,
+        ];
+
+        $data = explode(',', $_POST['data']);
+        update_option('_imageseo_bulk_process', [
+            'total_images'        => count($data),
+            'id_images'           => $data,
+            'current_index_image' => 0,
+        ]);
+
+        $data = array_map([$this, 'hydrateDataWithSettings'], $data);
+        $this->bulkProcess->push_all_data($data)->save()->dispatch();
 
         wp_send_json_success();
     }
 
-    public function deleteCurrentBulk()
+    public function getCurrentDispatchProcess()
     {
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
@@ -65,32 +77,25 @@ class OptimizeImage
             exit;
         }
 
-        delete_option('_imageseo_current_processed');
-        wp_send_json_success();
+        $infoBulkProcess = get_option('_imageseo_bulk_process');
+        if (!$infoBulkProcess) {
+            $infoBulkProcess = [
+                'current_index_image' => -1,
+                'id_images'           => [],
+            ];
+        }
+        wp_send_json_success([
+            'is_running'   => $this->bulkProcess->is_process_running(),
+            'bulk_process' => $infoBulkProcess,
+        ]);
     }
 
-    public function getPreviewAlt()
+    protected function hydrateDataWithSettings($item)
     {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        if (!isset($_POST['attachmentId']) || !isset($_POST['altTemplate'])) {
-            wp_send_json_error([
-                'code' => 'missing_parameters',
-            ]);
-
-            return;
-        }
-
-        $attachmentId = (int) $_POST['attachmentId'];
-        $template = sanitize_text_field($_POST['altTemplate']);
-        $alt = $this->tagsToStringService->replace($template, $attachmentId);
-
-        wp_send_json_success($alt);
+        return [
+            'id'       => $item,
+            'settings' => $this->settings,
+        ];
     }
 
     public function getPreviewDataReport()
@@ -102,7 +107,7 @@ class OptimizeImage
             exit;
         }
 
-        if (!isset($_POST['attachmentId']) || !isset($_POST['altTemplate'])) {
+        if (!isset($_POST['attachmentId'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
             ]);
@@ -112,22 +117,9 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-        $excludeFilenames = [];
-        try {
-            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
-        } catch (\Exception $e) {
-            $excludeFilenames = [];
-        }
+        $data = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
 
-        list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
-        $template = sanitize_text_field($_POST['altTemplate']);
-        $alt = $this->tagsToStringService->replace($template, $attachmentId);
-
-        wp_send_json_success([
-            'filename'  => $filename,
-            'extension' => $extension,
-            'alt'       => $alt,
-        ]);
+        wp_send_json_success($data);
     }
 
     protected function getFilenameForPreview($attachmentId, $excludeFilenames = [])
@@ -155,40 +147,6 @@ class OptimizeImage
         ];
     }
 
-    public function getPreviewFilename()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        if (!isset($_POST['attachmentId'])) {
-            wp_send_json_error([
-                'code' => 'missing_parameters',
-            ]);
-
-            return;
-        }
-
-        $attachmentId = (int) $_POST['attachmentId'];
-
-        $excludeFilenames = [];
-        try {
-            $excludeFilenames = isset($_POST['excludeFilenames']) ? json_decode(stripslashes($_POST['excludeFilenames']), true) : [];
-        } catch (\Exception $e) {
-            $excludeFilenames = [];
-        }
-
-        list($filename, $extension) = $this->getFilenameForPreview($attachmentId, $excludeFilenames);
-
-        wp_send_json_success([
-            'filename'                   => $filename,
-            'extension'                  => $extension,
-        ]);
-    }
-
     public function optimizeAlt()
     {
         if (!current_user_can('manage_options')) {
@@ -208,8 +166,6 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
         $alt = sanitize_text_field($_POST['alt']);
-
-        $currentAlt = $this->altService->getAlt($attachmentId);
 
         $this->altService->updateAlt($attachmentId, $alt);
 

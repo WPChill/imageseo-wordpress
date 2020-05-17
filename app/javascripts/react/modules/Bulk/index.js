@@ -1,29 +1,29 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
-import { get, isNull, isNil, find } from "lodash";
+import { get, isNull, isNil, find, difference } from "lodash";
 import { format } from "date-fns";
 
 import Block from "../../ui/Block";
 import BlockContentInner, {
 	BlockContentInnerTitle,
-	BlockContentInnerAction
+	BlockContentInnerAction,
 } from "../../ui/Block/ContentInner";
 import IconChevron from "../../ui/Icons/Chevron";
 
 import BulkSettingsContextProvider, {
-	BulkSettingsContext
+	BulkSettingsContext,
 } from "../../contexts/BulkSettingsContext";
 import BulkSettings from "../../components/Bulk/Settings";
 import BlockFooter from "../../ui/Block/Footer";
 import Button from "../../ui/Button";
 import BulkResults from "../../components/Bulk/Results";
 import BulkProcessContextProvider, {
-	BulkProcessContext
+	BulkProcessContext,
 } from "../../contexts/BulkProcessContext";
 import {
 	canLaunchBulk,
 	getAttachmentIdWithProcess,
-	getPercentBulk
+	getPercentBulk,
 } from "../../services/bulk";
 import BulkSummary from "../../components/Bulk/Summary";
 import UserContextProvider, { UserContext } from "../../contexts/UserContext";
@@ -37,9 +37,19 @@ import generateReport from "../../services/ajax/generate-report";
 import SubTitle from "../../ui/Block/Subtitle";
 import {
 	deleteCurrentBulk,
-	saveCurrentBulk
+	saveCurrentBulk,
+	startBulkProcess,
+	getCurrentProcessDispatch,
 } from "../../services/ajax/current-bulk";
 import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
+import useInterval from "../../hooks/useInterval";
+
+const defaultCurrentProcess = {
+	bulk_process: {
+		current_index_image: -1,
+		id_images: [],
+	},
+};
 
 function BulkWithProviders() {
 	const { state, dispatch } = useContext(BulkProcessContext);
@@ -53,6 +63,8 @@ function BulkWithProviders() {
 		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
 	);
 	const [loadingImages, setLoadingImages] = useState(false);
+	const [currentProcess, setCurrentProcess] = useState(defaultCurrentProcess);
+	const [attachmentIdsView, setAttachmentIdsView] = useState([]);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed =
@@ -67,18 +79,42 @@ function BulkWithProviders() {
 		handleQueryImages({
 			filters: {
 				alt_filter: settings.altFilter,
-				alt_fill: settings.altFill
-			}
+				alt_fill: settings.altFill,
+			},
 		});
 	}, [settings.altFilter, settings.altFill]);
 
+	let processInterval = null;
+
+	useInterval(async () => {
+		if (!state.bulkActive || state.bulkFinish || state.bulkPause) {
+			return;
+		}
+
+		const { data } = await getCurrentProcessDispatch();
+		console.log("[data]", data);
+		if (!data.is_running) {
+			dispatch({
+				type: "FINISH_BULK",
+				payload: null,
+			});
+			setCurrentProcess(data);
+			return;
+		}
+
+		if (
+			get(currentProcess, "bulk_process.current_index_image", null) !==
+			get(data, "bulk_process.current_index_image", 0)
+		) {
+			setCurrentProcess(data);
+		}
+	}, 3000);
+
+	console.log("[current]:", currentProcess);
+
 	// Call an attachment
 	useEffect(() => {
-		if (
-			!state.bulkActive ||
-			isNull(state.currentProcess) ||
-			state.bulkPause
-		) {
+		if (!currentProcess.is_running || state.bulkFinish || state.bulkPause) {
 			return;
 		}
 
@@ -88,97 +124,94 @@ function BulkWithProviders() {
 				text:
 					"You have no credit left. We've stopped the bulk process.",
 				icon: "info",
-				confirmButtonText: "Close"
+				confirmButtonText: "Close",
 			});
-			dispatch({ type: "PAUSE_BULK" });
+			dispatch({
+				type: "FINISH_BULK",
+				payload: null,
+			});
 			return;
 		}
 
-		const attachmentId = getAttachmentIdWithProcess(state);
-		const fetchAttachment = async attachmentId => {
-			const { data: attachment } = await getAttachement(attachmentId);
-			if (get(attachment, "code", false) === "not_exist") {
-				dispatch({
-					type: "ATTACHMENT_NOT_FOUND",
-					payload: attachmentId
-				});
-			} else {
-				dispatch({
-					type: "ADD_ATTACHMENT",
-					payload: attachment
-				});
+		const idsAttachment = difference(
+			currentProcess.bulk_process.id_images.slice(
+				0,
+				currentProcess.bulk_process.current_index_image + 1
+			),
+			attachmentIdsView
+		);
+		console.log("[idsAttachment]", idsAttachment);
+		const fetchAttachment = async (idsAttachment) => {
+			for (let index = 0; index < idsAttachment.length; index++) {
+				const { data: attachment } = await getAttachement(
+					idsAttachment[index]
+				);
+				if (get(attachment, "code", false) === "not_exist") {
+					dispatch({
+						type: "ATTACHMENT_NOT_FOUND",
+						payload: idsAttachment[index],
+					});
+				} else {
+					dispatch({
+						type: "ADD_ATTACHMENT",
+						payload: attachment,
+					});
+				}
+
+				setAttachmentIdsView([
+					...attachmentIdsView,
+					idsAttachment[index],
+				]);
 			}
 		};
 
-		saveCurrentBulk(settings, state, state.currentProcess + 1);
-
-		// No attachement
-		if (isNull(attachmentId)) {
-			dispatch({ type: "FINISH_BULK" });
-			setTimeout(() => {
-				deleteCurrentBulk();
-			}, 2000);
-			return;
-		}
-
-		fetchAttachment(attachmentId);
-	}, [state.currentProcess, state.bulkPause]);
+		fetchAttachment(idsAttachment);
+	}, [currentProcess]);
 
 	// Query reports
 	useEffect(() => {
-		if (!state.bulkActive || state.bulkPause) {
-			return;
-		}
-
 		if (hasLimitExcedeed(userState.user_infos)) {
-			dispatch({ type: "PAUSE_BULK" });
+			dispatch({
+				type: "FINISH_BULK",
+				payload: null,
+			});
 			return;
 		}
 
-		const attachmentId = getAttachmentIdWithProcess(state);
+		const idsAttachment = difference(
+			currentProcess.bulk_process.id_images.slice(
+				0,
+				currentProcess.bulk_process.current_index_image
+			),
+			Object.keys(state.reports)
+		);
+		console.log("[attachmentIdsOptimized]", idsAttachment);
 
-		const fetchReport = async attachmentId => {
-			const {
-				success,
-				data: { need_update_counter, report }
-			} = await generateReport(attachmentId, settings.language);
-
-			if (!success) {
-				Swal.fire({
-					title: "Oups !",
-					text:
-						"You have no credit left. We've stopped the bulk process.",
-					icon: "info",
-					confirmButtonText: "Close"
+		const fetchReport = async (idsAttachment) => {
+			for (let index = 0; index < idsAttachment.length; index++) {
+				console.log("Go report : ", idsAttachment[index]);
+				dispatch({
+					type: "ADD_REPORT",
+					payload: {
+						ID: idsAttachment[index],
+						canGetReport: true,
+					},
 				});
-				dispatch({ type: "PAUSE_BULK" });
-				return;
-			}
 
-			if (need_update_counter) {
 				if (userState.user_infos.bonus_stock_images > 0) {
 					dispatchUser({
-						type: "DECREASE_BONUS_STOCK_IMAGES"
+						type: "DECREASE_BONUS_STOCK_IMAGES",
 					});
 				} else {
 					dispatchUser({
-						type: "INCREASE_CURRENT_REQUEST_IMAGES"
+						type: "INCREASE_CURRENT_REQUEST_IMAGES",
 					});
 				}
 			}
-
-			dispatch({
-				type: "ADD_REPORT",
-				payload: report
-			});
-			dispatch({
-				type: "NEW_PROCESS",
-				payload: state.currentProcess + 1
-			});
 		};
 
-		fetchReport(attachmentId);
-	}, [state.attachments]);
+		fetchReport(idsAttachment);
+	}, [currentProcess]);
 
 	const handleQueryImages = async (filters = {}) => {
 		setLoadingImages(true);
@@ -190,7 +223,7 @@ function BulkWithProviders() {
 		dispatch({ type: "UPDATE_ALL_IDS", payload: data.ids });
 		dispatch({
 			type: "UPDATE_ALL_IDS_OPTIMIZED",
-			payload: data.ids_optimized
+			payload: data.ids_optimized,
 		});
 		setLoadingImages(false);
 	};
@@ -202,7 +235,7 @@ function BulkWithProviders() {
 				title: "Oups !",
 				text: "Please select at least one optimization",
 				icon: "info",
-				confirmButtonText: "Close"
+				confirmButtonText: "Close",
 			});
 			return;
 		}
@@ -212,7 +245,7 @@ function BulkWithProviders() {
 				title: "Oups !",
 				text: "There are no images to optimize",
 				icon: "info",
-				confirmButtonText: "Close"
+				confirmButtonText: "Close",
 			});
 			return;
 		}
@@ -222,22 +255,21 @@ function BulkWithProviders() {
 				title: "Oups !",
 				text: "Please select the format of your alternative text (alt)",
 				icon: "info",
-				confirmButtonText: "Close"
+				confirmButtonText: "Close",
 			});
 			return;
 		}
 
-		const launchBulk = async () => {
-			if (IMAGESEO_DATA.CURRENT_PROCESSED) {
-				await deleteCurrentBulk();
-				IMAGESEO_DATA.CURRENT_PROCESSED = false;
-			}
-			dispatch({ type: "START_BULK" });
-			dispatch({
-				type: "NEW_PROCESS",
-				payload: 0
-			});
-		};
+		// const launchBulk = async () => {
+		// 	if (IMAGESEO_DATA.CURRENT_PROCESSED) {
+		// 		await deleteCurrentBulk();
+		// 		IMAGESEO_DATA.CURRENT_PROCESSED = false;
+		// 	}
+		// 	dispatch({
+		// 		type: "NEW_PROCESS",
+		// 		payload: 0,
+		// 	});
+		// };
 
 		Swal.fire({
 			title: "Are you sure?",
@@ -246,80 +278,85 @@ function BulkWithProviders() {
 			icon: "info",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
-			confirmButtonText: "Yes, let's go!"
-		}).then(result => {
+			confirmButtonText: "Yes, let's go!",
+		}).then(async (result) => {
 			if (result.value) {
-				launchBulk();
-			}
-		});
-	};
-
-	const handleRestartBulk = e => {
-		e.preventDefault();
-		if (!IMAGESEO_DATA.CURRENT_PROCESSED) {
-			return;
-		}
-
-		Swal.fire({
-			title: "Are you sure?",
-			text:
-				"You're going to take over a bulk optimization that was in progress. ",
-			icon: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			confirmButtonText: "Yes, let's go!"
-		}).then(result => {
-			if (result.value) {
-				dispatchSettings({
-					type: "NEW_OPTIONS",
-					payload: {
-						...IMAGESEO_DATA.CURRENT_PROCESSED.settings,
-						restartBulk: true
-					}
+				console.log(settings);
+				await startBulkProcess(state.allIds, settings);
+				dispatch({
+					type: "START_BULK",
+					payload: null,
 				});
 			}
 		});
 	};
 
+	// const handleRestartBulk = (e) => {
+	// 	e.preventDefault();
+	// 	if (!IMAGESEO_DATA.CURRENT_PROCESSED) {
+	// 		return;
+	// 	}
+
+	// 	Swal.fire({
+	// 		title: "Are you sure?",
+	// 		text:
+	// 			"You're going to take over a bulk optimization that was in progress. ",
+	// 		icon: "warning",
+	// 		showCancelButton: true,
+	// 		confirmButtonColor: "#3085d6",
+	// 		confirmButtonText: "Yes, let's go!",
+	// 	}).then((result) => {
+	// 		if (result.value) {
+	// 			dispatchSettings({
+	// 				type: "NEW_OPTIONS",
+	// 				payload: {
+	// 					...IMAGESEO_DATA.CURRENT_PROCESSED.settings,
+	// 					restartBulk: true,
+	// 				},
+	// 			});
+	// 		}
+	// 	});
+	// };
+
 	// Resume an old bulk
-	useEffect(() => {
-		if (!settings.restartBulk) {
-			return;
-		}
+	// useEffect(() => {
+	// 	if (!settings.restartBulk) {
+	// 		return;
+	// 	}
 
-		const fetchRestartBulk = async () => {
-			await deleteCurrentBulk();
+	// 	const fetchRestartBulk = async () => {
+	// 		await deleteCurrentBulk();
 
-			dispatch({
-				type: "RESTART_BULK",
-				payload: {
-					...IMAGESEO_DATA.CURRENT_PROCESSED.state,
-					bulkActive: true,
-					attachments: {},
-					reports: {},
-					currentProcess:
-						Number(
-							IMAGESEO_DATA.CURRENT_PROCESSED.state.currentProcess
-						) + 1
-				}
-			});
-		};
+	// 		dispatch({
+	// 			type: "RESTART_BULK",
+	// 			payload: {
+	// 				...IMAGESEO_DATA.CURRENT_PROCESSED.state,
+	// 				bulkActive: true,
+	// 				attachments: {},
+	// 				reports: {},
+	// 				currentProcess:
+	// 					Number(
+	// 						IMAGESEO_DATA.CURRENT_PROCESSED.state.currentProcess
+	// 					) + 1,
+	// 			},
+	// 		});
+	// 	};
 
-		fetchRestartBulk();
-	}, [settings.restartBulk]);
+	// 	fetchRestartBulk();
+	// }, [settings.restartBulk]);
 
-	useEffect(() => {
-		if (!state.bulkFinish) {
-			return;
-		}
-		setTimeout(() => {
-			deleteCurrentBulk();
-		}, 2000);
-	}, [state.bulkFinish]);
+	// useEffect(() => {
+	// 	if (!state.bulkFinish) {
+	// 		return;
+	// 	}
+	// 	setTimeout(() => {
+	// 		deleteCurrentBulk();
+	// 	}, 2000);
+	// }, [state.bulkFinish]);
 
 	return (
 		<>
-			{IMAGESEO_DATA.CURRENT_PROCESSED &&
+			{/* {IMAGESEO_DATA.CURRENT_PROCESSED &&
 				get(IMAGESEO_DATA, "CURRENT_PROCESSED.state", false) &&
 				get(IMAGESEO_DATA, "CURRENT_PROCESSED.count_optimized", 0) <
 					get(IMAGESEO_DATA, "CURRENT_PROCESSED.state.allIds", [])
@@ -398,7 +435,7 @@ function BulkWithProviders() {
 													code:
 														IMAGESEO_DATA
 															.CURRENT_PROCESSED
-															.settings.language
+															.settings.language,
 												}).name
 											}
 										</li>
@@ -440,7 +477,7 @@ function BulkWithProviders() {
 							</BlockContentInner>
 						</Block>
 					</div>
-				)}
+				)} */}
 			<Block>
 				{loadingImages && (
 					<div
@@ -455,7 +492,7 @@ function BulkWithProviders() {
 							borderRadius: 12,
 							display: "flex",
 							justifyContent: "center",
-							alignItems: "center"
+							alignItems: "center",
 						}}
 					>
 						<img
@@ -464,7 +501,7 @@ function BulkWithProviders() {
 								width: 100,
 								marginRight: 10,
 								animation:
-									"imageseo-rotation 1s infinite linear"
+									"imageseo-rotation 1s infinite linear",
 							}}
 						/>
 					</div>
@@ -476,7 +513,7 @@ function BulkWithProviders() {
 						alignItems: "center",
 						borderBottom: openOptimization
 							? "1px solid #C8D0DD"
-							: "none"
+							: "none",
 					}}
 				>
 					<BlockContentInnerTitle>
@@ -526,7 +563,7 @@ function BulkWithProviders() {
 								primary
 								style={{ marginRight: 15 }}
 								disabled={state.bulkActive}
-								onClick={e => {
+								onClick={(e) => {
 									handleStartBulk();
 								}}
 							>
@@ -536,7 +573,7 @@ function BulkWithProviders() {
 						{numberCreditsNeed > userImagesLeft && (
 							<Button
 								simple
-								onClick={e => {
+								onClick={(e) => {
 									window.open(
 										"https://app.imageseo.io/plan",
 										"_blank"
@@ -560,17 +597,22 @@ function BulkWithProviders() {
 							<Col span={10}>
 								<h2>
 									Bulk process (
-									{Object.values(state.attachments).length +
-										get(
-											IMAGESEO_DATA,
-											"CURRENT_PROCESSED.count_optimized",
-											0
-										)}
-									/{state.allIds.length})
+									{Number(
+										currentProcess.bulk_process
+											.current_index_image
+									) + 1}
+									/
+									{
+										currentProcess.bulk_process.id_images
+											.length
+									}
+									)
 								</h2>
 							</Col>
 							<Col>
-								<Loader percent={getPercentBulk(state)} />
+								<Loader
+									percent={getPercentBulk(currentProcess)}
+								/>
 							</Col>
 							<Col span={7}>
 								{!hasLimitExcedeed(userState.user_infos) && (
@@ -578,9 +620,9 @@ function BulkWithProviders() {
 										{state.bulkActive && !state.bulkPause && (
 											<Button
 												simple
-												onClick={e => {
+												onClick={(e) => {
 													dispatch({
-														type: "PAUSE_BULK"
+														type: "PAUSE_BULK",
 													});
 												}}
 											>
@@ -590,9 +632,9 @@ function BulkWithProviders() {
 										{state.bulkActive && state.bulkPause && (
 											<Button
 												simple
-												onClick={e => {
+												onClick={(e) => {
 													dispatch({
-														type: "PLAY_BULK"
+														type: "PLAY_BULK",
 													});
 												}}
 											>
@@ -631,7 +673,7 @@ function Bulk() {
 						default_language_ia:
 							IMAGESEO_DATA.OPTIONS.default_language_ia,
 						user_infos: IMAGESEO_DATA.USER_INFOS,
-						limit_images: IMAGESEO_DATA.LIMIT_IMAGES
+						limit_images: IMAGESEO_DATA.LIMIT_IMAGES,
 					}}
 				>
 					<BulkWithProviders />

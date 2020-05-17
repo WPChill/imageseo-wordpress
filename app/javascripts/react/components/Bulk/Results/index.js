@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import BlockTableHead, {
-	BlockTableHeadItem
+	BlockTableHeadItem,
 } from "../../../ui/Block/TableHead";
 import { Row, Col } from "../../../ui/Flex";
 
@@ -11,6 +11,7 @@ import { BulkSettingsContext } from "../../../contexts/BulkSettingsContext";
 
 function BulkResults() {
 	const { state } = useContext(BulkProcessContext);
+	console.log("[state]", state);
 	const { state: settings } = useContext(BulkSettingsContext);
 	return (
 		<>
@@ -37,7 +38,7 @@ function BulkResults() {
 					</Col>
 				</Row>
 			</BlockTableHead>
-			{Object.values(state.attachments).map(attachment => {
+			{Object.values(state.attachments).map((attachment) => {
 				return (
 					<BulkResultsItem
 						key={`attachment_${attachment.ID}`}

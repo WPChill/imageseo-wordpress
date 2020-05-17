@@ -6,11 +6,11 @@ import { Row, Col } from "../../../../ui/Flex";
 import BlockTableLine, {
 	BlockTableLineItem,
 	BlockTableLineImage,
-	BlockTableLineOldValue
+	BlockTableLineOldValue,
 } from "../../../../ui/Block/TableLine";
 import {
 	BulkProcessContext,
-	selectors
+	selectors,
 } from "../../../../contexts/BulkProcessContext";
 import { updateAlt } from "../../../../services/ajax/update-alt";
 import { renameFilename } from "../../../../services/ajax/rename-file";
@@ -45,7 +45,7 @@ function BulkResultsItem({ attachment }) {
 	const [altOptimizationIsValid, setAltOptimizationIsValid] = useState(false);
 	const [
 		filenameOptimizationIsValid,
-		setFilenameOptimizationIsValid
+		setFilenameOptimizationIsValid,
 	] = useState(false);
 
 	// Preview alt and filename
@@ -54,60 +54,35 @@ function BulkResultsItem({ attachment }) {
 			return;
 		}
 
-		if (
-			!isNil(state.altPreviews[attachment.ID]) ||
-			!isNil(state.filePreviews[attachment.ID])
-		) {
-			return;
-		}
-
 		const fetchOptimization = async () => {
-			const excludeFilenames = selectors.getAllFilenamesPreview(state);
-			const template =
-				settings.formatAlt === "CUSTOM_FORMAT"
-					? settings.formatAltCustom
-					: settings.formatAlt;
+			const { success, data } = await previewDataReport(attachment.ID);
 
-			const { success, data } = await previewDataReport(
-				attachment.ID,
-				template,
-				excludeFilenames
-			);
-
-			if (settings.optimizeAlt && isEmpty(alt)) {
-				if (isEmpty(data.alt)) {
-					setAlt(null);
-				} else if (success) {
-					setAlt(data.alt);
-					dispatch({
-						type: "ADD_ALT_PREVIEW",
-						payload: {
-							ID: attachment.ID,
-							alt: data.alt
-						}
-					});
-				}
+			if (settings.optimizeAlt) {
+				setAlt(data.alt);
+				// dispatch({
+				// 	type: "ADD_ALT_PREVIEW",
+				// 	payload: {
+				// 		ID: attachment.ID,
+				// 		alt: data.alt,
+				// 	},
+				// });
 			}
 
-			if (settings.optimizeFile && isEmpty(fileinfos)) {
-				if (isEmpty(data.filename)) {
-					setFileInfos(null);
-				} else {
-					setFileInfos({
-						filename: data.filename,
-						extension: data.extension
-					});
-					dispatch({
-						type: "ADD_FILENAME_PREVIEW",
-						payload: {
-							ID: attachment.ID,
-							file: {
-								filename: data.filename,
-								extension: data.extension
-							}
-						}
-					});
-				}
+			if (settings.optimizeFile) {
+				setFileInfos({
+					filename: data.filename,
+					extension: data.extension,
+				});
+				// dispatch({
+				// 	type: "ADD_FILENAME_PREVIEW",
+				// 	payload: {
+				// 		ID: attachment.ID,
+				// 		file: {
+				// 			filename: data.filename,
+				// 			extension: data.extension,
+				// 		},
+				// 	},
+				// });
 			}
 
 			setLoading(false);
@@ -115,45 +90,6 @@ function BulkResultsItem({ attachment }) {
 
 		fetchOptimization();
 	}, [state.reports]);
-
-	// Optimize alt auto
-	useEffect(() => {
-		if (settings.wantValidateResult || altOptimizationIsValid) {
-			return;
-		}
-
-		if (!settings.optimizeAlt || isEmpty(alt) || isNil(alt)) {
-			return;
-		}
-
-		const fetchUpdateAlt = async () => {
-			await updateAlt(attachment.ID, alt);
-			setAltOptimizationIsValid(true);
-		};
-
-		fetchUpdateAlt();
-	}, [alt]);
-
-	// Optimize file auto
-	useEffect(() => {
-		if (settings.wantValidateResult || filenameOptimizationIsValid) {
-			return;
-		}
-
-		if (!settings.optimizeFile || isEmpty(fileinfos) || isNil(fileinfos)) {
-			return;
-		}
-
-		const fetchUpdateFile = async () => {
-			await renameFilename(
-				attachment.ID,
-				getFilenameWithoutExtension(getFilenamePreview(fileinfos))
-			);
-			setFilenameOptimizationIsValid(true);
-		};
-
-		fetchUpdateFile();
-	}, [fileinfos]);
 
 	const handleValidateResult = async () => {
 		if (filenameOptimizationIsValid && altOptimizationIsValid) {
@@ -207,9 +143,9 @@ function BulkResultsItem({ attachment }) {
 									<input
 										type="text"
 										value={alt}
-										onChange={e => setAlt(e.target.value)}
+										onChange={(e) => setAlt(e.target.value)}
 										style={{
-											flex: 1
+											flex: 1,
 										}}
 									/>
 								)}
@@ -262,14 +198,14 @@ function BulkResultsItem({ attachment }) {
 									<input
 										type="text"
 										value={fileinfos.filename}
-										onChange={e => {
+										onChange={(e) => {
 											setFileInfos({
 												...fileinfos,
-												filename: e.target.value
+												filename: e.target.value,
 											});
 										}}
 										style={{
-											flex: 1
+											flex: 1,
 										}}
 									/>
 								)}
@@ -311,9 +247,9 @@ function BulkResultsItem({ attachment }) {
 															{
 																replacement:
 																	"-",
-																remove: /[*+~.()'"!:@]/g
+																remove: /[*+~.()'"!:@]/g,
 															}
-														)
+														),
 													});
 												}}
 											>
@@ -345,7 +281,7 @@ function BulkResultsItem({ attachment }) {
 								src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
 								style={{
 									animation:
-										"imageseo-rotation 1s infinite linear"
+										"imageseo-rotation 1s infinite linear",
 								}}
 							/>
 						)}
@@ -373,7 +309,7 @@ function BulkResultsItem({ attachment }) {
 										marginLeft: 20,
 										display: "flex",
 										alignItems: "center",
-										padding: "7px 15px"
+										padding: "7px 15px",
 									}}
 									onClick={() => {
 										setLoadingHandleResult(true);
@@ -387,7 +323,7 @@ function BulkResultsItem({ attachment }) {
 											style={{
 												marginRight: 10,
 												animation:
-													"imageseo-rotation 1s infinite linear"
+													"imageseo-rotation 1s infinite linear",
 											}}
 										/>
 									)}

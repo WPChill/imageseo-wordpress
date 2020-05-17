@@ -9,11 +9,8 @@ const initialState = {
 	bulkActive: false,
 	bulkFinish: false,
 	bulkPause: false,
-	currentProcess: null,
 	attachments: {},
 	reports: {},
-	altPreviews: {},
-	filePreviews: {}
 };
 
 function reducer(state, { type, payload }) {
@@ -21,67 +18,40 @@ function reducer(state, { type, payload }) {
 		case "RESTART_BULK":
 			return {
 				...state,
-				...payload
-			};
-		case "ADD_ALT_PREVIEW":
-			return {
-				...state,
-				altPreviews: {
-					...state.altPreviews,
-					[payload.ID]: payload.alt
-				}
-			};
-		case "ADD_FILENAME_PREVIEW":
-			return {
-				...state,
-				filePreviews: {
-					...state.filePreviews,
-					[payload.ID]: payload.file
-				}
+				...payload,
 			};
 		case "UPDATE_ALL_IDS":
 			return {
 				...state,
-				allIds: payload
+				allIds: payload,
 			};
 		case "UPDATE_ALL_IDS_OPTIMIZED":
 			return {
 				...state,
-				allIdsOptimized: payload
+				allIdsOptimized: payload,
 			};
 		case "START_BULK":
 			return {
 				...state,
 				bulkActive: true,
 				attachments: {},
-				reports: {}
+				reports: {},
 			};
 		case "PLAY_BULK":
 			return {
 				...state,
-				bulkPause: false
+				bulkPause: false,
 			};
 		case "PAUSE_BULK":
 			return {
 				...state,
-				bulkPause: true
+				bulkPause: true,
 			};
 		case "FINISH_BULK":
 			return {
 				...state,
 				bulkActive: false,
 				bulkFinish: true,
-				currentProcess: false
-			};
-		case "NEW_PROCESS":
-			return {
-				...state,
-				currentProcess: payload
-			};
-		case "STOP_CURRENT_PROCESS":
-			return {
-				...state,
-				currentProcess: null
 			};
 		case "ATTACHMENT_NOT_FOUND":
 			const {
@@ -98,25 +68,25 @@ function reducer(state, { type, payload }) {
 				...state,
 				currentProcess: state.currentProcess + 1,
 				attachments: {
-					...rest
+					...rest,
 				},
-				allIds: filter(state.allIds, itm => itm !== payload)
+				allIds: filter(state.allIds, (itm) => itm !== payload),
 			};
 		case "ADD_ATTACHMENT":
 			return {
 				...state,
 				attachments: {
 					...state.attachments,
-					[payload.ID]: payload
-				}
+					[payload.ID]: payload,
+				},
 			};
 		case "ADD_REPORT":
 			return {
 				...state,
 				reports: {
 					...state.reports,
-					[payload.ID]: payload
-				}
+					[payload.ID]: payload,
+				},
 			};
 		default:
 			return state;
@@ -127,12 +97,12 @@ const BulkProcessContext = createContext(null);
 
 const BulkProcessContextProvider = ({ children }) => {
 	let initState = {
-		...initialState
+		...initialState,
 	};
 	if (IMAGESEO_DATA.CURRENT_PROCESSED) {
 		initState = {
 			...initState,
-			...IMAGESEO_DATA.CURRENT_PROCESSED.state
+			...IMAGESEO_DATA.CURRENT_PROCESSED.state,
 		};
 	}
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -141,7 +111,7 @@ const BulkProcessContextProvider = ({ children }) => {
 		<BulkProcessContext.Provider
 			value={{
 				state,
-				dispatch
+				dispatch,
 			}}
 		>
 			{children}
@@ -149,7 +119,7 @@ const BulkProcessContextProvider = ({ children }) => {
 	);
 };
 
-const getAllFilenamesPreviewMemoize = memoize(state => {
+const getAllFilenamesPreviewMemoize = memoize((state) => {
 	const filenames = reduce(
 		Object.values(state.filePreviews),
 		(result, value, key) => {
@@ -168,7 +138,7 @@ const getAllFilenamesPreviewMemoize = memoize(state => {
 });
 
 const selectors = {
-	getAllFilenamesPreview: getAllFilenamesPreviewMemoize
+	getAllFilenamesPreview: getAllFilenamesPreviewMemoize,
 };
 
 export default BulkProcessContextProvider;

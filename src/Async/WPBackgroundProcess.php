@@ -76,6 +76,13 @@ abstract class WPBackgroundProcess extends WPAsyncRequest
         return $this;
     }
 
+    public function push_all_data($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
     /**
      * Save queue.
      *
@@ -193,7 +200,7 @@ abstract class WPBackgroundProcess extends WPAsyncRequest
      * Check whether the current process is already running
      * in a background process.
      */
-    protected function is_process_running()
+    public function is_process_running()
     {
         if (get_site_transient($this->identifier . '_process_lock')) {
             // Process already running.

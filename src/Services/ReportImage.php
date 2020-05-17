@@ -82,13 +82,12 @@ class ReportImage
                 'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
             ], $query);
         }
-        
+
         if ($result && !$result['success']) {
             return $result;
         }
 
         $report = $result['result'];
-        update_post_meta($attachmentId, AttachmentMeta::DATE_REPORT, time());
         update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
         update_post_meta($attachmentId, AttachmentMeta::LANGUAGE, $language);
 

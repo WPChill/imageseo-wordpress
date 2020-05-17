@@ -13,18 +13,14 @@ function getAttachmentIdWithProcess(state) {
 	return get(state, ["allIds", currentProcess], null);
 }
 
-function getPercentBulk(state) {
-	const countCurrent = Object.values(state.attachments).length;
+function getPercentBulk(currentProcess) {
+	const countCurrent =
+		Number(currentProcess.bulk_process.current_index_image) + 1;
 	if (countCurrent === 0) {
 		return 0;
 	}
 
-	return (
-		((countCurrent +
-			get(IMAGESEO_DATA, "CURRENT_PROCESSED.count_optimized", 0)) *
-			100) /
-		state.allIds.length
-	);
+	return (countCurrent * 100) / currentProcess.bulk_process.id_images.length;
 }
 
 export { getAttachmentIdWithProcess, canLaunchBulk, getPercentBulk };
