@@ -76,9 +76,22 @@ const getCurrentProcessDispatch = async () => {
 	return await response.json();
 };
 
+const stopCurrentProcess = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_stop_bulk");
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
 export {
 	saveCurrentBulk,
 	deleteCurrentBulk,
 	startBulkProcess,
 	getCurrentProcessDispatch,
+	stopCurrentProcess,
 };

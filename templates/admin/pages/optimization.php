@@ -7,13 +7,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$currentProcessed = get_option('_imageseo_current_processed');
-
 $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
-
 $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
 
-$currentProcess = get_option('_imageseo_current_processed', 0);
+$currentProcessed = get_option('_imageseo_bulk_process');
+$lastBulkProcess = get_option('_imageseo_last_bulk_process');
 
 $limitImages = 10;
 if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
@@ -33,7 +31,7 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
                 </div>
             </div>
         </div>
-        
+
         <div id="js-module-optimization"></div>
 
     </div>
@@ -42,7 +40,8 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
 <script>
     const IMAGESEO_URL_DIST = "<?php echo IMAGESEO_URL_DIST; ?>"
     const IMAGESEO_DATA = {
-        CURRENT_PROCESSED: <?php echo wp_json_encode($currentProcessed); ?>,
+		CURRENT_PROCESSED: <?php echo $currentProcessed ? wp_json_encode($currentProcessed) : 'null'; ?>,
+		LAST_PROCESSED: <?php echo $lastBulkProcess ? wp_json_encode($lastBulkProcess) : 'null'; ?>,
         TOTAL_ALT_NO_OPTIMIZE : <?php echo $totalAltNoOptimize; ?>,
         PERCENT_TRAFFIC_LOOSE : <?php echo $percentLoose; ?>,
         LIMIT_IMAGES: <?php echo $limitImages; ?>,

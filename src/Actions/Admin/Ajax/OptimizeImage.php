@@ -25,8 +25,25 @@ class OptimizeImage
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
 
+        add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
         add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
         add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
+    }
+
+    public function stopBulk()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
+        $optionBulkProcess = get_option('_imageseo_bulk_process');
+        update_option('_imageseo_need_to_stop_process', true);
+        update_option('_imageseo_last_bulk_process', $optionBulkProcess);
+
+        wp_send_json_success();
     }
 
     public function dispatchBulk()
@@ -46,23 +63,21 @@ class OptimizeImage
             return;
         }
 
-        $this->settings = [
-            'formatAlt'          => $_POST['formatAlt'],
-            'formatAltCustom'    => 'CUSTOM_FORMAT' === $_POST['formatAltCustom'] ? true : false,
-            'language'           => $_POST['language'],
-            'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
-            'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
-            'wantValidateResult' => 'true' === $_POST['wantValidateResult'] ? true : false,
-        ];
-
         $data = explode(',', $_POST['data']);
         update_option('_imageseo_bulk_process', [
-            'total_images'        => count($data),
-            'id_images'           => $data,
-            'current_index_image' => 0,
+            'total_images'         => count($data),
+            'id_images'            => $data,
+            'current_index_image'  => 0,
+            'settings'             => [
+                'formatAlt'          => $_POST['formatAlt'],
+                'formatAltCustom'    => 'CUSTOM_FORMAT' === $_POST['formatAltCustom'] ? true : false,
+                'language'           => $_POST['language'],
+                'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
+                'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
+                'wantValidateResult' => 'true' === $_POST['wantValidateResult'] ? true : false,
+            ],
         ]);
 
-        $data = array_map([$this, 'hydrateDataWithSettings'], $data);
         $this->bulkProcess->push_all_data($data)->save()->dispatch();
 
         wp_send_json_success();
@@ -80,22 +95,15 @@ class OptimizeImage
         $infoBulkProcess = get_option('_imageseo_bulk_process');
         if (!$infoBulkProcess) {
             $infoBulkProcess = [
-                'current_index_image' => -1,
-                'id_images'           => [],
+                'current_index_image'  => -1,
+                'id_images'            => [],
+                'settings'             => [],
             ];
         }
         wp_send_json_success([
             'is_running'   => $this->bulkProcess->is_process_running(),
             'bulk_process' => $infoBulkProcess,
         ]);
-    }
-
-    protected function hydrateDataWithSettings($item)
-    {
-        return [
-            'id'       => $item,
-            'settings' => $this->settings,
-        ];
     }
 
     public function getPreviewDataReport()

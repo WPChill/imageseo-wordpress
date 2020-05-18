@@ -1,4 +1,13 @@
-import { reduce, isEmpty, memoize, uniq, filter, set, get } from "lodash";
+import {
+	reduce,
+	isEmpty,
+	memoize,
+	uniq,
+	filter,
+	set,
+	get,
+	isNil,
+} from "lodash";
 import React, { useReducer, createContext } from "react";
 import getFilenameWithoutExtension from "../../helpers/getFilenameWithoutExtension";
 import getFilenamePreview from "../../helpers/getFilenamePreview";
@@ -99,10 +108,15 @@ const BulkProcessContextProvider = ({ children }) => {
 	let initState = {
 		...initialState,
 	};
-	if (IMAGESEO_DATA.CURRENT_PROCESSED) {
+	if (!isNil(IMAGESEO_DATA.CURRENT_PROCESSED)) {
 		initState = {
 			...initState,
 			...IMAGESEO_DATA.CURRENT_PROCESSED.state,
+		};
+	} else if (!isNil(IMAGESEO_DATA.LAST_PROCESSED)) {
+		initState = {
+			...initState,
+			...IMAGESEO_DATA.LAST_PROCESSED.state,
 		};
 	}
 	const [state, dispatch] = useReducer(reducer, initialState);

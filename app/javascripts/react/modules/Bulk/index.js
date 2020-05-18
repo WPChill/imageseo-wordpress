@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
-import { get, isNull, isNil, find, difference } from "lodash";
+import { get, isNull, isNil, find, difference, isEmpty } from "lodash";
 import { format } from "date-fns";
 
 import Block from "../../ui/Block";
@@ -40,6 +40,7 @@ import {
 	saveCurrentBulk,
 	startBulkProcess,
 	getCurrentProcessDispatch,
+	stopCurrentProcess,
 } from "../../services/ajax/current-bulk";
 import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 import useInterval from "../../hooks/useInterval";
@@ -169,22 +170,37 @@ function BulkWithProviders() {
 	}, [currentProcess]);
 
 	// Query reports
-	useEffect(() => {
-		if (hasLimitExcedeed(userState.user_infos)) {
-			dispatch({
-				type: "FINISH_BULK",
-				payload: null,
-			});
+	useInterval(async () => {
+		if (
+			(!currentProcess.is_running ||
+				state.bulkFinish ||
+				state.bulkPause) &&
+			Object.keys(state.reports).length ===
+				Object.keys(state.attachments).length
+		) {
 			return;
 		}
+		let idsAttachment = [];
 
-		const idsAttachment = difference(
-			currentProcess.bulk_process.id_images.slice(
-				0,
-				currentProcess.bulk_process.current_index_image
-			),
-			Object.keys(state.reports)
-		);
+		if (
+			currentProcess.is_running &&
+			!state.bulkFinish &&
+			!state.bulkPause
+		) {
+			idsAttachment = difference(
+				currentProcess.bulk_process.id_images.slice(
+					0,
+					currentProcess.bulk_process.current_index_image
+				),
+				Object.keys(state.reports)
+			);
+		} else if (!currentProcess.is_running || state.bulkFinish) {
+			idsAttachment = difference(
+				Object.keys(state.attachments),
+				Object.keys(state.reports)
+			);
+		}
+
 		console.log("[attachmentIdsOptimized]", idsAttachment);
 
 		const fetchReport = async (idsAttachment) => {
@@ -210,8 +226,10 @@ function BulkWithProviders() {
 			}
 		};
 
-		fetchReport(idsAttachment);
-	}, [currentProcess]);
+		if (!isEmpty(idsAttachment)) {
+			fetchReport(idsAttachment);
+		}
+	}, 4000);
 
 	const handleQueryImages = async (filters = {}) => {
 		setLoadingImages(true);
@@ -291,32 +309,43 @@ function BulkWithProviders() {
 		});
 	};
 
-	// const handleRestartBulk = (e) => {
-	// 	e.preventDefault();
-	// 	if (!IMAGESEO_DATA.CURRENT_PROCESSED) {
-	// 		return;
-	// 	}
+	const handleRestartBulk = (e) => {
+		e.preventDefault();
+		if (isNil(IMAGESEO_DATA.LAST_PROCESSED)) {
+			return;
+		}
 
-	// 	Swal.fire({
-	// 		title: "Are you sure?",
-	// 		text:
-	// 			"You're going to take over a bulk optimization that was in progress. ",
-	// 		icon: "warning",
-	// 		showCancelButton: true,
-	// 		confirmButtonColor: "#3085d6",
-	// 		confirmButtonText: "Yes, let's go!",
-	// 	}).then((result) => {
-	// 		if (result.value) {
-	// 			dispatchSettings({
-	// 				type: "NEW_OPTIONS",
-	// 				payload: {
-	// 					...IMAGESEO_DATA.CURRENT_PROCESSED.settings,
-	// 					restartBulk: true,
-	// 				},
-	// 			});
-	// 		}
-	// 	});
-	// };
+		Swal.fire({
+			title: "Are you sure?",
+			text:
+				"You're going to take over a bulk optimization that was in progress. ",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			confirmButtonText: "Yes, let's go!",
+		}).then(async (result) => {
+			if (result.value) {
+				const ids = IMAGESEO_DATA.LAST_PROCESSED.id_images.slice(
+					Number(IMAGESEO_DATA.LAST_PROCESSED.current_index_image) + 1
+				);
+
+				await startBulkProcess(
+					ids,
+					IMAGESEO_DATA.LAST_PROCESSED.settings
+				);
+				dispatch({
+					type: "START_BULK",
+					payload: null,
+				});
+				dispatchSettings({
+					type: "NEW_OPTIONS",
+					payload: {
+						...IMAGESEO_DATA.LAST_PROCESSED.settings,
+					},
+				});
+			}
+		});
+	};
 
 	// Resume an old bulk
 	// useEffect(() => {
@@ -353,14 +382,11 @@ function BulkWithProviders() {
 	// 		deleteCurrentBulk();
 	// 	}, 2000);
 	// }, [state.bulkFinish]);
-
+	console.log(IMAGESEO_DATA);
 	return (
 		<>
-			{/* {IMAGESEO_DATA.CURRENT_PROCESSED &&
-				get(IMAGESEO_DATA, "CURRENT_PROCESSED.state", false) &&
-				get(IMAGESEO_DATA, "CURRENT_PROCESSED.count_optimized", 0) <
-					get(IMAGESEO_DATA, "CURRENT_PROCESSED.state.allIds", [])
-						.length &&
+			{!isNil(IMAGESEO_DATA.LAST_PROCESSED) &&
+				get(IMAGESEO_DATA, "LAST_PROCESSED.id_images", []).length > 0 &&
 				!state.bulkActive && (
 					<div className="imageseo-mb-4">
 						<Block>
@@ -369,22 +395,18 @@ function BulkWithProviders() {
 									<Col flex="1">
 										<h2>
 											Paused Bulk Optimization (
-											{get(
-												IMAGESEO_DATA,
-												"CURRENT_PROCESSED.count_optimized",
-												0
-											)}
+											{Number(
+												IMAGESEO_DATA.LAST_PROCESSED
+													.current_index_image
+											) + 1}
 											/
 											{
-												get(
-													IMAGESEO_DATA,
-													"CURRENT_PROCESSED.state.allIds",
-													[]
-												).length
+												IMAGESEO_DATA.LAST_PROCESSED
+													.id_images.length
 											}
 											)
 										</h2>
-										<p>
+										{/* <p>
 											Paused :{" "}
 											{get(
 												IMAGESEO_DATA,
@@ -405,7 +427,7 @@ function BulkWithProviders() {
 														),
 														"dd MMMM yyyy - HH:mm"
 												  )}
-										</p>
+										</p> */}
 									</Col>
 									<Col auto>
 										<Button
@@ -423,7 +445,7 @@ function BulkWithProviders() {
 									<ul>
 										<li>
 											<strong>Manual Validation :</strong>{" "}
-											{IMAGESEO_DATA.CURRENT_PROCESSED
+											{IMAGESEO_DATA.LAST_PROCESSED
 												.settings.wantValidateResult
 												? "Yes"
 												: "No"}
@@ -434,31 +456,31 @@ function BulkWithProviders() {
 												find(IMAGESEO_DATA.LANGUAGES, {
 													code:
 														IMAGESEO_DATA
-															.CURRENT_PROCESSED
+															.LAST_PROCESSED
 															.settings.language,
 												}).name
 											}
 										</li>
 										<li>
 											<strong>Optimize alt :</strong>{" "}
-											{IMAGESEO_DATA.CURRENT_PROCESSED
+											{IMAGESEO_DATA.LAST_PROCESSED
 												.settings.optimizeAlt
 												? "Yes"
 												: "No"}{" "}
-											{IMAGESEO_DATA.CURRENT_PROCESSED
+											{IMAGESEO_DATA.LAST_PROCESSED
 												.settings.optimizeAlt && (
 												<>
 													(Format :{" "}
 													{IMAGESEO_DATA
-														.CURRENT_PROCESSED
-														.settings.formatAlt ===
+														.LAST_PROCESSED.settings
+														.formatAlt ===
 													"CUSTOM_FORMAT"
 														? IMAGESEO_DATA
-																.CURRENT_PROCESSED
+																.LAST_PROCESSED
 																.settings
 																.formatAltCustom
 														: IMAGESEO_DATA
-																.CURRENT_PROCESSED
+																.LAST_PROCESSED
 																.settings
 																.formatAlt}
 													)
@@ -467,7 +489,7 @@ function BulkWithProviders() {
 										</li>
 										<li>
 											<strong>Optimize filename :</strong>{" "}
-											{IMAGESEO_DATA.CURRENT_PROCESSED
+											{IMAGESEO_DATA.LAST_PROCESSED
 												.settings.optimizeFile
 												? "Yes"
 												: "No"}
@@ -477,7 +499,7 @@ function BulkWithProviders() {
 							</BlockContentInner>
 						</Block>
 					</div>
-				)} */}
+				)}
 			<Block>
 				{loadingImages && (
 					<div
@@ -621,15 +643,16 @@ function BulkWithProviders() {
 											<Button
 												simple
 												onClick={(e) => {
+													stopCurrentProcess();
 													dispatch({
-														type: "PAUSE_BULK",
+														type: "FINISH_BULK",
 													});
 												}}
 											>
-												Pause bulk
+												Stop bulk
 											</Button>
 										)}
-										{state.bulkActive && state.bulkPause && (
+										{/* {state.bulkActive && state.bulkPause && (
 											<Button
 												simple
 												onClick={(e) => {
@@ -640,7 +663,7 @@ function BulkWithProviders() {
 											>
 												Play
 											</Button>
-										)}
+										)} */}
 									</>
 								)}
 							</Col>

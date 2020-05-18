@@ -152,6 +152,17 @@ function BulkResultsItem({ attachment }) {
 								{!editAlt && (
 									<Col auto>
 										{!editAlt && <strong>{alt}</strong>}
+										{!editAlt && !loading && isEmpty(alt) && (
+											<strong
+												style={{
+													color: "#f32626",
+													fontStyle: "italic",
+												}}
+											>
+												Sorry, we couldn't find any
+												results
+											</strong>
+										)}
 									</Col>
 								)}
 								<Col auto>
@@ -214,6 +225,19 @@ function BulkResultsItem({ attachment }) {
 										{!editFilename && (
 											<strong>{filename}</strong>
 										)}
+										{!editFilename &&
+											!loading &&
+											isEmpty(filename) && (
+												<strong
+													style={{
+														color: "#f32626",
+														fontStyle: "italic",
+													}}
+												>
+													Sorry, we couldn't find any
+													results
+												</strong>
+											)}
 									</Col>
 								)}
 								<Col auto>
