@@ -63,6 +63,8 @@ class OptimizeImage
             return;
         }
 
+        delete_option('_imageseo_last_bulk_process');
+
         $data = explode(',', $_POST['data']);
         update_option('_imageseo_bulk_process', [
             'total_images'         => count($data),

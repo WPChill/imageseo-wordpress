@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
-import { get, isNull, isNil, find, difference, isEmpty } from "lodash";
+import { get, isNil, find, difference, isEmpty } from "lodash";
 import { format } from "date-fns";
 
 import Block from "../../ui/Block";
@@ -64,7 +64,17 @@ function BulkWithProviders() {
 		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
 	);
 	const [loadingImages, setLoadingImages] = useState(false);
-	const [currentProcess, setCurrentProcess] = useState(defaultCurrentProcess);
+	const [currentProcess, setCurrentProcess] = useState({
+		...defaultCurrentProcess,
+		bulk_process: {
+			id_images: get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images", []),
+			current_index_image: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.current_index_image",
+				-1
+			),
+		},
+	});
 	const [attachmentIdsView, setAttachmentIdsView] = useState([]);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
@@ -74,7 +84,7 @@ function BulkWithProviders() {
 	if (numberCreditsNeed < 0) {
 		numberCreditsNeed = 0;
 	}
-
+	console.log("State : ", state);
 	// QUERY IMAGES
 	useEffect(() => {
 		handleQueryImages({
@@ -278,17 +288,6 @@ function BulkWithProviders() {
 			return;
 		}
 
-		// const launchBulk = async () => {
-		// 	if (IMAGESEO_DATA.CURRENT_PROCESSED) {
-		// 		await deleteCurrentBulk();
-		// 		IMAGESEO_DATA.CURRENT_PROCESSED = false;
-		// 	}
-		// 	dispatch({
-		// 		type: "NEW_PROCESS",
-		// 		payload: 0,
-		// 	});
-		// };
-
 		Swal.fire({
 			title: "Are you sure?",
 			text:
@@ -347,47 +346,15 @@ function BulkWithProviders() {
 		});
 	};
 
-	// Resume an old bulk
-	// useEffect(() => {
-	// 	if (!settings.restartBulk) {
-	// 		return;
-	// 	}
+	console.log("[render state] : ", state);
 
-	// 	const fetchRestartBulk = async () => {
-	// 		await deleteCurrentBulk();
-
-	// 		dispatch({
-	// 			type: "RESTART_BULK",
-	// 			payload: {
-	// 				...IMAGESEO_DATA.CURRENT_PROCESSED.state,
-	// 				bulkActive: true,
-	// 				attachments: {},
-	// 				reports: {},
-	// 				currentProcess:
-	// 					Number(
-	// 						IMAGESEO_DATA.CURRENT_PROCESSED.state.currentProcess
-	// 					) + 1,
-	// 			},
-	// 		});
-	// 	};
-
-	// 	fetchRestartBulk();
-	// }, [settings.restartBulk]);
-
-	// useEffect(() => {
-	// 	if (!state.bulkFinish) {
-	// 		return;
-	// 	}
-	// 	setTimeout(() => {
-	// 		deleteCurrentBulk();
-	// 	}, 2000);
-	// }, [state.bulkFinish]);
-	console.log(IMAGESEO_DATA);
 	return (
 		<>
 			{!isNil(IMAGESEO_DATA.LAST_PROCESSED) &&
 				get(IMAGESEO_DATA, "LAST_PROCESSED.id_images", []).length > 0 &&
-				!state.bulkActive && (
+				isNil(IMAGESEO_DATA.CURRENT_PROCESSED) &&
+				!state.bulkActive &&
+				!state.bulkFinish && (
 					<div className="imageseo-mb-4">
 						<Block>
 							<BlockContentInner>

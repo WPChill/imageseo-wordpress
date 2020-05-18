@@ -23,6 +23,7 @@ const initialState = {
 };
 
 function reducer(state, { type, payload }) {
+	console.log(`[type] - [${type}] :`, state);
 	switch (type) {
 		case "RESTART_BULK":
 			return {
@@ -111,16 +112,17 @@ const BulkProcessContextProvider = ({ children }) => {
 	if (!isNil(IMAGESEO_DATA.CURRENT_PROCESSED)) {
 		initState = {
 			...initState,
-			...IMAGESEO_DATA.CURRENT_PROCESSED.state,
+			bulkActive: true,
+			allIds: IMAGESEO_DATA.CURRENT_PROCESSED.id_images,
 		};
 	} else if (!isNil(IMAGESEO_DATA.LAST_PROCESSED)) {
 		initState = {
 			...initState,
-			...IMAGESEO_DATA.LAST_PROCESSED.state,
+			allIds: IMAGESEO_DATA.LAST_PROCESSED.id_images,
 		};
 	}
-	const [state, dispatch] = useReducer(reducer, initialState);
 
+	const [state, dispatch] = useReducer(reducer, initState);
 	return (
 		<BulkProcessContext.Provider
 			value={{

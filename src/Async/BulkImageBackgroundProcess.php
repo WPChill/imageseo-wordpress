@@ -124,6 +124,10 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
     {
         parent::complete();
 
+        if ($optionBulkProcess['current_index_image'] + 1 == $optionBulkProcess['total_images']) {
+            delete_option('_imageseo_last_bulk_process');
+        }
+
         delete_option('_imageseo_bulk_exclude_filenames');
         delete_option('_imageseo_need_to_stop_process');
         delete_option('_imageseo_bulk_process');

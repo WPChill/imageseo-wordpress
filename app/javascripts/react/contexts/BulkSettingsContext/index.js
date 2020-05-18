@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { find, merge } from "lodash";
+import { find, merge, get } from "lodash";
 
 function reducer(state, { type, payload }) {
 	switch (type) {
@@ -8,7 +8,7 @@ function reducer(state, { type, payload }) {
 		case "UPDATE_OPTION":
 			return {
 				...state,
-				[payload.key]: payload.value
+				[payload.key]: payload.value,
 			};
 		case "NEW_OPTIONS":
 			return payload;
@@ -23,15 +23,38 @@ const BulkSettingsContextProvider = ({ children }) => {
 	const getInitialState = () => {
 		return {
 			smallImages: false,
-			wantValidateResult: false,
-			language: IMAGESEO_DATA.OPTIONS.default_language_ia,
-			optimizeAlt: false,
-			formatAlt: null,
-			formatAltCustom: "",
+			wantValidateResult: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.wantValidateResult",
+				false
+			),
+			language: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.language",
+				IMAGESEO_DATA.OPTIONS.default_language_ia
+			),
+			optimizeAlt: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.optimizeAlt",
+				false
+			),
+			formatAlt: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.formatAlt",
+				null
+			),
+			formatAltCustom: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.formatAltCustom",
+				""
+			),
 			altFilter: find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id,
 			altFill: find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id,
-			optimizeFile: false,
-			restartBulk: false
+			optimizeFile: get(
+				IMAGESEO_DATA,
+				"CURRENT_PROCESSED.settings.optimizeFile",
+				false
+			),
 		};
 	};
 	const [state, dispatch] = useReducer(reducer, getInitialState());
@@ -40,7 +63,7 @@ const BulkSettingsContextProvider = ({ children }) => {
 		<BulkSettingsContext.Provider
 			value={{
 				state,
-				dispatch
+				dispatch,
 			}}
 		>
 			{children}
