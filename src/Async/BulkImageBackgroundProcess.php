@@ -42,15 +42,12 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
      */
     protected function task($item)
     {
-        error_log(serialize($item));
         $optionBulkProcess = get_option('_imageseo_bulk_process');
 
         global $wpdb;
         $needToStopProcess = $wpdb->get_row($wpdb->prepare("SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", '_imageseo_need_to_stop_process'));
 
         if ($needToStopProcess) {
-            error_log('STOP PROCESS :' . $item);
-
             return false;
         }
 
@@ -72,7 +69,7 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
         $alt = '';
         $filename = '';
         $extension = '';
-        // error_log($optionBulkProcess['settings']['formatAlt']);
+
         if ($optionBulkProcess['settings']['optimizeAlt']) {
             $alt = imageseo_get_service('TagsToString')->replace($optionBulkProcess['settings']['formatAlt'], $item);
             if (!$optionBulkProcess['settings']['wantValidateResult']) {
@@ -90,8 +87,7 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
             list($filename, $extension) = $this->getFilenameForPreview($item, $excludeFilenames);
             $excludeFilenames[] = $filename;
             update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames);
-            // error_log('Filename : ' . $filename);
-            // error_log('extension : ' . $extension);
+
             if (!$optionBulkProcess['settings']['wantValidateResult']) {
                 if (empty($filename)) {
                     $renameFileService->removeFilename($item);
@@ -108,6 +104,7 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
         }
 
         ++$optionBulkProcess['current_index_image'];
+        $optionBulkProcess['id_images_optimized'][] = $item;
         update_option('_imageseo_bulk_process', $optionBulkProcess);
 
         update_post_meta($item, '_imageseo_bulk_report', [

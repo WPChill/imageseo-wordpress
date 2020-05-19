@@ -69,6 +69,7 @@ class OptimizeImage
         update_option('_imageseo_bulk_process', [
             'total_images'         => count($data),
             'id_images'            => $data,
+            'id_images_optimized'  => [],
             'current_index_image'  => 0,
             'settings'             => [
                 'formatAlt'          => $_POST['formatAlt'],
@@ -97,9 +98,10 @@ class OptimizeImage
         $infoBulkProcess = get_option('_imageseo_bulk_process');
         if (!$infoBulkProcess) {
             $infoBulkProcess = [
-                'current_index_image'  => -1,
-                'id_images'            => [],
-                'settings'             => [],
+                'current_index_image'   => -1,
+                'id_images'             => [],
+                'id_images_optimized'   => [],
+                'settings'              => [],
             ];
         }
         wp_send_json_success([

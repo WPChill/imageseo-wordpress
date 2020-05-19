@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { get, isEmpty, isNil } from "lodash";
 import styled from "styled-components";
-
+import slugify from "slugify";
 import { Row, Col } from "../../../../ui/Flex";
 import BlockTableLine, {
 	BlockTableLineItem,
@@ -54,35 +54,42 @@ function BulkResultsItem({ attachment }) {
 			return;
 		}
 
+		if (
+			!isNil(state.altPreviews[attachment.ID]) ||
+			!isNil(state.filePreviews[attachment.ID])
+		) {
+			return;
+		}
+
 		const fetchOptimization = async () => {
 			const { success, data } = await previewDataReport(attachment.ID);
 
-			if (settings.optimizeAlt) {
+			if (settings.optimizeAlt && !isEmpty(data.alt)) {
 				setAlt(data.alt);
-				// dispatch({
-				// 	type: "ADD_ALT_PREVIEW",
-				// 	payload: {
-				// 		ID: attachment.ID,
-				// 		alt: data.alt,
-				// 	},
-				// });
+				dispatch({
+					type: "ADD_ALT_PREVIEW",
+					payload: {
+						ID: attachment.ID,
+						alt: data.alt,
+					},
+				});
 			}
 
-			if (settings.optimizeFile) {
+			if (settings.optimizeFile && !isEmpty(data.filename)) {
+				dispatch({
+					type: "ADD_FILENAME_PREVIEW",
+					payload: {
+						ID: attachment.ID,
+						file: {
+							filename: data.filename,
+							extension: data.extension,
+						},
+					},
+				});
 				setFileInfos({
 					filename: data.filename,
 					extension: data.extension,
 				});
-				// dispatch({
-				// 	type: "ADD_FILENAME_PREVIEW",
-				// 	payload: {
-				// 		ID: attachment.ID,
-				// 		file: {
-				// 			filename: data.filename,
-				// 			extension: data.extension,
-				// 		},
-				// 	},
-				// });
 			}
 
 			setLoading(false);

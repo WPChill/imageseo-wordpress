@@ -20,15 +20,27 @@ const initialState = {
 	bulkPause: false,
 	attachments: {},
 	reports: {},
+	altPreviews: {},
+	filePreviews: {},
 };
 
 function reducer(state, { type, payload }) {
-	console.log(`[type] - [${type}] :`, state);
 	switch (type) {
-		case "RESTART_BULK":
+		case "ADD_ALT_PREVIEW":
 			return {
 				...state,
-				...payload,
+				altPreviews: {
+					...state.altPreviews,
+					[payload.ID]: payload.alt,
+				},
+			};
+		case "ADD_FILENAME_PREVIEW":
+			return {
+				...state,
+				filePreviews: {
+					...state.filePreviews,
+					[payload.ID]: payload.file,
+				},
 			};
 		case "UPDATE_ALL_IDS":
 			return {
@@ -46,11 +58,6 @@ function reducer(state, { type, payload }) {
 				bulkActive: true,
 				attachments: {},
 				reports: {},
-			};
-		case "PLAY_BULK":
-			return {
-				...state,
-				bulkPause: false,
 			};
 		case "PAUSE_BULK":
 			return {

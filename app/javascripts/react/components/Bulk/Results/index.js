@@ -11,7 +11,7 @@ import { BulkSettingsContext } from "../../../contexts/BulkSettingsContext";
 
 function BulkResults() {
 	const { state } = useContext(BulkProcessContext);
-	console.log("[state]", state);
+
 	const { state: settings } = useContext(BulkSettingsContext);
 	return (
 		<>

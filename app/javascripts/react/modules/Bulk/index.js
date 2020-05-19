@@ -75,16 +75,16 @@ function BulkWithProviders() {
 			),
 		},
 	});
-	const [attachmentIdsView, setAttachmentIdsView] = useState([]);
+	const [attachmentIdsView, setAttachmentIdsView] = useState(
+		get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images_optimized", [])
+	);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
-	let numberCreditsNeed =
-		get(state, "allIds", []).length -
-		get(state, "allIdsOptimized", []).length;
+	let numberCreditsNeed = get(state, "allIds", []).length;
 	if (numberCreditsNeed < 0) {
 		numberCreditsNeed = 0;
 	}
-	console.log("State : ", state);
+
 	// QUERY IMAGES
 	useEffect(() => {
 		handleQueryImages({
@@ -103,7 +103,7 @@ function BulkWithProviders() {
 		}
 
 		const { data } = await getCurrentProcessDispatch();
-		console.log("[data]", data);
+
 		if (!data.is_running) {
 			dispatch({
 				type: "FINISH_BULK",
@@ -120,8 +120,6 @@ function BulkWithProviders() {
 			setCurrentProcess(data);
 		}
 	}, 3000);
-
-	console.log("[current]:", currentProcess);
 
 	// Call an attachment
 	useEffect(() => {
@@ -151,7 +149,7 @@ function BulkWithProviders() {
 			),
 			attachmentIdsView
 		);
-		console.log("[idsAttachment]", idsAttachment);
+
 		const fetchAttachment = async (idsAttachment) => {
 			for (let index = 0; index < idsAttachment.length; index++) {
 				const { data: attachment } = await getAttachement(
@@ -211,11 +209,8 @@ function BulkWithProviders() {
 			);
 		}
 
-		console.log("[attachmentIdsOptimized]", idsAttachment);
-
 		const fetchReport = async (idsAttachment) => {
 			for (let index = 0; index < idsAttachment.length; index++) {
-				console.log("Go report : ", idsAttachment[index]);
 				dispatch({
 					type: "ADD_REPORT",
 					payload: {
@@ -298,7 +293,6 @@ function BulkWithProviders() {
 			confirmButtonText: "Yes, let's go!",
 		}).then(async (result) => {
 			if (result.value) {
-				console.log(settings);
 				await startBulkProcess(state.allIds, settings);
 				dispatch({
 					type: "START_BULK",
@@ -345,8 +339,6 @@ function BulkWithProviders() {
 			}
 		});
 	};
-
-	console.log("[render state] : ", state);
 
 	return (
 		<>
@@ -619,18 +611,6 @@ function BulkWithProviders() {
 												Stop bulk
 											</Button>
 										)}
-										{/* {state.bulkActive && state.bulkPause && (
-											<Button
-												simple
-												onClick={(e) => {
-													dispatch({
-														type: "PLAY_BULK",
-													});
-												}}
-											>
-												Play
-											</Button>
-										)} */}
 									</>
 								)}
 							</Col>
