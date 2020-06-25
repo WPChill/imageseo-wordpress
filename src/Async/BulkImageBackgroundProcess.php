@@ -4,6 +4,8 @@ namespace ImageSeoWP\Async;
 
 defined('ABSPATH') or die('Cheatin&#8217; uh?');
 
+use ImageSeoWP\Exception\NoRenameFile;
+
 class BulkImageBackgroundProcess extends WPBackgroundProcess
 {
     protected $action = 'imageseo_bulk_image_background_process';

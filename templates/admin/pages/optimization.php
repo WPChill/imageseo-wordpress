@@ -13,6 +13,12 @@ $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($to
 $currentProcessed = get_option('_imageseo_bulk_process');
 $lastBulkProcess = get_option('_imageseo_last_bulk_process');
 
+$needToStopProcess = get_option('_imageseo_need_to_stop_process');
+if (isset($_GET['stopProcess']) && '1' === $_GET['stopProcess']) {
+    delete_option('_imageseo_bulk_exclude_filenames');
+    delete_option('_imageseo_need_to_stop_process');
+    delete_option('_imageseo_bulk_process');
+}
 $limitImages = 10;
 if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
     $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
@@ -32,7 +38,22 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
             </div>
         </div>
 
-        <div id="js-module-optimization"></div>
+		<?php if ($needToStopProcess): ?>
+			<div class="imageseo-block">
+				<div class="imageseo-block__inner">
+					<h2><?php _e('Your old optimization process is coming to a stop.', 'imageseo'); ?></h2>
+					<div class="imageseo-mt-3">
+						<div class="imageseo-block__subtitle">
+							<?php _e('Please reload the page in a few seconds to resume it or start a new one.', 'imageseo'); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php else: ?>
+
+        	<div id="js-module-optimization"></div>
+		<?php endif; ?>
+
 
     </div>
 </div>

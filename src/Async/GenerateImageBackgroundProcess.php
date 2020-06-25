@@ -135,7 +135,9 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 
         $isAlreadyGenerate = get_post_meta($item['id'], '_imageseo_social_media_image_is_generate', true);
         $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
-
+        if (!$transientCurrentProcess) {
+            $transientCurrentProcess = [];
+        }
         foreach ($medias as $media) {
             $formatFilename = sanitize_title(sprintf('%s-%s-%s', $siteTitle, $post->post_name, $media));
             $filename = apply_filters('imageseo_filename_social_media_image', $formatFilename, $item['id'], $media);

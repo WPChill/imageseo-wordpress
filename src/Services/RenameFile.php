@@ -28,6 +28,8 @@ class RenameFile
 
         if (!$report) {
             throw new NoRenameFile('No need to change');
+
+            return;
         }
 
         $alts = $this->reportImageService->getAltsFromReport($report);
@@ -225,7 +227,7 @@ class RenameFile
         global $wpdb;
 
         $sqlQuery = "SELECT {$wpdb->postmeta}.meta_value
-            FROM {$wpdb->postmeta} 
+            FROM {$wpdb->postmeta}
             WHERE 1=1
             AND {$wpdb->postmeta}.meta_key LIKE '%_imageseo_filename_%'
             AND {$wpdb->postmeta}.post_id = '$attachmentId'
@@ -251,8 +253,8 @@ class RenameFile
     {
         global $wpdb;
 
-        $sqlQuery = "DELETE FROM {$wpdb->postmeta} 
-            WHERE 1=1 
+        $sqlQuery = "DELETE FROM {$wpdb->postmeta}
+            WHERE 1=1
             AND {$wpdb->postmeta}.post_id = '$attachmentId'
             AND {$wpdb->postmeta}.meta_key LIKE '%_imageseo_filename%'
         ";
@@ -266,9 +268,9 @@ class RenameFile
 
         $metaKey = sprintf('_imageseo_filename_%s', $filename);
         $sqlQuery = "SELECT {$wpdb->posts}.*
-            FROM {$wpdb->posts} 
-            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '$metaKey' ) 
-            WHERE 1=1 
+            FROM {$wpdb->posts}
+            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '$metaKey' )
+            WHERE 1=1
             LIMIT 1
         ";
 

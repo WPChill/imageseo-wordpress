@@ -6,15 +6,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use ImageSeoWP\Async\GenerateImageBackgroundProcess;
-
 class GenerateImage
 {
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
         $this->imageSocialService = imageseo_get_service('ImageSocial');
-        $this->process = new GenerateImageBackgroundProcess();
+        $this->generateImageSocialService = imageseo_get_service('GenerateImageSocial');
     }
 
     public function hooks()
@@ -40,9 +38,7 @@ class GenerateImage
         }
 
         if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
+            wp_redirect($redirectUrl);
             exit;
         }
 
@@ -50,11 +46,6 @@ class GenerateImage
         $redirectUrl = admin_url('edit.php');
         if ('post' !== $postType) {
             $redirectUrl .= '?post_type=' . $postType;
-        }
-
-        $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
-        if ($limitExcedeed) {
-            wp_redirect($redirectUrl);
         }
 
         if (!isset($_GET['post_id'])) {
@@ -69,13 +60,7 @@ class GenerateImage
             return;
         }
 
-        $this->imageSocialService->setCurrentProcess($post->ID);
-
-        $this->process->push_to_queue([
-            'id' => $post->ID,
-        ]);
-
-        $this->process->save()->dispatch();
+        $this->generateImageSocialService->prepare($post->ID);
 
         wp_redirect($redirectUrl);
     }

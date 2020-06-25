@@ -1,9 +1,9 @@
 import Swal from "sweetalert2";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 	const $ = jQuery;
 
-	$("#submit-form-register").on("click", function(e) {
+	$("#submit-form-register").on("click", function (e) {
 		e.preventDefault();
 		$("#submit-form-register").prop("disabled", "disabled");
 		$("#submit-form-register .text").hide();
@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
 			data: {
 				action: "imageseo_register",
 				email: $("#register-email").val(),
-				password: $("#register-email").val()
+				password: $("#register-password").val(),
 			},
-			success: response => {
+			success: (response) => {
 				const { success, data } = response;
 				$("#submit-form-register .loader").hide();
 				$("#submit-form-register .text").show();
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 								"https://app.imageseo.io/register",
 								"_blank"
 							);
-						}
+						},
 					});
 				}
 
@@ -48,9 +48,9 @@ document.addEventListener("DOMContentLoaded", function() {
 					text:
 						"You are registered and we have configured your API key",
 					icon: "success",
-					confirmButtonText: "Close"
+					confirmButtonText: "Close",
 				});
-			}
+			},
 		});
 	});
 });

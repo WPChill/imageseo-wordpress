@@ -105,8 +105,9 @@ class OptimizeImage
             ];
         }
         wp_send_json_success([
-            'is_running'   => $this->bulkProcess->is_process_running(),
-            'bulk_process' => $infoBulkProcess,
+            'is_running'           => $this->bulkProcess->is_process_running(),
+            'need_to_stop_process' => get_option('_imageseo_need_to_stop_process'),
+            'bulk_process'         => $infoBulkProcess,
         ]);
     }
 

@@ -98,13 +98,18 @@ function BulkWithProviders() {
 	let processInterval = null;
 
 	useInterval(async () => {
-		if (!state.bulkActive || state.bulkFinish || state.bulkPause) {
+		if (
+			!state.bulkActive ||
+			currentProcess.need_to_stop_process ||
+			state.bulkFinish ||
+			state.bulkPause
+		) {
 			return;
 		}
 
 		const { data } = await getCurrentProcessDispatch();
 
-		if (!data.is_running) {
+		if (currentProcess.need_to_stop_process) {
 			dispatch({
 				type: "FINISH_BULK",
 				payload: null,
@@ -123,7 +128,12 @@ function BulkWithProviders() {
 
 	// Call an attachment
 	useEffect(() => {
-		if (!currentProcess.is_running || state.bulkFinish || state.bulkPause) {
+		if (
+			!state.bulkActive ||
+			currentProcess.need_to_stop_process ||
+			state.bulkFinish ||
+			state.bulkPause
+		) {
 			return;
 		}
 
@@ -180,9 +190,7 @@ function BulkWithProviders() {
 	// Query reports
 	useInterval(async () => {
 		if (
-			(!currentProcess.is_running ||
-				state.bulkFinish ||
-				state.bulkPause) &&
+			(!state.bulkActive || state.bulkFinish || state.bulkPause) &&
 			Object.keys(state.reports).length ===
 				Object.keys(state.attachments).length
 		) {
@@ -191,7 +199,7 @@ function BulkWithProviders() {
 		let idsAttachment = [];
 
 		if (
-			currentProcess.is_running &&
+			currentProcess.need_to_stop_process &&
 			!state.bulkFinish &&
 			!state.bulkPause
 		) {
@@ -202,7 +210,7 @@ function BulkWithProviders() {
 				),
 				Object.keys(state.reports)
 			);
-		} else if (!currentProcess.is_running || state.bulkFinish) {
+		} else if (!currentProcess.need_to_stop_process || state.bulkFinish) {
 			idsAttachment = difference(
 				Object.keys(state.attachments),
 				Object.keys(state.reports)
@@ -576,19 +584,36 @@ function BulkWithProviders() {
 							style={{ alignItems: "center" }}
 						>
 							<Col span={10}>
-								<h2>
-									Bulk process (
-									{Number(
-										currentProcess.bulk_process
-											.current_index_image
-									) + 1}
-									/
-									{
-										currentProcess.bulk_process.id_images
-											.length
-									}
-									)
-								</h2>
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+									}}
+								>
+									<h2 style={{ marginRight: 10 }}>
+										Bulk process (
+										{Number(
+											currentProcess.bulk_process
+												.current_index_image
+										) + 1}
+										/
+										{
+											currentProcess.bulk_process
+												.id_images.length
+										}
+										)
+									</h2>
+									{state.bulkActive &&
+										!currentProcess.need_to_stop_process && (
+											<img
+												src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
+												style={{
+													animation:
+														"imageseo-rotation 1s infinite linear",
+												}}
+											/>
+										)}
+								</div>
 							</Col>
 							<Col>
 								<Loader
