@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.2.10
+Stable tag: v1.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,13 +12,13 @@ Image SEO optimizer is the best plugin WordPress to optimize your image alternat
 
 == Description ==
 
-Image SEO optimizer is the best plugin WordPress to optimize your image alternative texts (alt text or alt tag) and names with SEO friendly content. The plugin can optimize your image html attributes on upload or bulk your entire Library. Start saving time with your image gallery optimization, improve your WordPress accessibility and grow your organic traffic! 
+Image SEO optimizer is the best plugin WordPress to optimize your image alternative texts (alt text or alt tag) and names with SEO friendly content. The plugin can optimize your image html attributes on upload or bulk your entire Library. Start saving time with your image gallery optimization, improve your WordPress accessibility and grow your organic traffic!
 
-Our plugin also auto generates amazing Social Media images for your articles using The Open Graph protocol (og tag). 
+Our plugin also auto generates amazing Social Media images for your articles using The Open Graph protocol (og tag).
 
-Don’t feel guilty: nobody enjoys writing images alt text, meta titles, pinterest attributes, Twitter or Facebook card attributes and images description. Leave it to our auto alt tags generator. 
+Don’t feel guilty: nobody enjoys writing images alt text, meta titles, pinterest attributes, Twitter or Facebook card attributes and images description. Leave it to our auto alt tags generator.
 
-The plugin also allows to manually edit images names. 
+The plugin also allows to manually edit images names.
 
 Our image optimization plugin is compatible with WooCommerce, NextGen Gallery, Yoast, SEOPress, All in one SEO, and all the major plugin.
 
@@ -48,8 +48,8 @@ Example of what our image SEO plugin does :
 We rename your medias for a better SEO. We help you to get rid of your bad image names that Search Engines (Google, Bing, Qwant) dislike. We also improve your website accessibility : image alternatives texts are optimized with relevant keywords to help users with screen readers.
 
 Leave us this time consuming activity and spare your time and your imagination for something else! The plugin is ideal for artists, photographers, E-Commerce, store owners, niche sites, business, local business, startups, directories, travel agencies, newspapers, digital agencies, bloggers and marketplace websites.
- 
- 
+
+
 = WHY MUST YOU USE IMAGE SEO WORDPRESS PLUGIN ? =
 
 To grow your organic traffic : more than 20% of Google searches are coming from Google Images.
@@ -66,7 +66,7 @@ Because it’s easier to rank on competitive keywords during image searches (and
 Step 1 : you have to download and activate Image SEO Plugin.
 Step 2 : you need to [create an account on Image SEO](https://app.imageseo.io/register-wordpress) to get an API Key (it's free).
 Step 3 : Enter and save your API Key in the plugin.
-Step 4 : Bulk your library / image gallery and improve your images for SEO ! 
+Step 4 : Bulk your library / image gallery and improve your images for SEO !
 
 If you need more information about the importance of Images SEO, check that page : [https://imageseo.io/images-alt-and-filenames-for-seo/](https://imageseo.io/images-alt-and-filenames-for-seo/)
 
@@ -88,14 +88,14 @@ Image SEO optimize your Media Library and your image gallery for Search Engines 
 * Compatibility and support with WordPress Gallery Plugins (NextGEN, Photo Gallery, Responsive Photo Gallerye, FooGallery, etc.)
 * Compatibility and support for Custom Post Type Images;
 
-Our WordPress SEO Plugin is a huge time-saver. It will improve your ranking on image keywords and allow you to attract new visitors on your blog, gallery or website. 
+Our WordPress SEO Plugin is a huge time-saver. It will improve your ranking on image keywords and allow you to attract new visitors on your blog, gallery or website.
 
 = What about the Premium? =
 
 Image SEO is free for small websites (10 images optimization every month).We have monthly and one-shot premium plans starting from 4,99€ for for E-Commerce, Photographers, Marketplace, and SEO Specialists. We offer professional support to premium users and payment are secured by Stripe. Discover our pricing here : [https://imageseo.io/pricing/](https://imageseo.io/pricing/)
 
 = Image SEO Ressources =
- 
+
 If you want to learn about everything about Image SEO have a look at our site. We have [ultimate guides about image SEO optimization](https://imageseo.io/images-seo-optimization/), Alternative texts, EXIF Data, Figure and Figcaption, image compression and loading-time, Title text and Title tag, Legend, srcset attribute, responsive images, Lazy load, image sitemaps, etc, etc.
 
 * Support and Updates
@@ -135,7 +135,12 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 1.2.10 (08-02-2020) =
+= 1.2.11 (06-25-2020) =
+- Improved: The bulk process. It is possible to quit your browser
+- Changed: The manual generation of a social image is no longer a background process.
+
+
+= 1.2.10 (04-02-2020) =
 - Bugfix: Fix parser to insert pinterest metas
 - Bugfix: Sanitize title of filenames to avoid spaces
 
@@ -183,8 +188,8 @@ To help us translate Image SEO in your language, contact us
 
 = 1.2.0 (01-31-2020) =
 - [NEW]: Social card optimizer. We automatically generate images for social networks.
-- Improved: Performance bulk optimization for alt and media filename. 
-- Improved: Performance query SQL . 
+- Improved: Performance bulk optimization for alt and media filename.
+- Improved: Performance query SQL .
 - Bugfix: Support spaces (first element) in htaccess
 
 = 1.1.4 (01-24-2020) =
@@ -248,7 +253,7 @@ To help us translate Image SEO in your language, contact us
 - Improved: Automatic support for images hosted on a bucket
 
 = 1.0.14 (06-14-2019) =
-- Bugfix: Separation of the 2 bulk options during the alts update 
+- Bugfix: Separation of the 2 bulk options during the alts update
 - Improved: Support for unnecessary"."" in upload file names
 
 = 1.0.13 (05-24-2019) =
