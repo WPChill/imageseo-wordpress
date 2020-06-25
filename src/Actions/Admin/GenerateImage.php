@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Async\GenerateImageBackgroundProcess;
+
 class GenerateImage
 {
     public function __construct()
@@ -13,6 +15,7 @@ class GenerateImage
         $this->optionServices = imageseo_get_service('Option');
         $this->imageSocialService = imageseo_get_service('ImageSocial');
         $this->generateImageSocialService = imageseo_get_service('GenerateImageSocial');
+        $this->process = new GenerateImageBackgroundProcess();
     }
 
     public function hooks()
