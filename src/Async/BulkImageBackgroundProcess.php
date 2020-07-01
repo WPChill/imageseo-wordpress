@@ -73,7 +73,10 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
         $extension = '';
 
         if ($optionBulkProcess['settings']['optimizeAlt']) {
-            $alt = imageseo_get_service('TagsToString')->replace($optionBulkProcess['settings']['formatAlt'], $item);
+            $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
+
+            $alt = imageseo_get_service('TagsToString')->replace($format, $item);
+
             if (!$optionBulkProcess['settings']['wantValidateResult']) {
                 imageseo_get_service('Alt')->updateAlt($item, $alt);
             }
@@ -126,6 +129,15 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
         if ($optionBulkProcess['current_index_image'] + 1 == $optionBulkProcess['total_images']) {
             delete_option('_imageseo_last_bulk_process');
         }
+
+        global $wpdb;
+
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->postmeta WHERE meta_key = %s",
+                '_imageseo_bulk_report'
+            )
+        );
 
         delete_option('_imageseo_bulk_exclude_filenames');
         delete_option('_imageseo_need_to_stop_process');

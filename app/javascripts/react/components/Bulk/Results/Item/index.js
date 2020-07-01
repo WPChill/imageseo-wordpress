@@ -63,36 +63,38 @@ function BulkResultsItem({ attachment }) {
 
 		const fetchOptimization = async () => {
 			const { success, data } = await previewDataReport(attachment.ID);
-
-			if (settings.optimizeAlt && !isEmpty(data.alt)) {
-				setAlt(data.alt);
-				dispatch({
-					type: "ADD_ALT_PREVIEW",
-					payload: {
-						ID: attachment.ID,
-						alt: data.alt,
-					},
-				});
-			}
-
-			if (settings.optimizeFile && !isEmpty(data.filename)) {
-				dispatch({
-					type: "ADD_FILENAME_PREVIEW",
-					payload: {
-						ID: attachment.ID,
-						file: {
-							filename: data.filename,
-							extension: data.extension,
+			if (!isEmpty(data)) {
+				if (settings.optimizeAlt && !isEmpty(data.alt)) {
+					setAlt(data.alt);
+					dispatch({
+						type: "ADD_ALT_PREVIEW",
+						payload: {
+							ID: attachment.ID,
+							alt: data.alt,
 						},
-					},
-				});
-				setFileInfos({
-					filename: data.filename,
-					extension: data.extension,
-				});
-			}
+					});
+				}
 
-			setLoading(false);
+				if (settings.optimizeFile && !isEmpty(data.filename)) {
+					dispatch({
+						type: "ADD_FILENAME_PREVIEW",
+						payload: {
+							ID: attachment.ID,
+							file: {
+								filename: data.filename,
+								extension: data.extension,
+							},
+						},
+					});
+					setFileInfos({
+						filename: data.filename,
+						extension: data.extension,
+					});
+				}
+				setLoading(false);
+			} else {
+				setTimeout(() => fetchOptimization(), 2000);
+			}
 		};
 
 		fetchOptimization();

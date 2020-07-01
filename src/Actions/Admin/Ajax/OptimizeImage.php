@@ -73,7 +73,7 @@ class OptimizeImage
             'current_index_image'  => 0,
             'settings'             => [
                 'formatAlt'          => $_POST['formatAlt'],
-                'formatAltCustom'    => 'CUSTOM_FORMAT' === $_POST['formatAltCustom'] ? true : false,
+                'formatAltCustom'    => $_POST['formatAltCustom'],
                 'language'           => $_POST['language'],
                 'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
                 'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
