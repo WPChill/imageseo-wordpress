@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: v1.2.11
+Stable tag: v1.2.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,11 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 1.2.12 (07-01-2020) =
+- Bugfix: Correction of the custom format on the bulk process
+- Bugfix: Repairing the button to generate a social image when editing a post
+- Improved: Added an action to force the shutdown of a bulk process if it is crashed
 
 = 1.2.11 (06-25-2020) =
 - Improved: The bulk process. It is possible to quit your browser
