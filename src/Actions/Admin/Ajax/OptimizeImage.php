@@ -28,6 +28,7 @@ class OptimizeImage
         add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
         add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
         add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
+        add_action('admin_post_imageseo_force_stop', [$this, 'forceStop']);
     }
 
     public function stopBulk()
@@ -109,6 +110,42 @@ class OptimizeImage
             'need_to_stop_process' => get_option('_imageseo_need_to_stop_process'),
             'bulk_process'         => $infoBulkProcess,
         ]);
+    }
+
+    public function forceStop()
+    {
+        $redirectUrl = admin_url('admin.php?page=imageseo-optimization');
+
+        if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_force_stop')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
+        if (!current_user_can('manage_options')) {
+            wp_redirect($redirectUrl);
+            exit;
+        }
+
+        $optionBulkProcess = get_option('_imageseo_bulk_process');
+
+        if ($optionBulkProcess['current_index_image'] + 1 == $optionBulkProcess['total_images']) {
+            delete_option('_imageseo_last_bulk_process');
+        }
+
+        global $wpdb;
+
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->postmeta WHERE meta_key = %s",
+                '_imageseo_bulk_report'
+            )
+        );
+
+        delete_option('_imageseo_bulk_exclude_filenames');
+        delete_option('_imageseo_need_to_stop_process');
+        delete_option('_imageseo_bulk_process');
+
+        wp_redirect($redirectUrl);
     }
 
     public function getPreviewDataReport()
