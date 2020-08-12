@@ -5,6 +5,9 @@
 		"type": "git",
 		"url": "git+https://github.com/ImageSeo/imageseo-wordpress"
 	},
+	"scripts": {
+		"dev": "webpack -w"
+	},
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -32,7 +35,8 @@
 		"sass-loader": "^7.3.1",
 		"style-loader": "^0.21.0",
 		"url-loader": "^1.1.1",
-		"webpack": "^4.41.2"
+		"webpack": "^4.41.2",
+		"webpack-cli": "^3.3.12"
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.8.3",
