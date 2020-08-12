@@ -101,12 +101,16 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
     {
         $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
         if ($limitExcedeed) {
-            return;
-        }
+            return false;
+		}
+
+		if(!imageseo_get_api_key()){
+			return false;
+		}
 
         $post = get_post($item['id']);
         if (!$post) {
-            return;
+            return false;
         }
 
         $medias = [

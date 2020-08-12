@@ -15,6 +15,22 @@ class ClientApi
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
+	}
+
+
+	public function getHeaders($apiKey = null)
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+
+        if ($apiKey) {
+            $headers['Authorization'] = $apiKey;
+        } else {
+            $headers['Authorization'] = $this->optionService->getOption('api_key');
+        }
+
+        return $headers;
     }
 
     /**
@@ -24,7 +40,7 @@ class ClientApi
     {
         if (null === $apiKey) {
             $apiKey = $this->optionService->getOption('api_key');
-        }
+		}
 
         $options = [];
         if (defined('IMAGESEO_API_URL')) {
@@ -45,18 +61,53 @@ class ClientApi
      *
      * @return array
      */
-    public function getOwnerByApiKey($apiKey = null)
+    public function getOwnerByApiKey()
     {
+		if(!$this->optionService->getOption('api_key')){
+			return null;
+		}
+
         try {
-            $response = $this->getClient($apiKey)->getResource('Projects')->getOwner();
+			$response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
+				'headers' => $this->getHeaders(),
+			]);
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
         } catch (\Exception $e) {
             return null;
         }
-        if (!$response['success']) {
+        if (!$body['success']) {
             return null;
         }
 
-        return $response['result'];
+        return $body['result'];
+	}
+
+    /**
+     * @param string $apiKey
+     *
+     * @return array
+     */
+    public function validateApiKey($apiKey = null)
+    {
+        try {
+			$headers = $this->getHeaders();
+			$headers['Authorization'] = $apiKey;
+
+            $response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
+				'headers' => $headers,
+			]);
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+
+        } catch (\Exception $e) {
+            return null;
+        }
+        if (!$body['success']) {
+            return null;
+        }
+
+        return $body['result'];
     }
 
     /**
@@ -64,7 +115,7 @@ class ClientApi
      */
     public function getLanguages()
     {
-        $apiKey = $this->optionService->getOption('api_key');
+		$apiKey = $this->optionService->getOption('api_key');
 
         $response = $this->getClient($apiKey)->getResource('Languages')->getLanguages();
 
@@ -82,6 +133,10 @@ class ClientApi
      */
     public function generateSocialMediaImage($data)
     {
+		if(!$this->optionService->getOption('api_key')){
+			return null;
+		}
+
         list($body) = $this->getClient()->getResource('SocialMedia')->generateSocialMediaImage($data);
 
         return $body;

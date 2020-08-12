@@ -49,7 +49,8 @@ class ValidationApiKey
         $newOptions = wp_parse_args($options, $optionsBdd);
 
         try {
-            $owner = $this->clientServices->getOwnerByApiKey($apiKey);
+			$owner = $this->clientServices->validateApiKey($apiKey);
+
             if ($owner) {
                 $newOptions['allowed'] = true;
                 $newOptions['api_key'] = $apiKey;

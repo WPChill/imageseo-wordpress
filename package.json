@@ -6,7 +6,8 @@
 		"url": "git+https://github.com/ImageSeo/imageseo-wordpress"
 	},
 	"scripts": {
-		"dev": "webpack -w"
+		"dev": "webpack -w",
+		"build": "rm -rf ./dist && NODE_ENV=production webpack && composer update --no-dev"
 	},
 	"author": "",
 	"license": "MIT",
