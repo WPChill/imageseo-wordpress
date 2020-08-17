@@ -167,7 +167,7 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-        $data = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
+		$data = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
 
         wp_send_json_success($data);
     }

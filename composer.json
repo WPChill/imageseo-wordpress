@@ -18,6 +18,7 @@
 	},
 	"require": {
 		"imageseo/imageseo-php": "^1.0",
-		"cocur/slugify": "^3.1"
+		"cocur/slugify": "^3.1",
+		"symfony/http-client": "^5.1"
 	}
 }

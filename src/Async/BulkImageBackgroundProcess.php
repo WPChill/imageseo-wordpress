@@ -59,7 +59,7 @@ class BulkImageBackgroundProcess extends WPBackgroundProcess
         }
 
         try {
-            $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($item, ['force' => true], $optionBulkProcess['settings']['language']);
+			$response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($item, ['force' => true], $optionBulkProcess['settings']['language']);
         } catch (\Exception $e) {
             update_post_meta($item, '_imageseo_bulk_report', [
                 'success' => false,

@@ -65,7 +65,7 @@ class ReportImage
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
-                ], $query);
+				], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
                     'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
