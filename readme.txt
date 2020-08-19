@@ -2,7 +2,7 @@
 Contributors: gmulti
 Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
-Tested up to: 5.3
+Tested up to: 5.5
 Requires PHP: 5.6
 Stable tag: v1.3.0
 License: GPLv2 or later
