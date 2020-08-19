@@ -85,7 +85,7 @@ if ($this->owner) {
             </div>
         </div>
         <?php if ($this->owner): ?>
-            <hr class="imageseo-mt-2 imageseo-mb-2" /> 
+            <hr class="imageseo-mt-2 imageseo-mb-2" />
             <div class="imageseo-flex">
                 <div class="imageseo-mr-2">
                     <div class="imageseo-icons imageseo-icons--oval">
@@ -101,9 +101,9 @@ if ($this->owner) {
                     <div class="imageseo-flex imageseo-mt-1">
                         <div class="fl-1">
                             <strong class="imageseo-color-blue"><?php echo sprintf(__('%s credits used', 'imageseo'), "$usageCreditPercent%"); ?></strong>
-                        </div>				
+                        </div>
                         <a href="https://app.imageseo.io/plan" target="_blank">
-                            
+
                             <?php _e('Buy more credit', 'imageseo'); ?>
                         </a>
                     </div>

@@ -26,9 +26,9 @@ class QueryImages
         // == WHERE
         $sqlQuery .= 'WHERE 1=1 ';
         $sqlQuery .= "AND p.ID IN ($ids) ";
-        $sqlQuery .= "AND ( 
-            ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' ) 
-            OR 
+        $sqlQuery .= "AND (
+            ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' )
+            OR
             pmOnlyEmpty2.post_id IS NULL
             )  ";
 
@@ -49,7 +49,7 @@ class QueryImages
     {
         global $wpdb;
         $sqlQuery = "SELECT pm.meta_value
-            FROM {$wpdb->posts} p 
+            FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON (
                 pm.post_id = p.id
                 AND pm.meta_value IS NOT NULL
@@ -82,9 +82,9 @@ class QueryImages
         global $wpdb;
 
         $sqlQuery = "SELECT {$wpdb->posts}.ID
-            FROM {$wpdb->posts} 
-            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '_thumbnail_id' ) 
-            WHERE 1=1 
+            FROM {$wpdb->posts}
+            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '_thumbnail_id' )
+            WHERE 1=1
             AND {$wpdb->postmeta}.meta_value = '{$attachmentId}'";
 
         $ids = $wpdb->get_results($sqlQuery);
@@ -162,6 +162,7 @@ class QueryImages
      */
     public function getNumberImageNonOptimizeAlt($options = ['withCache' => true, 'forceQuery' => false])
     {
+
         if (!isset($options['withCache'])) {
             $options['withCache'] = true;
         }
@@ -184,14 +185,14 @@ class QueryImages
         }
 
         global $wpdb;
-        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID) 
-            FROM {$wpdb->posts} 
-            LEFT JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id ) 
-            LEFT JOIN {$wpdb->postmeta} AS mt1 ON ({$wpdb->posts}.ID = mt1.post_id AND mt1.meta_key = '_wp_attachment_image_alt' ) 
-            WHERE 1=1 
-            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
-            AND ( ( {$wpdb->postmeta}.meta_key = '_wp_attachment_image_alt' AND {$wpdb->postmeta}.meta_value = '' ) OR mt1.post_id IS NULL ) 
-            AND {$wpdb->posts}.post_type = 'attachment' 
+        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)
+            FROM {$wpdb->posts}
+            LEFT JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id )
+            LEFT JOIN {$wpdb->postmeta} AS mt1 ON ({$wpdb->posts}.ID = mt1.post_id AND mt1.meta_key = '_wp_attachment_image_alt' )
+            WHERE 1=1
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png')
+            AND ( ( {$wpdb->postmeta}.meta_key = '_wp_attachment_image_alt' AND {$wpdb->postmeta}.meta_value = '' ) OR mt1.post_id IS NULL )
+            AND {$wpdb->posts}.post_type = 'attachment'
             AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit'))";
 
         $this->numberImageNonOptimizeAlt = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_number_image_non_optimize_alt', $sqlQuery));
@@ -229,11 +230,11 @@ class QueryImages
 
         global $wpdb;
 
-        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)  
-            FROM {$wpdb->posts} 
-            WHERE 1=1 
-            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') 
-            AND {$wpdb->posts}.post_type = 'attachment' 
+        $sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)
+            FROM {$wpdb->posts}
+            WHERE 1=1
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png')
+            AND {$wpdb->posts}.post_type = 'attachment'
             AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit' ))";
 
         $this->totalImages = (int) $wpdb->get_var(apply_filters('imageseo_sql_query_total_images', $sqlQuery));
