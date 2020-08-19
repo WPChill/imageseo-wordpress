@@ -135,7 +135,7 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 1.3.0 (XXXXXX) =
+= 1.3.0 (08-19-2020) =
 - New API
 
 = 1.2.13 (08-12-2020) =
