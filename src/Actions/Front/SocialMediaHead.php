@@ -14,7 +14,12 @@ class SocialMediaHead
     {
         if (!imageseo_allowed()) {
             return;
+		}
+
+        if (is_home() || is_front_page()) {
+            return;
         }
+
 
         if (!function_exists('is_plugin_active')) {
             require_once ABSPATH . '/wp-admin/includes/plugin.php';
@@ -31,10 +36,6 @@ class SocialMediaHead
         } elseif (is_plugin_active('seo-by-rank-math/rank-math.php')) {
             $this->compatibilityRankMath();
 
-            return;
-        }
-
-        if (is_home() || is_front_page()) {
             return;
         }
 
@@ -60,11 +61,19 @@ class SocialMediaHead
     public function compatibilityRankMath()
     {
         add_filter('rank_math/opengraph/facebook/add_images', function ($image) {
+			if(empty($this->getImageUrlOpenGraph())){
+				return $image;
+			}
+
             $image->add_image($this->getImageUrlOpenGraph());
 
             return $image;
         });
         add_filter('rank_math/opengraph/twitter/add_images', function ($image) {
+			if(empty($this->getImageUrlOpenGraph())){
+				return $image;
+			}
+
             $image->add_image($this->getImageUrlOpenGraph());
 
             return $image;
@@ -93,6 +102,10 @@ class SocialMediaHead
 
     public function replaceOG($html)
     {
+		if(empty($this->getImageUrlOpenGraph())){
+			return $html;
+		}
+
         $regexIMG = "#(\"|\')og:image(\"|\') content=(\"|\')(?<imgUrl>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
         preg_match_all($regexIMG, $html, $matches);
         if (empty($matches['imgUrl'])) {
@@ -117,6 +130,10 @@ class SocialMediaHead
 
     public function replaceTwitter($html)
     {
+		if(empty($this->getImageUrlOpenGraph())){
+			return $html;
+		}
+
         $regexIMG = "#(\"|\')twitter:image(\"|\') content=(\"|\')(?<imgUrl>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
         preg_match_all($regexIMG, $html, $matches);
         $imgUrl = $matches['imgUrl'][0];
@@ -137,6 +154,12 @@ class SocialMediaHead
 
     public function replaceTwitterCard($html)
     {
+
+		if(empty($this->getImageUrlOpenGraph())){
+			return $html;
+		}
+
+
         $regexTwitterCard = "#(\"|\')twitter:card(\"|\') content=(\"|\')(?<card>[\s\S]*)(\"|\')([^\>]+?)?\/>#mU";
         preg_match_all($regexTwitterCard, $html, $matches);
 
