@@ -97,17 +97,21 @@ function imageseo_plugin_uninstall()
  */
 function imageseo_plugin_loaded()
 {
+	require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
+	require_once( plugin_dir_path( __FILE__ ) . '/vendor/woocommerce/action-scheduler/action-scheduler.php' );
+
     if (imageseo_is_compatible()) {
         require_once __DIR__ . '/imageseo-functions.php';
 
         load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
 
         Context::getContext()->initPlugin();
-    }
+	}
+
 }
 
 register_activation_hook(__FILE__, 'imageseo_plugin_activate');
 register_deactivation_hook(__FILE__, 'imageseo_plugin_deactivate');
 register_uninstall_hook(__FILE__, 'imageseo_plugin_uninstall');
 
-add_action('plugins_loaded', 'imageseo_plugin_loaded');
+add_action('plugins_loaded', 'imageseo_plugin_loaded', 0);

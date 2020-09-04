@@ -14,10 +14,11 @@ $currentProcessed = get_option('_imageseo_bulk_process');
 $lastBulkProcess = get_option('_imageseo_last_bulk_process');
 
 $needToStopProcess = get_option('_imageseo_need_to_stop_process');
-if (isset($_GET['stopProcess']) && '1' === $_GET['stopProcess']) {
+if ((isset($_GET['stopProcess']) && '1' === $_GET['stopProcess']) || get_option('_imageseo_bulk_is_finish') !== false) {
     delete_option('_imageseo_bulk_exclude_filenames');
     delete_option('_imageseo_need_to_stop_process');
     delete_option('_imageseo_bulk_process');
+    delete_option('_imageseo_bulk_is_finish');
 }
 $limitImages = 10;
 if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
@@ -38,34 +39,7 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
             </div>
         </div>
 
-
-
-
-		<?php if ($needToStopProcess): ?>
-			<?php
-                $urlForceStop = admin_url('admin-post.php?action=imageseo_force_stop');
-                $urlForceStop = wp_nonce_url($urlForceStop, 'imageseo_force_stop');
-            ?>
-
-			<div class="imageseo-block">
-				<div class="imageseo-block__inner">
-					<h2><?php _e('Your old optimization process is coming to a stop.', 'imageseo'); ?></h2>
-					<div class="imageseo-mt-3">
-						<div class="imageseo-block__subtitle">
-							<?php _e('Please reload the page in a few seconds to resume it or start a new one.', 'imageseo'); ?>
-						</div>
-					</div>
-					<h3 style="font-size:18px; margin-top:30px;"><?php _e("You think it's not working?", 'imageseo'); ?></h3>
-					<a href="<?php echo $urlForceStop; ?>" class="imageseo-btn--primary imageseo-btn">
-						<?php _e('Forcing the shutdown', 'imageseo'); ?>
-					</a>
-				</div>
-			</div>
-
-		<?php else: ?>
-
-        	<div id="js-module-optimization"></div>
-		<?php endif; ?>
+		<div id="js-module-optimization"></div>
 
 
 
@@ -77,6 +51,7 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
     const IMAGESEO_URL_DIST = "<?php echo IMAGESEO_URL_DIST; ?>"
     const IMAGESEO_DATA = {
 		CURRENT_PROCESSED: <?php echo $currentProcessed ? wp_json_encode($currentProcessed) : 'null'; ?>,
+		IS_FINISH: <?php echo get_option('_imageseo_bulk_is_finish') !== false ? true : 0; ?>,
 		LAST_PROCESSED: <?php echo $lastBulkProcess ? wp_json_encode($lastBulkProcess) : 'null'; ?>,
         TOTAL_ALT_NO_OPTIMIZE : <?php echo $totalAltNoOptimize; ?>,
         PERCENT_TRAFFIC_LOOSE : <?php echo $percentLoose; ?>,

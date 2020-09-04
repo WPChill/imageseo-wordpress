@@ -88,10 +88,23 @@ const stopCurrentProcess = async () => {
 	return await response.json();
 };
 
+const finishCurrentProcess = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_finish_bulk");
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
 export {
 	saveCurrentBulk,
 	deleteCurrentBulk,
 	startBulkProcess,
 	getCurrentProcessDispatch,
 	stopCurrentProcess,
+	finishCurrentProcess,
 };

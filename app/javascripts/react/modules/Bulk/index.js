@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
 import { get, isNil, find, difference, isEmpty } from "lodash";
-import { format } from "date-fns";
 
 import Block from "../../ui/Block";
 import BlockContentInner, {
@@ -20,11 +19,7 @@ import BulkResults from "../../components/Bulk/Results";
 import BulkProcessContextProvider, {
 	BulkProcessContext,
 } from "../../contexts/BulkProcessContext";
-import {
-	canLaunchBulk,
-	getAttachmentIdWithProcess,
-	getPercentBulk,
-} from "../../services/bulk";
+import { canLaunchBulk, getPercentBulk } from "../../services/bulk";
 import BulkSummary from "../../components/Bulk/Summary";
 import UserContextProvider, { UserContext } from "../../contexts/UserContext";
 import queryImages from "../../services/ajax/query-images";
@@ -33,17 +28,17 @@ import getAttachement from "../../services/ajax/get-attachement";
 
 import Loader from "../../ui/Loader";
 import { Col, Row } from "../../ui/Flex";
-import generateReport from "../../services/ajax/generate-report";
 import SubTitle from "../../ui/Block/Subtitle";
 import {
-	deleteCurrentBulk,
-	saveCurrentBulk,
 	startBulkProcess,
 	getCurrentProcessDispatch,
 	stopCurrentProcess,
+	finishCurrentProcess,
 } from "../../services/ajax/current-bulk";
 import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 import useInterval from "../../hooks/useInterval";
+import { fromUnixTime } from "date-fns/esm";
+import { differenceInSeconds } from "date-fns";
 
 const defaultCurrentProcess = {
 	bulk_process: {
@@ -75,6 +70,7 @@ function BulkWithProviders() {
 			),
 		},
 	});
+	console.log("[currentProcess]", currentProcess);
 	const [attachmentIdsView, setAttachmentIdsView] = useState(
 		get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images_optimized", [])
 	);
@@ -95,8 +91,6 @@ function BulkWithProviders() {
 		});
 	}, [settings.altFilter, settings.altFill]);
 
-	let processInterval = null;
-
 	useInterval(async () => {
 		if (
 			!state.bulkActive ||
@@ -108,8 +102,10 @@ function BulkWithProviders() {
 		}
 
 		const { data } = await getCurrentProcessDispatch();
-
-		if (currentProcess.need_to_stop_process) {
+		if (currentProcess.is_finish) {
+			await finishCurrentProcess();
+		}
+		if (currentProcess.need_to_stop_process || currentProcess.is_finish) {
 			dispatch({
 				type: "FINISH_BULK",
 				payload: null,
@@ -348,11 +344,25 @@ function BulkWithProviders() {
 		});
 	};
 
+	let nextTreatment = false;
+	try {
+		if (get(currentProcess, "is_running", false) !== false) {
+			nextTreatment = differenceInSeconds(
+				fromUnixTime(currentProcess.is_running),
+				fromUnixTime(Date.now() / 1000)
+			);
+			console.log(nextTreatment);
+		}
+	} catch (error) {
+		console.error(error);
+	}
 	return (
 		<>
 			{!isNil(IMAGESEO_DATA.LAST_PROCESSED) &&
 				get(IMAGESEO_DATA, "LAST_PROCESSED.id_images", []).length > 0 &&
 				isNil(IMAGESEO_DATA.CURRENT_PROCESSED) &&
+				get(IMAGESEO_DATA, "LAST_PROCESSED.total_images") >
+					get(IMAGESEO_DATA, "LAST_PROCESSED.current_index_image") &&
 				!state.bulkActive &&
 				!state.bulkFinish && (
 					<div className="imageseo-mb-4">
@@ -373,28 +383,6 @@ function BulkWithProviders() {
 											}
 											)
 										</h2>
-										{/* <p>
-											Paused :{" "}
-											{get(
-												IMAGESEO_DATA,
-												"CURRENT_PROCESSED.last_updated",
-												null
-											) === null
-												? format(
-														new Date(),
-														"dd MMMM yyyy - HH:mm"
-												  )
-												: format(
-														new Date(
-															get(
-																IMAGESEO_DATA,
-																"CURRENT_PROCESSED.last_updated",
-																null
-															)
-														),
-														"dd MMMM yyyy - HH:mm"
-												  )}
-										</p> */}
 									</Col>
 									<Col auto>
 										<Button
@@ -552,7 +540,7 @@ function BulkWithProviders() {
 								primary
 								style={{ marginRight: 15 }}
 								disabled={state.bulkActive}
-								onClick={(e) => {
+								onClick={() => {
 									handleStartBulk();
 								}}
 							>
@@ -562,7 +550,7 @@ function BulkWithProviders() {
 						{numberCreditsNeed > userImagesLeft && (
 							<Button
 								simple
-								onClick={(e) => {
+								onClick={() => {
 									window.open(
 										"https://app.imageseo.io/plan",
 										"_blank"
@@ -595,13 +583,36 @@ function BulkWithProviders() {
 										{Number(
 											currentProcess.bulk_process
 												.current_index_image
-										) + 1}
+										) +
+											1 >
+										currentProcess.bulk_process.id_images
+											.length
+											? currentProcess.bulk_process
+													.id_images.length
+											: Number(
+													currentProcess.bulk_process
+														.current_index_image
+											  ) + 1}
 										/
 										{
 											currentProcess.bulk_process
 												.id_images.length
 										}
 										)
+										{currentProcess.is_running &&
+											nextTreatment >= 0 && (
+												<>
+													<br />
+													<span
+														style={{ fontSize: 14 }}
+													>
+														The next treatment is
+														planned for :
+														<br />
+														{nextTreatment} seconds
+													</span>
+												</>
+											)}
 									</h2>
 									{state.bulkActive &&
 										!currentProcess.need_to_stop_process && (
@@ -626,7 +637,7 @@ function BulkWithProviders() {
 										{state.bulkActive && !state.bulkPause && (
 											<Button
 												simple
-												onClick={(e) => {
+												onClick={() => {
 													stopCurrentProcess();
 													dispatch({
 														type: "FINISH_BULK",

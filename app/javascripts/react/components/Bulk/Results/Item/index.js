@@ -8,10 +8,7 @@ import BlockTableLine, {
 	BlockTableLineImage,
 	BlockTableLineOldValue,
 } from "../../../../ui/Block/TableLine";
-import {
-	BulkProcessContext,
-	selectors,
-} from "../../../../contexts/BulkProcessContext";
+import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
 import { updateAlt } from "../../../../services/ajax/update-alt";
 import { renameFilename } from "../../../../services/ajax/rename-file";
 import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
@@ -62,7 +59,7 @@ function BulkResultsItem({ attachment }) {
 		}
 
 		const fetchOptimization = async () => {
-			const { success, data } = await previewDataReport(attachment.ID);
+			const { data } = await previewDataReport(attachment.ID);
 			if (!isEmpty(data)) {
 				if (settings.optimizeAlt && !isEmpty(data.alt)) {
 					setAlt(data.alt);
@@ -218,7 +215,7 @@ function BulkResultsItem({ attachment }) {
 									<input
 										type="text"
 										value={fileinfos.filename}
-										onChange={(e) => {
+										onChange={() => {
 											setFileInfos({
 												...fileinfos,
 												filename: e.target.value,

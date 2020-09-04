@@ -129,6 +129,14 @@ const BulkProcessContextProvider = ({ children }) => {
 		};
 	}
 
+	if (!isNil(IMAGESEO_DATA.IS_FINISH) && IMAGESEO_DATA.IS_FINISH === 1) {
+		initState = {
+			...initState,
+			bulkFinish: true,
+			bulkActive: false,
+		};
+	}
+
 	const [state, dispatch] = useReducer(reducer, initState);
 	return (
 		<BulkProcessContext.Provider
