@@ -36,18 +36,17 @@ class MediaLibraryReport
     {
         $filenameByImageSEO = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($post->ID);
 
-        $filename = '';
+        $data = ['url' => ''];
         if (!empty($filenameByImageSEO)) {
-            foreach ($filenameByImageSEO as $key => $value) {
-                if ('full' !== $value['size']) {
-                    continue;
-                }
+            $data = $this->renameFileService->getFilenameDataImageSEOWithAttachmentId($post->ID, $filenameByImageSEO);
+		}
+		if(empty($data['url'])){
+			return;
+		}
 
-                $filename = $key;
-            }
-        } ?>
-    		<input type="text" readonly class="widefat"  value="<?php echo $filename; ?>" />
-		    <a target="_blank" href="<?php echo $this->renameFileService->getLinkFileImageSEO($filename); ?>"><?php _e('View image', 'imageseo'); ?></a>
+		?>
+    		<input type="text" readonly class="widefat"  value="<?php echo $data['filename_without_extension'] . '.' . $data['extension']; ?>" />
+		    <a target="_blank" href="<?php echo $data['url']; ?>"><?php _e('View image', 'imageseo'); ?></a>
         <?php
     }
 

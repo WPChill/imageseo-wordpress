@@ -37,7 +37,7 @@ function bulk_image_process_action_scheduler($index)
 {
 
 	$optionBulkProcess = get_option('_imageseo_bulk_process');
-	error_log("Index : " . $index);
+
 	global $wpdb;
 	$needToStopProcess = $wpdb->get_row($wpdb->prepare("SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", '_imageseo_need_to_stop_process'));
 

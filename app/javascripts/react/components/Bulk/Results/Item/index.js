@@ -215,7 +215,7 @@ function BulkResultsItem({ attachment }) {
 									<input
 										type="text"
 										value={fileinfos.filename}
-										onChange={() => {
+										onChange={(e) => {
 											setFileInfos({
 												...fileinfos,
 												filename: e.target.value,

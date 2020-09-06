@@ -7,7 +7,6 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Exception\NoRenameFile;
-use ImageSeoWP\Async\BulkImageBackgroundProcess;
 
 class OptimizeImage
 {

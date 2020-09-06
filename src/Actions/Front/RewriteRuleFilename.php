@@ -38,7 +38,12 @@ class RewriteRuleFilename
                 'index.php?attachment_filename=$matches[1]',
                 'top'
             );
-        }
+		}
+
+		if(get_option('_imageseo_flush_rewrite_rules') === false){
+			update_option('_imageseo_flush_rewrite_rules', 1);
+			flush_rewrite_rules();
+		}
     }
 
     public function addQueryVars($queryVars)
@@ -69,6 +74,7 @@ class RewriteRuleFilename
 
     public function renderImage($path, $mimeType)
     {
+
         if (!file_exists($path)) {
             wp_redirect(site_url());
             die;
@@ -95,7 +101,7 @@ class RewriteRuleFilename
     {
         if (!get_query_var('attachment_filename')) {
             return;
-        }
+		}
 
         $links = get_option('imageseo_link_rename_files');
         if (empty($links)) {

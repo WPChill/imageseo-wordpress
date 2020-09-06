@@ -85,7 +85,11 @@ class GenerateImage
         $postTypesAuthorized = $this->optionServices->getOption('social_media_post_types');
         if (!in_array($post->post_type, $postTypesAuthorized, true)) {
             return;
-        }
+		}
+
+		if($this->imageSocialService->getPreviewImageUrlSocialMedia($post->ID)){
+			return;
+		}
 
         $this->imageSocialService->setCurrentProcess($post->ID);
 

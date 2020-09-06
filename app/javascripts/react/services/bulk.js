@@ -16,11 +16,15 @@ function getAttachmentIdWithProcess(state) {
 function getPercentBulk(currentProcess) {
 	const countCurrent =
 		Number(currentProcess.bulk_process.current_index_image) + 1;
+
 	if (countCurrent === 0) {
 		return 0;
 	}
+	if (countCurrent >= currentProcess.bulk_process.total_images) {
+		return 100;
+	}
 
-	return (countCurrent * 100) / currentProcess.bulk_process.id_images.length;
+	return (countCurrent * 100) / currentProcess.bulk_process.total_images;
 }
 
 export { getAttachmentIdWithProcess, canLaunchBulk, getPercentBulk };

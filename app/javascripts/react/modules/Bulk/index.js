@@ -351,11 +351,8 @@ function BulkWithProviders() {
 				fromUnixTime(currentProcess.is_running),
 				fromUnixTime(Date.now() / 1000)
 			);
-			console.log(nextTreatment);
 		}
-	} catch (error) {
-		console.error(error);
-	}
+	} catch (error) {}
 	return (
 		<>
 			{!isNil(IMAGESEO_DATA.LAST_PROCESSED) &&
@@ -600,7 +597,7 @@ function BulkWithProviders() {
 										}
 										)
 										{currentProcess.is_running &&
-											nextTreatment >= 0 && (
+											nextTreatment >= 1 && (
 												<>
 													<br />
 													<span
