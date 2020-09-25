@@ -28,7 +28,6 @@ class RenameFile
 
         if (!$report) {
             throw new NoRenameFile('No need to change');
-
             return;
         }
 
@@ -87,7 +86,11 @@ class RenameFile
      */
     public function getNameFileWithAttachmentId($attachmentId, $excludeFilenames = [])
     {
-        $newName = $this->generateNameFromReport($attachmentId);
+        try {
+			$newName = $this->generateNameFromReport($attachmentId);
+		} catch (NoRenameFile $e) {
+			throw new NoRenameFile('No need to change');
+		}
 
         $filePath = get_attached_file($attachmentId);
         $splitName = explode('.', basename($filePath));
