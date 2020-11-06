@@ -70,7 +70,7 @@ function BulkWithProviders() {
 			),
 		},
 	});
-	console.log("[currentProcess]", currentProcess);
+
 	const [attachmentIdsView, setAttachmentIdsView] = useState(
 		get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images_optimized", [])
 	);
