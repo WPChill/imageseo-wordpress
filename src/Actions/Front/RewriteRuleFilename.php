@@ -24,7 +24,9 @@ class RewriteRuleFilename
 
     public function rewriteRule()
     {
-        if (ServerSoftware::isApache()) {
+		$isApache = apply_filters('imageseo_type_server_rewrite_rule', ServerSoftware::isApache());
+
+        if ($isApache) {
             //APACHE
             add_rewrite_rule(
                 '^medias/images/([^/]+)(.jpg|.jpeg|.png|.gif|.webp)$',
