@@ -287,12 +287,14 @@ class RenameFile
 
     public function getLinkFileImageSEO($filename)
     {
-        if (ServerSoftware::isNginx()) {
+		$isNginx = apply_filters('imageseo_get_link_file_is_nginx', ServerSoftware::isNginx());
+
+        if ($isNginx) {
             $splitFilename = explode('.', $filename);
             array_pop($splitFilename);
-            $filename = implode('.', $splitFilename);
+			$filename = implode('.', $splitFilename);
         }
 
-        return site_url(sprintf('/medias/images/%s', $filename));
+        return site_url(sprintf('/medias/images/%s', str_replace('.webp', '', $filename)));
     }
 }

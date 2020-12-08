@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\TypeContent;
+use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFileContent
 {
@@ -146,7 +147,9 @@ class RenameFileContent
 
         preg_match_all($regex, $content, $matches);
 
-        $matchesSrc = array_unique($matches['src']);
+		$matchesSrc = array_unique($matches['src']);
+
+		$isNginx = apply_filters('imageseo_get_link_file_is_nginx', ServerSoftware::isNginx());
 
         foreach ($matchesSrc as $src) {
             if (false === strpos($src, 'wp-content/uploads')) {
@@ -168,10 +171,19 @@ class RenameFileContent
 
             foreach ($filenames as $filename) {
                 $srcBySize = wp_get_attachment_image_src($attachmentId, $filename['size']);
-                $fullFilename = sprintf('%s.%s', $filename['filename_without_extension'], $filename['extension']);
-                $content = str_replace($srcBySize[0], $this->renameFileService->getLinkFileImageSEO($fullFilename), $content);
+				$fullFilename = sprintf('%s.%s', $filename['filename_without_extension'], $filename['extension']);
+
+
+				$newFilename = $this->renameFileService->getLinkFileImageSEO($fullFilename);
+
+				$content = str_replace($srcBySize[0], $newFilename, $content);
+
+				if ($isNginx) {
+					$content = str_replace($newFilename . '.webp', $newFilename, $content);
+				}
+
             }
-        }
+		}
 
         return $content;
     }
