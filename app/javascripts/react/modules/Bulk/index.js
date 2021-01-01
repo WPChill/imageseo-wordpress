@@ -39,6 +39,7 @@ import LimitExcedeed from "../../components/Bulk/LimitExcedeed";
 import useInterval from "../../hooks/useInterval";
 import { fromUnixTime } from "date-fns/esm";
 import { differenceInSeconds } from "date-fns";
+import LoadingImages from "../../components/LoadingImages";
 
 const defaultCurrentProcess = {
 	bulk_process: {
@@ -55,25 +56,7 @@ function BulkWithProviders() {
 	const { state: settings, dispatch: dispatchSettings } = useContext(
 		BulkSettingsContext
 	);
-	const [openOptimization, setOpenOptimization] = useState(
-		IMAGESEO_DATA.CURRENT_PROCESSED ? false : true
-	);
 	const [loadingImages, setLoadingImages] = useState(false);
-	const [currentProcess, setCurrentProcess] = useState({
-		...defaultCurrentProcess,
-		bulk_process: {
-			id_images: get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images", []),
-			current_index_image: get(
-				IMAGESEO_DATA,
-				"CURRENT_PROCESSED.current_index_image",
-				-1
-			),
-		},
-	});
-
-	const [attachmentIdsView, setAttachmentIdsView] = useState(
-		get(IMAGESEO_DATA, "CURRENT_PROCESSED.id_images_optimized", [])
-	);
 
 	const userImagesLeft = getImagesLeft(userState.user_infos);
 	let numberCreditsNeed = get(state, "allIds", []).length;
@@ -91,155 +74,6 @@ function BulkWithProviders() {
 		});
 	}, [settings.altFilter, settings.altFill]);
 
-	useInterval(async () => {
-		if (
-			!state.bulkActive ||
-			currentProcess.need_to_stop_process ||
-			state.bulkFinish ||
-			state.bulkPause
-		) {
-			return;
-		}
-
-		const { data } = await getCurrentProcessDispatch();
-		if (currentProcess.is_finish) {
-			await finishCurrentProcess();
-		}
-		if (currentProcess.need_to_stop_process || currentProcess.is_finish) {
-			dispatch({
-				type: "FINISH_BULK",
-				payload: null,
-			});
-			setCurrentProcess(data);
-			return;
-		}
-
-		if (
-			get(currentProcess, "bulk_process.current_index_image", null) !==
-			get(data, "bulk_process.current_index_image", 0)
-		) {
-			setCurrentProcess(data);
-		}
-	}, 3000);
-
-	// Call an attachment
-	useEffect(() => {
-		if (
-			!state.bulkActive ||
-			currentProcess.need_to_stop_process ||
-			state.bulkFinish ||
-			state.bulkPause
-		) {
-			return;
-		}
-
-		if (hasLimitExcedeed(userState.user_infos)) {
-			Swal.fire({
-				title: "Oups !",
-				text:
-					"You have no credit left. We've stopped the bulk process.",
-				icon: "info",
-				confirmButtonText: "Close",
-			});
-			dispatch({
-				type: "FINISH_BULK",
-				payload: null,
-			});
-			return;
-		}
-
-		const idsAttachment = difference(
-			currentProcess.bulk_process.id_images.slice(
-				0,
-				currentProcess.bulk_process.current_index_image + 1
-			),
-			attachmentIdsView
-		);
-
-		const fetchAttachment = async (idsAttachment) => {
-			for (let index = 0; index < idsAttachment.length; index++) {
-				const { data: attachment } = await getAttachement(
-					idsAttachment[index]
-				);
-				if (get(attachment, "code", false) === "not_exist") {
-					dispatch({
-						type: "ATTACHMENT_NOT_FOUND",
-						payload: idsAttachment[index],
-					});
-				} else {
-					dispatch({
-						type: "ADD_ATTACHMENT",
-						payload: attachment,
-					});
-				}
-
-				setAttachmentIdsView([
-					...attachmentIdsView,
-					idsAttachment[index],
-				]);
-			}
-		};
-
-		fetchAttachment(idsAttachment);
-	}, [currentProcess]);
-
-	// Query reports
-	useInterval(async () => {
-		if (
-			(!state.bulkActive || state.bulkFinish || state.bulkPause) &&
-			Object.keys(state.reports).length ===
-				Object.keys(state.attachments).length
-		) {
-			return;
-		}
-		let idsAttachment = [];
-
-		if (
-			currentProcess.need_to_stop_process &&
-			!state.bulkFinish &&
-			!state.bulkPause
-		) {
-			idsAttachment = difference(
-				currentProcess.bulk_process.id_images.slice(
-					0,
-					currentProcess.bulk_process.current_index_image
-				),
-				Object.keys(state.reports)
-			);
-		} else if (!currentProcess.need_to_stop_process || state.bulkFinish) {
-			idsAttachment = difference(
-				Object.keys(state.attachments),
-				Object.keys(state.reports)
-			);
-		}
-
-		const fetchReport = async (idsAttachment) => {
-			for (let index = 0; index < idsAttachment.length; index++) {
-				dispatch({
-					type: "ADD_REPORT",
-					payload: {
-						ID: idsAttachment[index],
-						canGetReport: true,
-					},
-				});
-
-				if (userState.user_infos.bonus_stock_images > 0) {
-					dispatchUser({
-						type: "DECREASE_BONUS_STOCK_IMAGES",
-					});
-				} else {
-					dispatchUser({
-						type: "INCREASE_CURRENT_REQUEST_IMAGES",
-					});
-				}
-			}
-		};
-
-		if (!isEmpty(idsAttachment)) {
-			fetchReport(idsAttachment);
-		}
-	}, 4000);
-
 	const handleQueryImages = async (filters = {}) => {
 		setLoadingImages(true);
 		const { success, data } = await queryImages(filters);
@@ -247,11 +81,14 @@ function BulkWithProviders() {
 			return;
 		}
 
-		dispatch({ type: "UPDATE_ALL_IDS", payload: data.ids });
 		dispatch({
-			type: "UPDATE_ALL_IDS_OPTIMIZED",
-			payload: data.ids_optimized,
+			type: "UPDATE_QUERY_IMAGES",
+			payload: {
+				allIds: data.ids,
+				allIdsOptimized: data.ids_optimized,
+			},
 		});
+
 		setLoadingImages(false);
 	};
 
@@ -298,371 +135,70 @@ function BulkWithProviders() {
 		}).then(async (result) => {
 			if (result.value) {
 				await startBulkProcess(state.allIds, settings);
-				dispatch({
-					type: "START_BULK",
-					payload: null,
-				});
 			}
 		});
 	};
 
-	const handleRestartBulk = (e) => {
-		e.preventDefault();
-		if (isNil(IMAGESEO_DATA.LAST_PROCESSED)) {
-			return;
-		}
-
-		Swal.fire({
-			title: "Are you sure?",
-			text:
-				"You're going to take over a bulk optimization that was in progress. ",
-			icon: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			confirmButtonText: "Yes, let's go!",
-		}).then(async (result) => {
-			if (result.value) {
-				const ids = IMAGESEO_DATA.LAST_PROCESSED.id_images.slice(
-					Number(IMAGESEO_DATA.LAST_PROCESSED.current_index_image) + 1
-				);
-
-				await startBulkProcess(
-					ids,
-					IMAGESEO_DATA.LAST_PROCESSED.settings
-				);
-				dispatch({
-					type: "START_BULK",
-					payload: null,
-				});
-				dispatchSettings({
-					type: "NEW_OPTIONS",
-					payload: {
-						...IMAGESEO_DATA.LAST_PROCESSED.settings,
-					},
-				});
-			}
-		});
-	};
-
-	let nextTreatment = false;
-	try {
-		if (get(currentProcess, "is_running", false) !== false) {
-			nextTreatment = differenceInSeconds(
-				fromUnixTime(currentProcess.is_running),
-				fromUnixTime(Date.now() / 1000)
-			);
-		}
-	} catch (error) {}
 	return (
 		<>
-			{!isNil(IMAGESEO_DATA.LAST_PROCESSED) &&
-				get(IMAGESEO_DATA, "LAST_PROCESSED.id_images", []).length > 0 &&
-				isNil(IMAGESEO_DATA.CURRENT_PROCESSED) &&
-				get(IMAGESEO_DATA, "LAST_PROCESSED.total_images") >
-					get(IMAGESEO_DATA, "LAST_PROCESSED.current_index_image") &&
-				!state.bulkActive &&
-				!state.bulkFinish && (
-					<div className="imageseo-mb-4">
-						<Block>
-							<BlockContentInner>
-								<Row align="center">
-									<Col flex="1">
-										<h2>
-											Paused Bulk Optimization (
-											{Number(
-												IMAGESEO_DATA.LAST_PROCESSED
-													.current_index_image
-											) + 1}
-											/
-											{
-												IMAGESEO_DATA.LAST_PROCESSED
-													.id_images.length
-											}
-											)
-										</h2>
-									</Col>
-									<Col auto>
-										<Button
-											primary
-											onClick={handleRestartBulk}
-										>
-											Resume this bulk
-										</Button>
-									</Col>
-								</Row>
-								<div className="imageseo-mt-3">
-									<SubTitle>
-										Configuration of this optimization
-									</SubTitle>
-									<ul>
-										<li>
-											<strong>Manual Validation :</strong>{" "}
-											{IMAGESEO_DATA.LAST_PROCESSED
-												.settings.wantValidateResult
-												? "Yes"
-												: "No"}
-										</li>
-										<li>
-											<strong>Language :</strong>{" "}
-											{
-												find(IMAGESEO_DATA.LANGUAGES, {
-													code:
-														IMAGESEO_DATA
-															.LAST_PROCESSED
-															.settings.language,
-												}).name
-											}
-										</li>
-										<li>
-											<strong>Optimize alt :</strong>{" "}
-											{IMAGESEO_DATA.LAST_PROCESSED
-												.settings.optimizeAlt
-												? "Yes"
-												: "No"}{" "}
-											{IMAGESEO_DATA.LAST_PROCESSED
-												.settings.optimizeAlt && (
-												<>
-													(Format :{" "}
-													{IMAGESEO_DATA
-														.LAST_PROCESSED.settings
-														.formatAlt ===
-													"CUSTOM_FORMAT"
-														? IMAGESEO_DATA
-																.LAST_PROCESSED
-																.settings
-																.formatAltCustom
-														: IMAGESEO_DATA
-																.LAST_PROCESSED
-																.settings
-																.formatAlt}
-													)
-												</>
-											)}
-										</li>
-										<li>
-											<strong>Optimize filename :</strong>{" "}
-											{IMAGESEO_DATA.LAST_PROCESSED
-												.settings.optimizeFile
-												? "Yes"
-												: "No"}
-										</li>
-									</ul>
-								</div>
-							</BlockContentInner>
-						</Block>
-					</div>
-				)}
 			<Block>
-				{loadingImages && (
-					<div
-						style={{
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "100%",
-							height: "100%",
-							backgroundColor: "rgba(0,0,0,0.2)",
-							zIndex: 500,
-							borderRadius: 12,
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}
-					>
-						<img
-							src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
-							style={{
-								width: 100,
-								marginRight: 10,
-								animation:
-									"imageseo-rotation 1s infinite linear",
-							}}
-						/>
-					</div>
-				)}
+				{loadingImages && <LoadingImages />}
 				<BlockContentInner
 					isHead
 					withAction
 					style={{
 						alignItems: "center",
-						borderBottom: openOptimization
-							? "1px solid #C8D0DD"
-							: "none",
 					}}
 				>
 					<BlockContentInnerTitle>
 						<h2>Bulk optimization settings</h2>
 					</BlockContentInnerTitle>
-					<BlockContentInnerAction>
-						<IconChevron
-							up={openOptimization}
-							down={!openOptimization}
-							onClick={() =>
-								setOpenOptimization(!openOptimization)
-							}
-						/>
-					</BlockContentInnerAction>
 				</BlockContentInner>
-
-				{openOptimization && (
-					<BlockContentInner>
-						{!state.bulkActive && !state.bulkFinish && (
-							<BulkSettings
-								handleQueryImages={handleQueryImages}
-							/>
-						)}
-						{(state.bulkActive || state.bulkFinish) && (
-							<BulkSummary />
-						)}
-					</BlockContentInner>
-				)}
-				{openOptimization && !state.bulkFinish && (
-					<BlockFooter>
-						<h3>
-							Forecast: with your current settings{" "}
-							{state.allIds.length} images will be optimized.
-						</h3>
+				<BlockContentInner>
+					<BulkSettings handleQueryImages={handleQueryImages} />
+				</BlockContentInner>
+				<BlockFooter>
+					<h3>
+						Forecast: with your current settings{" "}
+						{state.allIds.length} images will be optimized.
+					</h3>
+					<p>
+						You have {userImagesLeft} credit(s) left in your
+						account.{" "}
+					</p>
+					{get(state, "allIdsOptimized", []).length > 0 && (
 						<p>
-							You have {userImagesLeft} credit(s) left in your
-							account.{" "}
+							{get(state, "allIdsOptimized", []).length}{" "}
+							optimizations have already been done!
 						</p>
-						{get(state, "allIdsOptimized", []).length > 0 && (
-							<p>
-								{get(state, "allIdsOptimized", []).length}{" "}
-								optimizations have already been done!
-							</p>
-						)}
-						{!state.bulkActive && (
-							<Button
-								primary
-								style={{ marginRight: 15 }}
-								disabled={state.bulkActive}
-								onClick={() => {
-									handleStartBulk();
-								}}
-							>
-								Start a new bulk optimization
-							</Button>
-						)}
-						{numberCreditsNeed > userImagesLeft && (
-							<Button
-								simple
-								onClick={() => {
-									window.open(
-										"https://app.imageseo.io/plan",
-										"_blank"
-									);
-								}}
-							>
-								Get more credits
-							</Button>
-						)}
-					</BlockFooter>
-				)}
-			</Block>
-			{(state.bulkActive || state.bulkFinish) && (
-				<div className="imageseo-mt-4">
-					<Block>
-						<BlockContentInner
-							isHead
-							withAction
-							style={{ alignItems: "center" }}
+					)}
+					{!state.bulkActive && (
+						<Button
+							primary
+							style={{ marginRight: 15 }}
+							disabled={state.bulkActive}
+							onClick={() => {
+								handleStartBulk();
+							}}
 						>
-							<Col span={10}>
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-									}}
-								>
-									<h2 style={{ marginRight: 10 }}>
-										Bulk process (
-										{Number(
-											currentProcess.bulk_process
-												.current_index_image
-										) +
-											1 >
-										currentProcess.bulk_process.id_images
-											.length
-											? currentProcess.bulk_process
-													.id_images.length
-											: Number(
-													currentProcess.bulk_process
-														.current_index_image
-											  ) + 1}
-										/
-										{
-											currentProcess.bulk_process
-												.id_images.length
-										}
-										)
-										{currentProcess.is_running &&
-											nextTreatment >= 1 && (
-												<>
-													<br />
-													<span
-														style={{ fontSize: 14 }}
-													>
-														The next treatment is
-														planned for :
-														<br />
-														{nextTreatment} seconds
-													</span>
-												</>
-											)}
-									</h2>
-									{state.bulkActive &&
-										!currentProcess.need_to_stop_process && (
-											<img
-												src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
-												style={{
-													animation:
-														"imageseo-rotation 1s infinite linear",
-												}}
-											/>
-										)}
-								</div>
-							</Col>
-							<Col>
-								<Loader
-									percent={getPercentBulk(currentProcess)}
-								/>
-							</Col>
-							<Col span={7}>
-								{!hasLimitExcedeed(userState.user_infos) && (
-									<>
-										{state.bulkActive && !state.bulkPause && (
-											<Button
-												simple
-												onClick={() => {
-													stopCurrentProcess();
-													dispatch({
-														type: "FINISH_BULK",
-													});
-												}}
-											>
-												Stop bulk
-											</Button>
-										)}
-									</>
-								)}
-							</Col>
-						</BlockContentInner>
-						{hasLimitExcedeed(userState.user_infos) && (
-							<BlockContentInner>
-								<LimitExcedeed />
-							</BlockContentInner>
-						)}
-						<BulkResults />
-						{Object.values(state.reports).length > 8 &&
-							hasLimitExcedeed(userState.user_infos) && (
-								<BlockContentInner>
-									<LimitExcedeed />
-								</BlockContentInner>
-							)}
-					</Block>
-				</div>
-			)}
+							Start a new bulk optimization
+						</Button>
+					)}
+					{numberCreditsNeed > userImagesLeft && (
+						<Button
+							simple
+							onClick={() => {
+								window.open(
+									"https://app.imageseo.io/plan",
+									"_blank"
+								);
+							}}
+						>
+							Get more credits
+						</Button>
+					)}
+				</BlockFooter>
+			</Block>
 		</>
 	);
 }
