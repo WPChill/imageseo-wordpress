@@ -19,41 +19,6 @@ function BulkSettings() {
 		<>
 			<SubTitle>Global settings</SubTitle>
 			<SCContentSettings>
-				<div className="imageseo-mb-3">
-					<IFlex>
-						<div className="imageseo-mr-2">
-							<input
-								type="checkbox"
-								name="wantValidateResult"
-								id="wantValidateResult"
-								value={settings.wantValidateResult}
-								onChange={() =>
-									dispatch({
-										type: "UPDATE_OPTION",
-										payload: {
-											key: "wantValidateResult",
-											value: !settings.wantValidateResult
-										}
-									})
-								}
-							/>
-						</div>
-						<IFlexNumber number={1}>
-							<label
-								htmlFor="wantValidateResult"
-								className="imageseo-label"
-							>
-								I want to validate the results manually.
-							</label>
-							<p>
-								If you tick this boxe, you will have the
-								possibility to valide our alt texts and names
-								suggestion. You can stop the bulk, untick this
-								boxe and restart the bulk at any moment.
-							</p>
-						</IFlexNumber>
-					</IFlex>
-				</div>
 				<Row className="imageseo-mb-3">
 					<Col>
 						<label htmlFor="language" className="imageseo-label">
@@ -62,17 +27,17 @@ function BulkSettings() {
 						</label>
 						<select
 							value={settings.language}
-							onChange={event =>
+							onChange={(event) =>
 								dispatch({
 									type: "UPDATE_OPTION",
 									payload: {
 										key: "language",
-										value: event.target.value
-									}
+										value: event.target.value,
+									},
 								})
 							}
 						>
-							{IMAGESEO_DATA.LANGUAGES.map(language => {
+							{IMAGESEO_DATA.LANGUAGES.map((language) => {
 								return (
 									<option
 										key={language.code}
@@ -93,13 +58,13 @@ function BulkSettings() {
 						<select
 							id="altFilter"
 							value={settings.altFilter}
-							onChange={event =>
+							onChange={(event) =>
 								dispatch({
 									type: "UPDATE_OPTION",
 									payload: {
 										key: "altFilter",
-										value: event.target.value
-									}
+										value: event.target.value,
+									},
 								})
 							}
 						>
@@ -134,8 +99,8 @@ function BulkSettings() {
 										type: "UPDATE_OPTION",
 										payload: {
 											key: "optimizeAlt",
-											value: !settings.optimizeAlt
-										}
+											value: !settings.optimizeAlt,
+										},
 									})
 								}
 							/>
@@ -163,13 +128,13 @@ function BulkSettings() {
 									<select
 										id="altFill"
 										value={settings.altFill}
-										onChange={event =>
+										onChange={(event) =>
 											dispatch({
 												type: "UPDATE_OPTION",
 												payload: {
 													key: "altFill",
-													value: event.target.value
-												}
+													value: event.target.value,
+												},
 											})
 										}
 									>
@@ -204,15 +169,15 @@ function BulkSettings() {
 													value.format ===
 													settings.formatAlt
 												}
-												onChange={event => {
+												onChange={(event) => {
 													dispatch({
 														type: "UPDATE_OPTION",
 														payload: {
 															key: "formatAlt",
 															value:
 																event.target
-																	.value
-														}
+																	.value,
+														},
 													});
 												}}
 											/>
@@ -223,7 +188,7 @@ function BulkSettings() {
 												<p
 													style={{
 														marginTop: 10,
-														fontSize: 14
+														fontSize: 14,
 													}}
 												>
 													{value.description}
@@ -236,7 +201,7 @@ function BulkSettings() {
 									<p
 										style={{
 											marginTop: 15,
-											fontSize: 14
+											fontSize: 14,
 										}}
 									>
 										Custom template. You can use multiple
@@ -248,13 +213,13 @@ function BulkSettings() {
 										type="radio"
 										name="formatAlt"
 										value="CUSTOM_FORMAT"
-										onChange={event => {
+										onChange={(event) => {
 											dispatch({
 												type: "UPDATE_OPTION",
 												payload: {
 													key: "formatAlt",
-													value: event.target.value
-												}
+													value: event.target.value,
+												},
 											});
 										}}
 									/>
@@ -265,16 +230,16 @@ function BulkSettings() {
 											name="formatAltCustom"
 											value={settings.formatAltCustom}
 											style={{
-												minWidth: "40%"
+												minWidth: "40%",
 											}}
-											onChange={event => {
+											onChange={(event) => {
 												dispatch({
 													type: "UPDATE_OPTION",
 													payload: {
 														key: "formatAltCustom",
 														value:
-															event.target.value
-													}
+															event.target.value,
+													},
 												});
 											}}
 										/>
@@ -300,8 +265,8 @@ function BulkSettings() {
 										type: "UPDATE_OPTION",
 										payload: {
 											key: "optimizeFile",
-											value: !settings.optimizeFile
-										}
+											value: !settings.optimizeFile,
+										},
 									})
 								}
 							/>
