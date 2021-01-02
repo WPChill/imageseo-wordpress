@@ -21,9 +21,11 @@ class BulkImages
     public function hooks()
     {
 
+		add_action('wp_ajax_imageseo_start_bulk', [$this, 'start']);
+
     }
 
-    public function dispatchBulk()
+    public function start()
     {
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
