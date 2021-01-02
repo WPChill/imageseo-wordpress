@@ -26,7 +26,7 @@ class OptimizeImage
 
         add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
         add_action('wp_ajax_imageseo_finish_bulk', [$this, 'finishBulk']);
-        add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
+        // add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
         add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
         add_action('admin_post_imageseo_force_stop', [$this, 'forceStop']);
     }
