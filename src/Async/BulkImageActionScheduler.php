@@ -33,65 +33,70 @@ function bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames = 
 
 add_action( 'action_bulk_image_process_action_scheduler', 'bulk_image_process_action_scheduler', 10, 2 );
 
-function bulk_image_process_action_scheduler($index)
+function bulk_image_process_action_scheduler()
 {
 
-	$optionBulkProcess = get_option('_imageseo_bulk_process');
-
-	global $wpdb;
-	$needToStopProcess = $wpdb->get_row($wpdb->prepare("SELECT option_value FROM $wpdb->options WHERE option_name = %s LIMIT 1", '_imageseo_need_to_stop_process'));
-
-	if ($needToStopProcess) {
-		return false;
-	}
+	$optionBulkProcess = get_option('_imageseo_bulk_process_settings');
 
 	$limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
 	if ($limitExcedeed) {
 		return false;
 	}
 
-	if(!isset($optionBulkProcess['id_images'][$index])){
-		return false;
+	$sizeImages = 5;
+	if(isset($optionBulkProcess['size_indexes_image'])){
+		$sizeImages = $optionBulkProcess['size_indexes_image'];
 	}
 
-	$attachmentId = $optionBulkProcess['id_images'][$index];
-
-	try {
-		$response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true], $optionBulkProcess['settings']['language']);
-	} catch (\Exception $e) {
-		update_post_meta($attachmentId, '_imageseo_bulk_report', [
-			'success' => false,
-		]);
-
-		return false;
+	// exclude the names of files in use during bulk
+	$excludeFilenames = get_option('_imageseo_bulk_exclude_filenames');
+	if (!$excludeFilenames) {
+		$excludeFilenames = [];
 	}
 
-	$alt = '';
-	$filename = '';
-	$extension = '';
 
-	if ($optionBulkProcess['settings']['optimizeAlt']) {
-		$format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
 
-		$alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
+	for ($i=0; $i < $sizeImages ; $i++) {
+		@set_time_limit(0);
 
-		if (!$optionBulkProcess['settings']['wantValidateResult']) {
+		if(!isset($optionBulkProcess['id_images'][$i])){
+			continue;
+		}
+
+		$attachmentId = array_shift($optionBulkProcess['id_images']);
+		error_log("Attachment : " . $attachmentId);
+		try {
+			$response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true], $optionBulkProcess['settings']['language']);
+		} catch (\Exception $e) {
+			error_log($e->getMessage());
+			update_post_meta($attachmentId, '_imageseo_bulk_report', [
+				'success' => false,
+			]);
+
+			continue;
+		}
+
+		$alt = '';
+		$filename = '';
+		$extension = '';
+
+		// Optimize Alt
+		if ($optionBulkProcess['settings']['optimizeAlt']) {
+			$format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
+
+			$alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
+
 			imageseo_get_service('Alt')->updateAlt($attachmentId, $alt);
 		}
-	}
 
-	if ($optionBulkProcess['settings']['optimizeFile']) {
-		$renameFileService = imageseo_get_service('RenameFile');
-		$excludeFilenames = get_option('_imageseo_bulk_exclude_filenames');
-		if (!$excludeFilenames) {
-			$excludeFilenames = [];
-		}
+		// Optimize file
+		if ($optionBulkProcess['settings']['optimizeFile']) {
+			$renameFileService = imageseo_get_service('RenameFile');
 
-		list($filename, $extension) = bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames);
-		$excludeFilenames[] = $filename;
-		update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames);
+			list($filename, $extension) = bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames);
 
-		if (!$optionBulkProcess['settings']['wantValidateResult']) {
+			$excludeFilenames[] = $filename;
+
 			if (empty($filename)) {
 				$renameFileService->removeFilename($attachmentId);
 			} else {
@@ -101,36 +106,36 @@ function bulk_image_process_action_scheduler($index)
 
 					$renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
 				} catch (\Exception $e) {
+					error_log($e->getMessage());
 				}
 			}
 		}
+
+		$optionBulkProcess['id_images_optimized'][] = $attachmentId;
+
+
+		update_post_meta($attachmentId, '_imageseo_bulk_report', [
+			'success'   => true,
+			'filename'  => $filename,
+			'extension' => $extension,
+			'alt'       => $alt,
+		]);
+
 	}
 
-	++$optionBulkProcess['current_index_image'];
-	$optionBulkProcess['id_images_optimized'][] = $attachmentId;
-	update_option('_imageseo_bulk_process', $optionBulkProcess);
+	$optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
 
-	update_post_meta($attachmentId, '_imageseo_bulk_report', [
-		'success'   => true,
-		'filename'  => $filename,
-		'extension' => $extension,
-		'alt'       => $alt,
-	]);
+	update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames);
+	update_option('_imageseo_bulk_process_settings', $optionBulkProcess);
 
-
-	if($optionBulkProcess['current_index_image'] < $optionBulkProcess['total_images']){
-		as_schedule_single_action( time(), 'action_bulk_image_process_action_scheduler', ["current_index_image" => $optionBulkProcess['current_index_image']], "group_bulk_image");
+	// Next batch
+	if(count($optionBulkProcess['id_images']) > 0){
+		as_schedule_single_action( time() + 60, 'action_bulk_image_process_action_scheduler', [], "group_bulk_image");
+	}
+	// Finish
+	else {
+		update_option('_imageseo_last_bulk_process', $optionBulkProcess);
+		delete_option('_imageseo_bulk_process_settings');
 	}
 
-	if($optionBulkProcess['current_index_image'] + 1 > $optionBulkProcess['total_images']){
-		$optionBulkProcess = get_option('_imageseo_bulk_process');
-
-		if ($optionBulkProcess['current_index_image'] + 1 == $optionBulkProcess['total_images']) {
-			delete_option('_imageseo_last_bulk_process');
-		}
-
-		update_option('_imageseo_bulk_is_finish', true);
-		delete_option('_imageseo_bulk_exclude_filenames');
-		delete_option('_imageseo_need_to_stop_process');
-	}
 }

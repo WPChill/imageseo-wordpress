@@ -47,14 +47,14 @@ const startBulkProcess = async (
 ) => {
 	const formData = new FormData();
 
-	formData.append("action", "imageseo_dispatch_bulk");
+	formData.append("action", "imageseo_start_bulk");
 	formData.append("data", data);
 	formData.append("formatAlt", formatAlt);
 	formData.append("formatAltCustom", formatAltCustom);
 	formData.append("language", language);
 	formData.append("optimizeAlt", optimizeAlt);
 	formData.append("optimizeFile", optimizeFile);
-	formData.append("wantValidateResult", wantValidateResult);
+	formData.append("wantValidateResult", false);
 
 	const response = await fetch(ajaxurl, {
 		method: "POST",

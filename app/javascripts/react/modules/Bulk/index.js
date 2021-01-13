@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
 import { get, isNil, find, difference, isEmpty } from "lodash";
+const { __ } = wp.i18n;
 
 import Block from "../../ui/Block";
 import BlockContentInner, {
@@ -106,32 +107,37 @@ function BulkWithProviders() {
 
 		if (get(state, "allIds", []).length === 0) {
 			Swal.fire({
-				title: "Oups !",
-				text: "There are no images to optimize",
+				title: __("Oups !", "imageseo"),
+				text: __("There are no images to optimize", "imageseo"),
 				icon: "info",
-				confirmButtonText: "Close",
+				confirmButtonText: __("Close", "imageseo"),
 			});
 			return;
 		}
 
 		if (settings.optimizeAlt && isNil(settings.formatAlt)) {
 			Swal.fire({
-				title: "Oups !",
-				text: "Please select the format of your alternative text (alt)",
+				title: __("Oups !", "imageseo"),
+				text: __(
+					"Please select the format of your alternative text (alt)",
+					"imageseo"
+				),
 				icon: "info",
-				confirmButtonText: "Close",
+				confirmButtonText: __("Close", "imageseo"),
 			});
 			return;
 		}
 
 		Swal.fire({
-			title: "Are you sure?",
-			text:
+			title: __("Are you sure?", "imageseo"),
+			text: __(
 				"You're about to launch a bulk optimization. You can pause it and resume it at any time.",
+				"imageseo"
+			),
 			icon: "info",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
-			confirmButtonText: "Yes, let's go!",
+			confirmButtonText: __("Yes, let's go!", "imageseo"),
 		}).then(async (result) => {
 			if (result.value) {
 				await startBulkProcess(state.allIds, settings);
@@ -151,7 +157,7 @@ function BulkWithProviders() {
 					}}
 				>
 					<BlockContentInnerTitle>
-						<h2>Bulk optimization settings</h2>
+						<h2>{__("Bulk optimization settings", "imageseo")}</h2>
 					</BlockContentInnerTitle>
 				</BlockContentInner>
 				<BlockContentInner>
@@ -159,17 +165,21 @@ function BulkWithProviders() {
 				</BlockContentInner>
 				<BlockFooter>
 					<h3>
-						Forecast: with your current settings{" "}
-						{state.allIds.length} images will be optimized.
+						{__("Forecast: with your current settings", "imageseo")}{" "}
+						{state.allIds.length}{" "}
+						{__("images will be optimized.", "imageseo")}
 					</h3>
 					<p>
-						You have {userImagesLeft} credit(s) left in your
-						account.{" "}
+						{__("You have", "imageseo")} {userImagesLeft}{" "}
+						{__("credit(s) left in your account.", "imageseo")}{" "}
 					</p>
 					{get(state, "allIdsOptimized", []).length > 0 && (
 						<p>
 							{get(state, "allIdsOptimized", []).length}{" "}
-							optimizations have already been done!
+							{__(
+								"optimizations have already been done!",
+								"imageseo"
+							)}
 						</p>
 					)}
 					{!state.bulkActive && (
@@ -181,7 +191,7 @@ function BulkWithProviders() {
 								handleStartBulk();
 							}}
 						>
-							Start a new bulk optimization
+							{__("Start a new bulk optimization", "imageseo")}
 						</Button>
 					)}
 					{numberCreditsNeed > userImagesLeft && (
@@ -194,7 +204,7 @@ function BulkWithProviders() {
 								);
 							}}
 						>
-							Get more credits
+							{__("Get more credits", "imageseo")}
 						</Button>
 					)}
 				</BlockFooter>
