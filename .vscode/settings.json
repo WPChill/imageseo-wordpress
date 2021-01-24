@@ -1,5 +1,4 @@
 {
-	"php-cs-fixer.executablePath": "php-cs-fixer",
     "php-cs-fixer.onsave": true,
     "php-cs-fixer.rules": "@PSR2",
     "php-cs-fixer.config": ".php_cs",
@@ -11,5 +10,4 @@
     "editor.formatOnSave": true,
     "prettier.tabWidth": 4,
     "prettier.singleQuote": true,
-    "javascript.implicitProjectConfig.experimentalDecorators": true
 }

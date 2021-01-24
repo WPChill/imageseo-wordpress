@@ -14,7 +14,8 @@
 		}
 	},
 	"require-dev": {
-		"squizlabs/php_codesniffer": "*"
+		"squizlabs/php_codesniffer": "*",
+		"friendsofphp/php-cs-fixer": "^2.18"
 	},
 	"require": {
 		"imageseo/imageseo-php": "^1.0",
