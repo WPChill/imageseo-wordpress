@@ -47,13 +47,13 @@ class Enqueue
 
     public function adminEnqueueCSS($page)
     {
-        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global-css.css', [], IMAGESEO_VERSION);
+        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global.css', [], IMAGESEO_VERSION);
 
         if (!in_array($page, ['edit.php', 'toplevel_page_' . Pages::SETTINGS, 'image-seo_page_imageseo-optimization', 'upload.php', 'post.php', 'image-seo_page_imageseo-options', 'image-seo_page_imageseo-social-media'], true)) {
             return;
         }
 
-        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin-css.css', [], IMAGESEO_VERSION);
+        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin.css', [], IMAGESEO_VERSION);
     }
 
     /**
@@ -71,15 +71,13 @@ class Enqueue
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
         }
 
-        if (in_array($page, ['toplevel_page_' . Pages::SETTINGS], true)) {
-            wp_enqueue_script('imageseo-application-js', IMAGESEO_URL_DIST . '/application.js', ['jquery'], IMAGESEO_VERSION, true);
+        if (in_array($page, ['image-seo_page_imageseo-optimization', 'image-seo_page_imageseo-social-media'], true)) {
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery', 'wp-i18n'], IMAGESEO_VERSION, true);
+        }
 
-            wp_localize_script('imageseo-application-js', 'IMAGESEO', [
-                'OWNER'      => imageseo_get_service('ClientApi')->getOwnerByApiKey(),
-                'API_KEY'    => imageseo_get_service('Option')->getOption('api_key'),
-                'URL_DIST'   => IMAGESEO_URL_DIST,
-                'ADMIN_AJAX' => admin_url('admin-ajax.php'),
-            ]);
+        if (in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {
+            wp_enqueue_script('imageseo-admin-register-js', IMAGESEO_URL_DIST . '/register.js', ['jquery'], IMAGESEO_VERSION, true);
+            wp_enqueue_script('imageseo-admin-api-key-js', IMAGESEO_URL_DIST . '/api-key.js', ['jquery'], IMAGESEO_VERSION, true);
         }
 
         if (in_array($page, ['post.php'], true)) {
