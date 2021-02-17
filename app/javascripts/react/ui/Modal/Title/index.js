@@ -14,4 +14,4 @@ function ModalTitle({ children, ...rest }) {
 	return <SCModalContainerTitle {...rest}>{children}</SCModalContainerTitle>;
 }
 
-export default React.memo(ModalTitle);
+export default ModalTitle;

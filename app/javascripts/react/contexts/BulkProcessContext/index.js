@@ -15,6 +15,11 @@ import getFilenamePreview from "../../helpers/getFilenamePreview";
 const initialState = {
 	allIds: [],
 	allIdsOptimized: [],
+	currentProcess: null,
+	finishProcess: null,
+	lastProcess: null,
+	bulkActive: false,
+	bulkIsFinish: false,
 };
 
 function reducer(state, { type, payload }) {
@@ -24,6 +29,31 @@ function reducer(state, { type, payload }) {
 				...state,
 				allIds: payload.allIds,
 				allIdsOptimized: payload.allIdsOptimized,
+			};
+		case "START_CURRENT_PROCESS":
+			return {
+				...state,
+				bulkActive: true,
+				currentProcess: payload,
+				lastProcess: null,
+			};
+		case "STOP_CURRENT_PROCESS":
+			return {
+				...state,
+				bulkActive: false,
+				currentProcess: null,
+				lastProcess: payload,
+			};
+		case "UPDATE_CURRENT_PROCESS":
+			return {
+				...state,
+				currentProcess: payload,
+			};
+		case "FINISH_CURRENT_PROCESS":
+			return {
+				...state,
+				bulkIsFinish: true,
+				finishProcess: payload,
 			};
 		default:
 			return state;
@@ -35,27 +65,15 @@ const BulkProcessContext = createContext(null);
 const BulkProcessContextProvider = ({ children }) => {
 	let initState = {
 		...initialState,
+		currentProcess: get(IMAGESEO_DATA, "CURRENT_PROCESSED", null),
+		lastProcess: get(IMAGESEO_DATA, "LAST_PROCESSED", null),
 	};
-	// if (!isNil(IMAGESEO_DATA.CURRENT_PROCESSED)) {
-	// 	initState = {
-	// 		...initState,
-	// 		bulkActive: true,
-	// 		allIds: IMAGESEO_DATA.CURRENT_PROCESSED.id_images,
-	// 	};
-	// } else if (!isNil(IMAGESEO_DATA.LAST_PROCESSED)) {
-	// 	initState = {
-	// 		...initState,
-	// 		allIds: IMAGESEO_DATA.LAST_PROCESSED.id_images,
-	// 	};
-	// }
-
-	// if (!isNil(IMAGESEO_DATA.IS_FINISH) && IMAGESEO_DATA.IS_FINISH === 1) {
-	// 	initState = {
-	// 		...initState,
-	// 		bulkFinish: true,
-	// 		bulkActive: false,
-	// 	};
-	// }
+	if (!isNil(initState.currentProcess)) {
+		initState = {
+			...initState,
+			bulkActive: true,
+		};
+	}
 
 	const [state, dispatch] = useReducer(reducer, initState);
 	return (
