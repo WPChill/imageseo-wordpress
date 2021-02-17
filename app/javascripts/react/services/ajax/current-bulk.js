@@ -64,6 +64,42 @@ const startBulkProcess = async (
 	return await response.json();
 };
 
+export const restartBulkProcess = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_restart_bulk");
+
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
+export const getPreviewBulk = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_get_preview_bulk");
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+export const getCurrentBulk = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_get_current_bulk");
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
 const getCurrentProcessDispatch = async () => {
 	const formData = new FormData();
 
