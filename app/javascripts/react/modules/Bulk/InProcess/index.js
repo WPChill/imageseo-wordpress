@@ -7,6 +7,7 @@ import Modal from "../../../ui/Modal";
 import ModalOverlay from "../../../ui/Modal/Overlay";
 import ModalIconClose from "../../../ui/Modal/IconClose";
 import { BulkSettingsContext } from "../../../contexts/BulkSettingsContext";
+import LimitExcedeed from "../../../components/Bulk/LimitExcedeed";
 import { BulkProcessContext } from "../../../contexts/BulkProcessContext";
 import LoadingImages from "../../../components/LoadingImages";
 import {
@@ -20,7 +21,15 @@ const SCContainerProcess = styled.div`
 	padding: 32px;
 	border-radius: 8px;
 	border: solid 1px #2b68d9;
-	border-color: ${({ finish }) => (finish ? `#27c166` : `#2b68d9`)};
+	border-color: ${({ finish, limitExcedeed }) => {
+		if (limitExcedeed) {
+			return `#fa7455`;
+		}
+		if (finish) {
+			return `#27c166`;
+		}
+		return `#2b68d9`;
+	}};
 	background-color: #fafafc;
 	position: relative;
 	z-index: 3;
@@ -30,7 +39,15 @@ const SCContainerProcess = styled.div`
 		z-index: 1;
 		height: 100%;
 		opacity: 0.1;
-		background-color: ${({ finish }) => (finish ? `#27c166` : `#2b68d9`)};
+		background-color: ${({ finish, limitExcedeed }) => {
+			if (limitExcedeed) {
+				return `#fa7455`;
+			}
+			if (finish) {
+				return `#27c166`;
+			}
+			return `#2b68d9`;
+		}};
 		width: ${({ percent }) => Number(percent).toFixed(0)}%;
 		top: 0;
 		left: 0;
@@ -62,8 +79,15 @@ const SCContainerProcess = styled.div`
 			height: 8px;
 			border-top-left-radius: 15px;
 			border-bottom-left-radius: 15px;
-			background-color: ${({ finish }) =>
-				finish ? `#27c166` : `#2b68d9`};
+			background-color: ${({ finish, limitExcedeed }) => {
+				if (limitExcedeed) {
+					return `#fa7455`;
+				}
+				if (finish) {
+					return `#27c166`;
+				}
+				return `#2b68d9`;
+			}};
 			width: ${({ percent }) => {
 				if (Number(percent).toFixed(0) === 0) {
 					return 0;
@@ -139,7 +163,39 @@ const SCContainerModal = styled.div`
 	}
 `;
 
-const ModalCurrentResults = ({ onClickClose }) => {
+const SCFinishProcess = styled.div`
+	padding: 32px;
+	border-radius: 8px;
+	border: solid 1px #00081a;
+	background-color: #fafafc;
+	position: relative;
+	z-index: 3;
+	margin-bottom: 50px;
+	p {
+		font-size: 16px;
+	}
+	.btn__view {
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+		border: 1px solid #d5d9dc;
+		padding: 0px 16px;
+		height: 40px;
+		box-sizing: border-box;
+		color: #00081a;
+		border-radius: 4px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #fff;
+		&:hover {
+			cursor: pointer;
+			background-color: #fafafa;
+		}
+	}
+`;
+
+const ModalCurrentResults = ({ onClickClose, state }) => {
 	const ref = useRef(null);
 	useOnClickOutside(ref, () => onClickClose());
 	const [loading, setLoading] = useState(true);
@@ -155,6 +211,17 @@ const ModalCurrentResults = ({ onClickClose }) => {
 
 		fetchData();
 	}, []);
+
+	const optimizeFilename = get(
+		state,
+		"currentProcess.settings.optimizeFile",
+		false
+	);
+	const optimizeAlt = get(
+		state,
+		"currentProcess.settings.optimizeAlt",
+		false
+	);
 
 	return (
 		<ModalOverlay>
@@ -198,23 +265,29 @@ const ModalCurrentResults = ({ onClickClose }) => {
 									filename = `${get(
 										image,
 										"report.filename"
-									)}${get(image, "report.extension")}`;
+									)}.${get(image, "report.extension")}`;
 									alt = `${get(image, "report.alt")}`;
 								}
 								return (
 									<div className="item__image" key={key}>
 										<img src={image.url} />
 										<div>
-											<p className="item__image--filename">
-												{__(
-													"Filename alias:",
-													"imageseo"
-												)}{" "}
-												{filename}
-											</p>
-											<p className="item__image--alt">
-												{__("Alt:", "imageseo")} {alt}
-											</p>
+											{optimizeFilename && (
+												<p className="item__image--filename">
+													{__(
+														"Filename alias:",
+														"imageseo"
+													)}{" "}
+													{filename}
+												</p>
+											)}
+
+											{optimizeAlt && (
+												<p className="item__image--alt">
+													{__("Alt:", "imageseo")}{" "}
+													{alt}
+												</p>
+											)}
 										</div>
 									</div>
 								);
@@ -229,7 +302,7 @@ const ModalCurrentResults = ({ onClickClose }) => {
 
 const BulkInProcess = () => {
 	const { state, dispatch } = useContext(BulkProcessContext);
-	console.log(state);
+
 	let total_ids_optimized = 0;
 	let total_images = 1;
 
@@ -257,6 +330,9 @@ const BulkInProcess = () => {
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [reload, setReload] = useState(false);
+	const limit = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false);
+
+	const [limitExcedeed, setLimitExcedeed] = useState(limit ? true : false);
 	const onClickClose = () => setIsOpen(false);
 
 	const handleStopBulk = () => {
@@ -292,16 +368,34 @@ const BulkInProcess = () => {
 				payload: get(data, "finish"),
 			});
 		}
+
+		if (get(data, "limit_excedeed", false)) {
+			setLimitExcedeed(true);
+			dispatch({
+				type: "UPDATE_LIMIT_EXCEDEED",
+				payload: true,
+			});
+		}
+
 		setReload(false);
 	};
 
 	return (
 		<>
-			{isOpen && <ModalCurrentResults onClickClose={onClickClose} />}
-			<SCContainerProcess percent={percent} finish={state.bulkIsFinish}>
+			{isOpen && (
+				<ModalCurrentResults
+					onClickClose={onClickClose}
+					state={state}
+				/>
+			)}
+			<SCContainerProcess
+				percent={percent}
+				finish={state.bulkIsFinish}
+				limitExcedeed={limitExcedeed}
+			>
 				<h2>
 					{__("Bulk optimization in progress", "imageseo")}{" "}
-					{!state.bulkIsFinish && (
+					{!state.bulkIsFinish && !limitExcedeed && (
 						<img
 							src={`${IMAGESEO_URL_DIST}/images/rotate-cw.svg`}
 							style={{
@@ -319,7 +413,7 @@ const BulkInProcess = () => {
 					<div className="progress__bar--content"></div>
 				</div>
 				<div className="actions">
-					{!state.bulkIsFinish && (
+					{!state.bulkIsFinish && !limitExcedeed && (
 						<div
 							className="btn__action btn__action--reload"
 							onClick={handleRefreshData}
@@ -343,7 +437,7 @@ const BulkInProcess = () => {
 					>
 						{__("View results", "imageseo")}
 					</div>
-					{!state.bulkIsFinish && (
+					{!state.bulkIsFinish && !limitExcedeed && (
 						<div className="btn__action" onClick={handleStopBulk}>
 							<img
 								src={`${IMAGESEO_URL_DIST}/images/icon-pause.svg`}
@@ -354,6 +448,23 @@ const BulkInProcess = () => {
 					)}
 				</div>
 			</SCContainerProcess>
+			{state.bulkIsFinish && (
+				<>
+					<SCFinishProcess>
+						<p>{__("The process ended well.", "imageseo")}</p>
+						<p>
+							{__(
+								"You can edit and view all your results in your media library in 'list' mode.",
+								"imageseo"
+							)}
+						</p>
+						<a className="btn__view" href={IMAGESEO_LIBRARY_URL}>
+							{__("View medias", "imageseo")}
+						</a>
+					</SCFinishProcess>
+				</>
+			)}
+			{limitExcedeed && <LimitExcedeed percent={percent} />}
 		</>
 	);
 };
