@@ -21,6 +21,7 @@ import { getImagesLeft } from "../../../services/user";
 
 import { restartBulkProcess } from "../../../services/ajax/current-bulk";
 import LoadingImages from "../../../components/LoadingImages";
+import LimitExcedeed from "../../../components/Bulk/LimitExcedeed";
 
 const SCContainerProcess = styled.div`
 	padding: 32px;
@@ -124,11 +125,23 @@ const BulkLastProcess = () => {
 			confirmButtonText: __("Restart process", "imageseo"),
 		}).then(async (result) => {
 			if (result.value) {
-				const { data } = await restartBulkProcess();
+				const { data, success } = await restartBulkProcess();
+				if (!success) {
+					Swal.fire({
+						title: __("Oups!", "imageseo"),
+						text: __("Limit excedeed.", "imageseo"),
+						icon: "error",
+						showCancelButton: true,
+					});
+				}
 				dispatch({ type: "START_CURRENT_PROCESS", payload: data });
 			}
 		});
 	};
+
+	const limitExcedeed = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false)
+		? true
+		: false;
 
 	return (
 		<>
@@ -140,14 +153,17 @@ const BulkLastProcess = () => {
 				<div className="progress__bar">
 					<div className="progress__bar--content"></div>
 				</div>
-				<div className="btn__action" onClick={handleRestartBulk}>
-					<img
-						src={`${IMAGESEO_URL_DIST}/images/icon-play.svg`}
-						alt=""
-					/>
-					{__("Restart", "imageseo")}
-				</div>
+				{!limitExcedeed && (
+					<div className="btn__action" onClick={handleRestartBulk}>
+						<img
+							src={`${IMAGESEO_URL_DIST}/images/icon-play.svg`}
+							alt=""
+						/>
+						{__("Restart", "imageseo")}
+					</div>
+				)}
 			</SCContainerProcess>
+			{limitExcedeed && <LimitExcedeed percent={percent} />}
 		</>
 	);
 };

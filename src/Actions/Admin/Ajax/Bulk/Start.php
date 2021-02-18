@@ -30,6 +30,11 @@ class Start
             return;
         }
 
+        $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
+        if ($limitExcedeed) {
+            wp_send_json_error();
+        }
+
         $data = explode(',', $_POST['data']);
         $settings = [
             'total_images'         => count($data),

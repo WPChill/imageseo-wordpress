@@ -18,6 +18,8 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
     $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
 }
 
+$scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+
 ?>
 
 <div id="wrap-imageseo">
@@ -39,10 +41,12 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
 
     </div>
 </div>
-
 <script>
+	const IMAGESEO_LIBRARY_URL = "<?php echo admin_url('upload.php?mode=list'); ?>"
     const IMAGESEO_URL_DIST = "<?php echo IMAGESEO_URL_DIST; ?>"
     const IMAGESEO_DATA = {
+		NEXT_SCHEDULED : <?php echo $scheduled ? $scheduled : 'false'; ?>,
+		LIMIT_EXCEDEED : <?php echo imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : 0; ?>,
 		CURRENT_PROCESSED: <?php echo $currentProcessed ? wp_json_encode($currentProcessed) : 'null'; ?>,
 		IS_FINISH: <?php echo false !== get_option('_imageseo_bulk_is_finish') ? true : 0; ?>,
 		LAST_PROCESSED: <?php echo $lastBulkProcess ? wp_json_encode($lastBulkProcess) : 'null'; ?>,

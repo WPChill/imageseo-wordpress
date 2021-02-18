@@ -22,7 +22,12 @@ class Restart
             exit;
         }
 
+        $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
         $settings = get_option('_imageseo_pause_bulk_process');
+        if ($limitExcedeed) {
+            wp_send_json_error($settings);
+        }
+
         update_option('_imageseo_bulk_process_settings', $settings);
         delete_option('_imageseo_pause_bulk_process');
 
