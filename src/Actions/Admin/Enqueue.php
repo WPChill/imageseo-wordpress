@@ -47,13 +47,13 @@ class Enqueue
 
     public function adminEnqueueCSS($page)
     {
-        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global-css.css', [], IMAGESEO_VERSION);
+        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global.css', [], IMAGESEO_VERSION);
 
         if (!in_array($page, ['edit.php', 'toplevel_page_' . Pages::SETTINGS, 'image-seo_page_imageseo-optimization', 'upload.php', 'post.php', 'image-seo_page_imageseo-options', 'image-seo_page_imageseo-social-media'], true)) {
             return;
         }
 
-        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin-css.css', [], IMAGESEO_VERSION);
+        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin.css', [], IMAGESEO_VERSION);
     }
 
     /**
@@ -72,7 +72,7 @@ class Enqueue
         }
 
         if (in_array($page, ['image-seo_page_imageseo-optimization', 'image-seo_page_imageseo-social-media'], true)) {
-            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery'], IMAGESEO_VERSION, true);
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery', 'wp-i18n'], IMAGESEO_VERSION, true);
         }
 
         if (in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {

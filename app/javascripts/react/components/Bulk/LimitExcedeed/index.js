@@ -6,38 +6,27 @@ import { Row, Col } from "../../../ui/Flex";
 import Button from "../../../ui/Button";
 import { BulkProcessContext } from "../../../contexts/BulkProcessContext";
 
-function LimitExcedeed() {
-	const { state } = useContext(BulkProcessContext);
-
-	const percentOptimized = Math.round(
-		(Object.values(state.reports).length * 100) /
-			get(state, "allIds", []).length
-	);
-
+function LimitExcedeed({ percent }) {
 	return (
 		<Block secondary style={{ margin: 20 }}>
 			<BlockContentInner>
 				<Row align="center">
-					<Col auto style={{ marginRight: 20 }}>
+					<div style={{ marginRight: 20 }}>
 						<img src={`${IMAGESEO_URL_DIST}/images/alert.svg`} />
-					</Col>
-					<Col flex="1">
+					</div>
+					<div style={{ marginRight: 20 }}>
 						<p style={{ margin: 0 }}>
 							The bulk have been paused. You need more credits to
 							resume it.
 						</p>
-						{!isNaN(percentOptimized) && (
-							<p>
-								{percentOptimized}% images have been optimized (
-								{Object.values(state.reports).length} out of{" "}
-								{state.allIds.length} images)
-							</p>
+						{!isNaN(percent) && (
+							<p>{percent}% images have been optimized.</p>
 						)}
-					</Col>
-					<Col auto>
+					</div>
+					<div>
 						<Button
 							primary
-							onClick={e => {
+							onClick={(e) => {
 								window.open(
 									"https://app.imageseo.io/plan",
 									"_blank"
@@ -46,7 +35,7 @@ function LimitExcedeed() {
 						>
 							Get more credits
 						</Button>
-					</Col>
+					</div>
 				</Row>
 			</BlockContentInner>
 		</Block>

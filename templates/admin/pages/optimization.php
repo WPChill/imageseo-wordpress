@@ -10,20 +10,15 @@ if (!defined('ABSPATH')) {
 $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
 $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
 
-$currentProcessed = get_option('_imageseo_bulk_process');
-$lastBulkProcess = get_option('_imageseo_last_bulk_process');
+$currentProcessed = get_option('_imageseo_bulk_process_settings');
+$lastBulkProcess = get_option('_imageseo_pause_bulk_process');
 
-$needToStopProcess = get_option('_imageseo_need_to_stop_process');
-if ((isset($_GET['stopProcess']) && '1' === $_GET['stopProcess']) || get_option('_imageseo_bulk_is_finish') !== false) {
-    delete_option('_imageseo_bulk_exclude_filenames');
-    delete_option('_imageseo_need_to_stop_process');
-    delete_option('_imageseo_bulk_process');
-    delete_option('_imageseo_bulk_is_finish');
-}
 $limitImages = 10;
 if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
     $limitImages = $this->owner['plan']['limit_images'] + $this->owner['bonus_stock_images'];
 }
+
+$scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
 
 ?>
 
@@ -46,12 +41,14 @@ if (null !== $this->owner && isset($this->owner['plan']['limit_images'])) {
 
     </div>
 </div>
-
 <script>
+	const IMAGESEO_LIBRARY_URL = "<?php echo admin_url('upload.php?mode=list'); ?>"
     const IMAGESEO_URL_DIST = "<?php echo IMAGESEO_URL_DIST; ?>"
     const IMAGESEO_DATA = {
+		NEXT_SCHEDULED : <?php echo $scheduled ? $scheduled : 'false'; ?>,
+		LIMIT_EXCEDEED : <?php echo imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : 0; ?>,
 		CURRENT_PROCESSED: <?php echo $currentProcessed ? wp_json_encode($currentProcessed) : 'null'; ?>,
-		IS_FINISH: <?php echo get_option('_imageseo_bulk_is_finish') !== false ? true : 0; ?>,
+		IS_FINISH: <?php echo false !== get_option('_imageseo_bulk_is_finish') ? true : 0; ?>,
 		LAST_PROCESSED: <?php echo $lastBulkProcess ? wp_json_encode($lastBulkProcess) : 'null'; ?>,
         TOTAL_ALT_NO_OPTIMIZE : <?php echo $totalAltNoOptimize; ?>,
         PERCENT_TRAFFIC_LOOSE : <?php echo $percentLoose; ?>,

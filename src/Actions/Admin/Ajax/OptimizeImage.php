@@ -12,7 +12,6 @@ class OptimizeImage
 {
     public function __construct()
     {
-
         $this->tagsToStringService = imageseo_get_service('TagsToString');
         $this->renameFileService = imageseo_get_service('RenameFile');
         $this->altService = imageseo_get_service('Alt');
@@ -24,10 +23,10 @@ class OptimizeImage
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
 
-        add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
-        add_action('wp_ajax_imageseo_finish_bulk', [$this, 'finishBulk']);
-        add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
-        add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
+        // add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
+        // add_action('wp_ajax_imageseo_finish_bulk', [$this, 'finishBulk']);
+        // add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
+        // add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
         add_action('admin_post_imageseo_force_stop', [$this, 'forceStop']);
     }
 
@@ -40,8 +39,8 @@ class OptimizeImage
             exit;
         }
 
-		$optionBulkProcess = get_option('_imageseo_bulk_process');
-		delete_option('_imageseo_bulk_process');
+        $optionBulkProcess = get_option('_imageseo_bulk_process');
+        delete_option('_imageseo_bulk_process');
         update_option('_imageseo_need_to_stop_process', true);
         update_option('_imageseo_last_bulk_process', $optionBulkProcess);
 
@@ -65,9 +64,9 @@ class OptimizeImage
             return;
         }
 
-		delete_option('_imageseo_last_bulk_process');
-		delete_option('_imageseo_bulk_is_finish');
-		delete_option('_imageseo_need_to_stop_process');
+        delete_option('_imageseo_last_bulk_process');
+        delete_option('_imageseo_bulk_is_finish');
+        delete_option('_imageseo_need_to_stop_process');
 
         $data = explode(',', $_POST['data']);
         update_option('_imageseo_bulk_process', [
@@ -85,8 +84,7 @@ class OptimizeImage
             ],
         ]);
 
-		as_schedule_single_action( time(), 'action_bulk_image_process_action_scheduler', ["current_index_image" => 0], "group_bulk_image");
-
+        as_schedule_single_action(time(), 'action_bulk_image_process_action_scheduler', ['current_index_image' => 0], 'group_bulk_image');
 
         wp_send_json_success();
     }
@@ -108,11 +106,11 @@ class OptimizeImage
                 'id_images_optimized'   => [],
                 'settings'              => [],
             ];
-		}
+        }
 
         wp_send_json_success([
-			'is_running'           => as_next_scheduled_action( 'action_bulk_image_process_action_scheduler', ["current_index_image" => $infoBulkProcess["current_index_image"]], "group_bulk_image" ),
-			'is_finish' => get_option('_imageseo_bulk_is_finish') !== false ? true : false,
+            'is_running'           => as_next_scheduled_action('action_bulk_image_process_action_scheduler', ['current_index_image' => $infoBulkProcess['current_index_image']], 'group_bulk_image'),
+            'is_finish'            => false !== get_option('_imageseo_bulk_is_finish') ? true : false,
             'need_to_stop_process' => get_option('_imageseo_need_to_stop_process'),
             'bulk_process'         => $infoBulkProcess,
         ]);
@@ -120,7 +118,7 @@ class OptimizeImage
 
     public function finishBulk()
     {
-		if (!current_user_can('manage_options')) {
+        if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
             ]);
@@ -132,9 +130,9 @@ class OptimizeImage
         delete_option('_imageseo_bulk_process');
         delete_option('_imageseo_bulk_is_finish');
 
-		wp_send_json_success();
-
+        wp_send_json_success();
     }
+
     public function forceStop()
     {
         $redirectUrl = admin_url('admin.php?page=imageseo-optimization');
@@ -182,7 +180,7 @@ class OptimizeImage
 
         $attachmentId = (int) $_POST['attachmentId'];
 
-		$data = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
+        $data = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
 
         wp_send_json_success($data);
     }

@@ -47,15 +47,51 @@ const startBulkProcess = async (
 ) => {
 	const formData = new FormData();
 
-	formData.append("action", "imageseo_dispatch_bulk");
+	formData.append("action", "imageseo_start_bulk");
 	formData.append("data", data);
 	formData.append("formatAlt", formatAlt);
 	formData.append("formatAltCustom", formatAltCustom);
 	formData.append("language", language);
 	formData.append("optimizeAlt", optimizeAlt);
 	formData.append("optimizeFile", optimizeFile);
-	formData.append("wantValidateResult", wantValidateResult);
+	formData.append("wantValidateResult", false);
 
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
+export const restartBulkProcess = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_restart_bulk");
+
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+
+export const getPreviewBulk = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_get_preview_bulk");
+	const response = await fetch(ajaxurl, {
+		method: "POST",
+		body: formData,
+	});
+
+	return await response.json();
+};
+export const getCurrentBulk = async () => {
+	const formData = new FormData();
+
+	formData.append("action", "imageseo_get_current_bulk");
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,

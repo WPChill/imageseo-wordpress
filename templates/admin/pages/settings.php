@@ -25,11 +25,11 @@ if ($percentLoose >= 2) {
 
 <div id="wrap-imageseo">
     <div class="wrap">
-        <h1 class="imageseo__page-title"><?php _e('Image SEO Settings', 'imageseo'); ?></h1>
-        <?php if (!imageseo_allowed()): ?>
+		<h1 class="imageseo__page-title"><?php _e('Image SEO Settings', 'imageseo'); ?></h1>
+		<?php if (!imageseo_allowed()) { ?>
             <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/banner-welcome.php'; ?>
-        <?php endif; ?>
-        <div class="imageseo-flex imageseo-mt-3">
+        <?php } ?>
+		<div class="imageseo-flex imageseo-mt-3">
             <div class="<?php echo implode(' ', $classesBlock); ?>">
                 <div class="imageseo-block">
                     <div class="imageseo-block__inner">
@@ -47,15 +47,15 @@ if ($percentLoose >= 2) {
                     </div>
                 </div>
             </div>
-            <?php if ($percentLoose >= 2): ?>
+            <?php if ($percentLoose >= 2) { ?>
                 <div class="fl-1">
                     <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/optimization.php'; ?>
                 </div>
-            <?php endif; ?>
+            <?php } ?>
         </div>
         <div class="imageseo-flex imageseo-mt-3 imageseo-mb-3">
             <div class="fl-2 imageseo-mr-3">
-                <?php if (imageseo_allowed()): ?>
+                <?php if (imageseo_allowed()) { ?>
 
                     <div class="imageseo-block">
                         <div class="imageseo-block__inner imageseo-block__inner--head">
@@ -65,9 +65,9 @@ if ($percentLoose >= 2) {
                             <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/api-key.php'; ?>
                         </div>
                     </div>
-                <?php else: ?>
+                <?php } else { ?>
                     <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/register.php'; ?>
-                <?php endif; ?>
+                <?php } ?>
             </div>
             <div class="fl-3">
                 <?php include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/elements/overview.php'; ?>
