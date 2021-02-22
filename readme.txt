@@ -135,7 +135,7 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 1.3.2 (09-07-2020) =
+= 1.3.2 (02-22-2020) =
 - New: Creation of a new more efficient bulk process
 
 = 1.3.1 (09-07-2020) =
