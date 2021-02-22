@@ -7,7 +7,7 @@ Author: Image SEO
 Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2
 */
 
@@ -22,7 +22,7 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '1.3.1');
+define('IMAGESEO_VERSION', '1.3.2');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_DEBUG', false);
 define('IMAGESEO_DEBUG_ALT', false);
@@ -97,8 +97,8 @@ function imageseo_plugin_uninstall()
  */
 function imageseo_plugin_loaded()
 {
-	require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
-	require_once( plugin_dir_path( __FILE__ ) . '/vendor/woocommerce/action-scheduler/action-scheduler.php' );
+    require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
+    require_once plugin_dir_path(__FILE__) . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
     if (imageseo_is_compatible()) {
         require_once __DIR__ . '/imageseo-functions.php';
@@ -106,8 +106,7 @@ function imageseo_plugin_loaded()
         load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
 
         Context::getContext()->initPlugin();
-	}
-
+    }
 }
 
 register_activation_hook(__FILE__, 'imageseo_plugin_activate');
