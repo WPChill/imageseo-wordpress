@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Swal from "sweetalert2";
-import { get, isNil } from "lodash";
+import { get, isNil, isNaN } from "lodash";
 const { __ } = wp.i18n;
 import Modal from "../../../ui/Modal";
 import ModalOverlay from "../../../ui/Modal/Overlay";
@@ -16,6 +16,8 @@ import {
 	stopCurrentProcess,
 } from "../../../services/ajax/current-bulk";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
+import { fromUnixTime } from "date-fns";
+import { differenceInSeconds } from "date-fns/esm";
 
 const SCContainerProcess = styled.div`
 	padding: 32px;
@@ -330,6 +332,9 @@ const BulkInProcess = () => {
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [reload, setReload] = useState(false);
+	const [nextProcessed, setNextProcessed] = useState(
+		get(IMAGESEO_DATA, "NEXT_SCHEDULED", false)
+	);
 	const limit = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false);
 
 	const [limitExcedeed, setLimitExcedeed] = useState(limit ? true : false);
@@ -362,6 +367,7 @@ const BulkInProcess = () => {
 				type: "UPDATE_CURRENT_PROCESS",
 				payload: get(data, "current"),
 			});
+			setNextProcessed(get(data, "scheduled", false));
 		} else if (get(data, "finish", false)) {
 			dispatch({
 				type: "FINISH_CURRENT_PROCESS",
@@ -379,6 +385,7 @@ const BulkInProcess = () => {
 
 		setReload(false);
 	};
+
 	const optimizeAlt = get(
 		state,
 		"currentProcess.settings.optimizeAlt",
@@ -389,6 +396,17 @@ const BulkInProcess = () => {
 		"currentProcess.settings.optimizeFile",
 		false
 	);
+
+	let diffSeconds = false;
+	try {
+		if (nextProcessed) {
+			const now = new Date();
+			diffSeconds = differenceInSeconds(fromUnixTime(nextProcessed), now);
+			if (diffSeconds < 0) {
+				diffSeconds = Math.abs(diffSeconds);
+			}
+		}
+	} catch (error) {}
 
 	return (
 		<>
@@ -415,6 +433,14 @@ const BulkInProcess = () => {
 						/>
 					)}
 				</h2>
+				{!isNaN(diffSeconds) &&
+					Number(diffSeconds) > 0 &&
+					Number(diffSeconds) < 60 && (
+						<p>
+							{__("Next process in few seconds", "imageseo")} (
+							{diffSeconds}s){" "}
+						</p>
+					)}
 				<p className="infos__images">
 					{total_ids_optimized} / {total_images} images{" "}
 					{!isNaN(percent) && <>- {percent}%</>}
