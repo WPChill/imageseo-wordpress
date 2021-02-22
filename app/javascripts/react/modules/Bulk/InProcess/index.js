@@ -379,6 +379,16 @@ const BulkInProcess = () => {
 
 		setReload(false);
 	};
+	const optimizeAlt = get(
+		state,
+		"currentProcess.settings.optimizeAlt",
+		false
+	);
+	const optimizeFilename = get(
+		state,
+		"currentProcess.settings.optimizeFile",
+		false
+	);
 
 	return (
 		<>
@@ -409,6 +419,12 @@ const BulkInProcess = () => {
 					{total_ids_optimized} / {total_images} images{" "}
 					{!isNaN(percent) && <>- {percent}%</>}
 				</p>
+				{optimizeFilename && (
+					<p>{__("Optimize Filename: Yes", "imageseo")}</p>
+				)}
+				{optimizeAlt && (
+					<p>{__("Optimize Alternative text: Yes", "imageseo")}</p>
+				)}
 				<div className="progress__bar">
 					<div className="progress__bar--content"></div>
 				</div>

@@ -142,6 +142,12 @@ const BulkLastProcess = () => {
 	const limitExcedeed = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false)
 		? true
 		: false;
+	const optimizeAlt = get(state, "lastProcess.settings.optimizeAlt", false);
+	const optimizeFilename = get(
+		state,
+		"lastProcess.settings.optimizeFile",
+		false
+	);
 
 	return (
 		<>
@@ -150,6 +156,12 @@ const BulkLastProcess = () => {
 				<p className="infos__images">
 					{total_ids_optimized} / {total_images} images - {percent}%
 				</p>
+				{optimizeFilename && (
+					<p>{__("Optimize Filename: Yes", "imageseo")}</p>
+				)}
+				{optimizeAlt && (
+					<p>{__("Optimize Alternative text: Yes", "imageseo")}</p>
+				)}
 				<div className="progress__bar">
 					<div className="progress__bar--content"></div>
 				</div>
