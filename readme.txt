@@ -2,8 +2,8 @@
 Contributors: gmulti
 Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
-Tested up to: 5.5
-Requires PHP: 5.6
+Tested up to: 5.6
+Requires PHP: 7.0
 Stable tag: v1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -137,6 +137,7 @@ To help us translate Image SEO in your language, contact us
 
 = 1.3.2 (02-22-2020) =
 - New: Creation of a new more efficient bulk process
+- Bugfix: Undefined index on social media head
 
 = 1.3.1 (09-07-2020) =
 - Improved: background process for processing images
