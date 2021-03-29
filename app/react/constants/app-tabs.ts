@@ -24,6 +24,15 @@ export default [
 		order: 1,
 		description: __("Metrics, get help", "imageseo"),
 		mainContent: MAIN_CONTENT.OVERVIEW,
+		icon: "icon-overview.svg",
+	},
+	{
+		key: TABS.ON_UPLOAD_SETTINGS,
+		label: __("Settings", "imageseo"),
+		order: 1,
+		description: __("Time saver", "imageseo"),
+		mainContent: MAIN_CONTENT.ON_UPLOAD_SETTINGS,
+		icon: "icon-settings.svg",
 	},
 	{
 		key: TABS.BULK_OPTIMIZATION,
@@ -31,6 +40,7 @@ export default [
 		order: 1,
 		description: __("Improve your SEO", "imageseo"),
 		mainContent: MAIN_CONTENT.BULK_OPTIMIZATION,
+		icon: "icon-bulk.svg",
 	},
 	{
 		key: TABS.SOCIAL_CARD,
@@ -38,12 +48,6 @@ export default [
 		order: 1,
 		description: __("More url reshare", "imageseo"),
 		mainContent: MAIN_CONTENT.SOCIAL_CARD,
-	},
-	{
-		key: TABS.ON_UPLOAD_SETTINGS,
-		label: __("On Upload settings", "imageseo"),
-		order: 1,
-		description: __("Time saver", "imageseo"),
-		mainContent: MAIN_CONTENT.ON_UPLOAD_SETTINGS,
+		icon: "icon-social.svg",
 	},
 ];

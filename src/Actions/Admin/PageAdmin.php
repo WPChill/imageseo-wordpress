@@ -40,31 +40,6 @@ class PageAdmin
             [$this, 'pluginSettingsPage'],
            'dashicons-imageseo-logo'
         );
-
-        add_submenu_page(
-            Pages::SETTINGS,
-            __('Settings', 'imageseo'),
-            __('Settings', 'imageseo'),
-            'manage_options',
-            'imageseo-options',
-            [$this, 'pluginSettingsPage']
-        );
-        add_submenu_page(
-            Pages::SETTINGS,
-            __('Alt & Name Optimizer', 'imageseo'),
-            __('Alt & Name Optimizer', 'imageseo'),
-            'manage_options',
-            'imageseo-optimization',
-            [$this, 'optimizationPage']
-        );
-        add_submenu_page(
-            Pages::SETTINGS,
-            __('Social Card Optimizer', 'imageseo'),
-            __('Social Card Optimizer', 'imageseo'),
-            'manage_options',
-            'imageseo-social-media',
-            [$this, 'socialMedia']
-        );
     }
 
     public function menuOrderCount()
@@ -80,29 +55,6 @@ class PageAdmin
      */
     public function pluginSettingsPage()
     {
-        $this->owner = $this->clientServices->getOwnerByApiKey();
-
-        if (isset($_GET['tab'])) { // phpcs:ignore
-            $this->tab_active = sanitize_text_field(wp_unslash($_GET['tab'])); // phpcs:ignore
-        }
-
-        $this->options = $this->optionServices->getOptions();
-        $this->languages = $this->clientServices->getLanguages();
         include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/settings.php';
-    }
-
-    public function optimizationPage()
-    {
-        $this->owner = $this->clientServices->getOwnerByApiKey();
-        $this->languages = $this->clientServices->getLanguages();
-        $this->options = $this->optionServices->getOptions();
-        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/optimization.php';
-    }
-
-    public function socialMedia()
-    {
-        $this->owner = $this->clientServices->getOwnerByApiKey();
-        $this->options = $this->optionServices->getOptions();
-        include_once IMAGESEO_TEMPLATES_ADMIN_PAGES . '/social-media.php';
     }
 }

@@ -16,6 +16,8 @@ module.exports = {
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		"admin-css": "./app/styles/admin.scss",
 		"admin-global-css": "./app/styles/admin-global.scss",
+		application: "./app/react/modules/index.tsx",
+		"imageseo-tw": "./app/styles/index.css",
 	},
 	output: {
 		path: __dirname + "/dist",
@@ -24,6 +26,15 @@ module.exports = {
 	mode: env,
 	module: {
 		rules: [
+			{
+				test: /\.ts(x?)$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: "ts-loader",
+					},
+				],
+			},
 			{
 				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
@@ -63,6 +74,16 @@ module.exports = {
 					{
 						loader: "sass-loader",
 					},
+				],
+			},
+			{
+				test: /\.css$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					"css-loader?url=false",
+					"postcss-loader",
 				],
 			},
 		],

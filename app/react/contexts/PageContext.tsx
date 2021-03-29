@@ -55,7 +55,7 @@ export const PageContextProvider = ({ children }) => {
 		MAIN_CONTENT.OVERVIEW
 	);
 
-	const [pageTitle, setPageTitle] = useState("");
+	const [pageTitle, setPageTitle] = useState(getItemTab(TABS.OVERVIEW).label);
 	const [apiKey, setApiKey] = useState(getApiKey());
 	const [params, setParams] = useState(null);
 

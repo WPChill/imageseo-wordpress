@@ -53,7 +53,7 @@ class Enqueue
             return;
         }
 
-        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/admin.css', [], IMAGESEO_VERSION);
+        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/imageseo-tw.css', [], IMAGESEO_VERSION);
     }
 
     /**
@@ -71,13 +71,30 @@ class Enqueue
             wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
         }
 
-        if (in_array($page, ['image-seo_page_imageseo-optimization', 'image-seo_page_imageseo-social-media'], true)) {
-            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/bulk.js', ['jquery', 'wp-i18n'], IMAGESEO_VERSION, true);
-        }
-
         if (in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {
-            wp_enqueue_script('imageseo-admin-register-js', IMAGESEO_URL_DIST . '/register.js', ['jquery'], IMAGESEO_VERSION, true);
-            wp_enqueue_script('imageseo-admin-api-key-js', IMAGESEO_URL_DIST . '/api-key.js', ['jquery'], IMAGESEO_VERSION, true);
+            $owner = imageseo_get_service('ClientApi')->getOwnerByApiKey();
+            $options = imageseo_get_service('Option')->getOptions();
+            $languages = imageseo_get_service('ClientApi')->getLanguages();
+
+            $data = [
+                'API_KEY'                        => imageseo_get_option('api_key'),
+                'API_URL'                        => IMAGESEO_API_URL,
+                'APP_URL'                        => IMAGESEO_APP_URL,
+                'ADMIN_URL_PAGE_MONITORS'        => admin_url('options-general.php?page=' . Pages::SETTINGS),
+                'URL_DIST'                       => IMAGESEO_URL_DIST,
+                'ADMIN_AJAX'                     => admin_url('admin-ajax.php'),
+                'USER'                           => $owner,
+                'OPTIONS'                        => $options,
+                'LANGUAGES'                      => $languages,
+            ];
+
+            wp_register_script('imageseo-application', IMAGESEO_URL_DIST . '/application.js', ['wp-i18n'], IMAGESEO_VERSION, true);
+            wp_enqueue_script('imageseo-application');
+
+            if (function_exists('wp_set_script_translations')) {
+                wp_set_script_translations('imageseo-application', 'imageseo', IMAGESEO_LANGUAGES);
+            }
+            wp_localize_script('imageseo-application', 'IMAGESEO_DATA', $data);
         }
 
         if (in_array($page, ['post.php'], true)) {

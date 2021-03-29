@@ -1,9 +1,8 @@
 module.exports = {
 	plugins: [
-		require("autoprefixer")({
-			browsers: ["last 8 versions", "not ie <= 8"]
-		})
-	]
+		require("postcss-import"),
+		require("tailwindcss"),
+		require("postcss-nested"),
+		require("autoprefixer"),
+	],
 };
-
-

@@ -18,39 +18,27 @@ const SCMain = styled.div`
 	border-radius: 8px;
 `;
 
-const SCMainHeader = styled.header`
-	display: flex;
-	align-items-center;
-	padding-bottom: 32px;
-	border-bottom: 1px solid var(--theme-ui-grey);
-	h2 {
-		font-size: 24px;
-		color:var(--black-dark);
-		margin:0;
-	}
-`;
-
 function Main() {
 	const pageTitle = usePageTitle();
 	const mainContentSelected = useMainContentSelected();
 
 	return (
 		<SCMain>
-			<SCMainHeader>
-				<h2>
-					<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
-				</h2>
-			</SCMainHeader>
+			<h2 className="font-bold text-xl border-b pb-4">
+				<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
+			</h2>
 
-			{(() => {
-				switch (mainContentSelected) {
-					case MAIN_CONTENT.OVERVIEW:
-						return <Overview />;
+			<div className="py-4">
+				{(() => {
+					switch (mainContentSelected) {
+						case MAIN_CONTENT.OVERVIEW:
+							return <Overview />;
 
-					default:
-						return null;
-				}
-			})()}
+						default:
+							return null;
+					}
+				})()}
+			</div>
 		</SCMain>
 	);
 }

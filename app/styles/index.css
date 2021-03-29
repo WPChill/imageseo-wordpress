@@ -1,0 +1,7 @@
+img {
+	border: 0;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

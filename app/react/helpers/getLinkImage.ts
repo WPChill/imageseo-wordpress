@@ -1,5 +1,5 @@
 export const getLinkImage = (src: string): string =>
 	//@ts-ignore
-	`${IMAGESEO.URL_DIST}/images/${src}`;
+	`${IMAGESEO_DATA.URL_DIST}/images/${src}`;
 
 export default getLinkImage;

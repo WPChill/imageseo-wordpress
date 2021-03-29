@@ -71,7 +71,7 @@ function SideNavigation() {
 	return (
 		<SCTabContainer>
 			<div
-				className="d-flex align-items-center justify-content-center"
+				className="flex items-center justify-center"
 				style={{
 					paddingTop: 16,
 					paddingBottom: 16,
@@ -90,7 +90,7 @@ function SideNavigation() {
 						isActive={isActive}
 						onClick={() => actions.setTabSelected(item.key)}
 					>
-						<SCTabIndicator isActive={isActive} />
+						<SCTabIcon src={getLinkImage(item.icon)} width={20} />
 						<SCTabContent>
 							<p
 								style={{
