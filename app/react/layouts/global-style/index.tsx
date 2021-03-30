@@ -44,6 +44,16 @@ const GlobalStyle = createGlobalStyle`
 		--shadow-border: 0 0 0 1px rgba(89, 105, 128, 0.1),
 			0 1px 3px 0 rgba(89, 105, 128, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 	}
+
+	@keyframes imageseo-loading {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
 `;
 
 export default GlobalStyle;

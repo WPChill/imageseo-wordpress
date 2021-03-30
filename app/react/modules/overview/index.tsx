@@ -1,14 +1,27 @@
-import React, { useState, useContext, useEffect, Suspense } from "react";
-import { isNull, get, isEmpty } from "lodash";
-import Swal from "sweetalert2";
-import styled from "styled-components";
-import getApiKey from "../../helpers/getApiKey";
+import { isEmpty } from "lodash";
+import React, { useState, useContext, Suspense } from "react";
 import { AlertSimple, IconsAlert } from "../../components/Alerts/Simple";
+import FormRegister from "../../components/Forms/Register";
+import FormValidateApiKey from "../../components/Forms/ValidateApiKey";
+import { PageContext } from "../../contexts/PageContext";
+import getApiKey from "../../helpers/getApiKey";
+import useOwner from "../../hooks/useOwner";
 
 //@ts-ignore
 const { __ } = wp.i18n;
 
-function Overview() {
+const OverviewConnected = () => {
+	const user = useOwner();
+	console.log(user);
+
+	return <div>hello</div>;
+};
+
+const Overview = () => {
+	const {
+		values: { apiKey },
+	} = useContext(PageContext);
+
 	return (
 		<>
 			<AlertSimple icon={IconsAlert.INFORMATION} blue>
@@ -27,25 +40,41 @@ function Overview() {
 					)}
 				</p>
 			</AlertSimple>
-			{/* {!isEmpty(getApiKey()) && (
-				<SCContainerSideOverview>
-					<Suspense
-						fallback={
-							<div className="mt-10">
-								<Skeleton />
-								<Skeleton />
+			<div className="mt-4 grid grid-cols-6 gap-16">
+				<div className="col-span-4 border-r pr-16">
+					{isEmpty(getApiKey()) && (
+						<>
+							<div className=" pb-2 mb-4">
+								<h2 className="font-bold text-xl">
+									{__("Create an account", "imageseo")} -{" "}
+									<span className="font-bold text-indigo-500 text-lg">
+										{__("It's free", "imageseo")}
+									</span>
+								</h2>
 							</div>
-						}
-					>
-						<div className="mb-15">
-							<AccountInfoSuspense />
-						</div>
-						<ValidateApiKey alignButton={false} />
-					</Suspense>
-				</SCContainerSideOverview>
-			)} */}
+							<FormRegister />
+						</>
+					)}
+
+					{!isEmpty(getApiKey()) && (
+						<Suspense fallback={<div className="mt-10">Hello</div>}>
+							<OverviewConnected />
+						</Suspense>
+					)}
+				</div>
+				<div className="col-span-2">
+					<div className=" pb-2 mb-4">
+						<h2 className="font-bold text-xl">
+							{isEmpty(apiKey) &&
+								__("You already have a Key API?", "imageseo")}
+							{!isEmpty(apiKey) && __("Your API Key", "imageseo")}
+						</h2>
+					</div>
+					<FormValidateApiKey />
+				</div>
+			</div>
 		</>
 	);
-}
+};
 
 export default Overview;

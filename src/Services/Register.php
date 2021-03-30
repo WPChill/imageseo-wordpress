@@ -20,12 +20,15 @@ class Register
                 'Content-Type' => 'application/json',
             ],
             'body' => json_encode([
-                'email'      => $email,
-                'password'   => $password,
-                'wp_url'     => site_url(),
-                'withProject'=> true,
-                'name'       => get_bloginfo('name'),
-                'optins'     => 'terms',
+                'firstname'       => isset($options['firstname']) ? $options['firstname'] : '',
+                'lastname'        => isset($options['lastname']) ? $options['lastname'] : '',
+                'newsletters'     => isset($options['newsletters']) ? $options['newsletters'] : false,
+                'email'           => $email,
+                'password'        => $password,
+                'wp_url'          => site_url(),
+                'withProject'     => true,
+                'name'            => get_bloginfo('name'),
+                'optins'          => 'terms',
             ]),
         ]);
 

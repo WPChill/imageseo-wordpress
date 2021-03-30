@@ -1,6 +1,6 @@
 import React from "react";
 
-export const SVGEyeClosed = ({ style = {} }) => {
+export const SVGEyeClosed = ({ style = {}, className = "" }) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -8,6 +8,7 @@ export const SVGEyeClosed = ({ style = {} }) => {
 			height="24"
 			viewBox="0 0 24 24"
 			style={style}
+			className={className}
 		>
 			<path
 				fill="#000000"

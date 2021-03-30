@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TABS from "../../constants/app-tabs";
 import { PageContext, useTabSelected } from "../../contexts/PageContext";
 import getLinkImage from "../../helpers/getLinkImage";
+import classNames from "classnames";
 
 interface Props {
 	readonly isActive?: boolean;
@@ -18,12 +19,6 @@ const SCTab = styled.div<Props>`
 		justify-content: flex-start;
 	}
 	border-left: 2px solid transparent;
-	${({ isActive }) =>
-		isActive &&
-		`border-left-color: var(--blue);
-		background-color:#fff;
-	cursor: pointer;`}
-
 	border-bottom: 1px solid #f1f1f1;
 	&:first-child {
 		border-top: 1px solid #f1f1f1;
@@ -88,6 +83,12 @@ function SideNavigation() {
 					<SCTab
 						key={`tab_${item.key}`}
 						isActive={isActive}
+						className={classNames(
+							{
+								"border-blue-500 bg-white": isActive,
+							},
+							"border-l-2 border-transparent"
+						)}
 						onClick={() => actions.setTabSelected(item.key)}
 					>
 						<SCTabIcon src={getLinkImage(item.icon)} width={20} />

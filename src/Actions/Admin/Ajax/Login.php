@@ -6,11 +6,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Register
+class Login
 {
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_register', [$this, 'register']);
+        add_action('wp_ajax_imageseo_login', [$this, 'login']);
     }
 
     public function register()
@@ -22,7 +22,14 @@ class Register
             exit;
         }
 
-        if (!isset($_POST['email'], $_POST['password'], $_POST['lastname'], $_POST['firstname'])) {
+        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'imageseo_login')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
+        if (!isset($_POST['email']) || !isset($_POST['password'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
             ]);
@@ -30,14 +37,10 @@ class Register
         }
 
         $email = sanitize_email($_POST['email']);
-        $password = (string) $_POST['password'];
+        $password = sanitize_text_field($_POST['password']);
 
         try {
-            $newUser = imageseo_get_service('Register')->register($email, $password, [
-                'firstname'    => sanitize_text_field($_POST['firstname']),
-                'lastname'     => sanitize_text_field($_POST['lastname']),
-                'newsletters'  => isset($_POST['newsletters']) && 'true' === $_POST['newsletters'],
-            ]);
+            $newUser = $this->registerService->login($email, $password);
         } catch (\Exception $e) {
             wp_send_json_error([
                 'code' => 'unknown_error',
@@ -47,7 +50,7 @@ class Register
 
         if (null === $newUser) {
             wp_send_json_error([
-                'code' => 'unknown_error',
+                'code' => 'no_user',
             ]);
         }
 

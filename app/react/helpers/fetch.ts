@@ -24,11 +24,11 @@ export const fetchAdminPost = () =>
 	async function (...args) {
 		const url = first(args);
 		const formData = new FormData();
-		formData.append("action", "wp_health_proxy");
+		formData.append("action", "imageseo_proxy");
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#_nonce_wp_health_proxy")
+				.querySelector("#_nonce_imageseo_proxy")
 				.getAttribute("value")
 		);
 

@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { getProjectOwnerPath } from "../services/api/project";
 
 const useOwner = () => {
-	const { data, error } = useSWR(getProjectOwnerPath(), {
+	const { data } = useSWR(getProjectOwnerPath(), {
 		suspense: true,
 	});
 
@@ -22,7 +22,7 @@ const useOwner = () => {
 		return null;
 	}
 
-	return dataResult;
+	return get(dataResult, "result", {});
 };
 
 export default useOwner;

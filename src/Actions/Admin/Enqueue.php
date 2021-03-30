@@ -82,6 +82,7 @@ class Enqueue
                 'APP_URL'                        => IMAGESEO_APP_URL,
                 'ADMIN_URL_PAGE_MONITORS'        => admin_url('options-general.php?page=' . Pages::SETTINGS),
                 'URL_DIST'                       => IMAGESEO_URL_DIST,
+                'SITE_URL'                       => IMAGESEO_SITE_URL,
                 'ADMIN_AJAX'                     => admin_url('admin-ajax.php'),
                 'USER'                           => $owner,
                 'OPTIONS'                        => $options,
