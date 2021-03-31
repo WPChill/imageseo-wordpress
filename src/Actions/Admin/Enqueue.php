@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use ImageSeoWP\Helpers\AltFormat;
+use ImageSeoWP\Helpers\Bulk\AltSpecification;
 use ImageSeoWP\Helpers\Pages;
 
 class Enqueue
@@ -87,6 +89,17 @@ class Enqueue
                 'USER'                           => $owner,
                 'OPTIONS'                        => $options,
                 'LANGUAGES'                      => $languages,
+                'NEXT_SCHEDULED'                 => $scheduled ? $scheduled : 'false',
+                'LIMIT_EXCEDEED'                 => imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : 0,
+                'CURRENT_PROCESSED'              => $currentProcessed ? wp_json_encode($currentProcessed) : 'null',
+                'IS_FINISH'                      => false !== get_option('_imageseo_bulk_is_finish') ? true : 0,
+                'LAST_PROCESSED'                 => $lastBulkProcess ? wp_json_encode($lastBulkProcess) : 'null',
+                'TOTAL_ALT_NO_OPTIMIZE'          => $totalAltNoOptimize,
+                'PERCENT_TRAFFIC_LOOSE'          => $percentLoose,
+                'LIMIT_IMAGES'                   => $limitImages,
+                'ALT_FORMATS'                    => AltFormat::getFormats(),
+                'ALT_SPECIFICATION'              => AltSpecification::getMetas(),
+                'ALT_FILL_TYPE'                  => AltSpecification::getFillType(),
             ];
 
             wp_register_script('imageseo-application', IMAGESEO_URL_DIST . '/application.js', ['wp-i18n'], IMAGESEO_VERSION, true);

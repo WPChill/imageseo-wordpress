@@ -8,6 +8,7 @@ import {
 } from "../../contexts/PageContext";
 import { MAIN_CONTENT } from "../../constants/app-tabs";
 import Overview from "../../modules/overview";
+import Bulk from "../../modules/bulk";
 
 const SCMain = styled.div`
 	width: 85%;
@@ -33,7 +34,8 @@ function Main() {
 					switch (mainContentSelected) {
 						case MAIN_CONTENT.OVERVIEW:
 							return <Overview />;
-
+						case MAIN_CONTENT.BULK_OPTIMIZATION:
+							return <Bulk />;
 						default:
 							return null;
 					}
