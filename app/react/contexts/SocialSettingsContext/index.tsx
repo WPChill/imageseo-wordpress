@@ -8,7 +8,7 @@ function reducer(state, { type, payload }) {
 		case "UPDATE_OPTION":
 			return {
 				...state,
-				[payload.key]: payload.value
+				[payload.key]: payload.value,
 			};
 		default:
 			return state;
@@ -20,45 +20,58 @@ const SocialSettingsContext = createContext(null);
 const SocialSettingsContextProvider = ({ children }) => {
 	const getInitialState = () => {
 		return {
+			//@ts-ignore
 			layout: get(IMAGESEO_DATA, "SETTINGS.layout", "CARD_LEFT"),
+			//@ts-ignore
 			textColor: get(IMAGESEO_DATA, "SETTINGS.textColor", "#000000"),
 			contentBackgroundColor: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.contentBackgroundColor",
 				"#ffffff"
 			),
+			//@ts-ignore
 			starColor: get(IMAGESEO_DATA, "SETTINGS.starColor", "#F8CA00"),
 			visibilitySubTitle: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.visibilitySubTitle",
 				true
 			),
 			visibilitySubTitleTwo: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.visibilitySubTitleTwo",
 				true
 			),
 			visibilityAvatar: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.visibilityAvatar",
 				true
 			),
 			visibilityRating: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.visibilityRating",
 				false
 			),
 			defaultBgImg: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.defaultBgImg",
-				`${IMAGESEO_URL_DIST}/images/default_image.png`
+				//@ts-ignore
+				`${IMAGESEO_DATA.URL_DIST}/images/default_image.png`
 			),
+			//@ts-ignore
 			textAlignment: get(IMAGESEO_DATA, "SETTINGS.textAlignment", "top"),
 			logoUrl: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"SETTINGS.logoUrl",
-				`${IMAGESEO_URL_DIST}/images/default_logo.png`
-			)
+				//@ts-ignore
+				`${IMAGESEO_DATA.URL_DIST}/images/default_logo.png`
+			),
 		};
 	};
 
@@ -68,7 +81,7 @@ const SocialSettingsContextProvider = ({ children }) => {
 		<SocialSettingsContext.Provider
 			value={{
 				state,
-				dispatch
+				dispatch,
 			}}
 		>
 			{children}

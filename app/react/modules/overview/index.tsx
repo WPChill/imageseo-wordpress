@@ -32,7 +32,7 @@ const OverviewConnected = () => {
 						</p>
 						<p className="text-sm font-bold mt-1">
 							{__(`We could certainly do it in`, `imageseo`)}{" "}
-							<strong>{data.string_time_estimated}</strong>.
+							{data.string_time_estimated}.
 						</p>
 					</AlertSimple>
 				)}

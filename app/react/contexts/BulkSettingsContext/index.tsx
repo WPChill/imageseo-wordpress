@@ -24,33 +24,42 @@ const BulkSettingsContextProvider = ({ children }) => {
 		return {
 			smallImages: false,
 			wantValidateResult: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.wantValidateResult",
 				false
 			),
 			language: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.language",
+				//@ts-ignore
 				IMAGESEO_DATA.OPTIONS.default_language_ia
 			),
 			optimizeAlt: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.optimizeAlt",
 				false
 			),
 			formatAlt: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.formatAlt",
 				null
 			),
 			formatAltCustom: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.formatAltCustom",
 				""
 			),
+			//@ts-ignore
 			altFilter: find(IMAGESEO_DATA.ALT_SPECIFICATION, { id: "ALL" }).id,
+			//@ts-ignore
 			altFill: find(IMAGESEO_DATA.ALT_FILL_TYPE, { id: "FILL_ALL" }).id,
 			optimizeFile: get(
+				//@ts-ignore
 				IMAGESEO_DATA,
 				"CURRENT_PROCESSED.settings.optimizeFile",
 				false

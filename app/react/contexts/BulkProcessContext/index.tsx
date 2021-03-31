@@ -65,7 +65,9 @@ const BulkProcessContext = createContext(null);
 const BulkProcessContextProvider = ({ children }) => {
 	let initState = {
 		...initialState,
+		//@ts-ignore
 		currentProcess: get(IMAGESEO_DATA, "CURRENT_PROCESSED", null),
+		//@ts-ignore
 		lastProcess: get(IMAGESEO_DATA, "LAST_PROCESSED", null),
 	};
 	if (!isNil(initState.currentProcess)) {
