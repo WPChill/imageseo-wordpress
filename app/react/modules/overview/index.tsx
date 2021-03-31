@@ -1,20 +1,45 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isNull } from "lodash";
 import React, { useState, useContext, Suspense } from "react";
 import { AlertSimple, IconsAlert } from "../../components/Alerts/Simple";
 import FormRegister from "../../components/Forms/Register";
 import FormValidateApiKey from "../../components/Forms/ValidateApiKey";
+import OverviewCountImages from "../../components/OverviewCountImages";
 import { PageContext } from "../../contexts/PageContext";
 import getApiKey from "../../helpers/getApiKey";
-import useOwner from "../../hooks/useOwner";
+import useCountImages from "../../hooks/useCountImages";
+import useOptimizedTimeEstimated from "../../hooks/useOptimizedTimeEstimated";
 
 //@ts-ignore
 const { __ } = wp.i18n;
 
 const OverviewConnected = () => {
-	const user = useOwner();
-	console.log(user);
+	const data = useOptimizedTimeEstimated();
 
-	return <div>hello</div>;
+	return (
+		<>
+			<div className="mb-4">
+				{!isNull(data) && (
+					<AlertSimple yellow icon={IconsAlert.EXCLAMATION}>
+						<p className="text-sm">
+							{__(
+								`Estimated time if you had to fill out your alternative texts and manually rewrite your file names`,
+								`imageseo`
+							)}{" "}
+							<strong>
+								{data.minutes_by_human}{" "}
+								{__("minutes", "imageseo")}.
+							</strong>
+						</p>
+						<p className="text-sm font-bold mt-1">
+							{__(`We could certainly do it in`, `imageseo`)}{" "}
+							<strong>{data.string_time_estimated}</strong>.
+						</p>
+					</AlertSimple>
+				)}
+			</div>
+			<OverviewCountImages />
+		</>
+	);
 };
 
 const Overview = () => {

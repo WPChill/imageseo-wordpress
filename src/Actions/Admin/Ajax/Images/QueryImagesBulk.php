@@ -1,6 +1,6 @@
 <?php
 
-namespace ImageSeoWP\Actions\Admin\Ajax;
+namespace ImageSeoWP\Actions\Admin\Ajax\Images;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use ImageSeoWP\Helpers\Bulk\AltSpecification;
 
-class QueryImages
+class QueryImagesBulk
 {
     public function __construct()
     {
@@ -53,9 +53,9 @@ class QueryImages
 
         switch ($options['alt_fill']) {
             case AltSpecification::FILL_ONLY_EMPTY:
-                $sqlQuery .= "AND ( 
-                    ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' ) 
-                    OR 
+                $sqlQuery .= "AND (
+                    ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' )
+                    OR
                     pmOnlyEmpty2.post_id IS NULL
                   )  ";
                 break;
@@ -85,8 +85,8 @@ class QueryImages
             AND pm.meta_key = '_thumbnail_id'
         ) ";
         $sqlQuery .= "LEFT JOIN {$wpdb->postmeta} pm2 ON (
-            pm.meta_value = pm2.post_id 
-            AND pm2.meta_key = '_wp_attached_file' 
+            pm.meta_value = pm2.post_id
+            AND pm2.meta_key = '_wp_attached_file'
             AND pm2.meta_value IS NOT NULL
         ) ";
 
@@ -102,9 +102,9 @@ class QueryImages
 
         switch ($options['alt_fill']) {
             case AltSpecification::FILL_ONLY_EMPTY:
-                $sqlQuery .= "AND ( 
-                    ( pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty2.meta_value = '' ) 
-                    OR 
+                $sqlQuery .= "AND (
+                    ( pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty2.meta_value = '' )
+                    OR
                     pmOnlyEmpty2.post_id IS NULL
                   )  ";
                 break;
