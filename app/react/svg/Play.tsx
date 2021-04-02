@@ -1,0 +1,38 @@
+import React from "react";
+
+export const SVGPlay = ({ className = "" }) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		className={className}
+	>
+		<defs>
+			<filter id="5kmcvuojxa">
+				<feColorMatrix
+					in="SourceGraphic"
+					values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"
+				/>
+			</filter>
+		</defs>
+		<g fill="none" fill-rule="evenodd">
+			<g>
+				<g>
+					<g>
+						<g
+							filter="url(#5kmcvuojxa)"
+							transform="translate(-755 -443) translate(32 394) translate(707 41) translate(16 8)"
+						>
+							<path
+								stroke="#00081A"
+								stroke-width="2"
+								d="M7 4.832l11.07 7.116L7 19.168V4.832z"
+							/>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</svg>
+);

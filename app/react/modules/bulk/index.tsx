@@ -22,7 +22,7 @@ const Bulk = () => {
 							null
 						),
 						//@ts-ignore
-						user_infos: get(IMAGESEO_DATA, "USER_INFOS", null),
+						user_infos: get(IMAGESEO_DATA, "USER", null),
 						//@ts-ignore
 						limit_images: get(IMAGESEO_DATA, "LIMIT_IMAGES", null),
 					}}

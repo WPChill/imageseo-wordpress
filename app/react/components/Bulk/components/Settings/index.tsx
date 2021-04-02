@@ -11,7 +11,7 @@ function BulkSettings() {
 
 	return (
 		<>
-			<div className="shadow rounded-md overflow-hidden mt-4">
+			<div className="shadow rounded-md overflow-hidden">
 				<div className="bg-white py-6 px-4 p-6">
 					<div>
 						<h2 className="text-lg leading-6 font-medium text-blue-900">

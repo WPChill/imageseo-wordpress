@@ -8,7 +8,6 @@ const { __ } = wp.i18n;
 import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
 import BulkSettings from "../Settings";
 import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
-import { canLaunchBulk } from "../../../../services/bulk";
 import { UserContext } from "../../../../contexts/UserContext";
 import queryImages from "../../../../services/ajax/query-images";
 import { getImagesLeft } from "../../../../services/user";
@@ -59,16 +58,6 @@ const BulkPrepare = () => {
 
 	// Start a new bulk
 	const handleStartBulk = async () => {
-		if (!canLaunchBulk(settings)) {
-			Swal.fire({
-				title: "Oups !",
-				text: __("Please select at least one optimization", "imageseo"),
-				icon: "info",
-				confirmButtonText: "Close",
-			});
-			return;
-		}
-
 		if (get(state, "allIds", []).length === 0) {
 			Swal.fire({
 				title: __("Oups !", "imageseo"),
@@ -130,47 +119,92 @@ const BulkPrepare = () => {
 				</p>
 			</AlertSimple>
 
-			<BulkSettings />
-			<div>
-				<h3>
-					{__("Forecast: with your current settings", "imageseo")}{" "}
-					{state.allIds.length}{" "}
-					{__("images will be optimized.", "imageseo")}
-				</h3>
-				<p>
-					{__("You have", "imageseo")} {userImagesLeft}{" "}
-					{__("credit(s) left in your account.", "imageseo")}{" "}
-				</p>
-				{get(state, "allIdsOptimized", []).length > 0 && (
-					<p>
-						{get(state, "allIdsOptimized", []).length}{" "}
-						{__(
-							"optimizations have already been done!",
-							"imageseo"
-						)}
-					</p>
-				)}
-				{!state.bulkActive && (
-					<button
-						style={{ marginRight: 15 }}
-						disabled={state.bulkActive}
-						onClick={handleStartBulk}
-					>
-						{__("Start a new bulk optimization", "imageseo")}
-					</button>
-				)}
-				{numberCreditsNeed > userImagesLeft && (
-					<button
-						onClick={() => {
-							window.open(
-								"https://app.imageseo.io/plan",
-								"_blank"
-							);
-						}}
-					>
-						{__("Get more credits", "imageseo")}
-					</button>
-				)}
+			<div className="grid grid-cols-5 gap-4 mt-4">
+				<div className="col-span-3">
+					<BulkSettings />
+					{!state.bulkActive && (
+						<div className="text-center">
+							<button
+								disabled={state.bulkActive}
+								onClick={handleStartBulk}
+								className="inline-block items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 mx-auto"
+							>
+								{__(
+									"Start a new bulk optimization",
+									"imageseo"
+								)}
+							</button>
+						</div>
+					)}
+				</div>
+				<div className="col-span-2">
+					<div className="shadow rounded-md overflow-hidden">
+						<div className="bg-white py-6 px-4 p-6">
+							<h3 className="font-bold text-lg">
+								{__(
+									"Forecast: with your current settings",
+									"imageseo"
+								)}{" "}
+								{state.allIds.length}{" "}
+								{__("images will be optimized.", "imageseo")}
+							</h3>
+							{userImagesLeft < 10 && (
+								<div className="my-2">
+									<AlertSimple
+										yellow
+										icon={IconsAlert.EXCLAMATION}
+									>
+										<p className="text-sm">
+											{__("You have", "imageseo")}{" "}
+											<strong>{userImagesLeft} </strong>
+											{__(
+												"credit(s) left in your account.",
+												"imageseo"
+											)}{" "}
+										</p>
+									</AlertSimple>
+								</div>
+							)}
+							{userImagesLeft >= 10 && (
+								<p className="text-sm mt-2">
+									{__("You have", "imageseo")}{" "}
+									<strong>{userImagesLeft} </strong>
+									{__(
+										"credit(s) left in your account.",
+										"imageseo"
+									)}{" "}
+								</p>
+							)}
+
+							{get(state, "allIdsOptimized", []).length > 0 && (
+								<p className="text-sm mt-2">
+									<strong>
+										{
+											get(state, "allIdsOptimized", [])
+												.length
+										}{" "}
+									</strong>
+									{__(
+										"optimizations have already been done!",
+										"imageseo"
+									)}
+								</p>
+							)}
+
+							{numberCreditsNeed > userImagesLeft && (
+								<div className="text-center">
+									<a
+										className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4"
+										href="https://app.imageseo.io/plan"
+										target="_blank"
+									>
+										{__("Get more credits", "imageseo")}
+									</a>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
 			</div>
 		</>
 	);

@@ -78,6 +78,18 @@ class Enqueue
             $options = imageseo_get_service('Option')->getOptions();
             $languages = imageseo_get_service('ClientApi')->getLanguages();
 
+            $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
+            $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
+            $currentProcessed = get_option('_imageseo_bulk_process_settings');
+            $lastBulkProcess = get_option('_imageseo_pause_bulk_process');
+
+            $limitImages = 10;
+            if (null !== $owner && isset($owner['plan']['limit_images'])) {
+                $limitImages = $owner['plan']['limit_images'] + $owner['bonus_stock_images'];
+            }
+
+            $scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+
             $data = [
                 'API_KEY'                        => imageseo_get_option('api_key'),
                 'API_URL'                        => IMAGESEO_API_URL,
@@ -91,10 +103,10 @@ class Enqueue
                 'OPTIONS'                        => $options,
                 'LANGUAGES'                      => $languages,
                 'NEXT_SCHEDULED'                 => $scheduled ? $scheduled : false,
-                'LIMIT_EXCEDEED'                 => imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : 0,
-                'CURRENT_PROCESSED'              => $currentProcessed ? wp_json_encode($currentProcessed) : null,
-                'IS_FINISH'                      => false !== get_option('_imageseo_bulk_is_finish') ? true : 0,
-                'LAST_PROCESSED'                 => $lastBulkProcess ? wp_json_encode($lastBulkProcess) : null,
+                'LIMIT_EXCEDEED'                 => imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : false,
+                'CURRENT_PROCESSED'              => $currentProcessed ? $currentProcessed : null,
+                'IS_FINISH'                      => false !== get_option('_imageseo_bulk_is_finish') ? true : false,
+                'LAST_PROCESSED'                 => $lastBulkProcess ? $lastBulkProcess : null,
                 'TOTAL_ALT_NO_OPTIMIZE'          => $totalAltNoOptimize,
                 'PERCENT_TRAFFIC_LOOSE'          => $percentLoose,
                 'LIMIT_IMAGES'                   => $limitImages,

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import Swal from "sweetalert2";
 import { get, isNil, isNaN } from "lodash";
+import { fromUnixTime } from "date-fns";
+import { differenceInSeconds } from "date-fns/esm";
 
 //@ts-ignore
 const { __ } = wp.i18n;
@@ -14,203 +15,7 @@ import {
 	stopCurrentProcess,
 } from "../../../../services/ajax/current-bulk";
 import useOnClickOutside from "../../../../hooks/useOnClickOutside";
-import { fromUnixTime } from "date-fns";
-import { differenceInSeconds } from "date-fns/esm";
-
-const SCContainerProcess = styled.div`
-	padding: 32px;
-	border-radius: 8px;
-	border: solid 1px #2b68d9;
-	border-color: ${
-		//@ts-ignore
-		({ finish, limitExcedeed }) => {
-			if (limitExcedeed) {
-				return `#fa7455`;
-			}
-			if (finish) {
-				return `#27c166`;
-			}
-			return `#2b68d9`;
-		}
-	};
-	background-color: #fafafc;
-	position: relative;
-	z-index: 3;
-	&:after {
-		position: absolute;
-		content: "";
-		z-index: 1;
-		height: 100%;
-		opacity: 0.1;
-		background-color: ${
-			//@ts-ignore
-			({ finish, limitExcedeed }) => {
-				if (limitExcedeed) {
-					return `#fa7455`;
-				}
-				if (finish) {
-					return `#27c166`;
-				}
-				return `#2b68d9`;
-			}
-		};
-		width: ${
-			//@ts-ignore
-			({ percent }) => Number(percent).toFixed(0)
-		}%;
-		top: 0;
-		left: 0;
-		border-top-left-radius: 8px;
-		border-bottom-left-radius: 8px;
-	}
-	h2 {
-		margin: 0 0 8px;
-		font-size: 24px;
-		font-weight: bold;
-		color: #001f59;
-		display: flex;
-		align-items: center;
-		img {
-			margin-left: 10px;
-		}
-	}
-	.infos__images {
-		font-size: 14px;
-		color: #001f59;
-	}
-	.progress__bar {
-		width: 100%;
-		height: 8px;
-		border-radius: 15px;
-		background-color: #dadae0;
-		overflow: hidden;
-		&--content {
-			height: 8px;
-			border-top-left-radius: 15px;
-			border-bottom-left-radius: 15px;
-
-			background-color: ${
-				//@ts-ignore
-				({ finish, limitExcedeed }) => {
-					if (limitExcedeed) {
-						return `#fa7455`;
-					}
-					if (finish) {
-						return `#27c166`;
-					}
-					return `#2b68d9`;
-				}
-			};
-			width: ${
-				//@ts-ignore
-				({ percent }) => {
-					//@ts-ignore
-					if (Number(percent).toFixed(0) === 0) {
-						return 0;
-					}
-					return `calc(${Number(percent).toFixed(0)}% + 32px)`;
-				}
-			};
-		}
-	}
-	.actions {
-		display: flex;
-		align-items: center;
-		position: absolute;
-		top: 32px;
-		right: 32px;
-		z-index: 5;
-		> div {
-			margin-right: 16px;
-		}
-	}
-	.btn__action {
-		font-size: 14px;
-		font-weight: bold;
-		text-align: center;
-		border: 1px solid #d5d9dc;
-		padding: 0px 16px;
-		height: 40px;
-		box-sizing: border-box;
-		color: #00081a;
-		border-radius: 4px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #fff;
-		&--reload {
-			display: flex;
-			align-items: center;
-		}
-		&:hover {
-			cursor: pointer;
-			background-color: #fafafa;
-		}
-	}
-`;
-
-const SCContainerModal = styled.div`
-	h2 {
-		font-size: 24px;
-		font-weight: bold;
-		text-align: center;
-		color: #00081a;
-	}
-	.item__image {
-		display: flex;
-		align-items: center;
-		margin-bottom: 32px;
-		img {
-			width: 64px;
-			height: 64px;
-			margin-right: 16px;
-		}
-		p {
-			margin: 0;
-		}
-		&--filename {
-			font-size: 14px;
-			color: #5b2222;
-			margin-bottom: 4px;
-		}
-		&--alt {
-			font-size: 16px;
-			color: #00081a;
-		}
-	}
-`;
-
-const SCFinishProcess = styled.div`
-	padding: 32px;
-	border-radius: 8px;
-	border: solid 1px #00081a;
-	background-color: #fafafc;
-	position: relative;
-	z-index: 3;
-	margin-bottom: 50px;
-	p {
-		font-size: 16px;
-	}
-	.btn__view {
-		font-size: 14px;
-		font-weight: bold;
-		text-align: center;
-		border: 1px solid #d5d9dc;
-		padding: 0px 16px;
-		height: 40px;
-		box-sizing: border-box;
-		color: #00081a;
-		border-radius: 4px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #fff;
-		&:hover {
-			cursor: pointer;
-			background-color: #fafafa;
-		}
-	}
-`;
+import { SVGPause } from "../../../../svg/Pause";
 
 // const ModalCurrentResults = ({ onClickClose, state }) => {
 // 	const ref = useRef(null);
@@ -437,50 +242,25 @@ const BulkInProcess = () => {
 					state={state}
 				/>
 			)} */}
-			<SCContainerProcess
-				//@ts-ignore
-				percent={percent}
-				finish={state.bulkIsFinish}
-				limitExcedeed={limitExcedeed}
-			>
-				<h2>
-					{__("Bulk optimization in progress", "imageseo")}{" "}
-					{!state.bulkIsFinish && !limitExcedeed && (
-						<img
-							//@ts-ignore
-							src={`${IMAGESEO_DATA.URL_DIST}/images/rotate-cw.svg`}
-							style={{
-								animation:
-									"imageseo-rotation 1s infinite linear",
-							}}
-						/>
-					)}
-				</h2>
-				{!isNaN(diffSeconds) &&
-					Number(diffSeconds) > 0 &&
-					Number(diffSeconds) < 60 && (
-						<p>
-							{__("Next process in few seconds", "imageseo")} (
-							{diffSeconds}s){" "}
-						</p>
-					)}
-				<p className="infos__images">
-					{total_ids_optimized} / {total_images} images{" "}
-					{!isNaN(percent) && <>- {percent}%</>}
-				</p>
-				{optimizeFilename && (
-					<p>{__("Optimize Filename: Yes", "imageseo")}</p>
-				)}
-				{optimizeAlt && (
-					<p>{__("Optimize Alternative text: Yes", "imageseo")}</p>
-				)}
-				<div className="progress__bar">
-					<div className="progress__bar--content"></div>
-				</div>
-				<div className="actions">
+			<div className="bg-white rounded-lg border max-w-5xl p-6">
+				<div className="flex">
+					<h2 className="text-base font-bold mb-2 flex items-center flex-1">
+						{!state.bulkIsFinish && !limitExcedeed && (
+							<img
+								//@ts-ignore
+								src={`${IMAGESEO_DATA.URL_DIST}/images/rotate-cw.svg`}
+								style={{
+									animation:
+										"imageseo-rotation 1s infinite linear",
+								}}
+								className="mr-4"
+							/>
+						)}
+						{__("Bulk optimization in progress", "imageseo")}{" "}
+					</h2>
 					{!state.bulkIsFinish && !limitExcedeed && (
 						<div
-							className="btn__action btn__action--reload"
+							className="inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer mr-4"
 							onClick={handleRefreshData}
 						>
 							{__("Click here for refresh data", "imageseo")}
@@ -497,25 +277,50 @@ const BulkInProcess = () => {
 							)}
 						</div>
 					)}
+				</div>
+
+				{!isNaN(diffSeconds) &&
+					Number(diffSeconds) > 0 &&
+					Number(diffSeconds) < 60 && (
+						<p className="text-sm mb-2">
+							{__("Next process in few seconds", "imageseo")} (
+							{diffSeconds}s){" "}
+						</p>
+					)}
+				<p className="text-sm font-bold">
+					{total_ids_optimized} / {total_images} images{" "}
+					{!isNaN(percent) && <>- {percent}%</>}
+				</p>
+
+				<div className="relative my-2">
+					<div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200">
+						<div
+							style={{
+								width: `${percent}%`,
+							}}
+							className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
+						></div>
+					</div>
+				</div>
+				<div className="flex items-center">
 					<div
-						className="btn__action"
+						className="inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer mr-4"
 						onClick={() => setIsOpen(true)}
 					>
 						{__("View results", "imageseo")}
 					</div>
 					{!state.bulkIsFinish && !limitExcedeed && (
-						<div className="btn__action" onClick={handleStopBulk}>
-							<img
-								//@ts-ignore
-								src={`${IMAGESEO_DATA.URL_DIST}/images/icon-pause.svg`}
-								alt=""
-							/>
+						<div
+							className="inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+							onClick={handleStopBulk}
+						>
+							<SVGPause className="mr-2 h-4 w-4" />
 							{__("Pause", "imageseo")}
 						</div>
 					)}
 				</div>
-			</SCContainerProcess>
-			{state.bulkIsFinish && (
+			</div>
+			{/* {state.bulkIsFinish && (
 				<>
 					<SCFinishProcess>
 						<p>{__("The process ended well.", "imageseo")}</p>
@@ -534,8 +339,12 @@ const BulkInProcess = () => {
 						</a>
 					</SCFinishProcess>
 				</>
+			)} */}
+			{limitExcedeed && (
+				<div className="mt-4">
+					<LimitExcedeed percent={percent} />
+				</div>
 			)}
-			{limitExcedeed && <LimitExcedeed percent={percent} />}
 		</>
 	);
 };

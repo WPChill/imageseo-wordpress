@@ -1,8 +1,5 @@
 import { get, isNull } from "lodash";
 
-function canLaunchBulk(settings) {
-	return settings.optimizeFile || settings.optimizeAlt;
-}
 
 function getAttachmentIdWithProcess(state) {
 	let currentProcess = get(state, "currentProcess", 0);
@@ -27,4 +24,4 @@ function getPercentBulk(currentProcess) {
 	return (countCurrent * 100) / currentProcess.bulk_process.total_images;
 }
 
-export { getAttachmentIdWithProcess, canLaunchBulk, getPercentBulk };
+export { getAttachmentIdWithProcess, getPercentBulk };
