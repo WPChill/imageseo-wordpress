@@ -4,6 +4,7 @@ import { AlertSimple, IconsAlert } from "../../components/Alerts/Simple";
 import FormRegister from "../../components/Forms/Register";
 import FormValidateApiKey from "../../components/Forms/ValidateApiKey";
 import OverviewCountImages from "../../components/OverviewCountImages";
+import SeoFact from "../../components/SeoFact";
 import { PageContext } from "../../contexts/PageContext";
 import getApiKey from "../../helpers/getApiKey";
 import useCountImages from "../../hooks/useCountImages";
@@ -49,22 +50,7 @@ const Overview = () => {
 
 	return (
 		<>
-			<AlertSimple icon={IconsAlert.INFORMATION} blue>
-				<p className="imageseo-mb-0">
-					<strong>
-						{__(
-							"SEO Fact : More than 20% of Google Organic Traffic comes from image searches",
-							"imageseo"
-						)}
-					</strong>
-				</p>
-				<p>
-					{__(
-						"Start optimizing your image alt texts and names and grow your traffic!",
-						"imageseo"
-					)}
-				</p>
-			</AlertSimple>
+			{isEmpty(getApiKey()) && <SeoFact />}
 			<div className="mt-4 grid grid-cols-6 gap-16">
 				<div className="col-span-4 border-r pr-16">
 					{isEmpty(getApiKey()) && (
@@ -82,8 +68,19 @@ const Overview = () => {
 					)}
 
 					{!isEmpty(getApiKey()) && (
-						<Suspense fallback={<div className="mt-10">Hello</div>}>
-							<OverviewConnected />
+						<Suspense
+							fallback={
+								<div className="mt-10">
+									Data is current loading
+								</div>
+							}
+						>
+							<>
+								<div className="mb-4">
+									<SeoFact />
+								</div>
+								<OverviewConnected />
+							</>
 						</Suspense>
 					)}
 				</div>

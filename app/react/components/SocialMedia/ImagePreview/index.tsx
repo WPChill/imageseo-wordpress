@@ -69,6 +69,7 @@ function SocialMediaImagePreview() {
 						backgroundPosition: "center center",
 						backgroundSize: "cover",
 						backgroundRepeat: "no-repeat",
+						maxHeight: 260,
 					}}
 				/>
 
@@ -116,11 +117,12 @@ function SocialMediaImagePreview() {
 					{settings.visibilityAvatar && (
 						<img
 							className="imageseo-media__content__avatar"
-							src={`${IMAGESEO_URL_DIST}/images/avatar-default.jpg`}
+							//@ts-ignore
+							src={`${IMAGESEO_DATA.URL_DIST}/images/avatar-default.jpg`}
 						/>
 					)}
 					{settings.visibilityRating && (
-						<div className="imageseo-media__content__stars">
+						<div className="imageseo-media__content__stars flex">
 							{stars.map((itm, key) => {
 								return (
 									<svg

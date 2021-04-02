@@ -28,3 +28,121 @@ img {
 		-webkit-transform: rotate(359deg);
 	}
 }
+
+.imageseo-media--open-graph {
+	width: 1200px;
+	height: 630px;
+}
+.imageseo-media--pinterest {
+	width: 1000px;
+	height: 1500px;
+}
+.imageseo-media--instagram {
+	width: 1080px;
+	height: 1920px;
+}
+.imageseo-media--instagram-square {
+	width: 1000px;
+	height: 1000px;
+}
+
+.imageseo-media--pinterest,
+.imageseo-media--instagram {
+	flex-direction: column !important;
+}
+
+.imageseo-media__container {
+	display: flex;
+}
+
+.imageseo-media__container__image {
+	flex: 2;
+}
+.imageseo-media__container__content {
+	flex: 1;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+}
+.imageseo-media__container__content--center {
+	justify-content: center;
+}
+.imageseo-media__container__content--center .imageseo-media__content__stars {
+	margin-top: initial;
+}
+.imageseo-media__container__content--bottom {
+	justify-content: flex-end;
+}
+.imageseo-media__container__content--bottom .imageseo-media__content__stars {
+	margin-top: initial;
+}
+.imageseo-media__container--open-graph {
+	width: 1200px;
+	height: 630px;
+}
+.imageseo-media__container--pinterest {
+	width: 1000px;
+	height: 1500px;
+}
+.imageseo-media__container--instagram {
+	width: 1080px;
+	height: 1920px;
+}
+.imageseo-media__container--instagram-square {
+	width: 1000px;
+	height: 1000px;
+}
+
+.imageseo-media__layout--card-left {
+	flex-direction: row;
+}
+
+.imageseo-media__layout--card-right {
+	flex-direction: row-reverse;
+}
+
+.imageseo-media__content__title {
+	font-size: 30px;
+	color: #000;
+	line-height: 1.2;
+	font-weight: bold;
+}
+
+.imageseo-media__content__logo {
+	max-height: 40px;
+	height: auto;
+	object-fit: contain;
+	object-position: left;
+	margin-bottom: 10px;
+}
+
+.imageseo-media__content__sub-title {
+	font-size: 20px;
+	color: #000;
+	line-height: 1.5;
+	padding-top: 15px;
+}
+
+.imageseo-media__content__sub-title-two {
+	color: rgba(0, 0, 0, 0.5);
+	font-size: 17px;
+	line-height: 1.5;
+	padding-top: 5px;
+}
+
+.imageseo-media__content__avatar {
+	max-height: 50px;
+	width: 50px;
+	height: auto;
+	object-fit: contain;
+	object-position: left;
+	margin-top: auto;
+	border-radius: 50px;
+}
+
+.imageseo-media__content__stars {
+	margin-top: auto;
+}
+.imageseo-media__content__stars svg {
+	margin-right: 5px;
+}

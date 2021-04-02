@@ -53,7 +53,7 @@ function bulk_image_process_action_scheduler()
 
     for ($i = 0; $i < $sizeImages; ++$i) {
         //     @set_time_limit(0);
-        sleep(100);
+        // sleep(100);
         $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
         if ($limitExcedeed) {
             continue;
@@ -84,6 +84,7 @@ function bulk_image_process_action_scheduler()
         //     $alt = '';
         //     $filename = '';
         //     $extension = '';
+        // $oldAlt =  = imageseo_get_service('Alt')->getAlt($attachmentId);
 
         //     // Optimize Alt
         //     if ($optionBulkProcess['settings']['optimizeAlt']) {
@@ -120,6 +121,7 @@ function bulk_image_process_action_scheduler()
 
         update_post_meta($attachmentId, '_imageseo_bulk_report', [
             'success'   => true,
+            'old_alt'   => 'azerty', //$oldAlt,
             'filename'  => 'abcd', //$filename,
             'extension' => '.jpg', //$extension,
             'alt'       => 'toto', //$alt,

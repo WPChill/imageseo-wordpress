@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { isNil, isEmpty } from "lodash";
 import {
 	useMainContentSelected,
 	usePageTitle,
-	PageContext,
 } from "../../contexts/PageContext";
 import { MAIN_CONTENT } from "../../constants/app-tabs";
 import Overview from "../../modules/overview";
 import Bulk from "../../modules/bulk";
+import SocialMedia from "../../modules/social";
 
 const SCMain = styled.div`
 	width: 85%;
@@ -36,6 +35,8 @@ function Main() {
 							return <Overview />;
 						case MAIN_CONTENT.BULK_OPTIMIZATION:
 							return <Bulk />;
+						case MAIN_CONTENT.SOCIAL_CARD:
+							return <SocialMedia />;
 						default:
 							return null;
 					}

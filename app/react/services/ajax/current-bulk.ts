@@ -12,7 +12,7 @@ const saveCurrentBulk = async (settings, state, countOptimized) => {
 			pick(state, ["currentProcess", "allIds", "allIdsOptimized"])
 		)
 	);
-
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -25,7 +25,7 @@ const deleteCurrentBulk = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_delete_current_bulk");
-
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -42,7 +42,6 @@ const startBulkProcess = async (
 		language,
 		optimizeAlt,
 		optimizeFile,
-		wantValidateResult,
 	}
 ) => {
 	const formData = new FormData();
@@ -54,8 +53,9 @@ const startBulkProcess = async (
 	formData.append("language", language);
 	formData.append("optimizeAlt", optimizeAlt);
 	formData.append("optimizeFile", optimizeFile);
+	//@ts-ignore
 	formData.append("wantValidateResult", false);
-
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -68,7 +68,7 @@ export const restartBulkProcess = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_restart_bulk");
-
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -81,6 +81,7 @@ export const getPreviewBulk = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_get_preview_bulk");
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -92,6 +93,7 @@ export const getCurrentBulk = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_get_current_bulk");
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -104,6 +106,7 @@ const getCurrentProcessDispatch = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_get_current_dispatch");
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -116,6 +119,7 @@ const stopCurrentProcess = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_stop_bulk");
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,
@@ -128,6 +132,7 @@ const finishCurrentProcess = async () => {
 	const formData = new FormData();
 
 	formData.append("action", "imageseo_finish_bulk");
+	//@ts-ignore
 	const response = await fetch(ajaxurl, {
 		method: "POST",
 		body: formData,

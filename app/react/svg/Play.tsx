@@ -16,7 +16,7 @@ export const SVGPlay = ({ className = "" }) => (
 				/>
 			</filter>
 		</defs>
-		<g fill="none" fill-rule="evenodd">
+		<g fill="none" fillRule="evenodd">
 			<g>
 				<g>
 					<g>
@@ -26,7 +26,7 @@ export const SVGPlay = ({ className = "" }) => (
 						>
 							<path
 								stroke="#00081A"
-								stroke-width="2"
+								strokeWidth="2"
 								d="M7 4.832l11.07 7.116L7 19.168V4.832z"
 							/>
 						</g>

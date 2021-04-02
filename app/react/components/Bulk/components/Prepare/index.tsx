@@ -107,18 +107,6 @@ const BulkPrepare = () => {
 
 	return (
 		<>
-			<AlertSimple icon={IconsAlert.INFORMATION} blue>
-				<h3 className="text-lg leading-6 font-medium text-gray-900">
-					{__("Configuration", "imageseo")}
-				</h3>
-				<p className="mt-2 max-w-4xl text-sm text-gray-500">
-					{__(
-						"Prepare the configuration of your bulk optimization",
-						"imageseo"
-					)}
-				</p>
-			</AlertSimple>
-
 			<div className="grid grid-cols-5 gap-4 mt-4">
 				<div className="col-span-3">
 					<BulkSettings />

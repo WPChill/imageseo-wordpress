@@ -5,9 +5,7 @@ import { get } from "lodash";
 //@ts-ignore
 const { __ } = wp.i18n;
 
-import { BulkSettingsContext } from "../../../../contexts/BulkSettingsContext";
 import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
-import { UserContext } from "../../../../contexts/UserContext";
 
 import { restartBulkProcess } from "../../../../services/ajax/current-bulk";
 import LimitExcedeed from "../LimitExcedeed";
@@ -15,8 +13,6 @@ import { SVGPlay } from "../../../../svg/Play";
 
 const BulkLastProcess = () => {
 	const { state, dispatch } = useContext(BulkProcessContext);
-	const { state: userState } = useContext(UserContext);
-	const { state: settings } = useContext(BulkSettingsContext);
 
 	const total_ids_optimized = get(
 		state,
@@ -58,12 +54,6 @@ const BulkLastProcess = () => {
 	const limitExcedeed = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false)
 		? true
 		: false;
-	const optimizeAlt = get(state, "lastProcess.settings.optimizeAlt", false);
-	const optimizeFilename = get(
-		state,
-		"lastProcess.settings.optimizeFile",
-		false
-	);
 
 	return (
 		<>

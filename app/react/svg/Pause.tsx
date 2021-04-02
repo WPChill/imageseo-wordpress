@@ -8,8 +8,8 @@ export const SVGPause = ({ className = "" }) => (
 		viewBox="0 0 24 24"
 		className={className}
 	>
-		<g fill="none" fill-rule="evenodd">
-			<g fill="#00081A" fill-rule="nonzero">
+		<g fill="none" fillRule="evenodd">
+			<g fill="#00081A" fillRule="nonzero">
 				<g>
 					<g>
 						<g>
