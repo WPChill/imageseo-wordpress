@@ -22,32 +22,8 @@ class MediaLibraryReport
         if (!imageseo_allowed()) {
             return;
         }
-        add_action('add_meta_boxes', [$this, 'renameMetabox']);
         add_action('admin_post_imageseo_generate_alt', [$this, 'adminPostGenerateAlt']);
         add_action('admin_post_imageseo_rename_attachment', [$this, 'adminPostRenameAttachment']);
-    }
-
-    public function renameMetabox()
-    {
-        add_meta_box('imageseo_filename', 'Filename by ImageSEO', [$this, 'attachmentFields'], 'attachment', 'side', 'high');
-    }
-
-    public function attachmentFields($post)
-    {
-        $filenameByImageSEO = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($post->ID);
-
-        $data = ['url' => ''];
-        if (!empty($filenameByImageSEO)) {
-            $data = $this->renameFileService->getFilenameDataImageSEOWithAttachmentId($post->ID, $filenameByImageSEO);
-		}
-		if(empty($data['url'])){
-			return;
-		}
-
-		?>
-    		<input type="text" readonly class="widefat"  value="<?php echo $data['filename_without_extension'] . '.' . $data['extension']; ?>" />
-		    <a target="_blank" href="<?php echo $data['url']; ?>"><?php _e('View image', 'imageseo'); ?></a>
-        <?php
     }
 
     /**
@@ -58,10 +34,15 @@ class MediaLibraryReport
         if ('GET' === $_SERVER['REQUEST_METHOD']) {
             return (int) $_GET['attachment_id'];
         } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
-            return(int) $_POST['attachment_id'];
+            return (int) $_POST['attachment_id'];
         }
     }
 
+    /**
+     * @since 2.0
+     *
+     * @return void
+     */
     public function adminPostGenerateAlt()
     {
         $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
@@ -80,6 +61,11 @@ class MediaLibraryReport
         wp_redirect($redirectUrl);
     }
 
+    /**
+     * @since 2.0
+     *
+     * @return void
+     */
     public function adminPostRenameAttachment()
     {
         $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
@@ -96,19 +82,20 @@ class MediaLibraryReport
 
         $attachmentId = $this->getAttachmentId();
 
-        $this->reportImageService->generateReportByAttachmentId($attachmentId);
+        // $this->reportImageService->generateReportByAttachmentId($attachmentId);
 
-        try {
-            $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
-        } catch (NoRenameFile $e) {
-            wp_redirect($redirectUrl);
+        // try {
+        //     $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
+        // } catch (NoRenameFile $e) {
+        //     wp_redirect($redirectUrl);
 
-            return;
-        }
+        //     return;
+        // }
 
-        $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
+        // $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
 
-        $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
+        imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', 'big-image', 'jpg'));
+        // imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         wp_redirect($redirectUrl);
     }
 }

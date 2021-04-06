@@ -1,6 +1,6 @@
 <?php
 
-namespace ImageSeoWP\Services;
+namespace ImageSeoWP\Services\File;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -28,6 +28,7 @@ class RenameFile
 
         if (!$report) {
             throw new NoRenameFile('No need to change');
+
             return;
         }
 
@@ -87,10 +88,10 @@ class RenameFile
     public function getNameFileWithAttachmentId($attachmentId, $excludeFilenames = [])
     {
         try {
-			$newName = $this->generateNameFromReport($attachmentId);
-		} catch (NoRenameFile $e) {
-			throw new NoRenameFile('No need to change');
-		}
+            $newName = $this->generateNameFromReport($attachmentId);
+        } catch (NoRenameFile $e) {
+            throw new NoRenameFile('No need to change');
+        }
 
         $filePath = get_attached_file($attachmentId);
         $splitName = explode('.', basename($filePath));
@@ -287,12 +288,12 @@ class RenameFile
 
     public function getLinkFileImageSEO($filename)
     {
-		$isNginx = apply_filters('imageseo_get_link_file_is_nginx', ServerSoftware::isNginx());
+        $isNginx = apply_filters('imageseo_get_link_file_is_nginx', ServerSoftware::isNginx());
 
         if ($isNginx) {
             $splitFilename = explode('.', $filename);
             array_pop($splitFilename);
-			$filename = implode('.', $splitFilename);
+            $filename = implode('.', $splitFilename);
         }
 
         return site_url(sprintf('/medias/images/%s', str_replace('.webp', '', $filename)));

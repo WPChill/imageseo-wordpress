@@ -22,13 +22,6 @@ $backupAttachmentUrl = wp_nonce_url(add_query_arg(
     admin_url('admin-post.php')
 ), 'imageseo_backup_attachment');
 
-$resetHtaccess = wp_nonce_url(add_query_arg(
-    [
-        'action' => 'imageseo_reset_htaccess',
-    ],
-    admin_url('admin-post.php')
-), 'imageseo_reset_htaccess');
-
 $data = imageseo_get_service('Htaccess')->generate();
 
 ?>

@@ -7,7 +7,6 @@ if (!defined('ABSPATH')) {
 }
 
 use ImageSeoWP\Helpers\TypeContent;
-use ImageSeoWP\Helpers\ServerSoftware;
 
 class RenameFileContent
 {
@@ -59,7 +58,7 @@ class RenameFileContent
             return;
         }
 
-        add_action('init', [$this, 'updateContentFile'], 12);
+        // add_action('init', [$this, 'updateContentFile'], 12);
     }
 
     public function updateContentFile()
@@ -70,9 +69,9 @@ class RenameFileContent
 
         $file = apply_filters('imageseo_debug_file', IMAGESEO_DIR . '/content.html');
 
-        if (defined('IMAGESEO_DEBUG') && IMAGESEO_DEBUG && file_exists($file)) {
+        if (false && file_exists($file)) {
             echo $this->update(file_get_contents($file));
-            die;
+            exit;
         } else {
             ob_start([$this, 'update']);
         }
@@ -95,7 +94,7 @@ class RenameFileContent
             'fields'     => 'ids',
             'meta_query' => [
                 [
-                    'key'     => '_wp_attached_file',
+                    'key'     => '_old_wp_attached_file',
                     'value'   => $file,
                     'compare' => 'LIKE',
                 ],
@@ -107,14 +106,16 @@ class RenameFileContent
 
         if (!empty($ids)) {
             foreach ($ids as $id) {
+                $oldMetadata = get_post_meta($id, '_old_wp_attachment_metadata', true);
+
                 // first entry of returned array is the URL
-                if ($url === array_shift(wp_get_attachment_image_src($id, 'full'))) {
+                if ($url === sprintf('%s/%s', $dir['baseurl'], $oldMetadata['file'])) {
                     return $id;
                 }
             }
         }
 
-        $query['meta_query'][0]['key'] = '_wp_attachment_metadata';
+        $query['meta_query'][0]['key'] = '_old_wp_attachment_metadata';
         // query attachments again
         $ids = get_posts($query);
 
@@ -123,16 +124,22 @@ class RenameFileContent
         }
 
         foreach ($ids as $id) {
-            $meta = wp_get_attachment_metadata($id);
+            $oldMetadata = get_post_meta($id, '_old_wp_attachment_metadata', true);
 
-            foreach ($meta['sizes'] as $size => $values) {
-                if ($values['file'] === $file && $url === array_shift(wp_get_attachment_image_src($id, $size))) {
+            foreach ($oldMetadata['sizes'] as $size => $values) {
+                if ($values['file'] === $file) {
                     return $id;
                 }
             }
+
+            if (isset($oldMetadata['original_image']) && $file === $oldMetadata['original_image']) {
+                return $id;
+            }
         }
 
-        return false;
+        if (isset($oldMetadata)) {
+            return false;
+        }
     }
 
     public function update($content)
@@ -143,13 +150,11 @@ class RenameFileContent
             return $content;
         }
 
-        $regex = '#<img[^>]* src=(?:\"|\')(?<src>([^"]*))(?:\"|\')[^>]*>#mU';
+        $regex = '#<img[^\>]*src=(?:\"|\')(?<src>([^"]*))(?:\"|\')[^\>]+?>#mU';
 
         preg_match_all($regex, $content, $matches);
 
-		$matchesSrc = array_unique($matches['src']);
-
-		$isNginx = apply_filters('imageseo_get_link_file_is_nginx', ServerSoftware::isNginx());
+        $matchesSrc = array_unique($matches['src']);
 
         foreach ($matchesSrc as $src) {
             if (false === strpos($src, 'wp-content/uploads')) {
@@ -162,28 +167,38 @@ class RenameFileContent
                 continue;
             }
 
-            $filenames = $this->renameFileService->getAllFilenamesByImageSEO($attachmentId);
-            if (empty($filenames)) {
-                continue;
-            }
+            $oldMetadata = get_post_meta($attachmentId, '_old_wp_attachment_metadata', true);
 
             $metadata = wp_get_attachment_metadata($attachmentId);
+            $filenameNeedReplace = wp_basename($src);
 
-            foreach ($filenames as $filename) {
-                $srcBySize = wp_get_attachment_image_src($attachmentId, $filename['size']);
-				$fullFilename = sprintf('%s.%s', $filename['filename_without_extension'], $filename['extension']);
+            $oldFilename = wp_basename($oldMetadata['file']);
 
-
-				$newFilename = $this->renameFileService->getLinkFileImageSEO($fullFilename);
-
-				$content = str_replace($srcBySize[0], $newFilename, $content);
-
-				if ($isNginx) {
-					$content = str_replace($newFilename . '.webp', $newFilename, $content);
-				}
-
+            //basic file
+            if ($oldFilename === $filenameNeedReplace) {
+                $srcBySize = wp_get_attachment_image_src($attachmentId, 'full');
+                $content = str_replace($src, $srcBySize[0], $content);
+            } else {
+                // Multiple Sizes
+                foreach ($oldMetadata['sizes'] as $key => $data) {
+                    $oldFilename = wp_basename($data['file']);
+                    if ($oldFilename === $filenameNeedReplace) {
+                        $srcBySize = wp_get_attachment_image_src($attachmentId, $key);
+                        $content = str_replace($src, $srcBySize[0], $content);
+                    }
+                }
             }
-		}
+
+            // Original Image
+            if (isset($metadata['original_image']) && isset($oldMetadata['original_image'])) {
+                $oldOriginalFilename = wp_basename($oldMetadata['original_image']);
+
+                if ($oldOriginalFilename === $filenameNeedReplace) {
+                    $srcBySize = wp_get_original_image_url($attachmentId);
+                    $content = str_replace($src, $srcBySize, $content);
+                }
+            }
+        }
 
         return $content;
     }
