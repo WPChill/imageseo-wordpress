@@ -56,6 +56,9 @@ function SocialMediaImagePreview() {
 					"imageseo-media__container--preview"
 				)}
 				style={{
+					border: "1px solid #999",
+					maxWidth: "80%",
+					margin: "0 auto",
 					backgroundColor: settings.contentBackgroundColor,
 				}}
 			>
@@ -69,7 +72,6 @@ function SocialMediaImagePreview() {
 						backgroundPosition: "center center",
 						backgroundSize: "cover",
 						backgroundRepeat: "no-repeat",
-						maxHeight: 260,
 					}}
 				/>
 
