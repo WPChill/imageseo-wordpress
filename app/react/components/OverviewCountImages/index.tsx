@@ -14,9 +14,10 @@ const OverviewCountImages = () => {
 	}
 
 	const percentOptimized = getPercentImagesOptimizedAlt(
-		data.total_images,
-		data.total_images_no_alt
+		Number(data.total_images),
+		Number(data.total_images_no_alt)
 	);
+	console.log(data);
 
 	return (
 		<div className="bg-white border rounded-lg">
@@ -46,10 +47,19 @@ const OverviewCountImages = () => {
 						></div>
 					</div>
 				</div>
-				<p className="text-sm -mt-1">
-					<strong>{percentOptimized}%</strong>{" "}
-					{__("completed", "imageseo")}
-				</p>
+				<div className="flex  -mt-1">
+					<p className="text-sm flex-1">
+						<strong>{percentOptimized}%</strong>{" "}
+						{__("completed", "imageseo")}
+					</p>
+					<a
+						className="text-sm underline text-blue-500"
+						//@ts-ignore
+						href={IMAGESEO_DATA.URL_RECOUNT}
+					>
+						{__("Recalculating the images counter", "imageseo")}
+					</a>
+				</div>
 			</div>
 		</div>
 	);

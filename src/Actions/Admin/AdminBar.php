@@ -30,7 +30,7 @@ class AdminBar
             'parent'    => false,
             'id'        => 'imageseo',
             'title'     => 'ImageSEO',
-            'href'      => admin_url('admin.php?page=imageseo-options'),
+            'href'      => admin_url('admin.php?page=imageseo-settings'),
         ]);
 
         if (!is_admin()) {

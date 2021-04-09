@@ -90,6 +90,9 @@ class Enqueue
 
             $scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
 
+            $urlRecount = admin_url('admin-post.php?action=imageseo_recount_images');
+            $urlRecount = wp_nonce_url($urlRecount, 'imageseo_recount_images');
+
             $data = [
                 'API_KEY'                        => imageseo_get_option('api_key'),
                 'API_URL'                        => IMAGESEO_API_URL,
@@ -113,6 +116,8 @@ class Enqueue
                 'ALT_FORMATS'                    => AltFormat::getFormats(),
                 'ALT_SPECIFICATION'              => AltSpecification::getMetas(),
                 'ALT_FILL_TYPE'                  => AltSpecification::getFillType(),
+                'PAGE_BUILDERS'                  => imageseo_get_service('WordPressData')->getPageBuilders(),
+                'URL_RECOUNT'                    => $urlRecount,
             ];
 
             wp_register_script('imageseo-application', IMAGESEO_URL_DIST . '/application.js', ['wp-i18n'], IMAGESEO_VERSION, true);

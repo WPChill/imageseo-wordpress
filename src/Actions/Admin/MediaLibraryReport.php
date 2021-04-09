@@ -12,7 +12,7 @@ class MediaLibraryReport
 {
     public function __construct()
     {
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->generateFilename = imageseo_get_service('GenerateFilename');
         $this->reportImageService = imageseo_get_service('ReportImage');
         $this->altService = imageseo_get_service('Alt');
     }
@@ -22,8 +22,8 @@ class MediaLibraryReport
         if (!imageseo_allowed()) {
             return;
         }
-        add_action('admin_post_imageseo_generate_alt', [$this, 'adminPostGenerateAlt']);
-        add_action('admin_post_imageseo_rename_attachment', [$this, 'adminPostRenameAttachment']);
+        add_action('admin_post_imageseo_generate_alt', [$this, 'generateAlt']);
+        add_action('admin_post_imageseo_rename_attachment', [$this, 'renameFile']);
     }
 
     /**
@@ -43,7 +43,7 @@ class MediaLibraryReport
      *
      * @return void
      */
-    public function adminPostGenerateAlt()
+    public function generateAlt()
     {
         $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
 
@@ -66,7 +66,7 @@ class MediaLibraryReport
      *
      * @return void
      */
-    public function adminPostRenameAttachment()
+    public function renameFile()
     {
         $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
 
@@ -82,20 +82,19 @@ class MediaLibraryReport
 
         $attachmentId = $this->getAttachmentId();
 
-        // $this->reportImageService->generateReportByAttachmentId($attachmentId);
+        $this->reportImageService->generateReportByAttachmentId($attachmentId);
 
-        // try {
-        //     $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
-        // } catch (NoRenameFile $e) {
-        //     wp_redirect($redirectUrl);
+        try {
+            $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId);
+        } catch (NoRenameFile $e) {
+            wp_redirect($redirectUrl);
 
-        //     return;
-        // }
+            return;
+        }
 
-        // $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
+        $extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
 
-        imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', 'big-image', 'jpg'));
-        // imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
+        imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         wp_redirect($redirectUrl);
     }
 }

@@ -6,15 +6,11 @@ const env = process.env.NODE_ENV || "development";
 
 module.exports = {
 	entry: {
-		bulk: "./app/javascripts/react/index.js",
 		"media-upload": "./app/javascripts/media-upload.js",
 		"deactivate-intent":
 			"./app/javascripts/react/deactivate-intent.module.js",
 		"generate-social-media": "./app/javascripts/generate-social-media.js",
-		"api-key": "./app/javascripts/api-key.js",
-		register: "./app/javascripts/register.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
-		"admin-css": "./app/styles/admin.scss",
 		"admin-global-css": "./app/styles/admin-global.scss",
 		application: "./app/react/modules/index.tsx",
 		"imageseo-tw": "./app/styles/index.css",

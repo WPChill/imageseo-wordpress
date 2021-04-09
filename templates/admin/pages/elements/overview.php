@@ -48,9 +48,9 @@ if ($this->owner) {
             </div>
             <div class="fl-1">
                 <p class="imageseo-mb-0"><strong><?php echo sprintf(__('There are %s images in your library.', 'imageseo'), $total); ?></strong></p>
-                <?php if (0 != $percentMissing): ?>
+                <?php if (0 != $percentMissing) { ?>
                     <p class="imageseo-mb-0"><?php echo sprintf(__('Did you know that %s alternative texts are missing ?', 'imageseo'), "$percentMissing%"); ?></strong></p>
-                <?php endif; ?>
+                <?php } ?>
                 <div class="imageseo-loader imageseo-mt-2">
                     <div class="imageseo-loader__step" style="width: <?php echo $percentComplete; ?>%"></div>
                 </div>
@@ -74,17 +74,17 @@ if ($this->owner) {
                     $urlRecount = wp_nonce_url($urlRecount, 'imageseo_recount_images');
                 ?>
                 <a href="<?php echo $urlRecount; ?>" style="display:flex; align-items:center;">
-                    <?php if (false !== get_transient('imageseo_process_query_count_images')): ?>
+                    <?php if (false !== get_transient('imageseo_process_query_count_images')) { ?>
                         <img
                             src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
                             style="animation:imageseo-rotation 1s infinite linear; margin-right:10px;"
                         />
-                    <?php endif; ?>
+                    <?php } ?>
                     <?php _e('Recalculating the images counter', 'imageseo'); ?>
                 </a>
             </div>
         </div>
-        <?php if ($this->owner): ?>
+        <?php if ($this->owner) { ?>
             <hr class="imageseo-mt-2 imageseo-mb-2" />
             <div class="imageseo-flex">
                 <div class="imageseo-mr-2">
@@ -109,6 +109,6 @@ if ($this->owner) {
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </div>

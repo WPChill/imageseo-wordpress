@@ -24,7 +24,7 @@ class UpdateCounterImages
 
     public function recountImages()
     {
-        $redirectUrl = admin_url('admin.php?page=imageseo-options');
+        $redirectUrl = admin_url('admin.php?page=imageseo-settings');
 
         if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_recount_images')) {
             wp_redirect($redirectUrl);

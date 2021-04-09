@@ -107,12 +107,10 @@ class UpdateFile
 
         update_post_meta($attachmentId, '_old_wp_attachment_metadata', $metadata);
         update_post_meta($attachmentId, '_old_wp_attached_file', $metadata['file']);
-
-        exit;
     }
 
     // Mass update of all the meta with the new filenames
-    public function action_update_postmeta($orig_image_url, $new_image_url)
+    public function action_update_postmeta($baseImageUrl, $newImageUrl)
     {
         global $wpdb;
         $query = $wpdb->prepare("UPDATE $wpdb->postmeta
@@ -120,17 +118,17 @@ class UpdateFile
 			WHERE meta_key <> '_original_filename'
 			AND (TRIM(meta_value) = '%s'
 			OR TRIM(meta_value) = '%s'
-		);", $new_image_url, $orig_image_url, str_replace(' ', '%20', $orig_image_url));
+		);", $newImageUrl, $baseImageUrl, str_replace(' ', '%20', $baseImageUrl));
         $query_revert = $wpdb->prepare("UPDATE $wpdb->postmeta
 			SET meta_value = '%s'
 			WHERE meta_key <> '_original_filename'
 			AND meta_value = '%s';
-		", $orig_image_url, $new_image_url);
+		", $baseImageUrl, $newImageUrl);
         $wpdb->query($query);
     }
 
     // Mass update of all the articles with the new filenames
-    public function action_update_posts($orig_image_url, $new_image_url)
+    public function action_update_posts($baseImageUrl, $newImageUrl)
     {
         global $wpdb;
 
@@ -146,7 +144,7 @@ class UpdateFile
 			AND post_type != 'shop_order_refund'
 			AND post_type != 'nav_menu_item'
 			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $orig_image_url, $new_image_url);
+			AND post_type != 'auto-draft'", $baseImageUrl, $newImageUrl);
         $query_revert = $wpdb->prepare("UPDATE $wpdb->posts
 			SET post_content = REPLACE(post_content, '%s', '%s')
 			WHERE post_status != 'inherit'
@@ -158,7 +156,7 @@ class UpdateFile
 			AND post_type != 'shop_order_refund'
 			AND post_type != 'nav_menu_item'
 			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $new_image_url, $orig_image_url);
+			AND post_type != 'auto-draft'", $newImageUrl, $baseImageUrl);
         $wpdb->query($query);
 
         // Excerpt
@@ -173,7 +171,7 @@ class UpdateFile
 			AND post_type != 'shop_order_refund'
 			AND post_type != 'nav_menu_item'
 			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $orig_image_url, $new_image_url);
+			AND post_type != 'auto-draft'", $baseImageUrl, $newImageUrl);
         $query_revert = $wpdb->prepare("UPDATE $wpdb->posts
 			SET post_excerpt = REPLACE(post_excerpt, '%s', '%s')
 			WHERE post_status != 'inherit'
@@ -185,7 +183,7 @@ class UpdateFile
 			AND post_type != 'shop_order_refund'
 			AND post_type != 'nav_menu_item'
 			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $new_image_url, $orig_image_url);
+			AND post_type != 'auto-draft'", $newImageUrl, $baseImageUrl);
         $wpdb->query($query);
     }
 }

@@ -5,12 +5,22 @@ interface Props {
 	className?: string;
 	yellow?: boolean;
 	red?: boolean;
+	blue?: boolean;
 }
 
-export const SVGExclamation = ({ className = "", yellow, red }: Props) => (
+export const SVGExclamation = ({
+	className = "",
+	yellow,
+	red,
+	blue,
+}: Props) => (
 	<svg
 		className={classNames(
-			{ "text-yellow-400": yellow, "text-red-400": red },
+			{
+				"text-yellow-400": yellow,
+				"text-red-400": red,
+				"text-blue-400": blue,
+			},
 			`h-5 w-5 ${className}`
 		)}
 		xmlns="http://www.w3.org/2000/svg"

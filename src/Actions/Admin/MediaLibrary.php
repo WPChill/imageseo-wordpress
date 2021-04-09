@@ -12,7 +12,7 @@ class MediaLibrary
     {
         $this->optionService = imageseo_get_service('Option');
         $this->reportImageService = imageseo_get_service('ReportImage');
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->generateFilename = imageseo_get_service('GenerateFilename');
         $this->altService = imageseo_get_service('Alt');
     }
 
@@ -27,7 +27,6 @@ class MediaLibrary
 
         add_action('wp_ajax_imageseo_media_alt_update', [$this, 'ajaxAltUpdate']);
 
-        add_action('admin_init', [$this, 'metaboxReport']);
         add_filter('wp_generate_attachment_metadata', [$this, 'createProcessOnUpload'], 10, 2);
         add_action('delete_attachment', [$this, 'updateDeleteCount'], 100);
     }
@@ -77,9 +76,9 @@ class MediaLibrary
 
         if ($activeRenameOnUpload) {
             try {
-                $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId);
+                $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId);
                 if (!empty($filename)) {
-                    $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
+                    $this->generateFilename->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
                 }
             } catch (NoRenameFile $e) {
             }
@@ -125,25 +124,6 @@ class MediaLibrary
         imageseo_get_service('Alt')->updateAlt($postId, $alt);
     }
 
-    public function metaboxReport()
-    {
-        add_meta_box(
-            'imageseo-report',
-            __('Report ImageSEO', 'imageseo'),
-            [$this, 'viewMetaboxReport'],
-            'attachment',
-            'normal'
-        );
-    }
-
-    /**
-     * @param object $post
-     */
-    public function viewMetaboxReport($post)
-    {
-        include_once IMAGESEO_TEMPLATES_ADMIN_METABOXES . '/report.php';
-    }
-
     /**
      * Activate array.
      */
@@ -169,7 +149,7 @@ class MediaLibrary
                 </div>
                 <?php
             } ?>
-					
+
             <div id="wrapper-imageseo-alt-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-alt">
                 <input
                     type="text"
@@ -195,12 +175,7 @@ class MediaLibrary
 
     public function renderFilename($attachmentId)
     {
-        $filename = $this->renameFileService->getFilenameByImageSEOWithAttachmentId($attachmentId);
-
-        $data = ['url' => ''];
-        if (!empty($filename)) {
-            $data = $this->renameFileService->getFilenameDataImageSEOWithAttachmentId($attachmentId, $filename);
-        } ?>
+        $oldMetadata = get_post_meta($attachmentId, '_old_wp_attached_file', true); ?>
         <div class="media-column-imageseo">
             <span class="text" style="margin-bottom:5px; display:block;"><?php esc_html_e('Choose a new file name.', 'imageseo'); ?></span>
             <div id="wrapper-imageseo-filename-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-filename">
@@ -220,15 +195,11 @@ class MediaLibrary
 
             </div>
             <span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo $attachmentId; ?>"></span>
-            <?php if (!empty($filename)): ?>
-                <a target="_blank" href="<?php echo $this->renameFileService->getLinkFileImageSEO(sprintf('%s.%s', $data['filename_without_extension'], $data['extension'])); ?>" style="margin:5px 0px; display:block;">
-                    <?php _e('View Image', 'imageseo'); ?>
-                </a>
-            <?php endif; ?>
             <br />
             <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
                 <?php echo __('Rename file automatically', 'imageseo'); ?>
             </a>
+
         </div>
         <?php
     }

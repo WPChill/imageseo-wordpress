@@ -13,7 +13,7 @@ class OptimizeImage
     public function __construct()
     {
         $this->tagsToStringService = imageseo_get_service('TagsToString');
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->generateFilename = imageseo_get_service('GenerateFilename');
         $this->altService = imageseo_get_service('Alt');
     }
 
@@ -23,114 +23,7 @@ class OptimizeImage
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
 
-        // add_action('wp_ajax_imageseo_stop_bulk', [$this, 'stopBulk']);
-        // add_action('wp_ajax_imageseo_finish_bulk', [$this, 'finishBulk']);
-        // add_action('wp_ajax_imageseo_dispatch_bulk', [$this, 'dispatchBulk']);
-        // add_action('wp_ajax_imageseo_get_current_dispatch', [$this, 'getCurrentDispatchProcess']);
         add_action('admin_post_imageseo_force_stop', [$this, 'forceStop']);
-    }
-
-    public function stopBulk()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        $optionBulkProcess = get_option('_imageseo_bulk_process');
-        delete_option('_imageseo_bulk_process');
-        update_option('_imageseo_need_to_stop_process', true);
-        update_option('_imageseo_last_bulk_process', $optionBulkProcess);
-
-        wp_send_json_success();
-    }
-
-    public function dispatchBulk()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        if (!isset($_POST['data'])) {
-            wp_send_json_error([
-                'code' => 'missing_parameters',
-            ]);
-
-            return;
-        }
-
-        delete_option('_imageseo_last_bulk_process');
-        delete_option('_imageseo_bulk_is_finish');
-        delete_option('_imageseo_need_to_stop_process');
-
-        $data = explode(',', $_POST['data']);
-        update_option('_imageseo_bulk_process', [
-            'total_images'         => count($data),
-            'id_images'            => $data,
-            'id_images_optimized'  => [],
-            'current_index_image'  => 0,
-            'settings'             => [
-                'formatAlt'          => $_POST['formatAlt'],
-                'formatAltCustom'    => $_POST['formatAltCustom'],
-                'language'           => $_POST['language'],
-                'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
-                'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
-                'wantValidateResult' => 'true' === $_POST['wantValidateResult'] ? true : false,
-            ],
-        ]);
-
-        as_schedule_single_action(time(), 'action_bulk_image_process_action_scheduler', ['current_index_image' => 0], 'group_bulk_image');
-
-        wp_send_json_success();
-    }
-
-    public function getCurrentDispatchProcess()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        $infoBulkProcess = get_option('_imageseo_bulk_process');
-        if (!$infoBulkProcess) {
-            $infoBulkProcess = [
-                'current_index_image'   => -1,
-                'id_images'             => [],
-                'id_images_optimized'   => [],
-                'settings'              => [],
-            ];
-        }
-
-        wp_send_json_success([
-            'is_running'           => as_next_scheduled_action('action_bulk_image_process_action_scheduler', ['current_index_image' => $infoBulkProcess['current_index_image']], 'group_bulk_image'),
-            'is_finish'            => false !== get_option('_imageseo_bulk_is_finish') ? true : false,
-            'need_to_stop_process' => get_option('_imageseo_need_to_stop_process'),
-            'bulk_process'         => $infoBulkProcess,
-        ]);
-    }
-
-    public function finishBulk()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        delete_option('_imageseo_bulk_exclude_filenames');
-        delete_option('_imageseo_need_to_stop_process');
-        delete_option('_imageseo_bulk_process');
-        delete_option('_imageseo_bulk_is_finish');
-
-        wp_send_json_success();
     }
 
     public function forceStop()
@@ -188,9 +81,9 @@ class OptimizeImage
     protected function getFilenameForPreview($attachmentId, $excludeFilenames = [])
     {
         try {
-            $filename = $this->renameFileService->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
+            $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
         } catch (NoRenameFile $e) {
-            $filename = $this->renameFileService->getFilenameByAttachmentId($attachmentId);
+            $filename = $this->generateFilename->getFilenameByAttachmentId($attachmentId);
         }
 
         $splitFilename = explode('.', $filename);
@@ -256,7 +149,7 @@ class OptimizeImage
         $filename = sanitize_title($_POST['filename']);
 
         if (empty($filename)) {
-            $this->renameFileService->removeFilename($attachmentId);
+            $this->generateFilename->removeFilename($attachmentId);
             wp_send_json_success([
                 'filename' => $filename,
             ]);
@@ -265,10 +158,10 @@ class OptimizeImage
         }
 
         try {
-            $extension = $this->renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
-            $filename = $this->renameFileService->validateUniqueFilename($attachmentId, $filename);
+            $extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
+            $filename = $this->generateFilename->validateUniqueFilename($attachmentId, $filename);
 
-            $this->renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
+            imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         } catch (\Exception $e) {
             wp_send_json_error();
         }

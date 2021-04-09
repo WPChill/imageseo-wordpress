@@ -55,7 +55,6 @@ const BulkInProcess = () => {
 	const limit = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false);
 
 	const [limitExcedeed, setLimitExcedeed] = useState(limit ? true : false);
-	const onClickClose = () => setIsOpen(false);
 
 	const handleStopBulk = () => {
 		Swal.fire({
@@ -102,17 +101,6 @@ const BulkInProcess = () => {
 
 		setReload(false);
 	};
-
-	const optimizeAlt = get(
-		state,
-		"currentProcess.settings.optimizeAlt",
-		false
-	);
-	const optimizeFilename = get(
-		state,
-		"currentProcess.settings.optimizeFile",
-		false
-	);
 
 	let diffSeconds = false;
 	try {

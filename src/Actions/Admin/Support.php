@@ -10,7 +10,7 @@ class Support
 {
     public function __construct()
     {
-        $this->renameFileServices = imageseo_get_service('RenameFile');
+        $this->renameFileServices = imageseo_get_service('GenerateFilename');
     }
 
     public function hooks()
@@ -20,7 +20,7 @@ class Support
 
     public function backupAttachment()
     {
-        $redirectUrl = admin_url('admin.php?page=imageseo-options&tab=support');
+        $redirectUrl = admin_url('admin.php?page=imageseo-settings&tab=support');
 
         if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_backup_attachment')) {
             wp_redirect($redirectUrl);

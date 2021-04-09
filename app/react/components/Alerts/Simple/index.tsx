@@ -40,7 +40,7 @@ export const AlertSimple = ({
 		<div className="flex">
 			<div className="flex-shrink-0">
 				{icon === IconsAlert.EXCLAMATION && (
-					<SVGExclamation yellow={yellow} red={red} />
+					<SVGExclamation yellow={yellow} red={red} blue={blue} />
 				)}
 				{icon === IconsAlert.INFORMATION && <SVGInformationCircle />}
 			</div>

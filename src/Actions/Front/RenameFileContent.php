@@ -10,11 +10,6 @@ use ImageSeoWP\Helpers\TypeContent;
 
 class RenameFileContent
 {
-    public function __construct()
-    {
-        $this->renameFileService = imageseo_get_service('RenameFile');
-    }
-
     /**
      * @return bool
      */
@@ -50,13 +45,13 @@ class RenameFileContent
 
     public function hooks()
     {
-        if (is_admin() &&
-        (!wp_doing_ajax() || (wp_doing_ajax() && isset($_SERVER['HTTP_REFERER']) && false !== strpos($_SERVER['HTTP_REFERER'], 'wp-admin')))) {
-            return;
-        }
-        if (is_admin() && (!wp_doing_ajax() || $this->no_translate_action_ajax())) {
-            return;
-        }
+        // if (is_admin() &&
+        // (!wp_doing_ajax() || (wp_doing_ajax() && isset($_SERVER['HTTP_REFERER']) && false !== strpos($_SERVER['HTTP_REFERER'], 'wp-admin')))) {
+        //     return;
+        // }
+        // if (is_admin() && (!wp_doing_ajax() || $this->no_translate_action_ajax())) {
+        //     return;
+        // }
 
         // add_action('init', [$this, 'updateContentFile'], 12);
     }

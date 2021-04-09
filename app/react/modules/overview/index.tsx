@@ -1,4 +1,4 @@
-import { isEmpty, isNull } from "lodash";
+import { get, isEmpty, isNull } from "lodash";
 import React, { useState, useContext, Suspense } from "react";
 import { AlertSimple, IconsAlert } from "../../components/Alerts/Simple";
 import FormRegister from "../../components/Forms/Register";
@@ -19,7 +19,7 @@ const OverviewConnected = () => {
 	return (
 		<>
 			<div className="mb-4">
-				{!isNull(data) && (
+				{!isNull(data) && get(data, "minutes_by_human", 0) > 1 && (
 					<AlertSimple yellow icon={IconsAlert.EXCLAMATION}>
 						<p className="text-sm">
 							{__(

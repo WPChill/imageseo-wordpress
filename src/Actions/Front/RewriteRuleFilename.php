@@ -12,19 +12,19 @@ class RewriteRuleFilename
 {
     public function __construct()
     {
-        $this->renameFileService = imageseo_get_service('RenameFile');
+        $this->generateFilename = imageseo_get_service('GenerateFilename');
     }
 
     public function hooks()
     {
-        add_action('init', [$this, 'rewriteRule']);
-        add_filter('query_vars', [$this, 'addQueryVars']);
-        add_action('template_redirect', [$this, 'redirectMediaFile']);
+        // add_action('init', [$this, 'rewriteRule']);
+        // add_filter('query_vars', [$this, 'addQueryVars']);
+        // add_action('template_redirect', [$this, 'redirectMediaFile']);
     }
 
     public function rewriteRule()
     {
-		$isApache = apply_filters('imageseo_type_server_rewrite_rule', ServerSoftware::isApache());
+        $isApache = apply_filters('imageseo_type_server_rewrite_rule', ServerSoftware::isApache());
 
         if ($isApache) {
             //APACHE
@@ -40,12 +40,12 @@ class RewriteRuleFilename
                 'index.php?attachment_filename=$matches[1]',
                 'top'
             );
-		}
+        }
 
-		if(get_option('_imageseo_flush_rewrite_rules') === false){
-			update_option('_imageseo_flush_rewrite_rules', 1);
-			flush_rewrite_rules();
-		}
+        if (false === get_option('_imageseo_flush_rewrite_rules')) {
+            update_option('_imageseo_flush_rewrite_rules', 1);
+            flush_rewrite_rules();
+        }
     }
 
     public function addQueryVars($queryVars)
@@ -76,10 +76,9 @@ class RewriteRuleFilename
 
     public function renderImage($path, $mimeType)
     {
-
         if (!file_exists($path)) {
             wp_redirect(site_url());
-            die;
+            exit;
         }
         $maxAge = apply_filters('imageseo_rename_file_max_age', 86400);
         $lastModifiedTime = filemtime($path);
@@ -96,14 +95,14 @@ class RewriteRuleFilename
         header(sprintf('Etag: %s', $etag));
 
         readfile($path);
-        die;
+        exit;
     }
 
     public function redirectMediaFile()
     {
         if (!get_query_var('attachment_filename')) {
             return;
-		}
+        }
 
         $links = get_option('imageseo_link_rename_files');
         if (empty($links)) {
@@ -125,10 +124,10 @@ class RewriteRuleFilename
 
         if (isset($links[$filename])) {
             $this->renderImage($links[$filename]['path'], $links[$filename]['content-type']);
-            die;
+            exit;
         }
 
-        $attachment = $this->renameFileService->getAttachmentIdByFilenameImageSeo($filename);
+        $attachment = $this->generateFilename->getAttachmentIdByFilenameImageSeo($filename);
 
         if (!$attachment) {
             wp_redirect(home_url());
@@ -136,12 +135,12 @@ class RewriteRuleFilename
             return;
         }
 
-        $data = $this->renameFileService->getFilenameDataImageSEOWithAttachmentId($attachment->ID, $filename);
+        $data = $this->generateFilename->getFilenameDataImageSEOWithAttachmentId($attachment->ID, $filename);
 
         if (!isset($data['size'])) {
             header(sprintf('Content-type: %s', $attachment->post_mime_type));
             readfile($attachment->guid);
-            die;
+            exit;
         }
 
         $attachmentPath = $this->scaledImagePath($attachment->ID, $data['size']);
@@ -149,7 +148,7 @@ class RewriteRuleFilename
         if (!$attachmentPath || !file_exists($attachmentPath)) {
             header(sprintf('Content-type: %s', $attachment->post_mime_type));
             readfile($attachment->guid);
-            die;
+            exit;
         }
 
         $links[$filename] = [
@@ -164,6 +163,6 @@ class RewriteRuleFilename
         }
 
         $this->renderImage($attachmentPath, $attachment->post_mime_type);
-        die;
+        exit;
     }
 }

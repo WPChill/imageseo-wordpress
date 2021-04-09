@@ -98,6 +98,11 @@ Image SEO is free for small websites (10 images optimization every month).We hav
 
 If you want to learn about everything about Image SEO have a look at our site. We have [ultimate guides about image SEO optimization](https://imageseo.io/images-seo-optimization/), Alternative texts, EXIF Data, Figure and Figcaption, image compression and loading-time, Title text and Title tag, Legend, srcset attribute, responsive images, Lazy load, image sitemaps, etc, etc.
 
+
+=== BE CAREFUL: PREPARE A BACKUP ===
+Renaming (or moving) files is a dangerous process. Before doing anything in bulk, try renaming your files on by one, then check if the references (in your pages) have been updated properly. The renaming can't cover all use cases, as some plugins are unfortunately using unconventional ways to encode the usage of the files. Therefore, **it is absolutely necessary to backup your files and database** in order to enjoy this plugin at its full extent.
+
+
 * Support and Updates
 
 Bilder optimieren ; Suchmaschinenoptimierung ; Posicionamiento en buscadores;  optimización en motores de búsqueda ; Optimizar imágenes para los motores de búsqueda

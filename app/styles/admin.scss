@@ -111,33 +111,6 @@
 		margin: 0;
 	}
 }
-.imageseo-loading {
-	&:after {
-		content: " ";
-		display: block;
-		width: 10px;
-		height: 10px;
-		margin: 1px;
-		border-radius: 50%;
-		border: 5px solid #fff;
-		border-color: #fff transparent #fff transparent;
-		animation: imageseo-loading 1.2s linear infinite;
-	}
-}
-
-.wrapper-imageseo-input-alt,
-.wrapper-imageseo-input-filename {
-	display: flex;
-}
-
-.imageseo-loading--library {
-	margin-left: 5px;
-	&:after {
-		width: 10px;
-		height: 10px;
-		border-color: #4040bf transparent #4040bf transparent;
-	}
-}
 
 @keyframes imageseo-loading {
 	0% {

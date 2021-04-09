@@ -32,4 +32,12 @@ class WordPressData
 
         return apply_filters('imageseo_get_all_post_types', $postTypes);
     }
+
+    public function getPageBuilders()
+    {
+        return apply_filters('imageseo_get_page_builders', [
+            'beaver_builder'  => class_exists('FLBuilderModel'),
+            'visual_composer' => defined('VCV_VERSION'),
+        ]);
+    }
 }

@@ -12,7 +12,6 @@ class MediaLibraryFilters
     {
         $this->optionServices = imageseo_get_service('Option');
         $this->reportImageServices = imageseo_get_service('ReportImage');
-        $this->renameFileServices = imageseo_get_service('RenameFile');
     }
 
     public function hooks()
@@ -65,10 +64,9 @@ class MediaLibraryFilters
                 'value'   => '',
                 'compare' => $compare,
             ],
-            
         ];
 
-        if($compare === '='){
+        if ('=' === $compare) {
             $meta_query[] = [
                 'key'     => '_wp_attachment_image_alt',
                 'compare' => 'NOT EXISTS',

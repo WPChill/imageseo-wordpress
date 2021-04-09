@@ -7,9 +7,9 @@ use ImageSeoWP\Exception\NoRenameFile;
 function bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames = [])
 {
     try {
-        $filename = imageseo_get_service('RenameFile')->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
+        $filename = imageseo_get_service('GenerateFilename')->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
     } catch (NoRenameFile $e) {
-        $filename = imageseo_get_service('RenameFile')->getFilenameByAttachmentId($attachmentId);
+        $filename = imageseo_get_service('GenerateFilename')->getFilenameByAttachmentId($attachmentId);
     }
 
     $splitFilename = explode('.', $filename);
@@ -63,68 +63,77 @@ function bulk_image_process_action_scheduler()
             continue;
         }
 
-        //     $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
-        //     if (!empty($pauseBulkProcess)) {
-        //         continue;
-        //     }
+        $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
+        if (!empty($pauseBulkProcess)) {
+            continue;
+        }
 
         $attachmentId = array_shift($optionBulkProcess['id_images']);
         error_log('[attachment id] : ' . $attachmentId);
-        //     try {
-        //         $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true], $optionBulkProcess['settings']['language']);
-        //     } catch (\Exception $e) {
-        //         error_log($e->getMessage());
-        //         update_post_meta($attachmentId, '_imageseo_bulk_report', [
-        //             'success' => false,
-        //         ]);
+        try {
+            $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true], $optionBulkProcess['settings']['language']);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            update_post_meta($attachmentId, '_imageseo_bulk_report', [
+                'success' => false,
+            ]);
 
-        //         continue;
-        //     }
+            continue;
+        }
 
-        //     $alt = '';
-        //     $filename = '';
-        //     $extension = '';
-        // $oldAlt =  = imageseo_get_service('Alt')->getAlt($attachmentId);
+        $alt = '';
+        $filename = '';
+        $extension = '';
+        $oldAlt = imageseo_get_service('Alt')->getAlt($attachmentId);
+        $metadata = wp_get_attachment_metadata($attachmentId);
+        $oldFilename = '';
+        if (isset($metadata['original_image'])) {
+            $oldFilename = $metadata['original_image'];
+        } else {
+            $fileRootDirectories = explode('/', $metadata['file']);
+            $oldFilename = $fileRootDirectories[count($fileRootDirectories) - 1];
+        }
 
-        //     // Optimize Alt
-        //     if ($optionBulkProcess['settings']['optimizeAlt']) {
-        //         $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
+        // Optimize Alt
+        if ($optionBulkProcess['settings']['optimizeAlt']) {
+            $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
 
-        //         $alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
+            $alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
 
-        //         imageseo_get_service('Alt')->updateAlt($attachmentId, $alt);
-        //     }
+            imageseo_get_service('Alt')->updateAlt($attachmentId, $alt);
+        }
 
-        //     // Optimize file
-        //     if ($optionBulkProcess['settings']['optimizeFile']) {
-        //         $renameFileService = imageseo_get_service('RenameFile');
+        // Optimize file
+        if ($optionBulkProcess['settings']['optimizeFile']) {
+            $renameFileService = imageseo_get_service('GenerateFilename');
 
-        //         list($filename, $extension) = bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames);
+            list($filename, $extension) = bulk_image_get_filename_for_preview($attachmentId, $excludeFilenames);
 
-        //         $excludeFilenames[] = $filename;
+            $excludeFilenames[] = $filename;
 
-        //         if (empty($filename)) {
-        //             $renameFileService->removeFilename($attachmentId);
-        //         } else {
-        //             try {
-        //                 $extension = $renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
-        //                 $filename = $renameFileService->validateUniqueFilename($attachmentId, $filename);
+            if (empty($filename)) {
+                $renameFileService->removeFilename($attachmentId);
+            } else {
+                try {
+                    $extension = $renameFileService->getExtensionFilenameByAttachmentId($attachmentId);
+                    $filename = $renameFileService->validateUniqueFilename($attachmentId, $filename);
 
-        //                 $renameFileService->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
-        //             } catch (\Exception $e) {
-        //                 error_log($e->getMessage());
-        //             }
-        //         }
-        //     }
+                    imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
+                } catch (\Exception $e) {
+                    error_log($e->getMessage());
+                }
+            }
+        }
 
         $optionBulkProcess['id_images_optimized'][] = $attachmentId;
 
         update_post_meta($attachmentId, '_imageseo_bulk_report', [
-            'success'   => true,
-            'old_alt'   => 'azerty', //$oldAlt,
-            'filename'  => 'abcd', //$filename,
-            'extension' => '.jpg', //$extension,
-            'alt'       => 'toto', //$alt,
+            'success'      => true,
+            'old_alt'      => $oldAlt,
+            'old_filename' => $oldFilename,
+            'filename'     => $filename,
+            'extension'    => $extension,
+            'alt'          => $alt,
         ]);
 
         $optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
