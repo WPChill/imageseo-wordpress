@@ -48,6 +48,11 @@ import BulkLastProcess from "./LastProcess";
 function BulkWithProviders() {
 	const { state } = useContext(BulkProcessContext);
 
+	//@ts-ignore
+	const limitExcedeed = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false)
+		? true
+		: false;
+
 	if (state.bulkActive) {
 		return <BulkInProcess />;
 	}
@@ -56,7 +61,7 @@ function BulkWithProviders() {
 		<>
 			{!isNil(state.lastProcess) && <BulkLastProcess />}
 
-			<BulkPrepare />
+			{!limitExcedeed && <BulkPrepare />}
 		</>
 	);
 }

@@ -13,7 +13,6 @@ function BulkSettings() {
 
 	//@ts-ignore
 	const pageBuilders = groupBy(IMAGESEO_DATA.PAGE_BUILDERS, (item) => item);
-	console.log(pageBuilders);
 
 	return (
 		<>

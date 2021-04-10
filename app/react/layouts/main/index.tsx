@@ -8,6 +8,7 @@ import { MAIN_CONTENT } from "../../constants/app-tabs";
 import Overview from "../../modules/overview";
 import Bulk from "../../modules/bulk";
 import SocialMedia from "../../modules/social";
+import Settings from "../../modules/settings";
 
 const SCMain = styled.div`
 	width: 85%;
@@ -33,6 +34,8 @@ function Main() {
 					switch (mainContentSelected) {
 						case MAIN_CONTENT.OVERVIEW:
 							return <Overview />;
+						case MAIN_CONTENT.SETTINGS:
+							return <Settings />;
 						case MAIN_CONTENT.BULK_OPTIMIZATION:
 							return <Bulk />;
 						case MAIN_CONTENT.SOCIAL_CARD:

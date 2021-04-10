@@ -4,14 +4,15 @@ import { SVGToggleCross } from "../../svg/ToggleCross";
 import { SVGToggleValid } from "../../svg/ToggleValid";
 
 interface Props {
-	onClick: MouseEventHandler<HTMLButtonElement>;
+	onClick?: MouseEventHandler<HTMLButtonElement>;
 	active: boolean;
 }
 
 export const Toggle = ({ onClick, active }: Props) => {
+	console.log("active : ", active);
 	return (
 		<button
-			onClick={onClick}
+			onClick={onClick ? onClick : null}
 			type="button"
 			className={classNames(
 				{

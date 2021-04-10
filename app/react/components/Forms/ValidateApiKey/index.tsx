@@ -33,20 +33,20 @@ function FormValidateApiKey() {
 			get(data, "user.code", null) === "not_exist"
 		) {
 			Swal.fire({
-				title: __("Error!", "wp-health"),
-				text: __("Your API key is not valid", "wp-health"),
+				title: __("Error!", "imageseo"),
+				text: __("Your API key is not valid", "imageseo"),
 				icon: "error",
-				confirmButtonText: __("Close", "wp-health"),
+				confirmButtonText: __("Close", "imageseo"),
 			});
 			return;
 		}
 
 		setApiKey(apiKeyLocal);
 		Swal.fire({
-			title: __("Great!", "wp-health"),
-			text: __("Your API key is registered", "wp-health"),
+			title: __("Great!", "imageseo"),
+			text: __("Your API key is registered", "imageseo"),
 			icon: "success",
-			confirmButtonText: __("Close", "wp-health"),
+			confirmButtonText: __("Close", "imageseo"),
 		});
 	};
 
@@ -73,7 +73,7 @@ function FormValidateApiKey() {
 				type="submit"
 			>
 				{loading && <SVGLoader className="mr-2" />}
-				{__("Validate your API KEY", "wp-health")}
+				{__("Validate your API KEY", "imageseo")}
 			</button>
 		</form>
 	);

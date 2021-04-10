@@ -4,10 +4,10 @@ import { AlertSimple, IconsAlert } from "../../components/Alerts/Simple";
 import FormRegister from "../../components/Forms/Register";
 import FormValidateApiKey from "../../components/Forms/ValidateApiKey";
 import OverviewCountImages from "../../components/OverviewCountImages";
+import OverviewCredit from "../../components/OverviewCredit";
 import SeoFact from "../../components/SeoFact";
 import { PageContext } from "../../contexts/PageContext";
 import getApiKey from "../../helpers/getApiKey";
-import useCountImages from "../../hooks/useCountImages";
 import useOptimizedTimeEstimated from "../../hooks/useOptimizedTimeEstimated";
 
 //@ts-ignore
@@ -39,6 +39,9 @@ const OverviewConnected = () => {
 				)}
 			</div>
 			<OverviewCountImages />
+			<div className="mt-4">
+				<OverviewCredit />
+			</div>
 		</>
 	);
 };

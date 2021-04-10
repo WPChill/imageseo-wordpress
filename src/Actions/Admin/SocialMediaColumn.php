@@ -21,9 +21,11 @@ class SocialMediaColumn
         }
 
         $postTypes = $this->optionService->getOption('social_media_post_types');
-        foreach ($postTypes as $postType) {
-            add_filter('manage_' . $postType . '_posts_columns', [$this, 'addColumn']);
-            add_action('manage_' . $postType . '_posts_custom_column', [$this, 'previewSocialMediaImage'], 10, 2);
+        if (is_array($postTypes)) {
+            foreach ($postTypes as $postType) {
+                add_filter('manage_' . $postType . '_posts_columns', [$this, 'addColumn']);
+                add_action('manage_' . $postType . '_posts_custom_column', [$this, 'previewSocialMediaImage'], 10, 2);
+            }
         }
 
         add_action('add_meta_boxes', [$this, 'addMetaBoxPreviewSocialImage']);
@@ -75,11 +77,11 @@ class SocialMediaColumn
                 if (!$url && !$this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
                     <p><?php _e('No social image', 'imageseo'); ?></p>
-                    <?php if (!$limitExcedeed): ?>
+                    <?php if (!$limitExcedeed) { ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
                             <?php _e('Generate', 'imageseo'); ?>
                         </a>
-                    <?php else: ?>
+                    <?php } else { ?>
                         <a
                             class="imageseo-btn--simple imageseo-btn--small-padding imageseo-btn"
                             target="_blank"
@@ -87,7 +89,7 @@ class SocialMediaColumn
                         >
                             <?php _e('Get more credits', 'imageseo'); ?>
                         </a>
-                    <?php endif; ?>
+                    <?php } ?>
                     <?php
                 } elseif (!$url && $this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
@@ -98,7 +100,7 @@ class SocialMediaColumn
                     <?php _e('Current loading... Reload the page.', 'imageseo'); ?>
                     <?php
                 } elseif ($url) {
-                    if ($this->imageSocialService->isCurrentProcess($postId)):
+                    if ($this->imageSocialService->isCurrentProcess($postId)) {
                         ?>
                          <img
                             src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
@@ -106,16 +108,16 @@ class SocialMediaColumn
                         />
                         <?php _e('Current regeneration...', 'imageseo'); ?>
                         <?php
-                    endif; ?>
+                    } ?>
                     <div>
                         <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
                     </div>
-                    
-                    <?php if (!$limitExcedeed): ?>
+
+                    <?php if (!$limitExcedeed) { ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
                             <?php _e('Update', 'imageseo'); ?>
                         </a>
-                    <?php endif; ?>
+                    <?php } ?>
                     <?php
                 }
                 break;

@@ -110,8 +110,6 @@ function FormRegister() {
 			newsletters: !isEmpty(values.newsletters),
 		});
 
-		console.log("[data]", data);
-
 		if (!get(data, "user", false)) {
 			if (get(data, "code", false) === "missed_parameters") {
 				prepareErrors = {

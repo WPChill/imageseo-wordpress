@@ -11,21 +11,12 @@ function LimitExcedeed({ percent }) {
 	return (
 		<AlertSimple icon={IconsAlert.EXCLAMATION} yellow>
 			<p className="text-sm font-bold">
-				{__(
-					"The bulk have been paused. You need more credits to resume it.",
-					"imageseo"
-				)}
+				{__("You need more credits to resume it.", "imageseo")}
 			</p>
-			{!isNaN(percent) && (
-				<p className="text-sm mt-2">
-					<strong>{percent}% </strong>
-					{__("images have been optimized", "imageseo")}.
-				</p>
-			)}
 			<a
 				href="https://app.imageseo.io/plan"
 				target="_blank"
-				className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4"
+				className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 mt-4"
 			>
 				{__("Get more credits", "imageseo")}
 			</a>

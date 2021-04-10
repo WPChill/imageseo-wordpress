@@ -118,6 +118,7 @@ class Enqueue
                 'ALT_FILL_TYPE'                  => AltSpecification::getFillType(),
                 'PAGE_BUILDERS'                  => imageseo_get_service('WordPressData')->getPageBuilders(),
                 'URL_RECOUNT'                    => $urlRecount,
+                'SOCIAL_POST_TYPES'              => imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia(),
             ];
 
             wp_register_script('imageseo-application', IMAGESEO_URL_DIST . '/application.js', ['wp-i18n'], IMAGESEO_VERSION, true);

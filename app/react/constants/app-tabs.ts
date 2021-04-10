@@ -5,14 +5,14 @@ export enum TABS {
 	OVERVIEW,
 	BULK_OPTIMIZATION,
 	SOCIAL_CARD,
-	ON_UPLOAD_SETTINGS
+	SETTINGS
 }
 
 export enum MAIN_CONTENT {
 	OVERVIEW,
 	BULK_OPTIMIZATION,
 	SOCIAL_CARD,
-	ON_UPLOAD_SETTINGS
+	SETTINGS
 
 }
 
@@ -27,11 +27,11 @@ export default [
 		icon: "icon-overview.svg",
 	},
 	{
-		key: TABS.ON_UPLOAD_SETTINGS,
+		key: TABS.SETTINGS,
 		label: __("Settings", "imageseo"),
 		order: 1,
 		description: __("Time saver", "imageseo"),
-		mainContent: MAIN_CONTENT.ON_UPLOAD_SETTINGS,
+		mainContent: MAIN_CONTENT.SETTINGS,
 		icon: "icon-settings.svg",
 	},
 	{

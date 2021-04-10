@@ -17,7 +17,6 @@ const OverviewCountImages = () => {
 		Number(data.total_images),
 		Number(data.total_images_no_alt)
 	);
-	console.log(data);
 
 	return (
 		<div className="bg-white border rounded-lg">

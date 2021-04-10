@@ -10,6 +10,7 @@ import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
 import { restartBulkProcess } from "../../../../services/ajax/current-bulk";
 import LimitExcedeed from "../LimitExcedeed";
 import { SVGPlay } from "../../../../svg/Play";
+import { AlertSimple, IconsAlert } from "../../../Alerts/Simple";
 
 const BulkLastProcess = () => {
 	const { state, dispatch } = useContext(BulkProcessContext);
@@ -57,13 +58,39 @@ const BulkLastProcess = () => {
 
 	return (
 		<>
-			<div className="bg-white rounded-lg border max-w-5xl p-6">
-				<h2 className="text-base font-bold mb-2 flex items-center">
-					{__("Bulk optimization paused", "imageseo")}
-				</h2>
-				<p className="text-sm font-bold">
-					{total_ids_optimized} / {total_images} images - {percent}%
-				</p>
+			<div className="bg-white rounded-lg border p-6">
+				{limitExcedeed && (
+					<div className="mb-4">
+						<AlertSimple yellow icon={IconsAlert.EXCLAMATION}>
+							<p className="text-sm font-bold">
+								{__(
+									"You need more credits to resume it.",
+									"imageseo"
+								)}
+							</p>
+						</AlertSimple>
+					</div>
+				)}
+				<div className="flex items-center">
+					<div className="flex-1">
+						<h2 className="text-base font-bold mb-2 flex items-center">
+							{__("Bulk optimization paused", "imageseo")}
+						</h2>
+						<p className="text-sm font-bold">
+							{total_ids_optimized} / {total_images} images -{" "}
+							{percent}%
+						</p>
+					</div>
+					{limitExcedeed && (
+						<a
+							href="https://app.imageseo.io/plan"
+							target="_blank"
+							className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+						>
+							{__("Get more credits", "imageseo")}
+						</a>
+					)}
+				</div>
 
 				<div className="relative my-2">
 					<div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200">
@@ -85,11 +112,6 @@ const BulkLastProcess = () => {
 					</div>
 				)}
 			</div>
-			{limitExcedeed && (
-				<div className="mt-4">
-					<LimitExcedeed percent={percent} />
-				</div>
-			)}
 		</>
 	);
 };
