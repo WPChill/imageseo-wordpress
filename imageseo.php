@@ -31,6 +31,7 @@ define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
 define('IMAGESEO_API_URL', 'https://imageseo-api-external.herokuapp.com');
+// define('IMAGESEO_API_URL', 'http://localhost:3001');
 define('IMAGESEO_APP_URL', 'https://app.imageseo.io');
 define('IMAGESEO_SITE_URL', 'https://imageseo.io');
 define('IMAGESEO_LANGUAGES', IMAGESEO_DIR . '/languages/');

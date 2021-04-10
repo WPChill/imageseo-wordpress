@@ -134,11 +134,10 @@ function FormRegister() {
 				};
 				setLoading(false);
 				actions.setErrors(prepareErrors);
-				return;
-			} else if (get(data, "code", false) === "not_available") {
+
 				Swal.fire({
 					title: __("Error!", "imageseo"),
-					html: `Registration did not work, <a href='mailto:support@imageseo.io'>please contact support </a>`,
+					html: `This email is not available`,
 					icon: "error",
 					confirmButtonText: __("Close", "imageseo"),
 				});
@@ -149,16 +148,24 @@ function FormRegister() {
 		setLoading(false);
 
 		setApiKey(get(data, "user.project_create.api_key", null));
-
-		Swal.fire({
-			title: __("Great!", "imageseo"),
-			text: __(
-				"You are registered and we have configured your API key",
-				"imageseo"
-			),
-			icon: "success",
-			confirmButtonText: __("Close", "imageseo"),
-		});
+		if (get(data, "code", null)) {
+			Swal.fire({
+				title: __("Error!", "imageseo"),
+				html: `Registration did not work, <a href='mailto:support@imageseo.io'>please contact support </a>`,
+				icon: "error",
+				confirmButtonText: __("Close", "imageseo"),
+			});
+		} else {
+			Swal.fire({
+				title: __("Great!", "imageseo"),
+				text: __(
+					"You are registered and we have configured your API key",
+					"imageseo"
+				),
+				icon: "success",
+				confirmButtonText: __("Close", "imageseo"),
+			});
+		}
 	};
 
 	return (

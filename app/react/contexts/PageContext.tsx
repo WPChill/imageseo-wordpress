@@ -61,7 +61,7 @@ export const PageContextProvider = ({ children }) => {
 
 	const setApiKeyProcess = (value) => {
 		//@ts-ignore
-		IMAGESEO.API_KEY = value;
+		IMAGESEO_DATA.API_KEY = value;
 		setApiKey(value);
 	};
 

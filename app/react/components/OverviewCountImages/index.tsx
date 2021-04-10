@@ -31,7 +31,7 @@ const OverviewCountImages = () => {
 					<p className="text-sm mt-2">
 						{__(`Did you know that`, "imageseo")}{" "}
 						<span className="text-blue-500 font-bold">
-							{100 - percentOptimized}%
+							{(100 - percentOptimized).toFixed(2)}%
 						</span>{" "}
 						{__(`alternative texts are missing ?`, "imageseo")}
 					</p>

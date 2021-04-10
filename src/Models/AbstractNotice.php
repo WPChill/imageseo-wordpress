@@ -34,6 +34,10 @@ abstract class AbstractNotice
      */
     public static function admin_notice()
     {
+        $screen = get_current_screen();
+        if ('toplevel_page_imageseo-settings' === $screen->id) {
+            return;
+        }
         $class_call = get_called_class();
         if (!file_exists($class_call::get_template_file())) {
             return;
