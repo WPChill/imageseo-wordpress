@@ -10,10 +10,6 @@ class BackupFilename
 {
     public function hooks()
     {
-        if (!imageseo_allowed()) {
-            return;
-        }
-
         add_action('admin_post_imageseo_backup_rename_file', [$this, 'process']);
     }
 

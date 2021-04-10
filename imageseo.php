@@ -102,6 +102,7 @@ function imageseo_plugin_uninstall()
 function imageseo_plugin_loaded()
 {
     require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
+    require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
     require_once plugin_dir_path(__FILE__) . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
 
     if (imageseo_is_compatible()) {

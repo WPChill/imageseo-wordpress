@@ -42,9 +42,6 @@ class MediaLibrary
             return $metadata;
         }
 
-        $file = explode('.', basename($metadata['file']));
-        $extension = array_pop($file);
-
         $activeAltOnUpload = $this->optionService->getOption('active_alt_write_upload');
         $activeRenameOnUpload = $this->optionService->getOption('active_rename_write_upload');
 
@@ -64,25 +61,7 @@ class MediaLibrary
             return $metadata;
         }
 
-        try {
-            $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true]);
-        } catch (\Exception $e) {
-            return $metadata;
-        }
-
-        if ($activeAltOnUpload) {
-            $this->altService->updateAltAttachmentWithReport($attachmentId);
-        }
-
-        if ($activeRenameOnUpload) {
-            try {
-                $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId);
-                if (!empty($filename)) {
-                    $this->generateFilename->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
-                }
-            } catch (NoRenameFile $e) {
-            }
-        }
+        as_schedule_single_action(time() + 10, 'action_worker_on_upload_process_action_scheduler', ['attachment_id' => $attachmentId], 'on_upload_image');
 
         return $metadata;
     }
@@ -186,7 +165,7 @@ class MediaLibrary
                     class="imageseo-filename-ajax large-text"
                     id="imageseo-filename-<?php echo $attachmentId; ?>"
                     value="<?php echo $filename; ?>"
-                    placeholder="<?php echo esc_html('Enter filename', 'imageseo'); ?>"
+                    placeholder="<?php echo esc_html('Enter NEW filename', 'imageseo'); ?>"
                 />
                 <button class="button" data-id="<?php echo $attachmentId; ?>">
                     <span><?php _e('Submit', 'imageseo'); ?></span>

@@ -121,6 +121,9 @@ class GenerateFilename
     public function generateUniqueFilename($data, $name, $counter = 1)
     {
         list($directory, $ext, $delimiter, $attachmentId, $excludeFilenames) = $data;
+        if (!$excludeFilenames) {
+            $excludeFilenames = [];
+        }
 
         $numberTryName = apply_filters('imageseo_number_try_name_file', 7);
 
