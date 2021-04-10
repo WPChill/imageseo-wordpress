@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 4.8+
 Tested up to: 5.6
 Requires PHP: 7.0
-Stable tag: v1.3.2
+Stable tag: v2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,8 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 2.0.0 (02-22-2020) =
 
 = 1.3.2 (02-22-2020) =
 - New: Creation of a new more efficient bulk process
