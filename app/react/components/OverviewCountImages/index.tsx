@@ -1,5 +1,5 @@
 import React from "react";
-import { isNull } from "lodash";
+import { isNaN, isNull } from "lodash";
 import { getPercentImagesOptimizedAlt } from "../../helpers/getPercentImagesOptimizedAlt";
 import useCountImages from "../../hooks/useCountImages";
 
@@ -18,6 +18,11 @@ const OverviewCountImages = () => {
 		Number(data.total_images_no_alt)
 	);
 
+	const missPercent =
+		Number(data.total_images) === 0
+			? 0
+			: (100 - percentOptimized).toFixed(2);
+
 	return (
 		<div className="bg-white border rounded-lg">
 			<div className="px-4 py-5 sm:p-6">
@@ -27,11 +32,11 @@ const OverviewCountImages = () => {
 						"imageseo"
 					)}
 				</p>
-				{percentOptimized < 99 && (
+				{percentOptimized < 99 && !isNaN(missPercent) && (
 					<p className="text-sm mt-2">
 						{__(`Did you know that`, "imageseo")}{" "}
 						<span className="text-blue-500 font-bold">
-							{(100 - percentOptimized).toFixed(2)}%
+							{missPercent}%
 						</span>{" "}
 						{__(`alternative texts are missing ?`, "imageseo")}
 					</p>

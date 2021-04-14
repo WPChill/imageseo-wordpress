@@ -32,8 +32,10 @@ const OverviewConnected = () => {
 							</strong>
 						</p>
 						<p className="text-sm font-bold mt-1">
-							{__(`We could certainly do it in`, `imageseo`)}{" "}
-							{data.string_time_estimated}.
+							{__(
+								`Start a bulk optimization to fill out all your missing alt texts with SEO friendly content`,
+								`imageseo`
+							)}
 						</p>
 					</AlertSimple>
 				)}
@@ -91,7 +93,7 @@ const Overview = () => {
 					<div className=" pb-2 mb-4">
 						<h2 className="font-bold text-xl">
 							{isEmpty(apiKey) &&
-								__("You already have a Key API?", "imageseo")}
+								__("You already have an API Key?", "imageseo")}
 							{!isEmpty(apiKey) && __("Your API Key", "imageseo")}
 						</h2>
 					</div>

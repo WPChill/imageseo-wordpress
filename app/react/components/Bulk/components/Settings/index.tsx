@@ -152,7 +152,7 @@ function BulkSettings() {
 								</label>
 								<p className="text-sm">
 									{__(
-										"It might slow the process (+10sec by images) but it's really worth for SEO.",
+										"It's really worth for SEO ! 😎",
 										"imageseo"
 									)}
 								</p>
@@ -377,7 +377,7 @@ function BulkSettings() {
 								</label>
 								<p className="text-sm">
 									{__(
-										"It might slow the process (+10sec by images). This is not the priority in SEO",
+										"It might slow the process (+10sec by images). Filenames are not really relevant for SEO",
 										"imageseo"
 									)}
 								</p>
@@ -397,7 +397,7 @@ function BulkSettings() {
 									</h2>
 									<p>
 										{__(
-											"Renaming (or moving) files is a dangerous process. Before doing anything in bulk, try renaming your files on by one, then check if the references (in your pages) have been updated properly. The renaming can't cover all use cases, as some plugins are unfortunately using unconventional ways to encode the usage of the files. Therefore, it is absolutely necessary to backup your files and database in order to enjoy this plugin at its full extent.",
+											"Renaming or moving file is always tricky and can on rare occasion brake your images. Before triggering, try to rename your file in the library , then check if the images you renamed are available on the related pages. If so, you can bulk optimize the filenames. Bulking alt texts is always safe.",
 											"imageseo"
 										)}
 									</p>

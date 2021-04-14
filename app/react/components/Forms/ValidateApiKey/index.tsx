@@ -22,7 +22,8 @@ function FormValidateApiKey() {
 		setApiKeyLocal(apiKey);
 	}, [apiKey]);
 
-	const handleOnSubmit = async () => {
+	const handleOnSubmit = async (e) => {
+		e.preventDefault();
 		setLoading(true);
 		const { success, data } = await validateApiKey(apiKeyLocal);
 		setLoading(false);

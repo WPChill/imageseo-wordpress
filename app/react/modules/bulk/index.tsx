@@ -1,5 +1,5 @@
-import React from "react";
-import { get } from "lodash";
+import React, { Suspense } from "react";
+import { get, isNil } from "lodash";
 
 //@ts-ignore
 const { __ } = wp.i18n;
@@ -8,6 +8,17 @@ import BulkSettingsContextProvider from "../../contexts/BulkSettingsContext";
 import BulkProcessContextProvider from "../../contexts/BulkProcessContext";
 import UserContextProvider from "../../contexts/UserContext";
 import BulkWithProviders from "../../components/Bulk";
+import useOwner from "../../hooks/useOwner";
+import NeedConnectedApi from "../../components/NeedConnectedApi";
+
+const BulkWithOwner = () => {
+	const owner = useOwner();
+
+	if (isNil(owner)) {
+		return <NeedConnectedApi />;
+	}
+	return <BulkWithProviders />;
+};
 
 const Bulk = () => {
 	return (
@@ -27,7 +38,17 @@ const Bulk = () => {
 						limit_images: get(IMAGESEO_DATA, "LIMIT_IMAGES", null),
 					}}
 				>
-					<BulkWithProviders />
+					<Suspense
+						fallback={
+							<>
+								<div className="mt-10">
+									Data is current loading
+								</div>
+							</>
+						}
+					>
+						<BulkWithOwner />
+					</Suspense>
 				</UserContextProvider>
 			</BulkProcessContextProvider>
 		</BulkSettingsContextProvider>

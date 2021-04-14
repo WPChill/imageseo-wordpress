@@ -47,11 +47,11 @@ class AltSpecification
         return [
             [
                 'id'          => self::FILL_ALL,
-                'label'       => __('All alt', 'imageseo'),
+                'label'       => __('All Alt Texts', 'imageseo'),
             ],
             [
                 'id'          => self::FILL_ONLY_EMPTY,
-                'label'       => __('Only alt empty', 'imageseo'),
+                'label'       => __('Only missing alt texts', 'imageseo'),
             ],
         ];
     }

@@ -568,7 +568,7 @@ function SocialMediaWithProviders() {
 							/>
 							<p className="text-sm mt-2">
 								{__(
-									"This image will only be used if your page/article doesn’t have image",
+									"This image will only be used if your page/article doesn’t have a featured image",
 									"imageseo"
 								)}
 							</p>
