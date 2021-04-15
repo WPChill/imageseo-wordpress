@@ -8,10 +8,8 @@ const Application = () => {
 	return (
 		<PageContextProvider>
 			<GlobalStyle />
-			<div className="flex">
-				<SideNavigation />
-				<Main />
-			</div>
+			<SideNavigation />
+			<Main />
 		</PageContextProvider>
 	);
 };

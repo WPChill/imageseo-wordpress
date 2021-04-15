@@ -52,7 +52,7 @@ function SocialMediaImagePreview() {
 						"imageseo-media__layout--card-right":
 							settings.layout === "CARD_RIGHT",
 					},
-					"imageseo-media__container",
+					"imageseo-media__container sticky",
 					"imageseo-media__container--preview"
 				)}
 				style={{

@@ -12,13 +12,14 @@ interface Props {
 const SCTab = styled.div<Props>`
 	display: flex;
 	align-items: flex-start;
+	flex: 1;
 	padding: 16px;
 	justify-content: center;
 	@media (min-width: 1200px) {
 		padding-right: 10px;
 		justify-content: flex-start;
 	}
-	border-left: 2px solid transparent;
+	border-bottom: 2px solid transparent;
 	border-bottom: 1px solid #f1f1f1;
 	&:first-child {
 		border-top: 1px solid #f1f1f1;
@@ -29,20 +30,10 @@ const SCTab = styled.div<Props>`
 	}
 `;
 
-const SCTabIndicator = styled.div<Props>`
-	width: 24px;
-	height: 24px;
-	margin: 9px 16px 7px 0;
-	border-radius: 12px;
-	background-color: var(--grey-dark);
-	${({ isActive }) => isActive && `background-color: var(--blue);`}
-`;
-
 const SCTabContainer = styled.div`
-	@media (min-width: 1200px) {
-		min-width: 250px;
-		width: 15%;
-	}
+	display: flex;
+	align-items: center;
+	width: 100%;
 `;
 
 const SCTabContent = styled.div`
@@ -65,13 +56,7 @@ function SideNavigation() {
 
 	return (
 		<SCTabContainer>
-			<div
-				className="flex items-center justify-center"
-				style={{
-					paddingTop: 16,
-					paddingBottom: 16,
-				}}
-			>
+			<div className="flex items-center justify-center px-8 py-4">
 				<img
 					src={getLinkImage("logo-blue.svg")}
 					style={{ width: 148 }}
@@ -87,7 +72,7 @@ function SideNavigation() {
 							{
 								"border-blue-500 bg-white": isActive,
 							},
-							"border-l-2 border-transparent"
+							"border-b-2 border-transparent"
 						)}
 						onClick={() => actions.setTabSelected(item.key)}
 					>

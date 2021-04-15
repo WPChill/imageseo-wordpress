@@ -11,8 +11,14 @@ import SocialMedia from "../../modules/social";
 import Settings from "../../modules/settings";
 
 const SCMain = styled.div`
-	width: 85%;
-	max-width: calc(85% - 60px);
+	width: 100%;
+	@media (min-width: 1200px) {
+		${(props) =>
+			//@ts-ignore
+			props.mainContentSelected === MAIN_CONTENT.SOCIAL_CARD
+				? `width:98%`
+				: `width:70%`}
+	}
 	background-color: #fff;
 	padding: 36px;
 	padding-bottom: 20px;
@@ -24,7 +30,11 @@ function Main() {
 	const mainContentSelected = useMainContentSelected();
 
 	return (
-		<SCMain>
+		<SCMain
+			className="mx-auto my-4 mb-8"
+			//@ts-ignore
+			mainContentSelected={mainContentSelected}
+		>
 			<h2 className="font-bold text-xl border-b pb-4">
 				<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
 			</h2>

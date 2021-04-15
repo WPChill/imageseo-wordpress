@@ -85,14 +85,14 @@ function SocialMediaWithProviders() {
 	};
 
 	return (
-		<>
-			<div className="border rounded-md overflow-hidden">
+		<div className="flex">
+			<div className="border rounded-md overflow-hidden w-5/12 mr-2">
 				<div className="bg-white p-6">
 					<h2 className="text-lg leading-6 font-medium text-blue-900">
 						{__("Social Media Card Template", "imageseo")}
 					</h2>
-					<div className="flex">
-						<div className="w-1/2 mr-8">
+					<div className="">
+						<div className=" mr-8">
 							<p className="mt-2 mb-4 text-sm font-bold">
 								{__("Data displayed", "imageseo")}
 							</p>
@@ -254,7 +254,7 @@ function SocialMediaWithProviders() {
 								</div>
 							</div>
 						</div>
-						<div className="w-1/2">
+						<div className="">
 							<p className="my-4 text-sm font-bold">
 								{__("Look & Feel", "imageseo")}
 							</p>
@@ -513,8 +513,8 @@ function SocialMediaWithProviders() {
 						{__("Images", "imageseo")}
 					</p>
 
-					<div className="flex mb-4 ">
-						<div className="mr-4 w-1/2">
+					<div className="mb-4 ">
+						<div className="mr-4 ">
 							<label
 								htmlFor="logoUrl"
 								className="text-sm mb-1 block"
@@ -540,7 +540,7 @@ function SocialMediaWithProviders() {
 								}
 							/>
 						</div>
-						<div className="w-1/2">
+						<div className="">
 							<label
 								htmlFor="defaultBgImg"
 								className="text-sm block mb-1"
@@ -582,13 +582,13 @@ function SocialMediaWithProviders() {
 					</button>
 				</div>
 			</div>
-			<div className="border rounded-md bg-white p-4 max-w-5xl mt-4 mx-auto">
+			<div className="border rounded-md bg-white p-4 max-w-5xl mx-auto w-7/12">
 				<h2 className="text-lg leading-6 font-medium text-blue-900 mb-4">
 					{__("Preview", "imageseo")}
 				</h2>
 				<SocialMediaImagePreview />
 			</div>
-		</>
+		</div>
 	);
 }
 
