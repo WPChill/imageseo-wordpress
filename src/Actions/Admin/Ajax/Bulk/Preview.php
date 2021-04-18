@@ -29,22 +29,21 @@ class Preview
         }
 
         $images = [];
-        $i = 0;
-        $max = 5;
-        do {
-            if (!isset($data['id_images_optimized'][$i])) {
-                ++$i;
-                continue;
-            }
-            $attachmentId = $data['id_images_optimized'][$i];
-            $report = get_post_meta($attachmentId, '_imageseo_bulk_report', true);
+        $posts = get_posts([
+            'orderby'        => 'rand',
+            'post_type'      => 'attachment',
+            'post__in'       => isset($data['id_images_optimized']) ? $data['id_images_optimized'] : [],
+            'posts_per_page' => 5,
+        ]);
+
+        foreach ($posts as $key => $post) {
+            $report = get_post_meta($post->ID, '_imageseo_bulk_report', true);
             $images[] = [
-                'attachment_id' => $attachmentId,
-                'url'           => wp_get_attachment_image_url($attachmentId),
+                'attachment_id' => $post->ID,
+                'url'           => wp_get_attachment_image_url($post->ID),
                 'report'        => $report,
             ];
-            ++$i;
-        } while ($i < 5);
+        }
 
         wp_send_json_success($images);
     }

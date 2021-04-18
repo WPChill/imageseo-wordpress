@@ -6,6 +6,7 @@ import FormValidateApiKey from "../../components/Forms/ValidateApiKey";
 import OverviewCountImages from "../../components/OverviewCountImages";
 import OverviewCredit from "../../components/OverviewCredit";
 import SeoFact from "../../components/SeoFact";
+import { TABS } from "../../constants/app-tabs";
 import { PageContext } from "../../contexts/PageContext";
 import getApiKey from "../../helpers/getApiKey";
 import useOptimizedTimeEstimated from "../../hooks/useOptimizedTimeEstimated";
@@ -15,7 +16,7 @@ const { __ } = wp.i18n;
 
 const OverviewConnected = () => {
 	const data = useOptimizedTimeEstimated();
-
+	const { actions } = useContext(PageContext);
 	return (
 		<>
 			<div className="mb-4">
@@ -32,8 +33,18 @@ const OverviewConnected = () => {
 							</strong>
 						</p>
 						<p className="text-sm font-bold mt-1">
+							<span
+								className="underline font-bold cursor-pointer"
+								onClick={() => {
+									actions.setTabSelected(
+										TABS.BULK_OPTIMIZATION
+									);
+								}}
+							>
+								{__("Start a bulk optimization", "imageseo")}
+							</span>
 							{__(
-								`Start a bulk optimization to fill out all your missing alt texts with SEO friendly content`,
+								` to fill out all your missing alt texts with SEO friendly content`,
 								`imageseo`
 							)}
 						</p>

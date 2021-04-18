@@ -43,6 +43,11 @@ class RenameFileContent
         return false;
     }
 
+    /**
+     * @deprecated 2.0.0
+     *
+     * @return void
+     */
     public function hooks()
     {
         // if (is_admin() &&

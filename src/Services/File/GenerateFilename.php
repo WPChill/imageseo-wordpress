@@ -84,19 +84,19 @@ class GenerateFilename
      *
      * @return string
      */
-    public function getNameFileWithAttachmentId($attachmentId, $excludeFilenames = [])
+    public function generateFilenameByReportForAttachmentId($attachmentId, $excludeFilenames = [])
     {
         try {
-            $newName = $this->generateNameFromReport($attachmentId);
+            $newFilename = $this->generateNameFromReport($attachmentId);
         } catch (NoRenameFile $e) {
             throw new NoRenameFile('No need to change');
         }
 
         $filePath = get_attached_file($attachmentId);
         $splitName = explode('.', basename($filePath));
-        $oldName = $splitName[0];
+        $oldFilename = $splitName[0];
 
-        if ($oldName === $newName) {
+        if ($oldFilename === $newFilename) {
             throw new NoRenameFile('No need to change');
         }
 
@@ -106,9 +106,67 @@ class GenerateFilename
             $this->getDelimiter(), // Delimiter,
             $attachmentId,
             $excludeFilenames,
-        ], $newName);
+        ], $newFilename);
 
         return $this->validateUniqueFilename($attachmentId, $generateUniqueFilename);
+    }
+
+    /**
+     * @param int    $attachmentId
+     * @param string $filename
+     * @param int    $i            counter for unique filename
+     *
+     * @return string
+     */
+    public function validateUniqueFilename($attachmentId, $filename, $i = 2)
+    {
+        $extension = $this->getExtensionFilenameByAttachmentId($attachmentId);
+
+        $directory = trailingslashit(dirname(get_attached_file($attachmentId)));
+        $tryNewFilename = sprintf('%s%s.%s', $directory, $filename, $extension);
+
+        if (!file_exists($tryNewFilename)) {
+            return $filename;
+        }
+
+        $newFilename = sprintf('%s-%s', $filename, $i);
+
+        return $this->validateUniqueFilename($attachmentId, $newFilename, ++$i);
+    }
+
+    /**
+     * @since 2.0.0
+     *
+     * @param int   $attachmentId
+     * @param array $excludeFilenames
+     *
+     * @return array
+     */
+    public function generateFilenameForAttachmentId($attachmentId, $excludeFilenames = [])
+    {
+        try {
+            $filename = $this->generateFilenameForAttachmentId($attachmentId, $excludeFilenames);
+        } catch (NoRenameFile $e) {
+            $filename = $this->getFilenameByAttachmentId($attachmentId);
+        }
+
+        $splitFilename = explode('.', $filename);
+        if (1 === count($splitFilename)) { // Need to retrieve current extension
+            $currentFilename = wp_get_attachment_image_src($attachmentId, 'full');
+            $splitCurrentFilename = explode('.', $currentFilename[0]);
+            $extension = $splitCurrentFilename[count($splitCurrentFilename) - 1];
+        } else {
+            $extension = $splitFilename[count($splitFilename) - 1];
+            array_pop($splitFilename);
+            $filename = implode('.', $splitFilename);
+        }
+
+        $filename = sanitize_title(apply_filters('imageseo_generate_filename', $filename));
+
+        return [
+            $filename,
+            $extension,
+        ];
     }
 
     /**
@@ -151,47 +209,5 @@ class GenerateFilename
         }
 
         return $name;
-    }
-
-    /**
-     * @param int    $attachmentId
-     * @param string $filename
-     * @param int    $i
-     *
-     * @return string
-     */
-    public function validateUniqueFilename($attachmentId, $filename, $i = 2)
-    {
-        if (2 === $i && !$this->getAttachmentIdByFilenameImageSeo($filename)) {
-            return $filename;
-        }
-
-        $newFilename = sprintf('%s-%s', $filename, $i);
-
-        if (!$this->getAttachmentIdByFilenameImageSeo($newFilename)) {
-            return $newFilename;
-        }
-
-        return $this->validateUniqueFilename($attachmentId, $filename, ++$i);
-    }
-
-    public function getAttachmentIdByFilenameImageSeo($filename)
-    {
-        global $wpdb;
-
-        $metaKey = sprintf('_imageseo_filename_%s', $filename);
-        $sqlQuery = "SELECT {$wpdb->posts}.*
-            FROM {$wpdb->posts}
-            INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND  {$wpdb->postmeta}.meta_key = '$metaKey' )
-            WHERE 1=1
-            LIMIT 1
-        ";
-
-        $posts = $wpdb->get_results($sqlQuery);
-        if (empty($posts)) {
-            return null;
-        }
-
-        return $posts[0];
     }
 }

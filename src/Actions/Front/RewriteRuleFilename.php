@@ -15,6 +15,11 @@ class RewriteRuleFilename
         $this->generateFilename = imageseo_get_service('GenerateFilename');
     }
 
+    /**
+     * @deprecated 2.0.0
+     *
+     * @return void
+     */
     public function hooks()
     {
         // add_action('init', [$this, 'rewriteRule']);

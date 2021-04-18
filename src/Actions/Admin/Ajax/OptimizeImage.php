@@ -81,7 +81,7 @@ class OptimizeImage
     protected function getFilenameForPreview($attachmentId, $excludeFilenames = [])
     {
         try {
-            $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId, $excludeFilenames);
+            $filename = $this->generateFilename->generateFilenameForAttachmentId($attachmentId, $excludeFilenames);
         } catch (NoRenameFile $e) {
             $filename = $this->generateFilename->getFilenameByAttachmentId($attachmentId);
         }
@@ -103,6 +103,9 @@ class OptimizeImage
         ];
     }
 
+    /**
+     * @return array
+     */
     public function optimizeAlt()
     {
         if (!current_user_can('manage_options')) {
@@ -128,6 +131,9 @@ class OptimizeImage
         wp_send_json_success();
     }
 
+    /**
+     * @return array
+     */
     public function optimizeFilename()
     {
         if (!current_user_can('manage_options')) {
@@ -149,8 +155,8 @@ class OptimizeImage
         $filename = sanitize_title($_POST['filename']);
 
         if (empty($filename)) {
-            $this->generateFilename->removeFilename($attachmentId);
             wp_send_json_success([
+                'code'     => 'empty',
                 'filename' => $filename,
             ]);
 
@@ -167,6 +173,7 @@ class OptimizeImage
         }
 
         wp_send_json_success([
+            'code'     => 'rename',
             'filename' => $filename,
         ]);
     }

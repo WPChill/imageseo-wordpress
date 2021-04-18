@@ -147,7 +147,7 @@ const BulkInProcess = () => {
 							className="inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer mr-4"
 							onClick={handleRefreshData}
 						>
-							{__("Click here for refresh data", "imageseo")}
+							{__("Click here to refresh data", "imageseo")}
 							{reload && (
 								<img
 									//@ts-ignore

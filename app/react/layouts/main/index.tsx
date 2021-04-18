@@ -9,6 +9,7 @@ import Overview from "../../modules/overview";
 import Bulk from "../../modules/bulk";
 import SocialMedia from "../../modules/social";
 import Settings from "../../modules/settings";
+import getLinkImage from "../../helpers/getLinkImage";
 
 const SCMain = styled.div`
 	width: 100%;
@@ -35,9 +36,16 @@ function Main() {
 			//@ts-ignore
 			mainContentSelected={mainContentSelected}
 		>
-			<h2 className="font-bold text-xl border-b pb-4">
-				<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
-			</h2>
+			<div className="flex items-center border-b pb-4">
+				<img
+					src={getLinkImage("logo-blue.svg")}
+					style={{ width: 148 }}
+				/>
+				<h2 className="font-bold text-xl flex items-center">
+					<span className="mx-4">|</span>{" "}
+					<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
+				</h2>
+			</div>
 
 			<div className="py-4">
 				{(() => {

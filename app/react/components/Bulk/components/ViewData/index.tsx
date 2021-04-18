@@ -88,15 +88,18 @@ const ViewDataBulk = ({ state }) => {
 						oldAlt = `${get(image, "report.old_alt")}`;
 					}
 					return (
-						<div className="flex items-center mb-4" key={key}>
+						<div
+							className="flex items-center mb-4 border-b pb-4"
+							key={key}
+						>
 							<div className="p-2 border rounded-lg mr-4">
 								<img src={image.url} className="w-16 h-16" />
 							</div>
-							<div>
+							<div className="flex items-center flex-1">
 								{optimizeFilename && (
-									<>
+									<div className="flex-1 px-2">
 										{!isEmpty(oldFilename) && (
-											<p className="text-sm">
+											<p className="text-sm text-gray-500">
 												(
 												{__("Old filename", "imageseo")}
 												: {oldFilename})
@@ -105,17 +108,20 @@ const ViewDataBulk = ({ state }) => {
 
 										<p className="text-sm mb-2">
 											<strong>
-												{__("Filename", "imageseo")}{" "}
+												{__(
+													"New Filename:",
+													"imageseo"
+												)}{" "}
 											</strong>
 											{filename}{" "}
 										</p>
-									</>
+									</div>
 								)}
 
 								{optimizeAlt && (
-									<>
+									<div className="flex-1 px-2">
 										{!isEmpty(oldAlt) && (
-											<p className="text-sm">
+											<p className="text-sm text-gray-500">
 												({__("Old alt", "imageseo")}:{" "}
 												{oldAlt})
 											</p>
@@ -126,7 +132,7 @@ const ViewDataBulk = ({ state }) => {
 											</strong>{" "}
 											{alt}
 										</p>
-									</>
+									</div>
 								)}
 							</div>
 						</div>

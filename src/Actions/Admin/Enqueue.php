@@ -70,7 +70,7 @@ class Enqueue
         }
 
         if (in_array($page, ['upload.php'], true)) {
-            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery']);
+            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery', 'wp-i18n']);
         }
 
         if (in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {

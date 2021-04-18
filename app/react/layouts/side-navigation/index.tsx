@@ -56,12 +56,6 @@ function SideNavigation() {
 
 	return (
 		<SCTabContainer>
-			<div className="flex items-center justify-center px-8 py-4">
-				<img
-					src={getLinkImage("logo-blue.svg")}
-					style={{ width: 148 }}
-				/>
-			</div>
 			{TABS.map((item) => {
 				const isActive = item.key === tabSelected.key;
 				return (

@@ -336,39 +336,58 @@ function BulkSettings() {
 									</h2>
 									<p>
 										{__(
-											"It looks like you are using a page builder for WordPress. Our file renaming system is fully compatible with Gutenberg or the Classic Editor. Take every precaution if you still want to rename your files.",
+											"It looks like you are using a page builder for WordPress. Our file renaming system is fully compatible with Gutenberg or the Classic Editor. By default, we prevent you from doing this, but you can unlock the functionality by using a filter.",
 											"imageseo"
 										)}
 									</p>
+									<a
+										href="https://imageseo.io/documentation/how-to-unlock-file-renaming-for-a-page-builder/"
+										className="font-bold underline"
+									>
+										I am aware of this and I still want to
+										rename my files
+									</a>
 								</AlertSimple>
 							</div>
 						)}
 						<div className="flex">
 							<Toggle
-								onClick={() =>
+								onClick={() => {
+									if (
+										get(pageBuilders, "true", []).length > 0
+									) {
+										return;
+									}
 									dispatch({
 										type: "UPDATE_OPTION",
 										payload: {
 											key: "optimizeFile",
 											value: !settings.optimizeFile,
 										},
-									})
-								}
+									});
+								}}
 								active={settings.optimizeFile}
 							/>
 							<div className="ml-4">
 								<label
 									htmlFor="optimizeFile"
 									className="block text-sm font-medium text-gray-700"
-									onClick={() =>
+									onClick={() => {
+										if (
+											get(pageBuilders, "true", [])
+												.length > 0
+										) {
+											return;
+										}
+
 										dispatch({
 											type: "UPDATE_OPTION",
 											payload: {
 												key: "optimizeFile",
 												value: !settings.optimizeFile,
 											},
-										})
-									}
+										});
+									}}
 								>
 									{__(
 										"I want to optimize my image names for SEO",

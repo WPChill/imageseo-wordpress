@@ -35,9 +35,18 @@ class WordPressData
 
     public function getPageBuilders()
     {
-        return apply_filters('imageseo_get_page_builders', [
+        $builders = apply_filters('imageseo_get_page_builders', [
             'beaver_builder'  => class_exists('FLBuilderModel'),
             'visual_composer' => defined('VCV_VERSION'),
+            'divi'            => defined('ET_BUILDER_THEME'),
         ]);
+
+        if (apply_filters('imageseo_authorize_page_builder', false)) {
+            foreach ($builders as $key => $value) {
+                $builders[$key] = false;
+            }
+        }
+
+        return $builders;
     }
 }

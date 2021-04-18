@@ -85,7 +85,7 @@ class MediaLibraryReport
         $this->reportImageService->generateReportByAttachmentId($attachmentId);
 
         try {
-            $filename = $this->generateFilename->getNameFileWithAttachmentId($attachmentId);
+            $filename = $this->generateFilename->generateFilenameForAttachmentId($attachmentId);
         } catch (NoRenameFile $e) {
             wp_redirect($redirectUrl);
 
