@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-18T16:11:53+00:00\n"
+"POT-Creation-Date: 2021-04-18T16:24:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: imageseo\n"
@@ -39,6 +39,15 @@ msgstr ""
 #: app/javascripts/media-upload.js:86
 #: app/javascripts/media-upload.js:96
 #: app/javascripts/media-upload.js:104
+#: app/react/components/Bulk/components/Prepare/index.js:66
+#: app/react/components/Bulk/components/Prepare/index.js:82
+#: app/react/components/Forms/Register/index.js:142
+#: app/react/components/Forms/Register/index.js:156
+#: app/react/components/Forms/Register/index.js:166
+#: app/react/components/Forms/ValidateApiKey/index.js:40
+#: app/react/components/Forms/ValidateApiKey/index.js:50
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:71
+#: app/react/components/ModuleSettings/SocialSettings/index.js:61
 msgid "Close"
 msgstr ""
 
@@ -56,5 +65,500 @@ msgid "You can reload the page to see the change."
 msgstr ""
 
 #: app/javascripts/media-upload.js:101
+#: app/react/components/Bulk/components/LastProcess/index.js:43
 msgid "Oups!"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:61
+#: app/react/components/Bulk/components/LastProcess/index.js:32
+#: app/react/components/Bulk/components/Prepare/index.js:88
+msgid "Are you sure?"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:62
+msgid "You will always be able to pick up where the process left off."
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:69
+msgid "Stop process"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:143
+msgid "Bulk optimization in progress"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:150
+msgid "Click here to refresh data"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:170
+msgid "Next process in few seconds"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:208
+msgid "View results"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:216
+msgid "Pause"
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:225
+msgid "The process ended well."
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:228
+msgid "You can edit and view all your results in your media library in 'list' mode."
+msgstr ""
+
+#: app/react/components/Bulk/components/InProcess/index.js:238
+msgid "View medias"
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:33
+msgid "We will pick up where you left off."
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:37
+msgid "Restart process"
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:44
+msgid "Limit excedeed."
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:66
+#: app/react/components/Bulk/components/LimitExcedeed/index.js:14
+msgid "You need more credits to resume it."
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:77
+msgid "Bulk optimization paused"
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:90
+#: app/react/components/Bulk/components/LimitExcedeed/index.js:21
+#: app/react/components/Bulk/components/Prepare/index.js:189
+msgid "Get more credits"
+msgstr ""
+
+#: app/react/components/Bulk/components/LastProcess/index.js:111
+msgid "Restart"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:63
+#: app/react/components/Bulk/components/Prepare/index.js:73
+msgid "Oups !"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:64
+msgid "There are no images to optimize"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:75
+msgid "Please select the format of your alternative text (alt)"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:90
+msgid "You're about to launch a bulk optimization. You can pause it and resume it at any time."
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:99
+msgid "Yes, let's go!"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:120
+msgid "Start a new bulk optimization"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:132
+msgid "Forecast: with your current settings"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:137
+msgid "images will be optimized."
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:146
+#: app/react/components/Bulk/components/Prepare/index.js:158
+msgid "You have"
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:148
+#: app/react/components/Bulk/components/Prepare/index.js:160
+msgid "credit(s) left in your account."
+msgstr ""
+
+#: app/react/components/Bulk/components/Prepare/index.js:175
+msgid "optimizations have already been done!"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:33
+msgid "In which language should we write your filenames and alternative texts?"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:73
+msgid "Which images do you want to optimize?"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:117
+msgid "ALT text settings"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:148
+msgid "I want to fill out and optimize my ALT Texts for SEO and Accessibility."
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:154
+msgid "It's really worth for SEO ! 😎"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:169
+msgid "Which alt texts do you want to optimize?"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:208
+msgid "Format"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:269
+msgid "Custom template. You can use multiple shortcode or what you want. Only for advanced user"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:324
+msgid "Image name settings"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:332
+msgid "File renaming is not sure to be compatible"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:338
+msgid "It looks like you are using a page builder for WordPress. Our file renaming system is fully compatible with Gutenberg or the Classic Editor. By default, we prevent you from doing this, but you can unlock the functionality by using a filter."
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:348
+msgid "I am aware of this and I still want to rename my files"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:395
+msgid "I want to optimize my image names for SEO"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:401
+msgid "It might slow the process (+10sec by images). Filenames are not really relevant for SEO"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:415
+msgid "Be careful: prepare a backup"
+msgstr ""
+
+#: app/react/components/Bulk/components/Settings/index.js:421
+msgid "Renaming or moving file is always tricky and can on rare occasion brake your images. Before triggering, try to rename your file in the library , then check if the images you renamed are available on the related pages. If so, you can bulk optimize the filenames. Bulking alt texts is always safe."
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:43
+msgid "Results details"
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:53
+msgid "Reload data"
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:68
+msgid "Here is the preview of 5 randoms alt tags generated by our AI.  You can manually edit them in the WordPress media library."
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:104
+msgid "Old filename"
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:111
+msgid "New Filename:"
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:125
+msgid "Old alt"
+msgstr ""
+
+#: app/react/components/Bulk/components/ViewData/index.js:131
+msgid "Alt:"
+msgstr ""
+
+#: app/react/components/Bulk/index.js:36
+msgid "Configuration"
+msgstr ""
+
+#: app/react/components/Bulk/index.js:39
+msgid "Prepare the configuration of your bulk optimization"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:139
+#: app/react/components/Forms/Register/index.js:153
+#: app/react/components/Forms/ValidateApiKey/index.js:37
+msgid "Error!"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:160
+#: app/react/components/Forms/ValidateApiKey/index.js:47
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:68
+#: app/react/components/ModuleSettings/SocialSettings/index.js:58
+msgid "Great!"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:161
+msgid "You are registered and we have configured your API key"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:179
+msgid "First name"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:196
+msgid "It's nicer if we have your first name :)"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:208
+msgid "Last name"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:225
+msgid "You must enter your name"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:253
+msgid "No email, no chocolate."
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:300
+msgid "You need to have a password."
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:319
+msgid "I agree to"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:325
+msgid "ImageSEO's Terms of Service"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:334
+msgid "You must accept the terms to validate your registration."
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:356
+msgid "News and features updates, as well as occasional company announcements."
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:366
+msgid "The registration form is not complete."
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:372
+msgid "This email is not available"
+msgstr ""
+
+#: app/react/components/Forms/Register/index.js:381
+msgid "Register"
+msgstr ""
+
+#: app/react/components/Forms/ValidateApiKey/index.js:38
+msgid "Your API key is not valid"
+msgstr ""
+
+#: app/react/components/Forms/ValidateApiKey/index.js:48
+msgid "Your API key is registered"
+msgstr ""
+
+#: app/react/components/Forms/ValidateApiKey/index.js:60
+msgid "Enter your Api Key"
+msgstr ""
+
+#: app/react/components/Forms/ValidateApiKey/index.js:77
+msgid "Validate your API KEY"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:69
+msgid "Global settings saved!"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:85
+msgid "Automatically fill out ALT Texts when you upload an image"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:92
+msgid "If you tick this box, the plugin will automatically write an alternative to the images you will upload."
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:115
+msgid "Automatically rename your files when you upload a media"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:122
+msgid "If you tick this box, the plugin will automatically rewrite with SEO friendly content the name of the images you will upload."
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:132
+msgid "Language"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:160
+msgid "In which language should we write your filenames and alternative texts."
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:172
+msgid "Save global settings"
+msgstr ""
+
+#: app/react/components/ModuleSettings/GlobalSettings/index.js:176
+msgid "You will consume one credit for each image optimized."
+msgstr ""
+
+#: app/react/components/ModuleSettings/SocialSettings/index.js:59
+msgid "Social settings saved!"
+msgstr ""
+
+#: app/react/components/ModuleSettings/SocialSettings/index.js:72
+msgid "Do you want to enable the automatic generation of Social Media Card for your:"
+msgstr ""
+
+#: app/react/components/ModuleSettings/SocialSettings/index.js:115
+msgid "Please make sure that you have created a template and that your post and or page have a picture!"
+msgstr ""
+
+#: app/react/components/ModuleSettings/SocialSettings/index.js:126
+msgid "Save social settings"
+msgstr ""
+
+#: app/react/components/ModuleSettings/SocialSettings/index.js:130
+msgid "You will consume one credit by Socia Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn)."
+msgstr ""
+
+#: app/react/components/OverviewCountImages/index.js:13
+#: app/react/components/OverviewCredit/index.js:14
+msgid "Data being loaded..."
+msgstr ""
+
+#: app/react/components/OverviewCountImages/index.js:57
+msgid "completed"
+msgstr ""
+
+#: app/react/components/OverviewCountImages/index.js:64
+msgid "Recalculating the images counter"
+msgstr ""
+
+#: app/react/components/OverviewCredit/index.js:48
+msgid "credits used"
+msgstr ""
+
+#: app/react/components/OverviewCredit/index.js:55
+msgid "Buy more credit"
+msgstr ""
+
+#: app/react/components/SeoFact/index.js:11
+msgid "SEO Fact : More than 20% of Google Organic Traffic comes from image searches"
+msgstr ""
+
+#: app/react/components/SeoFact/index.js:18
+msgid "Start optimizing your image alt texts and names and grow your traffic!"
+msgstr ""
+
+#: app/react/modules/settings/index.js:14
+msgid "Settings - On-upload optimization"
+msgstr ""
+
+#: app/react/modules/settings/index.js:22
+msgid "Settings – Social Media Cards Generator"
+msgstr ""
+
+#: app/react/modules/social/index.js:81
+msgid "Your options have been saved"
+msgstr ""
+
+#: app/react/modules/social/index.js:92
+msgid "Social Media Card Template"
+msgstr ""
+
+#: app/react/modules/social/index.js:97
+msgid "Data displayed"
+msgstr ""
+
+#: app/react/modules/social/index.js:124
+msgid "Author or Product price (WooCommerce only) - Subtitle"
+msgstr ""
+
+#: app/react/modules/social/index.js:130
+msgid "Show the price product or author depending on the page"
+msgstr ""
+
+#: app/react/modules/social/index.js:163
+msgid "Reading time or Number of reviews (WooCommerce only) - Subtitle 2"
+msgstr ""
+
+#: app/react/modules/social/index.js:169
+msgid "Show the reading time of an article or the number of reviews."
+msgstr ""
+
+#: app/react/modules/social/index.js:201
+msgid "Stars rating"
+msgstr ""
+
+#: app/react/modules/social/index.js:204
+msgid "Show the stars linked to a review of your product for example."
+msgstr ""
+
+#: app/react/modules/social/index.js:209
+msgid "(Only use for WooCommerce Product)"
+msgstr ""
+
+#: app/react/modules/social/index.js:242
+msgid "Display the author avatar"
+msgstr ""
+
+#: app/react/modules/social/index.js:248
+msgid "Only use for post content"
+msgstr ""
+
+#: app/react/modules/social/index.js:259
+msgid "Look & Feel"
+msgstr ""
+
+#: app/react/modules/social/index.js:268
+msgid "Layout"
+msgstr ""
+
+#: app/react/modules/social/index.js:297
+msgid "Text alignment"
+msgstr ""
+
+#: app/react/modules/social/index.js:378
+msgid "Text color"
+msgstr ""
+
+#: app/react/modules/social/index.js:442
+msgid "Background color"
+msgstr ""
+
+#: app/react/modules/social/index.js:506
+msgid "Stars color"
+msgstr ""
+
+#: app/react/modules/social/index.js:515
+msgid "Images"
+msgstr ""
+
+#: app/react/modules/social/index.js:524
+msgid "Your logo :"
+msgstr ""
+
+#: app/react/modules/social/index.js:550
+msgid "Default background image :"
+msgstr ""
+
+#: app/react/modules/social/index.js:572
+msgid "This image will only be used if your page/article doesn’t have a featured image"
+msgstr ""
+
+#: app/react/modules/social/index.js:583
+msgid "Save configuration"
 msgstr ""
