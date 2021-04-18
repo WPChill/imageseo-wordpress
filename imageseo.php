@@ -22,7 +22,7 @@ use ImageSeoWP\Context;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '1.3.2');
+define('IMAGESEO_VERSION', '2.0.0');
 define('IMAGESEO_PHP_MIN', '5.6');
 define('IMAGESEO_DEBUG', false);
 define('IMAGESEO_DEBUG_ALT', false);
@@ -31,7 +31,7 @@ define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
 define('IMAGESEO_API_URL', 'https://imageseo-api-external.herokuapp.com');
-// define('IMAGESEO_API_URL', 'http://localhost:3001');
+
 define('IMAGESEO_APP_URL', 'https://app.imageseo.io');
 define('IMAGESEO_SITE_URL', 'https://imageseo.io');
 define('IMAGESEO_LANGUAGES', IMAGESEO_DIR . '/languages/');

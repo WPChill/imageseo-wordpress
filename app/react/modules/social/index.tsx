@@ -85,7 +85,7 @@ function SocialMediaWithProviders() {
 	};
 
 	return (
-		<div className="flex">
+		<div className="flex ">
 			<div className="border rounded-md overflow-hidden w-5/12 mr-2">
 				<div className="bg-white p-6">
 					<h2 className="text-lg leading-6 font-medium text-blue-900">
@@ -316,130 +316,132 @@ function SocialMediaWithProviders() {
 									</select>
 								</div>
 							</div>
-							<div className="mb-4">
-								<div className="flex items-center">
-									<div className="mr-2 border p-1 rounded">
-										<SCPicker
-											style={{
-												backgroundColor: currentTextColor,
-											}}
-											onClick={() =>
-												handleOpenColorPicker(
-													"textColor"
-												)
-											}
-										/>
-										{textColorPickerOpen && (
-											<div
+							<div className="flex items-center mb-4">
+								<div className="w-1/2">
+									<div className="flex items-center">
+										<div className="mr-2 border p-1 rounded">
+											<SCPicker
 												style={{
-													position: "absolute",
+													backgroundColor: currentTextColor,
 												}}
-											>
+												onClick={() =>
+													handleOpenColorPicker(
+														"textColor"
+													)
+												}
+											/>
+											{textColorPickerOpen && (
 												<div
 													style={{
-														position: "fixed",
-														top: "0px",
-														right: "0px",
-														bottom: "0px",
-														left: "0px",
+														position: "absolute",
 													}}
-													onClick={
-														handleCloseColorPicker
-													}
-												/>
-												<SketchPicker
-													disableAlpha={true}
-													color={currentTextColor}
-													onChange={(color) =>
-														setCurrentTextColor(
-															color.hex
-														)
-													}
-													onChangeComplete={(
-														color
-													) => {
-														dispatch({
-															type:
-																"UPDATE_OPTION",
-															payload: {
-																key:
-																	"textColor",
-																value:
-																	color.hex,
-															},
-														});
-													}}
-												/>
-											</div>
-										)}
+												>
+													<div
+														style={{
+															position: "fixed",
+															top: "0px",
+															right: "0px",
+															bottom: "0px",
+															left: "0px",
+														}}
+														onClick={
+															handleCloseColorPicker
+														}
+													/>
+													<SketchPicker
+														disableAlpha={true}
+														color={currentTextColor}
+														onChange={(color) =>
+															setCurrentTextColor(
+																color.hex
+															)
+														}
+														onChangeComplete={(
+															color
+														) => {
+															dispatch({
+																type:
+																	"UPDATE_OPTION",
+																payload: {
+																	key:
+																		"textColor",
+																	value:
+																		color.hex,
+																},
+															});
+														}}
+													/>
+												</div>
+											)}
+										</div>
+										<label className="text-sm">
+											{__("Text color", "imageseo")}
+										</label>
 									</div>
-									<label className="text-sm">
-										{__("Text color", "imageseo")}
-									</label>
 								</div>
-							</div>
-							<div className="mb-4">
-								<div className="flex items-center">
-									<div className="mr-2 border p-1 rounded">
-										<SCPicker
-											style={{
-												backgroundColor: currentBackgroundColor,
-											}}
-											onClick={() =>
-												handleOpenColorPicker(
-													"contentBackgroundColor"
-												)
-											}
-										/>
-										{backgroundColorPickerOpen && (
-											<div
+								<div className="w-1/2">
+									<div className="flex items-center">
+										<div className="mr-2 border p-1 rounded">
+											<SCPicker
 												style={{
-													position: "absolute",
+													backgroundColor: currentBackgroundColor,
 												}}
-											>
+												onClick={() =>
+													handleOpenColorPicker(
+														"contentBackgroundColor"
+													)
+												}
+											/>
+											{backgroundColorPickerOpen && (
 												<div
 													style={{
-														position: "fixed",
-														top: "0px",
-														right: "0px",
-														bottom: "0px",
-														left: "0px",
+														position: "absolute",
 													}}
-													onClick={
-														handleCloseColorPicker
-													}
-												/>
-												<SketchPicker
-													disableAlpha={true}
-													color={
-														currentBackgroundColor
-													}
-													onChange={(color) =>
-														setCurrentBackgroundColor(
-															color.hex
-														)
-													}
-													onChangeComplete={(
-														color
-													) => {
-														dispatch({
-															type:
-																"UPDATE_OPTION",
-															payload: {
-																key:
-																	"contentBackgroundColor",
-																value:
-																	color.hex,
-															},
-														});
-													}}
-												/>
-											</div>
-										)}
+												>
+													<div
+														style={{
+															position: "fixed",
+															top: "0px",
+															right: "0px",
+															bottom: "0px",
+															left: "0px",
+														}}
+														onClick={
+															handleCloseColorPicker
+														}
+													/>
+													<SketchPicker
+														disableAlpha={true}
+														color={
+															currentBackgroundColor
+														}
+														onChange={(color) =>
+															setCurrentBackgroundColor(
+																color.hex
+															)
+														}
+														onChangeComplete={(
+															color
+														) => {
+															dispatch({
+																type:
+																	"UPDATE_OPTION",
+																payload: {
+																	key:
+																		"contentBackgroundColor",
+																	value:
+																		color.hex,
+																},
+															});
+														}}
+													/>
+												</div>
+											)}
+										</div>
+										<label className="text-sm">
+											{__("Background color", "imageseo")}
+										</label>
 									</div>
-									<label className="text-sm">
-										{__("Background color", "imageseo")}
-									</label>
 								</div>
 							</div>
 							{settings.visibilityRating && (
@@ -540,7 +542,7 @@ function SocialMediaWithProviders() {
 								}
 							/>
 						</div>
-						<div className="">
+						<div className="mt-6">
 							<label
 								htmlFor="defaultBgImg"
 								className="text-sm block mb-1"
@@ -582,10 +584,7 @@ function SocialMediaWithProviders() {
 					</button>
 				</div>
 			</div>
-			<div className="border rounded-md bg-white p-4 max-w-5xl mx-auto w-7/12">
-				<h2 className="text-lg leading-6 font-medium text-blue-900 mb-4">
-					{__("Preview", "imageseo")}
-				</h2>
+			<div className="mx-auto w-7/12 ml-4 relative">
 				<SocialMediaImagePreview />
 			</div>
 		</div>

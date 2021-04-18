@@ -343,9 +343,12 @@ function BulkSettings() {
 									<a
 										href="https://imageseo.io/documentation/how-to-unlock-file-renaming-for-a-page-builder/"
 										className="font-bold underline"
+										target="_blank"
 									>
-										I am aware of this and I still want to
-										rename my files
+										{__(
+											"I am aware of this and I still want to rename my files",
+											"imageseo"
+										)}
 									</a>
 								</AlertSimple>
 							</div>

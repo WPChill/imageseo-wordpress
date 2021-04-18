@@ -145,7 +145,7 @@ class GenerateFilename
     public function generateFilenameForAttachmentId($attachmentId, $excludeFilenames = [])
     {
         try {
-            $filename = $this->generateFilenameForAttachmentId($attachmentId, $excludeFilenames);
+            $filename = $this->generateFilenameByReportForAttachmentId($attachmentId, $excludeFilenames);
         } catch (NoRenameFile $e) {
             $filename = $this->getFilenameByAttachmentId($attachmentId);
         }

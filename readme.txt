@@ -140,9 +140,12 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
-= 2.0.0 (02-22-2020) =
+= 2.0.0 (04-19-2021) =
+- New: Complete redesign of the UI/UX
+- New: Removed aliases and added real file renaming.
+- Improved: Bulk performance
 
-= 1.3.2 (02-22-2020) =
+= 1.3.2 (02-22-2021) =
 - New: Creation of a new more efficient bulk process
 - Bugfix: Undefined index on social media head
 

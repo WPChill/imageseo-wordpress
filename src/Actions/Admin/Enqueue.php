@@ -89,6 +89,10 @@ class Enqueue
             }
 
             $scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+            $getScheduled = as_get_scheduled_actions([
+                'hooks' => 'action_bulk_image_process_action_scheduler',
+                'group' => 'group_bulk_image',
+            ]);
 
             $urlRecount = admin_url('admin-post.php?action=imageseo_recount_images');
             $urlRecount = wp_nonce_url($urlRecount, 'imageseo_recount_images');

@@ -45,13 +45,9 @@ const GlobalStyle = createGlobalStyle`
 			0 1px 3px 0 rgba(89, 105, 128, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 	}
 
-	.toplevel_page_imageseo-settings  #wpbody-content, .toplevel_page_imageseo-settings  #wpcontent {
-		overflow-x: initial!important;
-	}
-
 	.toplevel_page_imageseo-settings  #wpcontent, .toplevel_page_imageseo-settings #wpbody-content {
 		padding: 0;
-		overflow-x: hidden!important;
+
 		min-height: calc(100vh - 32px);
 	}
 

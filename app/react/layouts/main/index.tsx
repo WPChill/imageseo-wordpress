@@ -12,8 +12,15 @@ import Settings from "../../modules/settings";
 import getLinkImage from "../../helpers/getLinkImage";
 
 const SCMain = styled.div`
-	width: 100%;
+	width: 98%;
 	@media (min-width: 1200px) {
+		${(props) =>
+			//@ts-ignore
+			props.mainContentSelected === MAIN_CONTENT.SOCIAL_CARD
+				? `width:98%`
+				: `width:78%`}
+	}
+	@media (min-width: 1400px) {
 		${(props) =>
 			//@ts-ignore
 			props.mainContentSelected === MAIN_CONTENT.SOCIAL_CARD

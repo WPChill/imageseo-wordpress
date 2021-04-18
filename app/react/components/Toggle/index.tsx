@@ -9,7 +9,6 @@ interface Props {
 }
 
 export const Toggle = ({ onClick, active }: Props) => {
-	console.log("active : ", active);
 	return (
 		<button
 			onClick={onClick ? onClick : null}

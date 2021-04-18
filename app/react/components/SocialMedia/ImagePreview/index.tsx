@@ -52,12 +52,11 @@ function SocialMediaImagePreview() {
 						"imageseo-media__layout--card-right":
 							settings.layout === "CARD_RIGHT",
 					},
-					"imageseo-media__container sticky",
+					"imageseo-media__container sticky top-16",
 					"imageseo-media__container--preview"
 				)}
 				style={{
 					border: "1px solid #999",
-					maxWidth: "80%",
 					margin: "0 auto",
 					backgroundColor: settings.contentBackgroundColor,
 				}}
