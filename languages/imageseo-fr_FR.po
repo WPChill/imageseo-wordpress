@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Image SEO 2.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/imageseo\n"
-"Last-Translator: ImageSEO <contact@imageseo.io>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,8 +12,9 @@ msgstr ""
 "PO-Revision-Date: 2021-04-18 18:51+0200\n"
 "X-Generator: Poedit 2.4.2\n"
 "X-Domain: imageseo\n"
-"Language-Team: \n"
-"Language: en_US\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr\n"
 
 #. Plugin Name of the plugin
 #. Author of the plugin
@@ -25,8 +26,14 @@ msgid "https://imageseo.io"
 msgstr ""
 
 #. Description of the plugin
-msgid "Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !"
+msgid ""
+"Optimize your images for search engines. Search engine optimization and web "
+"marketing strategy often neglect their images. Stop doing this mistake and "
+"take control back on your WordPress Medias !"
 msgstr ""
+"Optimisez vos images pour les moteurs de recherche. Les stratégies de "
+"référencement et de marketing web négligent souvent leurs images. Ne faites "
+"plus cette erreur et reprenez le contrôle de vos médias WordPress !"
 
 #. Author URI of the plugin
 msgid "https://imageseo.io/"
@@ -34,7 +41,7 @@ msgstr ""
 
 #: app/javascripts/media-upload.js:18
 msgid "Alternative text updated!"
-msgstr ""
+msgstr "Texte alternatif mis à jour !"
 
 #: app/javascripts/media-upload.js:21 app/javascripts/media-upload.js:86
 #: app/javascripts/media-upload.js:96 app/javascripts/media-upload.js:104
@@ -48,19 +55,23 @@ msgstr ""
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:71
 #: app/react/components/ModuleSettings/SocialSettings/index.js:61
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: app/javascripts/media-upload.js:80 app/javascripts/media-upload.js:90
 msgid "Successful renaming!"
-msgstr ""
+msgstr "Renommage réussi !"
 
 #: app/javascripts/media-upload.js:81
-msgid "We had to change the name because a file already exists on the one you tried. You can reload the page to see the change"
+msgid ""
+"We had to change the name because a file already exists on the one you "
+"tried. You can reload the page to see the change"
 msgstr ""
+"Nous avons dû changer le nom car un fichier existe déjà sur celui que vous "
+"avez essayé. Vous pouvez recharger la page pour voir le changement"
 
 #: app/javascripts/media-upload.js:91
 msgid "You can reload the page to see the change."
-msgstr ""
+msgstr "Vous pouvez recharger la page pour voir le changement."
 
 #: app/javascripts/media-upload.js:101
 #: app/react/components/Bulk/components/LastProcess/index.js:43
@@ -71,31 +82,31 @@ msgstr ""
 #: app/react/components/Bulk/components/LastProcess/index.js:32
 #: app/react/components/Bulk/components/Prepare/index.js:88
 msgid "Are you sure?"
-msgstr ""
+msgstr "Vous êtes sûr ?"
 
 #: app/react/components/Bulk/components/InProcess/index.js:62
 msgid "You will always be able to pick up where the process left off."
-msgstr ""
+msgstr "Vous pourrez toujours reprendre le processus là où il s’est arrêté."
 
 #: app/react/components/Bulk/components/InProcess/index.js:69
 msgid "Stop process"
-msgstr ""
+msgstr "Arrêt du processus"
 
 #: app/react/components/Bulk/components/InProcess/index.js:143
 msgid "Bulk optimization in progress"
-msgstr ""
+msgstr "Optimisation en masse en cours"
 
 #: app/react/components/Bulk/components/InProcess/index.js:150
 msgid "Click here to refresh data"
-msgstr ""
+msgstr "Cliquez ici pour rafraîchir les données"
 
 #: app/react/components/Bulk/components/InProcess/index.js:170
 msgid "Next process in few seconds"
-msgstr ""
+msgstr "Processus suivant dans quelques secondes"
 
 #: app/react/components/Bulk/components/InProcess/index.js:208
 msgid "View results"
-msgstr ""
+msgstr "Voir les résultats"
 
 #: app/react/components/Bulk/components/InProcess/index.js:216
 msgid "Pause"
@@ -103,42 +114,45 @@ msgstr ""
 
 #: app/react/components/Bulk/components/InProcess/index.js:225
 msgid "The process ended well."
-msgstr ""
+msgstr "Le processus s’est bien terminé."
 
 #: app/react/components/Bulk/components/InProcess/index.js:228
-msgid "You can edit and view all your results in your media library in 'list' mode."
+msgid ""
+"You can edit and view all your results in your media library in 'list' mode."
 msgstr ""
+"Vous pouvez modifier et afficher tous vos résultats dans votre médiathèque "
+"en mode « liste »."
 
 #: app/react/components/Bulk/components/InProcess/index.js:238
 msgid "View medias"
-msgstr ""
+msgstr "Voir les médias"
 
 #: app/react/components/Bulk/components/LastProcess/index.js:33
 msgid "We will pick up where you left off."
-msgstr ""
+msgstr "Nous reprendrons là où vous vous êtes arrêtés."
 
 #: app/react/components/Bulk/components/LastProcess/index.js:37
 msgid "Restart process"
-msgstr ""
+msgstr "Redémarrer le processus"
 
 #: app/react/components/Bulk/components/LastProcess/index.js:44
 msgid "Limit excedeed."
-msgstr ""
+msgstr "Limite dépassée."
 
 #: app/react/components/Bulk/components/LastProcess/index.js:66
 #: app/react/components/Bulk/components/LimitExcedeed/index.js:14
 msgid "You need more credits to resume it."
-msgstr ""
+msgstr "Vous avez besoin de plus de crédits pour le reprendre."
 
 #: app/react/components/Bulk/components/LastProcess/index.js:77
 msgid "Bulk optimization paused"
-msgstr ""
+msgstr "Optimisation en masse en pause"
 
 #: app/react/components/Bulk/components/LastProcess/index.js:90
 #: app/react/components/Bulk/components/LimitExcedeed/index.js:21
 #: app/react/components/Bulk/components/Prepare/index.js:189
 msgid "Get more credits"
-msgstr ""
+msgstr "Obtenir plus de crédits"
 
 #: app/react/components/Bulk/components/LastProcess/index.js:111
 msgid "Restart"
@@ -151,133 +165,171 @@ msgstr ""
 
 #: app/react/components/Bulk/components/Prepare/index.js:64
 msgid "There are no images to optimize"
-msgstr ""
+msgstr "Il n’y a pas d’images à optimiser"
 
 #: app/react/components/Bulk/components/Prepare/index.js:75
 msgid "Please select the format of your alternative text (alt)"
-msgstr ""
+msgstr "Veuillez sélectionner le format de votre texte alternatif (alt)"
 
 #: app/react/components/Bulk/components/Prepare/index.js:90
-msgid "You're about to launch a bulk optimization. You can pause it and resume it at any time."
+msgid ""
+"You're about to launch a bulk optimization. You can pause it and resume it "
+"at any time."
 msgstr ""
+"Vous êtes sur le point de lancer une optimisation en masse. Vous pouvez la "
+"mettre en pause et la reprendre à tout moment."
 
 #: app/react/components/Bulk/components/Prepare/index.js:99
 msgid "Yes, let's go!"
-msgstr ""
+msgstr "Oui, allons-y !"
 
 #: app/react/components/Bulk/components/Prepare/index.js:120
 msgid "Start a new bulk optimization"
-msgstr ""
+msgstr "Démarrer une nouvelle optimisation en masse"
 
 #: app/react/components/Bulk/components/Prepare/index.js:132
 msgid "Forecast: with your current settings"
-msgstr ""
+msgstr "Prévisions : avec vos paramètres actuels"
 
 #: app/react/components/Bulk/components/Prepare/index.js:137
 msgid "images will be optimized."
-msgstr ""
+msgstr "les images seront optimisées."
 
 #: app/react/components/Bulk/components/Prepare/index.js:146
 #: app/react/components/Bulk/components/Prepare/index.js:158
 msgid "You have"
-msgstr ""
+msgstr "Vous avez"
 
 #: app/react/components/Bulk/components/Prepare/index.js:148
 #: app/react/components/Bulk/components/Prepare/index.js:160
 msgid "credit(s) left in your account."
-msgstr ""
+msgstr "crédit(s) restant(s) sur votre compte."
 
 #: app/react/components/Bulk/components/Prepare/index.js:175
 msgid "optimizations have already been done!"
-msgstr ""
+msgstr "optimisations ont déjà été faites !"
 
 #: app/react/components/Bulk/components/Settings/index.js:33
 msgid "In which language should we write your filenames and alternative texts?"
 msgstr ""
+"Dans quelle langue devons-nous écrire vos noms de fichiers et textes "
+"alternatifs ?"
 
 #: app/react/components/Bulk/components/Settings/index.js:73
 msgid "Which images do you want to optimize?"
-msgstr ""
+msgstr "Quelles sont les images que vous souhaitez optimiser ?"
 
 #: app/react/components/Bulk/components/Settings/index.js:117
 msgid "ALT text settings"
-msgstr ""
+msgstr "Paramètres du texte ALT"
 
 #: app/react/components/Bulk/components/Settings/index.js:148
 msgid "I want to fill out and optimize my ALT Texts for SEO and Accessibility."
 msgstr ""
+"Je veux remplir et optimiser mes textes ALT pour le référencement et "
+"l’accessibilité."
 
 #: app/react/components/Bulk/components/Settings/index.js:154
 msgid "It's really worth for SEO ! 😎"
-msgstr ""
+msgstr "C’est vraiment utile pour le référencement !"
 
 #: app/react/components/Bulk/components/Settings/index.js:169
 msgid "Which alt texts do you want to optimize?"
-msgstr ""
+msgstr "Quels textes alt voulez-vous optimiser ?"
 
 #: app/react/components/Bulk/components/Settings/index.js:208
 msgid "Format"
 msgstr ""
 
 #: app/react/components/Bulk/components/Settings/index.js:269
-msgid "Custom template. You can use multiple shortcode or what you want. Only for advanced user"
+msgid ""
+"Custom template. You can use multiple shortcode or what you want. Only for "
+"advanced user"
 msgstr ""
+"Modèle personnalisé. Vous pouvez utiliser plusieurs shortcodes ou ce que "
+"vous voulez. Seulement pour les utilisateurs avancés"
 
 #: app/react/components/Bulk/components/Settings/index.js:324
 msgid "Image name settings"
-msgstr ""
+msgstr "Paramètres du nom de l’image"
 
 #: app/react/components/Bulk/components/Settings/index.js:332
 msgid "File renaming is not sure to be compatible"
-msgstr ""
+msgstr "Le renommage des fichiers n’est pas sûr d’être compatible"
 
 #: app/react/components/Bulk/components/Settings/index.js:338
-msgid "It looks like you are using a page builder for WordPress. Our file renaming system is fully compatible with Gutenberg or the Classic Editor. By default, we prevent you from doing this, but you can unlock the functionality by using a filter."
+msgid ""
+"It looks like you are using a page builder for WordPress. Our file renaming "
+"system is fully compatible with Gutenberg or the Classic Editor. By default, "
+"we prevent you from doing this, but you can unlock the functionality by "
+"using a filter."
 msgstr ""
+"Il semble que vous utilisiez un constructeur de pages pour WordPress. Notre "
+"système de renommage de fichiers est entièrement compatible avec Gutenberg "
+"ou l’éditeur classique. Par défaut, nous vous empêchons de le faire, mais "
+"vous pouvez déverrouiller la fonctionnalité en utilisant un filtre."
 
 #: app/react/components/Bulk/components/Settings/index.js:348
 msgid "I am aware of this and I still want to rename my files"
-msgstr ""
+msgstr "Je suis conscient de cela et je veux toujours renommer mes fichiers."
 
 #: app/react/components/Bulk/components/Settings/index.js:395
 msgid "I want to optimize my image names for SEO"
-msgstr ""
+msgstr "Je veux optimiser les noms de mes images pour le référencement"
 
 #: app/react/components/Bulk/components/Settings/index.js:401
-msgid "It might slow the process (+10sec by images). Filenames are not really relevant for SEO"
+msgid ""
+"It might slow the process (+10sec by images). Filenames are not really "
+"relevant for SEO"
 msgstr ""
+"Cela peut ralentir le processus (+10sec par images). Les noms de fichiers ne "
+"sont pas vraiment pertinents pour le référencement"
 
 #: app/react/components/Bulk/components/Settings/index.js:415
 msgid "Be careful: prepare a backup"
-msgstr ""
+msgstr "Attention : préparez une sauvegarde"
 
 #: app/react/components/Bulk/components/Settings/index.js:421
-msgid "Renaming or moving file is always tricky and can on rare occasion brake your images. Before triggering, try to rename your file in the library , then check if the images you renamed are available on the related pages. If so, you can bulk optimize the filenames. Bulking alt texts is always safe."
+msgid ""
+"Renaming or moving file is always tricky and can on rare occasion brake your "
+"images. Before triggering, try to rename your file in the library , then "
+"check if the images you renamed are available on the related pages. If so, "
+"you can bulk optimize the filenames. Bulking alt texts is always safe."
 msgstr ""
+"Renommer ou déplacer un fichier est toujours délicat et peut en de rares "
+"occasions freiner vos images. Avant de déclencher, essayez de renommer votre "
+"fichier dans la bibliothèque, puis vérifiez si les images que vous avez "
+"renommées sont disponibles sur les pages liées. Si c’est le cas, vous pouvez "
+"optimiser en masse les noms de fichiers. L’optimisation en masse des textes "
+"alt est toujours sûre."
 
 #: app/react/components/Bulk/components/ViewData/index.js:43
 msgid "Results details"
-msgstr ""
+msgstr "Détails des résultats"
 
 #: app/react/components/Bulk/components/ViewData/index.js:53
 msgid "Reload data"
-msgstr ""
+msgstr "Recharger les données"
 
 #: app/react/components/Bulk/components/ViewData/index.js:68
-msgid "Here is the preview of 5 randoms alt tags generated by our AI.  You can manually edit them in the WordPress media library."
+msgid ""
+"Here is the preview of 5 randoms alt tags generated by our AI.  You can "
+"manually edit them in the WordPress media library."
 msgstr ""
+"Voici l’aperçu de 5 balises alt aléatoires générées par notre IA.  Vous "
+"pouvez les modifier manuellement dans la médiathèque de WordPress."
 
 #: app/react/components/Bulk/components/ViewData/index.js:104
 msgid "Old filename"
-msgstr ""
+msgstr "Ancien nom de fichier"
 
 #: app/react/components/Bulk/components/ViewData/index.js:111
 msgid "New Filename:"
-msgstr ""
+msgstr "Nouveau nom de fichier :"
 
 #: app/react/components/Bulk/components/ViewData/index.js:125
 msgid "Old alt"
-msgstr ""
+msgstr "Ancien art"
 
 #: app/react/components/Bulk/components/ViewData/index.js:131
 msgid "Alt:"
@@ -289,257 +341,288 @@ msgstr ""
 
 #: app/react/components/Bulk/index.js:39
 msgid "Prepare the configuration of your bulk optimization"
-msgstr ""
+msgstr "Préparez la configuration de votre optimisation en masse"
 
 #: app/react/components/Forms/Register/index.js:139
 #: app/react/components/Forms/Register/index.js:153
 #: app/react/components/Forms/ValidateApiKey/index.js:37
 msgid "Error!"
-msgstr ""
+msgstr "Erreur!"
 
 #: app/react/components/Forms/Register/index.js:160
 #: app/react/components/Forms/ValidateApiKey/index.js:47
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:68
 #: app/react/components/ModuleSettings/SocialSettings/index.js:58
 msgid "Great!"
-msgstr ""
+msgstr "Bravo!"
 
 #: app/react/components/Forms/Register/index.js:161
 msgid "You are registered and we have configured your API key"
-msgstr ""
+msgstr "Vous êtes enregistré et nous avons configuré votre clé API."
 
 #: app/react/components/Forms/Register/index.js:179
 msgid "First name"
-msgstr ""
+msgstr "Prénom"
 
 #: app/react/components/Forms/Register/index.js:196
 msgid "It's nicer if we have your first name :)"
-msgstr ""
+msgstr "C’est plus sympa si on a votre prénom :)"
 
 #: app/react/components/Forms/Register/index.js:208
 msgid "Last name"
-msgstr ""
+msgstr "Nom"
 
 #: app/react/components/Forms/Register/index.js:225
 msgid "You must enter your name"
-msgstr ""
+msgstr "Vous devez entrer votre nom"
 
 #: app/react/components/Forms/Register/index.js:253
 msgid "No email, no chocolate."
-msgstr ""
+msgstr "Pas d’email, dans le chocolat."
 
 #: app/react/components/Forms/Register/index.js:300
 msgid "You need to have a password."
-msgstr ""
+msgstr "Vous devez avoir un mot de passe."
 
 #: app/react/components/Forms/Register/index.js:319
 msgid "I agree to"
-msgstr ""
+msgstr "Je suis d’accord pour"
 
 #: app/react/components/Forms/Register/index.js:325
 msgid "ImageSEO's Terms of Service"
-msgstr ""
+msgstr "Conditions d’utilisation de ImageSEO"
 
 #: app/react/components/Forms/Register/index.js:334
 msgid "You must accept the terms to validate your registration."
-msgstr ""
+msgstr "Vous devez accepter les conditions pour valider votre inscription."
 
 #: app/react/components/Forms/Register/index.js:356
 msgid "News and features updates, as well as occasional company announcements."
 msgstr ""
+"Nouvelles et mises à jour des caractéristiques, ainsi que des annonces "
+"occasionnelles de l’entreprise."
 
 #: app/react/components/Forms/Register/index.js:366
 msgid "The registration form is not complete."
-msgstr ""
+msgstr "Le formulaire d’inscription n’est pas complet."
 
 #: app/react/components/Forms/Register/index.js:372
 msgid "This email is not available"
-msgstr ""
+msgstr "Cet e-mail n’est pas disponible"
 
 #: app/react/components/Forms/Register/index.js:381
 msgid "Register"
-msgstr ""
+msgstr "Enregistrez-vous"
 
 #: app/react/components/Forms/ValidateApiKey/index.js:38
 msgid "Your API key is not valid"
-msgstr ""
+msgstr "Votre clé API n’est pas valide"
 
 #: app/react/components/Forms/ValidateApiKey/index.js:48
 msgid "Your API key is registered"
-msgstr ""
+msgstr "Votre clé API est enregistrée"
 
 #: app/react/components/Forms/ValidateApiKey/index.js:60
 msgid "Enter your Api Key"
-msgstr ""
+msgstr "Entrez votre clé Api"
 
 #: app/react/components/Forms/ValidateApiKey/index.js:77
 msgid "Validate your API KEY"
-msgstr ""
+msgstr "Validez votre clé API"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:69
 msgid "Global settings saved!"
-msgstr ""
+msgstr "Les paramètres globaux sont sauvegardés !"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:85
 msgid "Automatically fill out ALT Texts when you upload an image"
 msgstr ""
+"Remplir automatiquement les textes ALT lorsque vous téléchargez une image"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:92
-msgid "If you tick this box, the plugin will automatically write an alternative to the images you will upload."
+msgid ""
+"If you tick this box, the plugin will automatically write an alternative to "
+"the images you will upload."
 msgstr ""
+"Si vous cochez cette case, le plugin écrira automatiquement une alternative "
+"aux images que vous allez télécharger."
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:115
 msgid "Automatically rename your files when you upload a media"
 msgstr ""
+"Renommer automatiquement vos fichiers lorsque vous téléchargez un média"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:122
-msgid "If you tick this box, the plugin will automatically rewrite with SEO friendly content the name of the images you will upload."
+msgid ""
+"If you tick this box, the plugin will automatically rewrite with SEO "
+"friendly content the name of the images you will upload."
 msgstr ""
+"Si vous cochez cette case, le plugin réécrira automatiquement avec un "
+"contenu adapté au référencement le nom des images que vous téléchargerez."
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:132
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:160
 msgid "In which language should we write your filenames and alternative texts."
 msgstr ""
+"Dans quelle langue devons-nous écrire vos noms de fichiers et textes "
+"alternatifs."
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:172
 msgid "Save global settings"
-msgstr ""
+msgstr "Sauvegarder les paramètres globaux"
 
 #: app/react/components/ModuleSettings/GlobalSettings/index.js:176
 msgid "You will consume one credit for each image optimized."
-msgstr ""
+msgstr "Vous consommerez un crédit pour chaque image optimisée."
 
 #: app/react/components/ModuleSettings/SocialSettings/index.js:59
 msgid "Social settings saved!"
-msgstr ""
+msgstr "Paramètres sociaux sauvegardés !"
 
 #: app/react/components/ModuleSettings/SocialSettings/index.js:72
-msgid "Do you want to enable the automatic generation of Social Media Card for your:"
+msgid ""
+"Do you want to enable the automatic generation of Social Media Card for your:"
 msgstr ""
+"Voulez-vous activer la génération automatique de la carte de médias sociaux "
+"pour votre :"
 
 #: app/react/components/ModuleSettings/SocialSettings/index.js:115
-msgid "Please make sure that you have created a template and that your post and or page have a picture!"
+msgid ""
+"Please make sure that you have created a template and that your post and or "
+"page have a picture!"
 msgstr ""
+"Assurez-vous que vous avez créé un modèle et que votre message ou votre page "
+"comporte une image !"
 
 #: app/react/components/ModuleSettings/SocialSettings/index.js:126
 msgid "Save social settings"
-msgstr ""
+msgstr "Sauvegarder les paramètres sociaux"
 
 #: app/react/components/ModuleSettings/SocialSettings/index.js:130
-msgid "You will consume one credit by Socia Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn)."
+msgid ""
+"You will consume one credit by Socia Media Cards created (1 page = 1 Social "
+"media card working on Twitter, Facebook and LinkedIn)."
 msgstr ""
+"Vous consommerez un crédit par carte de médias sociaux créée (1 page = 1 "
+"carte de médias sociaux fonctionnant sur Twitter, Facebook et LinkedIn)."
 
 #: app/react/components/OverviewCountImages/index.js:13
 #: app/react/components/OverviewCredit/index.js:14
 msgid "Data being loaded..."
-msgstr ""
+msgstr "Données en cours de chargement…"
 
 #: app/react/components/OverviewCountImages/index.js:57
 msgid "completed"
-msgstr ""
+msgstr "terminé"
 
 #: app/react/components/OverviewCountImages/index.js:64
 msgid "Recalculating the images counter"
-msgstr ""
+msgstr "Recalculer le compteur d’images"
 
 #: app/react/components/OverviewCredit/index.js:48
 msgid "credits used"
-msgstr ""
+msgstr "crédits utilisés"
 
 #: app/react/components/OverviewCredit/index.js:55
 msgid "Buy more credit"
-msgstr ""
+msgstr "Acheter plus de crédit"
 
 #: app/react/components/SeoFact/index.js:11
-msgid "SEO Fact : More than 20% of Google Organic Traffic comes from image searches"
+msgid ""
+"SEO Fact : More than 20% of Google Organic Traffic comes from image searches"
 msgstr ""
+"Faits relatifs au référencement : plus de 20 % du trafic organique de Google "
+"provient de recherches d’images."
 
 #: app/react/components/SeoFact/index.js:18
 msgid "Start optimizing your image alt texts and names and grow your traffic!"
 msgstr ""
+"Commencez à optimiser les textes alt et les noms de vos images et augmentez "
+"votre trafic !"
 
 #: app/react/modules/settings/index.js:14
 msgid "Settings - On-upload optimization"
-msgstr ""
+msgstr "Paramètres - Optimisation des téléchargements"
 
 #: app/react/modules/settings/index.js:22
 msgid "Settings – Social Media Cards Generator"
-msgstr ""
+msgstr "Paramètres - Générateur de cartes de médias sociaux"
 
 #: app/react/modules/social/index.js:81
 msgid "Your options have been saved"
-msgstr ""
+msgstr "Vos options ont été enregistrées"
 
 #: app/react/modules/social/index.js:92
 msgid "Social Media Card Template"
-msgstr ""
+msgstr "Modèle de carte pour les médias sociaux"
 
 #: app/react/modules/social/index.js:97
 msgid "Data displayed"
-msgstr ""
+msgstr "Données affichées"
 
 #: app/react/modules/social/index.js:124
 msgid "Author or Product price (WooCommerce only) - Subtitle"
-msgstr ""
+msgstr "Prix de l’auteur ou du produit (WooCommerce uniquement) - Sous-titre"
 
 #: app/react/modules/social/index.js:130
 msgid "Show the price product or author depending on the page"
-msgstr ""
+msgstr "Afficher le prix du produit ou l’auteur en fonction de la page"
 
 #: app/react/modules/social/index.js:163
 msgid "Reading time or Number of reviews (WooCommerce only) - Subtitle 2"
 msgstr ""
+"Temps de lecture ou Nombre d’avis (WooCommerce uniquement) - Sous-titre 2"
 
 #: app/react/modules/social/index.js:169
 msgid "Show the reading time of an article or the number of reviews."
-msgstr ""
+msgstr "Affichez le temps de lecture d’un article ou le nombre de critiques."
 
 #: app/react/modules/social/index.js:201
 msgid "Stars rating"
-msgstr ""
+msgstr "Nombre d’étoiles"
 
 #: app/react/modules/social/index.js:204
 msgid "Show the stars linked to a review of your product for example."
-msgstr ""
+msgstr "Montrez les étoiles liées à une critique de votre produit par exemple."
 
 #: app/react/modules/social/index.js:209
 msgid "(Only use for WooCommerce Product)"
-msgstr ""
+msgstr "(à utiliser uniquement pour les produits WooCommerce)"
 
 #: app/react/modules/social/index.js:242
 msgid "Display the author avatar"
-msgstr ""
+msgstr "Afficher l’avatar de l’auteur"
 
 #: app/react/modules/social/index.js:248
 msgid "Only use for post content"
-msgstr ""
+msgstr "A utiliser uniquement pour le contenu des messages"
 
 #: app/react/modules/social/index.js:259
 msgid "Look & Feel"
-msgstr ""
+msgstr "Look & Feel"
 
 #: app/react/modules/social/index.js:268
 msgid "Layout"
-msgstr ""
+msgstr "Mise en page"
 
 #: app/react/modules/social/index.js:297
 msgid "Text alignment"
-msgstr ""
+msgstr "Alignement du texte"
 
 #: app/react/modules/social/index.js:378
 msgid "Text color"
-msgstr ""
+msgstr "Couleur du texte"
 
 #: app/react/modules/social/index.js:442
 msgid "Background color"
-msgstr ""
+msgstr "Couleur de fond"
 
 #: app/react/modules/social/index.js:506
 msgid "Stars color"
-msgstr ""
+msgstr "Couleur des avis"
 
 #: app/react/modules/social/index.js:515
 msgid "Images"
@@ -547,16 +630,20 @@ msgstr ""
 
 #: app/react/modules/social/index.js:524
 msgid "Your logo :"
-msgstr ""
+msgstr "Votre logo :"
 
 #: app/react/modules/social/index.js:550
 msgid "Default background image :"
-msgstr ""
+msgstr "Image de fond par défaut :"
 
 #: app/react/modules/social/index.js:572
-msgid "This image will only be used if your page/article doesn’t have a featured image"
+msgid ""
+"This image will only be used if your page/article doesn’t have a featured "
+"image"
 msgstr ""
+"Cette image ne sera utilisée que si votre page/article n’a pas d’image "
+"vedette."
 
 #: app/react/modules/social/index.js:583
 msgid "Save configuration"
-msgstr ""
+msgstr "Sauvegarder la configuration"

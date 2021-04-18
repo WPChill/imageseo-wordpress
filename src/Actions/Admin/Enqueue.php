@@ -131,6 +131,7 @@ class Enqueue
             if (function_exists('wp_set_script_translations')) {
                 wp_set_script_translations('imageseo-application', 'imageseo', IMAGESEO_LANGUAGES);
             }
+
             wp_localize_script('imageseo-application', 'IMAGESEO_DATA', $data);
         }
 

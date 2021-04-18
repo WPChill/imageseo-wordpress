@@ -87,7 +87,7 @@ const Overview = () => {
 						<Suspense
 							fallback={
 								<div className="mt-10">
-									Data is current loading
+									{__("Data is current loading", "imageseo")}
 								</div>
 							}
 						>
