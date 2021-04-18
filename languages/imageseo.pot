@@ -1,0 +1,60 @@
+# Copyright (C) 2021 Image SEO
+# This file is distributed under the same license as the Image SEO plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Image SEO 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/imageseo\n"
+"Last-Translator: ImageSEO <contact@imageseo.io>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-04-18T16:11:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: imageseo\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+msgid "Image SEO"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://imageseo.io"
+msgstr ""
+
+#. Description of the plugin
+msgid "Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://imageseo.io/"
+msgstr ""
+
+#: app/javascripts/media-upload.js:18
+msgid "Alternative text updated!"
+msgstr ""
+
+#: app/javascripts/media-upload.js:21
+#: app/javascripts/media-upload.js:86
+#: app/javascripts/media-upload.js:96
+#: app/javascripts/media-upload.js:104
+msgid "Close"
+msgstr ""
+
+#: app/javascripts/media-upload.js:80
+#: app/javascripts/media-upload.js:90
+msgid "Successful renaming!"
+msgstr ""
+
+#: app/javascripts/media-upload.js:81
+msgid "We had to change the name because a file already exists on the one you tried. You can reload the page to see the change"
+msgstr ""
+
+#: app/javascripts/media-upload.js:91
+msgid "You can reload the page to see the change."
+msgstr ""
+
+#: app/javascripts/media-upload.js:101
+msgid "Oups!"
+msgstr ""

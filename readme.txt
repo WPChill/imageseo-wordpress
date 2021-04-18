@@ -1,8 +1,8 @@
 ===  Image SEO Optimizer - auto images alt text, name and open graph tag - WooCommerce friendly ===
 Contributors: gmulti
 Tags: image seo, alt, alt text, open graph, seo
-Requires at least: 4.8+
-Tested up to: 5.6
+Requires at least: 5.0+
+Tested up to: 5.7
 Requires PHP: 7.0
 Stable tag: v2.0.0
 License: GPLv2 or later

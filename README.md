@@ -9,7 +9,7 @@
 
 ## Requirements
 
--   PHP version 5.6 and later
+-   PHP version 7.0 and later
 -   ImageSEO API Key, starting at [free level](https://imageseo.io/register)
 
 ## About

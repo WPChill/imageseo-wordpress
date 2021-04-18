@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
 				if (alert) {
 					Swal.fire({
 						title: __("Alternative text updated!", "imageseo"),
-						text: __("", "imageseo"),
+						text: "",
 						icon: "success",
 						confirmButtonText: __("Close", "imageseo"),
 					});
