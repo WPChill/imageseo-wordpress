@@ -51,7 +51,7 @@ const OverviewCountImages = () => {
 				</div>
 				<div className="flex -mt-1">
 					<p className="text-sm flex-1">
-						<strong>{percentOptimized}%</strong>{" "}
+						<strong>{Number(percentOptimized).toFixed(2)}%</strong>{" "}
 						{__("completed", "imageseo")}
 					</p>
 					<a
