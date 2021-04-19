@@ -18,14 +18,16 @@ const StepOne = ({ onClickClose, handleEndChurn = null }) => {
 		bad_support: false,
 		plugin_complicated: false,
 		lack_feature: false,
-		message: ""
+		message: "",
 	});
+
+	const $ = jQuery;
 
 	const hrefDeactivate = document
 		.querySelector(`.plugins [data-slug="imageseo"] .deactivate a`)
 		.getAttribute("href");
 
-	const handleSubmit = async e => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		$.ajax({
@@ -33,15 +35,15 @@ const StepOne = ({ onClickClose, handleEndChurn = null }) => {
 			method: "POST",
 			data: {
 				action: "imageseo_deactivate_plugin",
-				values
+				values,
 			},
-			success: response => {
+			success: (response) => {
 				document.querySelector("#imageseo-go-deactivate").click();
 			},
 
 			fail: () => {
 				document.querySelector("#imageseo-go-deactivate").click();
-			}
+			},
 		});
 	};
 
@@ -122,7 +124,7 @@ const StepOne = ({ onClickClose, handleEndChurn = null }) => {
 					<a
 						href="#"
 						style={{ marginLeft: 20 }}
-						onClick={e => {
+						onClick={(e) => {
 							e.preventDefault();
 							onClickClose();
 						}}

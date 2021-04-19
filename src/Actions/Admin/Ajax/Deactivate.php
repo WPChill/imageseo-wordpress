@@ -10,10 +10,6 @@ class Deactivate
 {
     public function hooks()
     {
-        if (!imageseo_allowed()) {
-            return;
-        }
-
         add_action('admin_notices', [$this, 'modalDeactivate']);
 
         add_action('wp_ajax_imageseo_deactivate_plugin', [$this, 'feedback']);
@@ -57,7 +53,7 @@ class Deactivate
             Message : <br/>
             %s
         </p>
-        
+
         <p>Raisons : </p>
         <ul>
             <li>Désactivation temporaire : %s</li>

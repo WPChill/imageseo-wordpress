@@ -7,7 +7,9 @@ const element = document.querySelector(
 	`.plugins [data-slug="imageseo"] .deactivate`
 );
 
-if (element) {
+const selector = document.querySelector("#deactivate-intent-imageseo");
+
+if (element && selector) {
 	ReactDOM.render(
 		<DeactivateIntent />,
 		document.querySelector("#deactivate-intent-imageseo")
