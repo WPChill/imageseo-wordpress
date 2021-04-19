@@ -101,18 +101,21 @@ const Overview = () => {
 					)}
 				</div>
 				<div className="col-span-2">
-					<div className="pb-2 mb-4">
-						<h2 className="font-bold text-xl">
-							{__("Manage your account", "imageseo")}
-						</h2>
-						<a
-							className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4"
-							href="https://app.imageseo.io/"
-							target="_blank"
-						>
-							{__("Go to the application", "imageseo")}
-						</a>
-					</div>
+					{!isEmpty(apiKey) && (
+						<div className="pb-2 mb-4">
+							<h2 className="font-bold text-xl">
+								{__("Manage your account", "imageseo")}
+							</h2>
+							<a
+								className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4"
+								href="https://app.imageseo.io/"
+								target="_blank"
+							>
+								{__("Go to the application", "imageseo")}
+							</a>
+						</div>
+					)}
+
 					<div className="pb-2 mb-4">
 						<h2 className="font-bold text-xl">
 							{isEmpty(apiKey) &&

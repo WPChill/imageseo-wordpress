@@ -325,32 +325,29 @@ function FormRegister() {
 						{__("ImageSEO's Terms of Service", "imageseo")}
 					</a>
 				</label>
-				{errors.terms.error && (
-					<p className="flex items-center my-2">
-						<img
-							src={getLinkImage("warning.svg")}
-							className="mr-2"
-						/>
-						{__(
-							"You must accept the terms to validate your registration.",
-							"imageseo"
-						)}
-					</p>
-				)}
 			</div>
+			{errors.terms.error && (
+				<p className="flex items-center mb-4 -mt-2">
+					<img src={getLinkImage("warning.svg")} className="mr-2" />
+					{__(
+						"You must accept the terms to validate your registration.",
+						"imageseo"
+					)}
+				</p>
+			)}
 
 			<div className="flex items-center">
 				<input
-					id="newsletter"
-					name="newsletter"
+					id="newsletters"
+					name="newsletters"
 					type="checkbox"
-					checked={!isEmpty(values.newsletter)}
-					value="terms"
+					checked={!isEmpty(values.newsletters)}
+					value="newsletters"
 					onChange={handleInputChange}
 					className="h-4 w-4 focus:ring-indigo-500 border-gray-300 rounded text-white"
 				/>
 				<label
-					htmlFor="newsletter"
+					htmlFor="newsletters"
 					className="ml-2 block text-sm text-gray-900"
 				>
 					{__(

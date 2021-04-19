@@ -49,7 +49,7 @@ const OverviewCountImages = () => {
 						></div>
 					</div>
 				</div>
-				<div className="flex  -mt-1">
+				<div className="flex -mt-1">
 					<p className="text-sm flex-1">
 						<strong>{percentOptimized}%</strong>{" "}
 						{__("completed", "imageseo")}
