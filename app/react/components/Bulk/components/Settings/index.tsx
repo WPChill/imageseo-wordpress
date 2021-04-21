@@ -399,7 +399,7 @@ function BulkSettings() {
 								</label>
 								<p className="text-sm">
 									{__(
-										"It might slow the process (+10sec by images). Filenames are not really relevant for SEO",
+										"It might slow the process (+10sec by images).",
 										"imageseo"
 									)}
 								</p>
