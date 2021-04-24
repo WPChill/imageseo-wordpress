@@ -44,35 +44,41 @@ class UpdateFile
             $newBasicFile = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $basicOldFileName);
             $destination = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $src);
 
-            rename($src, $destination);
-
             $oldUrl = wp_get_attachment_image_src($attachmentId, 'full')[0];
             $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
 
-            $this->action_update_postmeta($oldUrl, $newUrl);
-            $this->action_update_posts($oldUrl, $newUrl);
+            rename($src, $destination);
+
+            $this->updatePostmetas($oldUrl, $newUrl);
+            $this->updatePosts($oldUrl, $newUrl);
 
             $newMetadata['file'] = \sprintf('%s%s', $fileRoot, $newBasicFile);
 
+            $filesSizesAlreadyCheck = [];
             // Multiple Sizes
             foreach ($metadata['sizes'] as $key => $size) {
                 $srcBySize = sprintf('%s/%s%s', $uploadDirectoryData['basedir'], $fileRoot, $size['file']);
-                if (!file_exists($srcBySize)) {
+
+                if (!file_exists($srcBySize) && !isset($filesSizesAlreadyCheck[$size['file']])) {
                     continue;
                 }
 
-                $newFileBySize = str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $size['file']);
+                if (!isset($filesSizesAlreadyCheck[$size['file']])) {
+                    $newFileBySize = str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $size['file']);
+                    $destinationBySize = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcBySize);
 
-                $destinationBySize = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcBySize);
+                    $filesSizesAlreadyCheck[$size['file']] = $newFileBySize;
+                    $newMetadata['sizes'][$key]['file'] = $newFileBySize;
+                    rename($srcBySize, $destinationBySize);
 
-                $newMetadata['sizes'][$key]['file'] = $newFileBySize;
-                rename($srcBySize, $destinationBySize);
+                    $oldUrl = wp_get_attachment_image_src($attachmentId, $key)[0];
+                    $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
 
-                $oldUrl = wp_get_attachment_image_src($attachmentId, $key)[0];
-                $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
-
-                $this->action_update_postmeta($oldUrl, $newUrl);
-                $this->action_update_posts($oldUrl, $newUrl);
+                    $this->updatePostmetas($oldUrl, $newUrl);
+                    $this->updatePosts($oldUrl, $newUrl);
+                } else {
+                    $newMetadata['sizes'][$key]['file'] = $filesSizesAlreadyCheck[$size['file']];
+                }
             }
 
             // Original Image
@@ -90,8 +96,8 @@ class UpdateFile
                     $oldUrl = wp_get_original_image_url($attachmentId);
                     $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
 
-                    $this->action_update_postmeta($oldUrl, $newUrl);
-                    $this->action_update_posts($oldUrl, $newUrl);
+                    $this->updatePostmetas($oldUrl, $newUrl);
+                    $this->updatePosts($oldUrl, $newUrl);
                 }
             }
         } catch (\Exception $th) {
@@ -110,7 +116,7 @@ class UpdateFile
     }
 
     // Mass update of all the meta with the new filenames
-    public function action_update_postmeta($baseImageUrl, $newImageUrl)
+    public function updatePostmetas($baseImageUrl, $newImageUrl)
     {
         global $wpdb;
         $query = $wpdb->prepare("UPDATE $wpdb->postmeta
@@ -128,7 +134,7 @@ class UpdateFile
     }
 
     // Mass update of all the articles with the new filenames
-    public function action_update_posts($baseImageUrl, $newImageUrl)
+    public function updatePosts($baseImageUrl, $newImageUrl)
     {
         global $wpdb;
 

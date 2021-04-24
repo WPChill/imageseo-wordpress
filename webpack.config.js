@@ -13,6 +13,7 @@ module.exports = {
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		"admin-global-css": "./app/styles/admin-global.scss",
 		application: "./app/react/modules/index.tsx",
+		wizard: "./app/react/modules/wizard.tsx",
 		"imageseo-tw": "./app/styles/index.css",
 	},
 	output: {

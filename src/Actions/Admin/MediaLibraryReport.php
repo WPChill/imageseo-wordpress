@@ -85,16 +85,14 @@ class MediaLibraryReport
         $this->reportImageService->generateReportByAttachmentId($attachmentId);
 
         try {
-            $filename = $this->generateFilename->generateFilenameForAttachmentId($attachmentId);
+            list($filename, $extension) = $this->generateFilename->generateFilenameForAttachmentId($attachmentId);
+            imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         } catch (NoRenameFile $e) {
             wp_redirect($redirectUrl);
 
             return;
         }
 
-        $extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
-
-        imageseo_get_service('UpdateFile')->updateFilename($attachmentId, sprintf('%s.%s', $filename, $extension));
         wp_redirect($redirectUrl);
     }
 }
