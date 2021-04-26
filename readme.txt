@@ -142,6 +142,7 @@ To help us translate Image SEO in your language, contact us
 
 = 2.0.1 (04-26-2021) =
 - Improved: Replacing all custom thumbnails in WordPress
+- Bugfix: on upload rename file
 
 = 2.0.0 (04-19-2021) =
 - New: Complete redesign of the UI/UX
