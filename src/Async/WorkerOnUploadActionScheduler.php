@@ -9,20 +9,19 @@ add_action('action_worker_on_upload_process_action_scheduler', 'imageSeoProcessO
 function imageseo_get_filename_on_upload($attachmentId, $excludeFilenames = [])
 {
     try {
-        $filename = imageseo_get_service('GenerateFilename')->generateFilenameForAttachmentId($attachmentId, $excludeFilenames);
+        list($filename, $extension) = imageseo_get_service('GenerateFilename')->generateFilenameForAttachmentId($attachmentId, $excludeFilenames);
     } catch (NoRenameFile $e) {
         $filename = imageseo_get_service('GenerateFilename')->getFilenameByAttachmentId($attachmentId);
-    }
-
-    $splitFilename = explode('.', $filename);
-    if (1 === count($splitFilename)) { // Need to retrieve current extension
-        $currentFilename = wp_get_attachment_image_src($attachmentId, 'full');
-        $splitCurrentFilename = explode('.', $currentFilename[0]);
-        $extension = $splitCurrentFilename[count($splitCurrentFilename) - 1];
-    } else {
-        $extension = $splitFilename[count($splitFilename) - 1];
-        array_pop($splitFilename);
-        $filename = implode('.', $splitFilename);
+        $splitFilename = explode('.', $filename);
+        if (1 === count($splitFilename)) { // Need to retrieve current extension
+            $currentFilename = wp_get_attachment_image_src($attachmentId, 'full');
+            $splitCurrentFilename = explode('.', $currentFilename[0]);
+            $extension = $splitCurrentFilename[count($splitCurrentFilename) - 1];
+        } else {
+            $extension = $splitFilename[count($splitFilename) - 1];
+            array_pop($splitFilename);
+            $filename = implode('.', $splitFilename);
+        }
     }
 
     return [
@@ -33,8 +32,6 @@ function imageseo_get_filename_on_upload($attachmentId, $excludeFilenames = [])
 
 function imageSeoProcessOnUpload($attachmentId)
 {
-    error_log('here : ' . $attachmentId);
-
     $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
     if ($limitExcedeed) {
         return;

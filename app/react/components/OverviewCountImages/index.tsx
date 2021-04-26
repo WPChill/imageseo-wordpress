@@ -27,7 +27,7 @@ const OverviewCountImages = () => {
 		<div className="bg-white border rounded-lg">
 			<div className="px-4 py-5 sm:p-6">
 				<p className="text-sm leading-6 font-medium text-gray-900">
-					{__("There are", "imageseo")} {data.total_images}
+					{__("There are", "imageseo")} {data.total_images}{" "}
 					{__("images in your library.", "imageseo")}
 				</p>
 				{percentOptimized < 99 && !isNaN(missPercent) && (
