@@ -10,28 +10,24 @@ const steps = [
 		id: "01",
 		name: "What is Image SEO for?",
 		description: "Let's discover our extension in a few steps",
-		status: "complete",
 	},
 	{
 		key: 1,
 		id: "02",
 		name: "Bulk Optimization",
 		description: "Rename your files and fill in your Alts",
-		status: "current",
 	},
 	{
 		key: 2,
 		id: "03",
 		name: "Social Media",
 		description: "Create unique images for your social networks",
-		status: "upcoming",
 	},
 	{
 		key: 3,
 		id: "04",
 		name: "Register",
-		description: "Convinced? Create your account",
-		status: "upcoming",
+		description: "Create your account. It's free",
 	},
 ];
 
@@ -218,10 +214,23 @@ function WizardWindow() {
 										recusandae quod cupiditate, eius ad a
 										porro. Asperiores, iste?
 									</p>
+									<div
+										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
+										onClick={() => setStep(1)}
+									>
+										Continue
+									</div>
 								</>
 							)}
 							{step === 1 && (
 								<>
+									<p className="mb-8 text-center text-base">
+										We have developed a{" "}
+										<strong>bulk optimisation</strong>{" "}
+										system that allows you to run the
+										process across your entire media
+										library.
+									</p>
 									<div className="flex">
 										<div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
 											<img
@@ -232,21 +241,21 @@ function WizardWindow() {
 											/>
 										</div>
 										<div>
-											<p className="text-lg font-bold">
+											<p className="text-base font-bold">
 												This picture shows a Tesla
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Your current file name:
 												DSC001.jpeg and your alternative
 												text is not filled in.
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Filename by Image SEO:{" "}
 												<strong>
 													tesla-model-s.jpeg
 												</strong>
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Alt Text by Image SEO:{" "}
 												<strong>
 													Tesla, Inc. - Tesla
@@ -264,22 +273,22 @@ function WizardWindow() {
 											/>
 										</div>
 										<div>
-											<p className="text-lg font-bold">
+											<p className="text-base font-bold">
 												This picture shows a Effeil
 												Tower
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Your current file name:
 												DSC002.jpeg and your alternative
 												text is not filled in.
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Filename by Image SEO:{" "}
 												<strong>
 													eiffel-tower.jpeg
 												</strong>
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Alt Text by Image SEO:{" "}
 												<strong>
 													{" "}
@@ -298,22 +307,22 @@ function WizardWindow() {
 											/>
 										</div>
 										<div>
-											<p className="text-lg font-bold">
+											<p className="text-base font-bold">
 												This picture shows Central Park
 												(NYC)
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Your current file name:
 												DSC003.jpeg and your alternative
 												text is not filled in.
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Filename by Image SEO:{" "}
 												<strong>
 													central-park.jpeg
 												</strong>
 											</p>
-											<p className="mt-1 text-base">
+											<p className="mt-1 text-sm">
 												Alt Text by Image SEO:{" "}
 												<strong>
 													Central Park - Central Park
@@ -326,9 +335,34 @@ function WizardWindow() {
 										You can download these images to test
 										them directly in your media library
 									</p>
+									<div
+										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
+										onClick={() => setStep(2)}
+									>
+										Continue
+									</div>
 								</>
 							)}
-							{step === 2 && <>Step 3</>}
+							{step === 2 && (
+								<>
+									<p className="mb-8 text-center text-base">
+										You can configure the appearance of your
+										images for social networks.
+									</p>
+									<img
+										src={getLinkImage(
+											"wizard/social-media.png"
+										)}
+										className="mx-auto w-9/12 my-8"
+									/>
+									<div
+										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
+										onClick={() => setStep(3)}
+									>
+										Continue
+									</div>
+								</>
+							)}
 							{step === 3 && (
 								<>
 									<div className="max-w-2xl mx-auto">

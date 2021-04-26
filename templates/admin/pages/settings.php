@@ -8,11 +8,11 @@ if (!defined('ABSPATH')) {
 
 <div id="wrap-imageseo">
     <div class="wrap">
-		<?php if (!isset($_GET['wizard'])) { ?>
-			<div id="js-module-imageseo"></div>
-		<?php } elseif (isset($_GET['wizard'])) { ?>
-			<div id="js-module-imageseo-wizard"></div>
-		<?php } ?>
+		<div id="js-module-imageseo"></div>
+		<?php //if (!isset($_GET['wizard'])) {?>
+		<?php //} elseif (isset($_GET['wizard'])) {?>
+
+		<?php //} <div id="js-module-imageseo-wizard"></div>?>
     </div>
 </div>
 

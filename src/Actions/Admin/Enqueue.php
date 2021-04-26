@@ -86,7 +86,8 @@ class Enqueue
             return;
         }
 
-        if (isset($_GET['wizard'])) {
+        $apiKey = imageseo_get_option('api_key');
+        if (isset($_GET['wizard']) && !$apiKey) {
             return;
         }
 
@@ -157,7 +158,7 @@ class Enqueue
             return;
         }
 
-        if (!isset($_GET['wizard'])) {
+        if (!isset($_GET['wizard']) || imageseo_get_option('api_key')) {
             return;
         }
 
