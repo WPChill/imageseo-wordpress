@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, seo
 Requires at least: 5.0+
 Tested up to: 5.7
 Requires PHP: 7.0
-Stable tag: v2.0.0
+Stable tag: v2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,9 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 2.0.1 (04-26-2021) =
+- Improved: Replacing all custom thumbnails in WordPress
 
 = 2.0.0 (04-19-2021) =
 - New: Complete redesign of the UI/UX
