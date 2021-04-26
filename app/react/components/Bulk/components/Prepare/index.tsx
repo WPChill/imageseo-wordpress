@@ -111,18 +111,28 @@ const BulkPrepare = () => {
 				<div className="col-span-3">
 					<BulkSettings />
 					{!state.bulkActive && (
-						<div className="text-center">
-							<button
-								disabled={state.bulkActive}
-								onClick={handleStartBulk}
-								className="inline-block items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 mx-auto"
-							>
-								{__(
-									"Start a new bulk optimization",
-									"imageseo"
-								)}
-							</button>
-						</div>
+						<>
+							<div className="my-4">
+								<AlertSimple icon={IconsAlert.INFORMATION} blue>
+									{__(
+										"You will consume one credit for each image optimized.",
+										"imageseo"
+									)}
+								</AlertSimple>
+							</div>
+							<div className="text-center">
+								<button
+									disabled={state.bulkActive}
+									onClick={handleStartBulk}
+									className="inline-block items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 mx-auto"
+								>
+									{__(
+										"Start a new bulk optimization",
+										"imageseo"
+									)}
+								</button>
+							</div>
+						</>
 					)}
 				</div>
 				<div className="col-span-2">
