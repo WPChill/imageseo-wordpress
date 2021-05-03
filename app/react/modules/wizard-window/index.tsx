@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { CheckIcon } from "@heroicons/react/solid";
-import { find, isNull } from "lodash";
+import { find, get, isNull } from "lodash";
 import FormRegister from "../../components/Forms/Register";
 import getLinkImage from "../../helpers/getLinkImage";
 import { AlertSimple } from "../../components/Alerts/Simple";
 import SeoFact from "../../components/SeoFact";
 import useCountImages from "../../hooks/useCountImages";
 import { getPercentImagesOptimizedAlt } from "../../helpers/getPercentImagesOptimizedAlt";
+import useOptimizedTimeEstimated from "../../hooks/useOptimizedTimeEstimated";
 
 //@ts-ignore
 const { __ } = wp.i18n;
@@ -15,26 +16,26 @@ const steps = [
 	{
 		key: 0,
 		id: "01",
-		name: __("Discover ImageSEO", "imageseo"),
+		name: __("What does Image SEO Optimizer?", "imageseo"),
 		description: __(
-			"Let's discover our extension in a few steps",
+			"We use AI to optimize your images' alt texts and filenames with SEO friendly content.",
 			"imageseo"
 		),
 	},
 	{
 		key: 1,
 		id: "02",
-		name: __("Bulk Optimization", "imageseo"),
-		description: __("Rename your files and fill in your Alts", "imageseo"),
+		name: __("Bulk optimize all your images!", "imageseo"),
+		description: __(
+			"Fill out your empty alt texts and rename your image files with SEO friendly content.",
+			"imageseo"
+		),
 	},
 	{
 		key: 2,
 		id: "03",
 		name: __("Social Media", "imageseo"),
-		description: __(
-			"Create unique images for your social networks",
-			"imageseo"
-		),
+		description: __("Create unique images for Social Media", "imageseo"),
 	},
 	{
 		key: 3,
@@ -47,6 +48,28 @@ const steps = [
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
+
+const OverviewTimeOptimize = () => {
+	const data = useOptimizedTimeEstimated();
+	return (
+		<>
+			{!isNull(data) && get(data, "minutes_by_human", 0) > 1 && (
+				<>
+					<p className="text-base text-center">
+						{__(`It would approximately take you`, `imageseo`)}{" "}
+						<strong>
+							{data.minutes_by_human} {__("minutes", "imageseo")}.
+						</strong>{" "}
+						{__(
+							"to optimize them for SEO. We will do it for you!",
+							"imageseo"
+						)}
+					</p>
+				</>
+			)}
+		</>
+	);
+};
 
 const Steps = ({ currentStep, setStep }) => {
 	return (
@@ -229,6 +252,7 @@ function WizardWindow() {
 							{step === 0 && (
 								<>
 									<SeoFact />
+
 									<p className="text-base text-center mt-4 leading-6 font-medium text-gray-900">
 										{__("There are", "imageseo")}{" "}
 										{data.total_images}{" "}
@@ -241,9 +265,9 @@ function WizardWindow() {
 										{percentOptimized < 99 &&
 											//@ts-ignore
 											!isNaN(missPercent) && (
-												<p className="text-base mt-2">
+												<p className="text-base my-2">
 													{__(
-														`Did you know that`,
+														`Did you that`,
 														"imageseo"
 													)}{" "}
 													<span className="text-blue-500 font-bold">
@@ -256,11 +280,12 @@ function WizardWindow() {
 												</p>
 											)}
 									</div>
+									<OverviewTimeOptimize />
 									<div
 										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
 										onClick={() => setStep(1)}
 									>
-										Continue
+										{__("Continue", "imageseo")}
 									</div>
 									<div className="text-center mt-8">
 										<a
@@ -269,7 +294,7 @@ function WizardWindow() {
 											className="text-sm text-gray-500"
 										>
 											{__(
-												"Skip setup configuration",
+												"Skip the wizard and go directly to the settings",
 												"imageseo"
 											)}
 										</a>
@@ -279,11 +304,10 @@ function WizardWindow() {
 							{step === 1 && (
 								<>
 									<p className="mb-8 text-center text-base">
-										We have developed a{" "}
-										<strong>bulk optimisation</strong>{" "}
-										system that allows you to run the
-										process across your entire media
-										library.
+										Our bulk optimization process will allow
+										you to save a ton of time by optimizing
+										all your images using AI in just a few
+										clicks!
 									</p>
 									<div className="flex">
 										<div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
@@ -300,8 +324,8 @@ function WizardWindow() {
 											</p>
 											<p className="mt-1 text-sm">
 												Your current file name:
-												DSC001.jpeg and your alternative
-												text is not filled in.
+												DSC001.jpeg and the alt text is
+												empty.
 											</p>
 											<p className="mt-1 text-sm">
 												Filename by Image SEO:{" "}
@@ -385,15 +409,11 @@ function WizardWindow() {
 											</p>
 										</div>
 									</div>
-									<p className="mt-4 text-center text-base">
-										You can download these images to test
-										them directly in your media library
-									</p>
 									<div
 										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
 										onClick={() => setStep(2)}
 									>
-										Continue
+										{__("Continue", "imageseo")}
 									</div>
 									<div className="text-center mt-8">
 										<a
@@ -402,7 +422,7 @@ function WizardWindow() {
 											className="text-sm text-gray-500"
 										>
 											{__(
-												"Skip setup configuration",
+												"Skip the wizard and go directly to the settings",
 												"imageseo"
 											)}
 										</a>
@@ -412,8 +432,10 @@ function WizardWindow() {
 							{step === 2 && (
 								<>
 									<p className="mb-8 text-center text-base">
-										You can configure the appearance of your
-										images for social networks.
+										{__(
+											"Our Social Media cards builder will help you to create amazing preview cards for Social Media.",
+											"imageseo"
+										)}
 									</p>
 									<img
 										src={getLinkImage(
@@ -431,7 +453,7 @@ function WizardWindow() {
 										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
 										onClick={() => setStep(3)}
 									>
-										Continue
+										{__("Continue", "imageseo")}
 									</div>
 									<div className="text-center mt-8">
 										<a
@@ -440,7 +462,7 @@ function WizardWindow() {
 											className="text-sm text-gray-500"
 										>
 											{__(
-												"Skip setup configuration",
+												"Skip the wizard and go directly to the settings",
 												"imageseo"
 											)}
 										</a>

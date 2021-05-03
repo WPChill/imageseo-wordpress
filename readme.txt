@@ -1,6 +1,6 @@
-===  Image SEO Optimizer - auto images alt text, name and open graph tag - WooCommerce friendly ===
+===  Image SEO Optimizer - auto images alt text, name and open graph tag ===
 Contributors: gmulti
-Tags: image seo, alt, alt text, open graph, seo
+Tags: image seo, alt, alt text, open graph, image optimizer
 Requires at least: 5.0+
 Tested up to: 5.7
 Requires PHP: 7.0
@@ -8,7 +8,7 @@ Stable tag: v2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Image SEO optimizer is the best plugin WordPress to optimize your image alternative texts (alt text or alt tag) and names with SEO friendly content.
+Image SEO optImage SEO optimizer is the best plugin WordPress to optimize your image alternative texts (alt text or alt tag) and names with SEO friendly content.
 
 == Description ==
 
@@ -128,6 +128,10 @@ Of course not ! You will keep the alt texts we generated for you.
 = Do you provide image compression ? =
 
 Not yet, we leave it to our friends from Imagify.
+
+= Do you optimize image title ? =
+
+Image title is not relevant for SEO. We don't optimize image title attributes.
 
 = Does Image SEO integrates with other plugins? =
 
