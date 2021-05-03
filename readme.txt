@@ -144,6 +144,9 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
+= 2.0.2 (05-04-2021) =
+- New: Wizard during activation to guide you through the plugin.
+
 = 2.0.1 (04-26-2021) =
 - Improved: Replacing all custom thumbnails in WordPress
 - Bugfix: on upload rename file
