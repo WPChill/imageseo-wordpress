@@ -1,33 +1,46 @@
 import React, { useState } from "react";
 import { CheckIcon } from "@heroicons/react/solid";
-import { find } from "lodash";
+import { find, isNull } from "lodash";
 import FormRegister from "../../components/Forms/Register";
 import getLinkImage from "../../helpers/getLinkImage";
+import { AlertSimple } from "../../components/Alerts/Simple";
+import SeoFact from "../../components/SeoFact";
+import useCountImages from "../../hooks/useCountImages";
+import { getPercentImagesOptimizedAlt } from "../../helpers/getPercentImagesOptimizedAlt";
+
+//@ts-ignore
+const { __ } = wp.i18n;
 
 const steps = [
 	{
 		key: 0,
 		id: "01",
-		name: "What is Image SEO for?",
-		description: "Let's discover our extension in a few steps",
+		name: __("Discover ImageSEO", "imageseo"),
+		description: __(
+			"Let's discover our extension in a few steps",
+			"imageseo"
+		),
 	},
 	{
 		key: 1,
 		id: "02",
-		name: "Bulk Optimization",
-		description: "Rename your files and fill in your Alts",
+		name: __("Bulk Optimization", "imageseo"),
+		description: __("Rename your files and fill in your Alts", "imageseo"),
 	},
 	{
 		key: 2,
 		id: "03",
-		name: "Social Media",
-		description: "Create unique images for your social networks",
+		name: __("Social Media", "imageseo"),
+		description: __(
+			"Create unique images for your social networks",
+			"imageseo"
+		),
 	},
 	{
 		key: 3,
 		id: "04",
-		name: "Register",
-		description: "Create your account. It's free",
+		name: __("Register", "imageseo"),
+		description: __("Create your account. It's free", "imageseo"),
 	},
 ];
 
@@ -182,10 +195,26 @@ const Steps = ({ currentStep, setStep }) => {
 
 function WizardWindow() {
 	const [step, setStep] = useState(0);
+	const data = useCountImages();
+
+	if (isNull(data)) {
+		return <>{__("Data being loaded...", "imageseo")}</>;
+	}
+
+	const percentOptimized = getPercentImagesOptimizedAlt(
+		Number(data.total_images),
+		Number(data.total_images_no_alt)
+	);
+
+	const missPercent =
+		Number(data.total_images) === 0
+			? 0
+			: (100 - percentOptimized).toFixed(2);
+
 	return (
 		<>
 			<Steps currentStep={step} setStep={setStep} />
-			<div className="max-w-5xl mx-auto my-16 ">
+			<div className="max-w-4xl mx-auto my-16 ">
 				<div className="bg-white overflow-hidden shadow sm:rounded-lg">
 					<div className="px-4 py-5 sm:p-6">
 						<div className="border-b pb-4 text-center">
@@ -199,26 +228,51 @@ function WizardWindow() {
 						<div className="py-8 px-12 text-base">
 							{step === 0 && (
 								<>
-									<p>
-										Lorem ipsum dolor sit amet consectetur,
-										adipisicing elit. Placeat, optio
-										voluptate dolorem aliquid itaque sequi
-										quis doloremque laboriosam cumque, eum
-										maxime, nostrum maiores veniam unde
-										nesciunt dolorum reprehenderit natus
-										blanditiis. Officiis delectus libero
-										reprehenderit corporis tenetur magnam
-										nulla voluptate ullam fuga architecto
-										blanditiis totam possimus numquam nisi
-										expedita, explicabo, nesciunt sint
-										recusandae quod cupiditate, eius ad a
-										porro. Asperiores, iste?
+									<SeoFact />
+									<p className="text-base text-center mt-4 leading-6 font-medium text-gray-900">
+										{__("There are", "imageseo")}{" "}
+										{data.total_images}{" "}
+										{__(
+											"images in your library.",
+											"imageseo"
+										)}
 									</p>
+									<div className="text-center">
+										{percentOptimized < 99 &&
+											//@ts-ignore
+											!isNaN(missPercent) && (
+												<p className="text-base mt-2">
+													{__(
+														`Did you know that`,
+														"imageseo"
+													)}{" "}
+													<span className="text-blue-500 font-bold">
+														{missPercent}%
+													</span>{" "}
+													{__(
+														`alternative texts are missing ?`,
+														"imageseo"
+													)}
+												</p>
+											)}
+									</div>
 									<div
 										className="w-1/2  mx-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 cursor-pointer"
 										onClick={() => setStep(1)}
 									>
 										Continue
+									</div>
+									<div className="text-center mt-8">
+										<a
+											//@ts-ignore
+											href={IMAGESEO_DATA.SETTINGS_URL}
+											className="text-sm text-gray-500"
+										>
+											{__(
+												"Skip setup configuration",
+												"imageseo"
+											)}
+										</a>
 									</div>
 								</>
 							)}
@@ -341,6 +395,18 @@ function WizardWindow() {
 									>
 										Continue
 									</div>
+									<div className="text-center mt-8">
+										<a
+											//@ts-ignore
+											href={IMAGESEO_DATA.SETTINGS_URL}
+											className="text-sm text-gray-500"
+										>
+											{__(
+												"Skip setup configuration",
+												"imageseo"
+											)}
+										</a>
+									</div>
 								</>
 							)}
 							{step === 2 && (
@@ -349,6 +415,12 @@ function WizardWindow() {
 										You can configure the appearance of your
 										images for social networks.
 									</p>
+									<img
+										src={getLinkImage(
+											"wizard/social-media-config.png"
+										)}
+										className="mx-auto w-9/12 my-8"
+									/>
 									<img
 										src={getLinkImage(
 											"wizard/social-media.png"
@@ -361,12 +433,30 @@ function WizardWindow() {
 									>
 										Continue
 									</div>
+									<div className="text-center mt-8">
+										<a
+											//@ts-ignore
+											href={IMAGESEO_DATA.SETTINGS_URL}
+											className="text-sm text-gray-500"
+										>
+											{__(
+												"Skip setup configuration",
+												"imageseo"
+											)}
+										</a>
+									</div>
 								</>
 							)}
 							{step === 3 && (
 								<>
 									<div className="max-w-2xl mx-auto">
-										<FormRegister />
+										<FormRegister
+											afterSubmit={() => {
+												window.location.href =
+													//@ts-ignore
+													IMAGESEO_DATA.SETTINGS_URL;
+											}}
+										/>
 									</div>
 								</>
 							)}

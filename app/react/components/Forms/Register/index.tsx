@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Swal from "sweetalert2";
 import classNames from "classnames";
-import { isEmpty, isNil, find, get } from "lodash";
+import { isEmpty, isNil, find, get, after } from "lodash";
 
 //@ts-ignore
 const { __ } = wp.i18n;
@@ -16,7 +16,11 @@ import getSiteLink from "../../../helpers/getSiteLink";
 import { SVGLoader } from "../../../svg/Loader";
 import { register } from "../../../services/ajax/user";
 
-function FormRegister() {
+interface Props {
+	afterSubmit?: Function;
+}
+
+function FormRegister({ afterSubmit }: Props) {
 	const {
 		actions: { setApiKey },
 	} = useContext(PageContext);
@@ -156,6 +160,7 @@ function FormRegister() {
 				confirmButtonText: __("Close", "imageseo"),
 			});
 		} else {
+			//@ts-ignore
 			Swal.fire({
 				title: __("Great!", "imageseo"),
 				text: __(
@@ -165,6 +170,10 @@ function FormRegister() {
 				icon: "success",
 				confirmButtonText: __("Close", "imageseo"),
 			});
+
+			if (afterSubmit) {
+				afterSubmit();
+			}
 		}
 	};
 
@@ -371,8 +380,11 @@ function FormRegister() {
 			)}
 
 			<button
-				className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4"
+				className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 mx-auto"
 				type="submit"
+				style={{
+					maxWidth: 400,
+				}}
 			>
 				{loading && <SVGLoader className="mr-2" />}
 				{__("Register", "imageseo")}

@@ -12,6 +12,9 @@ const GlobalStyle = createGlobalStyle`
 	#adminmenuwrap{
 		display:none;
 	}
+	.swal2-container{
+		z-index:9999 !important;
+	}
 `;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					<div
 						className="fixed top-0 left-0 bg-gray-50 w-full h-full overflow-y-scroll"
 						style={{
-							zIndex: 9999,
+							zIndex: 9998,
 						}}
 					>
 						<WizardWindow />

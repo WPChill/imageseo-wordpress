@@ -174,7 +174,7 @@ class Enqueue
             'ADMIN_AJAX'                     => admin_url('admin-ajax.php'),
             'TOTAL_ALT_NO_OPTIMIZE'          => $totalAltNoOptimize,
             'PERCENT_TRAFFIC_LOOSE'          => $percentLoose,
-            'PAGE_BUILDERS'                  => imageseo_get_service('WordPressData')->getPageBuilders(),
+            'SETTINGS_URL'                   => admin_url('admin.php?page=imageseo-settings'),
         ];
 
         wp_register_script('imageseo-wizard', IMAGESEO_URL_DIST . '/wizard.js', ['wp-i18n'], IMAGESEO_VERSION, true);
