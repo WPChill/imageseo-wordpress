@@ -44,7 +44,7 @@ class SocialMediaSettings
         $optionsBdd = $this->optionServices->getOptions();
         $newOptions = wp_parse_args($options, $optionsBdd);
 
-        $newOptions['social_settings'] = $socialSettings;
+        $newOptions['social_media_settings'] = $socialSettings;
 
         $this->optionServices->setOptions($newOptions);
 

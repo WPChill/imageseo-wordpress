@@ -20,55 +20,71 @@ const SocialSettingsContext = createContext(null);
 const SocialSettingsContextProvider = ({ children }) => {
 	const getInitialState = () => {
 		return {
-			//@ts-ignore
-			layout: get(IMAGESEO_DATA, "SETTINGS.layout", "CARD_LEFT"),
-			//@ts-ignore
-			textColor: get(IMAGESEO_DATA, "SETTINGS.textColor", "#000000"),
+			layout: get(
+				//@ts-ignore
+				IMAGESEO_DATA,
+				"OPTIONS.social_media_settings.layout",
+				"CARD_LEFT"
+			),
+			textColor: get(
+				//@ts-ignore
+				IMAGESEO_DATA,
+				"OPTIONS.social_media_settings.textColor",
+				"#000000"
+			),
 			contentBackgroundColor: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.contentBackgroundColor",
+				"OPTIONS.social_media_settings.contentBackgroundColor",
 				"#ffffff"
 			),
-			//@ts-ignore
-			starColor: get(IMAGESEO_DATA, "SETTINGS.starColor", "#F8CA00"),
+			starColor: get(
+				//@ts-ignore
+				IMAGESEO_DATA,
+				"OPTIONS.social_media_settings.starColor",
+				"#F8CA00"
+			),
 			visibilitySubTitle: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.visibilitySubTitle",
+				"OPTIONS.social_media_settings.visibilitySubTitle",
 				true
 			),
 			visibilitySubTitleTwo: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.visibilitySubTitleTwo",
+				"OPTIONS.social_media_settings.visibilitySubTitleTwo",
 				true
 			),
 			visibilityAvatar: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.visibilityAvatar",
+				"OPTIONS.social_media_settings.visibilityAvatar",
 				true
 			),
 			visibilityRating: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.visibilityRating",
+				"OPTIONS.social_media_settings.visibilityRating",
 				false
 			),
 			defaultBgImg: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.defaultBgImg",
+				"OPTIONS.social_media_settings.defaultBgImg",
 				//@ts-ignore
 				`${IMAGESEO_DATA.URL_DIST}/images/default_image.png`
 			),
-			//@ts-ignore
-			textAlignment: get(IMAGESEO_DATA, "SETTINGS.textAlignment", "top"),
+			textAlignment: get(
+				//@ts-ignore
+				IMAGESEO_DATA,
+				"OPTIONS.social_media_settings.textAlignment",
+				"top"
+			),
 			logoUrl: get(
 				//@ts-ignore
 				IMAGESEO_DATA,
-				"SETTINGS.logoUrl",
+				"OPTIONS.social_media_settings.logoUrl",
 				//@ts-ignore
 				`${IMAGESEO_DATA.URL_DIST}/images/default_logo.png`
 			),

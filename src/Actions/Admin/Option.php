@@ -111,8 +111,6 @@ class Option
                 break;
         }
 
-        flush_rewrite_rules();
-
         return $newOptions;
     }
 }

@@ -4,7 +4,7 @@ Tags: image seo, alt, alt text, open graph, image optimizer
 Requires at least: 5.0+
 Tested up to: 5.7
 Requires PHP: 7.0
-Stable tag: v2.0.1
+Stable tag: v2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,9 @@ Image SEO currently supports English and French.
 To help us translate Image SEO in your language, contact us
 
 == Changelog ==
+
+= 2.0.3 (05-06-2021) =
+- Bugfix: Save options for social network images
 
 = 2.0.2 (05-04-2021) =
 - New: Wizard during activation to guide you through the plugin.
