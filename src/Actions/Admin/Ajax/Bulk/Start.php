@@ -43,12 +43,13 @@ class Start
 
             'size_indexes_image'   => apply_filters('imageseo_size_indexes_image_bulk_process', 5),
             'settings'             => [
-                'formatAlt'          => $_POST['formatAlt'],
-                'formatAltCustom'    => $_POST['formatAltCustom'],
-                'language'           => $_POST['language'],
-                'optimizeAlt'        => 'true' === $_POST['optimizeAlt'] ? true : false,
-                'optimizeFile'       => 'true' === $_POST['optimizeFile'] ? true : false,
-                'wantValidateResult' => 'true' === $_POST['wantValidateResult'] ? true : false,
+                'formatAlt'             => isset($_POST['formatAlt']) ? $_POST['formatAlt'] : '',
+                'formatAltCustom'       => isset($_POST['formatAltCustom']) ? $_POST['formatAltCustom'] : '',
+                'altFilter'             => isset($_POST['altFilter']) ? $_POST['altFilter'] : '',
+                'language'              => $_POST['language'],
+                'optimizeAlt'           => 'true' === $_POST['optimizeAlt'] ? true : false,
+                'optimizeFile'          => 'true' === $_POST['optimizeFile'] ? true : false,
+                'wantValidateResult'    => 'true' === $_POST['wantValidateResult'] ? true : false,
             ],
         ];
         update_option('_imageseo_bulk_process_settings', $settings);

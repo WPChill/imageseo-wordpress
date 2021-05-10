@@ -19,9 +19,9 @@ if (!defined('ABSPATH')) {
 //     1,
 // ), ARRAY_A);
 // var_dump(current($images));
-$a = imageseo_get_service('ReportImage')->generateReportByAttachmentIdForNextGen(1);
-var_dump($a);
-exit;
+// $a = imageseo_get_service('ReportImage')->generateReportByAttachmentIdForNextGen(1);
+// var_dump($a);
+// exit;
 
 ?>
 

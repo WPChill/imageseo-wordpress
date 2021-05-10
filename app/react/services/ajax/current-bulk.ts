@@ -42,6 +42,7 @@ const startBulkProcess = async (
 		language,
 		optimizeAlt,
 		optimizeFile,
+		altFilter
 	}
 ) => {
 	const formData = new FormData();
@@ -53,6 +54,7 @@ const startBulkProcess = async (
 	formData.append("language", language);
 	formData.append("optimizeAlt", optimizeAlt);
 	formData.append("optimizeFile", optimizeFile);
+	formData.append("altFilter", altFilter);
 	//@ts-ignore
 	formData.append("wantValidateResult", false);
 	//@ts-ignore

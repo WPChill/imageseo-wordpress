@@ -48,6 +48,7 @@ class ReportImage
 
         $filePath = $storage->get_image_abspath($attachmentId);
         $metadata = getimagesize($filePath);
+        $language = null === $language ? $this->optionService->getOption('default_language_ia') : $language;
 
         if (!isset($metadata['mime']) || false === strpos($metadata['mime'], 'image')) {
             return;
@@ -58,14 +59,14 @@ class ReportImage
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'lang'     => $language,
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
                 ], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'lang'     => $language,
                     'src'      => $storage->get_image_url($attachmentId),
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
@@ -73,7 +74,7 @@ class ReportImage
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                'lang'     => $language,
                 'src'      => $storage->get_image_url($attachmentId),
                 'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
                 'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
@@ -126,20 +127,21 @@ class ReportImage
 
         $filePath = get_attached_file($attachmentId);
         $metadata = wp_get_attachment_metadata($attachmentId);
+        $language = null === $language ? $this->optionService->getOption('default_language_ia') : $language;
 
         $reportImages = $this->clientService->getClient()->getResource('ImageReports', $query);
 
         if (file_exists($filePath)) {
             try {
                 $result = $reportImages->generateReportFromFile([
-                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'lang'     => $language,
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
                 ], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
-                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'lang'     => $language,
                     'src'      => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
@@ -147,7 +149,7 @@ class ReportImage
             }
         } else {
             $result = $reportImages->generateReportFromUrl([
-                'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                'lang'     => $language,
                 'src'      => $filePath,
                 'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                 'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
