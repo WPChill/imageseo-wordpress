@@ -1,17 +1,20 @@
 import React from "react";
-import { isNaN } from "lodash";
-import { SVGExclamation } from "../../../../svg/Exclamation";
-import { SVGExclamationCircle } from "../../../../svg/ExclamationCircle";
 import { AlertSimple, IconsAlert } from "../../../Alerts/Simple";
 
 //@ts-ignore
 const { __ } = wp.i18n;
 
-function LimitExcedeed({ percent }) {
+function LimitExcedeed({ typeMessage = "resume" }) {
 	return (
 		<AlertSimple icon={IconsAlert.EXCLAMATION} yellow>
 			<p className="text-sm font-bold">
-				{__("You need more credits to resume it.", "imageseo")}
+				{typeMessage === "resume" &&
+					__("You need more credits to resume it.", "imageseo")}
+				{typeMessage === "other" &&
+					__(
+						"You must have credits available to use bulk optimization.",
+						"imageseo"
+					)}
 			</p>
 			<a
 				href="https://app.imageseo.io/plan"

@@ -105,6 +105,9 @@ const BulkPrepare = () => {
 		});
 	};
 
+	console.log("[state]", state);
+	console.log("[settings]", settings);
+
 	return (
 		<>
 			<div className="grid grid-cols-5 gap-4 mt-4">
@@ -174,20 +177,25 @@ const BulkPrepare = () => {
 								</p>
 							)}
 
-							{get(state, "allIdsOptimized", []).length > 0 && (
-								<p className="text-sm mt-2">
-									<strong>
-										{
-											get(state, "allIdsOptimized", [])
-												.length
-										}{" "}
-									</strong>
-									{__(
-										"optimizations have already been done!",
-										"imageseo"
-									)}
-								</p>
-							)}
+							{settings.altFilter !== "NEXTGEN_GALLERY" &&
+								get(state, "allIdsOptimized", []).length >
+									0 && (
+									<p className="text-sm mt-2">
+										<strong>
+											{
+												get(
+													state,
+													"allIdsOptimized",
+													[]
+												).length
+											}{" "}
+										</strong>
+										{__(
+											"optimizations have already been done!",
+											"imageseo"
+										)}
+									</p>
+								)}
 
 							{numberCreditsNeed > userImagesLeft && (
 								<div className="text-center">

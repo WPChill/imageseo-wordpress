@@ -42,6 +42,77 @@ class ReportImage
      *
      * @return array
      */
+    public function generateReportByAttachmentIdForNextGen($attachmentId, $query = [], $language = null)
+    {
+        $storage = \C_Gallery_Storage::get_instance();
+
+        $filePath = $storage->get_image_abspath($attachmentId);
+        $metadata = getimagesize($filePath);
+
+        if (!isset($metadata['mime']) || false === strpos($metadata['mime'], 'image')) {
+            return;
+        }
+
+        $reportImages = $this->clientService->getClient()->getResource('ImageReports', $query);
+
+        if (file_exists($filePath)) {
+            try {
+                $result = $reportImages->generateReportFromFile([
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'filePath' => $filePath,
+                    'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
+                    'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
+                ], $query);
+            } catch (\Exception $e) {
+                $result = $reportImages->generateReportFromUrl([
+                    'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                    'src'      => $storage->get_image_url($attachmentId),
+                    'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
+                    'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
+                ], $query);
+            }
+        } else {
+            $result = $reportImages->generateReportFromUrl([
+                'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,
+                'src'      => $storage->get_image_url($attachmentId),
+                'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
+                'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
+            ], $query);
+        }
+
+        if ($result && !$result['success']) {
+            return $result;
+        }
+
+        $report = $result['result'];
+
+        global $wpdb;
+        $sqlQuery = 'SELECT p.extras_post_id as id ';
+        $sqlQuery .= "FROM {$wpdb->prefix}ngg_pictures p ";
+        $sqlQuery .= 'WHERE 1=1 ';
+        $sqlQuery .= 'AND p.pid = %d ';
+
+        $images = $wpdb->get_results($wpdb->prepare($sqlQuery,
+            $attachmentId,
+        ), ARRAY_A);
+
+        if (empty($images)) {
+            return $result;
+        }
+
+        $image = current($images);
+        update_post_meta($image['id'], AttachmentMeta::REPORT, $report);
+        update_post_meta($image['id'], AttachmentMeta::LANGUAGE, $language);
+
+        return $result;
+    }
+
+    /**
+     * @param int   $attachmentId
+     * @param array $query
+     *
+     * @return array
+     */
     public function generateReportByAttachmentId($attachmentId, $query = [], $language = null)
     {
         if (!apply_filters('imageseo_authorize_generate_report_attachment_id', true, $attachmentId)) {
@@ -65,7 +136,7 @@ class ReportImage
                     'filePath' => $filePath,
                     'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : '',
                     'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : '',
-				], $query);
+                ], $query);
             } catch (\Exception $e) {
                 $result = $reportImages->generateReportFromUrl([
                     'lang'     => null === $language ? $this->optionService->getOption('default_language_ia') : $language,

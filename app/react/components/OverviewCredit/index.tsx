@@ -1,7 +1,5 @@
 import React from "react";
 import { get, isNull } from "lodash";
-import { getPercentImagesOptimizedAlt } from "../../helpers/getPercentImagesOptimizedAlt";
-import useCountImages from "../../hooks/useCountImages";
 import useOwner from "../../hooks/useOwner";
 
 //@ts-ignore
@@ -29,7 +27,9 @@ const OverviewCredit = () => {
 		<div className="bg-white border rounded-lg">
 			<div className="px-4 py-5 sm:p-6">
 				<p className="text-sm leading-6 font-medium text-gray-900">
-					{__(`${limitImages} credits left.`, "imageseo")}
+					{limitImages < 0 && __(`0 credit left`, "imageseo")}
+					{limitImages >= 0 &&
+						__(`${limitImages} credits left.`, "imageseo")}
 				</p>
 
 				<div className="relative my-2">
@@ -44,7 +44,12 @@ const OverviewCredit = () => {
 				</div>
 				<div className="flex  -mt-1">
 					<p className="text-sm flex-1">
-						<strong>{usageCreditPercent}%</strong>{" "}
+						<strong>
+							{usageCreditPercent <= 100
+								? usageCreditPercent
+								: 100}
+							%
+						</strong>{" "}
 						{__("credits used", "imageseo")}
 					</p>
 					<a

@@ -10,13 +10,24 @@ import UserContextProvider from "../../contexts/UserContext";
 import BulkWithProviders from "../../components/Bulk";
 import useOwner from "../../hooks/useOwner";
 import NeedConnectedApi from "../../components/NeedConnectedApi";
+import LimitExcedeed from "../../components/Bulk/components/LimitExcedeed";
 
 const BulkWithOwner = () => {
 	const owner = useOwner();
 
+	//@ts-ignore
+	const limitExcedeed = get(IMAGESEO_DATA, "LIMIT_EXCEDEED", false)
+		? true
+		: false;
+
 	if (isNil(owner)) {
 		return <NeedConnectedApi />;
 	}
+
+	if (limitExcedeed) {
+		return <LimitExcedeed typeMessage="other" />;
+	}
+
 	return <BulkWithProviders />;
 };
 

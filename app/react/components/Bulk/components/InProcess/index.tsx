@@ -247,7 +247,7 @@ const BulkInProcess = () => {
 			)}
 			{limitExcedeed && (
 				<div className="mt-4">
-					<LimitExcedeed percent={percent} />
+					<LimitExcedeed />
 				</div>
 			)}
 		</>
