@@ -119,6 +119,26 @@ class QueryImagesBulk
         return $sqlQuery;
     }
 
+    public function buildSqlQueryNextGenGallery($options)
+    {
+        global $wpdb;
+        $sqlQuery = 'SELECT p.pid as ID ';
+        $sqlQuery .= "FROM {$wpdb->prefix}ngg_pictures p ";
+        $sqlQuery .= 'WHERE 1=1 ';
+
+        switch ($options['alt_fill']) {
+            case AltSpecification::FILL_ONLY_EMPTY:
+                $sqlQuery .= "AND (
+                    p.alttext = ''
+                    OR
+                    p.alttext IS NULL
+                  )  ";
+                break;
+        }
+
+        return $sqlQuery;
+    }
+
     public function query()
     {
         if (!current_user_can('manage_options')) {
@@ -151,6 +171,18 @@ class QueryImagesBulk
             if (!empty($idsOptimized)) {
                 $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
             }
+        } elseif (AltSpecification::NEXTGEN_GALLERY === $filters['alt_filter']) {
+            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => false]));
+            $ids = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($ids)) {
+                $ids = call_user_func_array('array_merge', $ids);
+            }
+
+            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => true]));
+            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
+            if (!empty($idsOptimized)) {
+                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
+            }
         } else {
             $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => false]));
             $ids = $wpdb->get_results($query, ARRAY_N);
@@ -166,8 +198,9 @@ class QueryImagesBulk
         }
 
         wp_send_json_success([
-            'ids'           => array_values(array_filter($ids)),
-            'ids_optimized' => array_values(array_filter($idsOptimized)),
+            'ids'               => array_values(array_filter($ids)),
+            'ids_optimized'     => array_values(array_filter($idsOptimized)),
+            'ids_non_optimized' => array_values(array_diff($ids, $idsOptimized)),
         ]);
     }
 }

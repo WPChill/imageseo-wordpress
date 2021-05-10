@@ -10,6 +10,7 @@ class AltSpecification
 {
     const ALL = 'ALL';
     const WOO_PRODUCT_IMAGE = 'WOO_PRODUCT_IMAGE';
+    const NEXTGEN_GALLERY = 'NEXTGEN_GALLERY';
     const FEATURED_IMAGE = 'FEATURED_IMAGE';
 
     const FILL_ALL = 'FILL_ALL';
@@ -35,6 +36,14 @@ class AltSpecification
             $metas[] = [
                 'id'          => self::WOO_PRODUCT_IMAGE,
                 'label'       => __('Only WooCommerce product images', 'imageseo'),
+                'conditions'  => [],
+            ];
+        }
+
+        if (is_plugin_active('nextgen-gallery/nggallery.php')) {
+            $metas[] = [
+                'id'          => self::NEXTGEN_GALLERY,
+                'label'       => __('Only NextGen Gallery', 'imageseo'),
                 'conditions'  => [],
             ];
         }
