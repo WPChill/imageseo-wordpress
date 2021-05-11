@@ -144,6 +144,11 @@ To help us translate Image SEO in your language, contact us
 
 == Changelog ==
 
+= 2.1.0 (05-06-2021) =
+- Next: Bulk gallery NextGEN
+- Bugfix: Check new filename
+- Bugfix: Prevent bulk page if limit excedeed
+
 = 2.0.3 (05-06-2021) =
 - Bugfix: Save options for social network images
 
