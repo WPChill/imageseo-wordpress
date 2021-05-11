@@ -87,23 +87,10 @@ class ReportImage
 
         $report = $result['result'];
 
-        global $wpdb;
-        $sqlQuery = 'SELECT p.extras_post_id as id ';
-        $sqlQuery .= "FROM {$wpdb->prefix}ngg_pictures p ";
-        $sqlQuery .= 'WHERE 1=1 ';
-        $sqlQuery .= 'AND p.pid = %d ';
+        $postId = imageseo_get_service('QueryNextGen')->getPostIdByNextGenId($attachmentId);
 
-        $images = $wpdb->get_results($wpdb->prepare($sqlQuery,
-            $attachmentId,
-        ), ARRAY_A);
-
-        if (empty($images)) {
-            return $result;
-        }
-
-        $image = current($images);
-        update_post_meta($image['id'], AttachmentMeta::REPORT, $report);
-        update_post_meta($image['id'], AttachmentMeta::LANGUAGE, $language);
+        update_post_meta($postId, AttachmentMeta::REPORT, $report);
+        update_post_meta($postId, AttachmentMeta::LANGUAGE, $language);
 
         return $result;
     }
@@ -195,6 +182,7 @@ class ReportImage
     public function getAltsFromReport($report)
     {
         $alts = [];
+
         foreach ($report['alts'] as $alt) {
             if (empty($alt['name'])) {
                 continue;

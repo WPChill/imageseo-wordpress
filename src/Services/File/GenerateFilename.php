@@ -16,12 +16,12 @@ class GenerateFilename
         $this->reportImageService = imageseo_get_service('ReportImage');
     }
 
-    protected function getDelimiter()
+    public function getDelimiter()
     {
         return apply_filters('imageseo_rename_delimiter', '-');
     }
 
-    protected function generateNameFromReport($attachmentId, $params = [])
+    public function generateNameFromReport($attachmentId, $params = [])
     {
         $report = $this->reportImageService->getReportByAttachmentId($attachmentId);
 
@@ -94,11 +94,6 @@ class GenerateFilename
 
         $filePath = get_attached_file($attachmentId);
         $splitName = explode('.', basename($filePath));
-        $oldFilename = $splitName[0];
-
-        if ($oldFilename === $newFilename) {
-            throw new NoRenameFile('No need to change');
-        }
 
         $generateUniqueFilename = $this->generateUniqueFilename([
             trailingslashit(dirname($filePath)), // Directory
@@ -107,6 +102,12 @@ class GenerateFilename
             $attachmentId,
             $excludeFilenames,
         ], $newFilename);
+
+        $oldFilename = $splitName[0];
+
+        if ($oldFilename === $newFilename) {
+            throw new NoRenameFile('No need to change');
+        }
 
         return $this->validateUniqueFilename($attachmentId, $generateUniqueFilename);
     }

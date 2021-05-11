@@ -32,6 +32,18 @@ class QueryNextGen
         return current($images)['id'];
     }
 
+    public function getImage($id)
+    {
+        $image_mapper = \C_Image_Mapper::get_instance();
+        $image = $image_mapper->find($id);
+
+        if (!$image) {
+            return null;
+        }
+
+        return $image;
+    }
+
     /**
      * @param int $id
      *
@@ -47,6 +59,56 @@ class QueryNextGen
         }
 
         return $image->alttext;
+    }
+
+    /**
+     * @param int    $id
+     * @param string $size
+     *
+     * @return string|null
+     */
+    public function getFilename($id, $size = 'full')
+    {
+        $image = $this->getImage($id);
+
+        if (!$image) {
+            return '';
+        }
+
+        if ('full' === $size && isset($image->meta_data['full']['filename'])) {
+            return $image->meta_data['full']['filename'];
+        } elseif ('full') {
+            return $image->filename;
+        }
+
+        if (isset($image->meta_data['full']['filename'])) {
+            return $image->meta_data['thumbnail']['filename'];
+        }
+
+        return sprintf('thumbs_%s', $image->filename);
+    }
+
+    /**
+     * @param int    $id
+     * @param string $size
+     *
+     * @return string|null
+     */
+    public function getFilepath($id, $size = 'full')
+    {
+        $image = $this->getImage($id);
+
+        $storage = \C_Gallery_Storage::get_instance();
+
+        if (!$image) {
+            return '';
+        }
+
+        if ('thumbnail' === $size) {
+            return $storage->get_image_abspath($image, 'thumbs');
+        }
+
+        return $storage->get_image_abspath($image);
     }
 
     /**

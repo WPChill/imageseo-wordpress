@@ -3,25 +3,24 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+// $excludeFilenames = get_option('_imageseo_bulk_exclude_filenames');
+// if (!$excludeFilenames) {
+//     $excludeFilenames = [];
+// }
 
-// $storage = \C_Gallery_Storage::get_instance();
-// var_dump(get_class_methods($storage));
-// var_dump(getimagesize($storage->get_image_abspath(1)));
-// var_dump($storage->get_image_url(1));
-
-// global $wpdb;
-// $sqlQuery = 'SELECT p.extras_post_id as id ';
-// $sqlQuery .= "FROM {$wpdb->prefix}ngg_pictures p ";
-// $sqlQuery .= 'WHERE 1=1 ';
-// $sqlQuery .= 'AND p.pid = %d ';
-
-// $images = $wpdb->get_results($wpdb->prepare($sqlQuery,
-//     1,
-// ), ARRAY_A);
-// var_dump(current($images));
-// $a = imageseo_get_service('ReportImage')->generateReportByAttachmentIdForNextGen(1);
-// var_dump($a);
+// $renameFileService = imageseo_get_service('GenerateFilenameNextGen');
+// list($filename, $extension) = $renameFileService->generateFilenameForAttachmentId(3, $excludeFilenames);
+// var_dump($filename);
+// var_dump($extension);
 // exit;
+// $alt = imageseo_get_service('TagsToString')->replace('[keyword_1]', 190);
+// error_log('[alt nextgen] : ' . $alt);
+// imageseo_get_service('QueryNextGen')->updateAlt(1, $alt);
+// exit;
+// // list($filename, $extension) = $renameFileService->generateFilenameForAttachmentId(2);
+// // var_dump($filename);
+// // var_dump($extension);
+// // exit;
 
 ?>
 

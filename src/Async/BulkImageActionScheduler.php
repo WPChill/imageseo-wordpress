@@ -2,6 +2,7 @@
 
 defined('ABSPATH') or exit('Cheatin&#8217; uh?');
 
+use ImageSeoWP\Helpers\AttachmentMeta;
 use ImageSeoWP\Helpers\Bulk\AltSpecification;
 
 add_action('action_bulk_image_process_action_scheduler', 'bulk_image_process_action_scheduler', 10, 2);
@@ -15,10 +16,8 @@ function bulk_image_process_action_scheduler()
         }
 
         if (AltSpecification::NEXTGEN_GALLERY === $optionBulkProcess['settings']['altFilter']) {
-            error_log('nextgen');
             imageseo_bulk_image_process_nextgen($optionBulkProcess);
         } else {
-            error_log('default');
             imageseo_bulk_image_process_default($optionBulkProcess);
         }
 
@@ -48,20 +47,25 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
             continue;
         }
 
-        if (!isset($optionBulkProcess['id_images'][$i])) {
+        if (empty($optionBulkProcess['id_images'])) {
             continue;
         }
+
+        $postIdNextGen = array_shift($optionBulkProcess['id_images']);
 
         $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
         if (!empty($pauseBulkProcess)) {
             continue;
         }
 
-        $postIdNextGen = array_shift($optionBulkProcess['id_images']);
         $attachmentId = imageseo_get_service('QueryNextGen')->getPostIdByNextGenId($postIdNextGen);
-        error_log('[attachment id nextgen] : ' . $postIdNextGen);
+
         try {
             $response = imageseo_get_service('ReportImage')->generateReportByAttachmentIdForNextGen($postIdNextGen, ['force' => true], $optionBulkProcess['settings']['language']);
+            $report = [];
+            if (isset($response['result'])) {
+                $report = $response['result'];
+            }
         } catch (\Exception $e) {
             update_post_meta($attachmentId, '_imageseo_bulk_report', [
                 'success' => false,
@@ -77,16 +81,33 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
         $oldFilename = '';
 
         try {
+            $renameFileService = imageseo_get_service('GenerateFilenameNextGen');
+            list($filename, $extension) = $renameFileService->generateFilenameForAttachmentId($postIdNextGen, $excludeFilenames);
+            $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
+            $alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
+
             // Optimize Alt
-            if ($optionBulkProcess['settings']['optimizeAlt']) {
-                $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
-
-                $alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
-
+            if ($optionBulkProcess['settings']['optimizeAlt'] && !empty($alt)) {
                 imageseo_get_service('QueryNextGen')->updateAlt($postIdNextGen, $alt);
+                update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
             }
 
-            $optionBulkProcess['id_images_optimized'][] = $attachmentId;
+            // Optimize file
+            if ($optionBulkProcess['settings']['optimizeFile']) {
+                $excludeFilenames[] = $filename;
+
+                if (!empty($filename)) {
+                    try {
+                        imageseo_get_service('UpdateFile')->updateFilenameForNextGen($postIdNextGen, sprintf('%s.%s', $filename, $extension));
+                    } catch (\Exception $e) {
+                        error_log($e->getMessage());
+                    }
+                }
+
+                update_post_meta($attachmentId, AttachmentMeta::REPORT, $report);
+            }
+
+            $optionBulkProcess['id_images_optimized'][] = $postIdNextGen;
 
             update_post_meta($attachmentId, '_imageseo_bulk_report', [
                 'success'      => true,
@@ -98,15 +119,16 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
             ]);
 
             $optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
-            update_option('_imageseo_bulk_process_settings', $optionBulkProcess);
+            update_option('_imageseo_bulk_process_settings', $optionBulkProcess, false);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
         }
     }
 
     $optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
 
-    update_option('_imageseo_bulk_process_settings', $optionBulkProcess);
-    update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames);
+    update_option('_imageseo_bulk_process_settings', $optionBulkProcess, false);
+    update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames, false);
 
     $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
     if (!empty($pauseBulkProcess)) {
@@ -119,7 +141,7 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
         if ($limitExcedeed) {
             as_unschedule_all_actions('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
             delete_option('_imageseo_bulk_process_settings');
-            update_option('_imageseo_pause_bulk_process', $optionBulkProcess);
+            update_option('_imageseo_pause_bulk_process', $optionBulkProcess, false);
 
             return false;
         }
@@ -127,9 +149,10 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
     }
     // Finish
     else {
-        update_option('_imageseo_finish_bulk_process', $optionBulkProcess);
+        update_option('_imageseo_finish_bulk_process', $optionBulkProcess, false);
         delete_option('_imageseo_last_process_settings');
         delete_option('_imageseo_bulk_process_settings');
+        delete_option('_imageseo_bulk_exclude_filenames');
     }
 }
 
@@ -153,20 +176,22 @@ function imageseo_bulk_image_process_default($optionBulkProcess)
             continue;
         }
 
-        if (!isset($optionBulkProcess['id_images'][$i])) {
+        if (empty($optionBulkProcess['id_images'])) {
             continue;
         }
+
+        $attachmentId = array_shift($optionBulkProcess['id_images']);
 
         $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
         if (!empty($pauseBulkProcess)) {
             continue;
         }
 
-        $attachmentId = array_shift($optionBulkProcess['id_images']);
         error_log('[attachment id] : ' . $attachmentId);
         try {
             $response = imageseo_get_service('ReportImage')->generateReportByAttachmentId($attachmentId, ['force' => true], $optionBulkProcess['settings']['language']);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
             update_post_meta($attachmentId, '_imageseo_bulk_report', [
                 'success' => false,
             ]);
@@ -228,13 +253,14 @@ function imageseo_bulk_image_process_default($optionBulkProcess)
             $optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
             update_option('_imageseo_bulk_process_settings', $optionBulkProcess);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
         }
     }
 
     $optionBulkProcess['id_images'] = $optionBulkProcess['id_images'];
 
-    update_option('_imageseo_bulk_process_settings', $optionBulkProcess);
-    update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames);
+    update_option('_imageseo_bulk_process_settings', $optionBulkProcess, false);
+    update_option('_imageseo_bulk_exclude_filenames', $excludeFilenames, false);
 
     $pauseBulkProcess = $wpdb->get_results("SELECT option_id FROM {$wpdb->prefix}options WHERE option_name = '_imageseo_pause_bulk_process'");
     if (!empty($pauseBulkProcess)) {
@@ -258,5 +284,6 @@ function imageseo_bulk_image_process_default($optionBulkProcess)
         update_option('_imageseo_finish_bulk_process', $optionBulkProcess);
         delete_option('_imageseo_last_process_settings');
         delete_option('_imageseo_bulk_process_settings');
+        delete_option('_imageseo_bulk_exclude_filenames');
     }
 }
