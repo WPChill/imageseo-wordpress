@@ -132,11 +132,6 @@ class UpdateFile
             'thumbs' => $storage->get_image_abspath($imageObj, 'thumbs'),
         ];
 
-        $oldUrls = [
-            'full'   => $storage->get_image_url($imageObj),
-            'thumbs' => $storage->get_image_url($imageObj, 'thumbs'),
-        ];
-
         $imageObj->image_slug = $filenameWithoutExtension;
         $imageObj->filename = $newFilename;
 
@@ -172,8 +167,6 @@ class UpdateFile
                         $destinationPath = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcPath);
                         break;
                 }
-
-                error_log('[dest path]' . $destinationPath);
 
                 @rename($srcPath, $destinationPath);
             }

@@ -78,7 +78,7 @@ function imageseo_bulk_image_process_nextgen($optionBulkProcess)
         $filename = '';
         $extension = '';
         $oldAlt = imageseo_get_service('QueryNextGen')->getAlt($postIdNextGen);
-        $oldFilename = '';
+        $oldFilename = imageseo_get_service('QueryNextGen')->getFilename($postIdNextGen);
 
         try {
             $renameFileService = imageseo_get_service('GenerateFilenameNextGen');

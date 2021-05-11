@@ -112,6 +112,29 @@ class QueryNextGen
     }
 
     /**
+     * @param int    $id
+     * @param string $size
+     *
+     * @return string|null
+     */
+    public function getUrl($id, $size = 'full')
+    {
+        $image = $this->getImage($id);
+
+        if (!$image) {
+            return '';
+        }
+
+        $storage = \C_Gallery_Storage::get_instance();
+
+        if ('thumbnail' === $size) {
+            return $storage->get_image_url($image, 'thumbs');
+        }
+
+        return $storage->get_image_url($image);
+    }
+
+    /**
      * @param int $id
      *
      * @return void

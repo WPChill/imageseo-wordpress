@@ -38,9 +38,7 @@ class GenerateFilenameNextGen
 
         try {
             $newFilename = $this->generateFilenameDefault->generateNameFromReport($postId);
-            error_log('NEW : ' . $newFilename);
         } catch (NoRenameFile $e) {
-            error_log('e : ' . $e->getMessage());
             throw new NoRenameFile('No need to change');
         }
 
@@ -95,17 +93,13 @@ class GenerateFilenameNextGen
      */
     public function generateFilenameForAttachmentId($attachmentId, $excludeFilenames = [])
     {
-        error_log('ATTACHMENT ID : ' . $attachmentId);
         $baseFilename = $this->getFilenameByAttachmentId($attachmentId);
         $splitFilename = explode('.', $baseFilename);
         $extension = $splitFilename[count($splitFilename) - 1];
-        error_log('BASE : ' . $baseFilename);
-        error_log('extension : ' . $extension);
+
         try {
             $filename = $this->generateFilenameByReportForAttachmentId($attachmentId, $excludeFilenames);
-            error_log('Filename : ' . $filename);
         } catch (NoRenameFile $e) {
-            error_log('Hmm ok no rename why ?');
             array_pop($splitFilename);
             $filename = implode('.', $splitFilename);
         }
