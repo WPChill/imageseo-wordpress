@@ -15,10 +15,9 @@ class ClientApi
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
-	}
+    }
 
-
-	public function getHeaders($apiKey = null)
+    public function getHeaders($apiKey = null)
     {
         $headers = [
             'Content-Type' => 'application/json',
@@ -40,7 +39,7 @@ class ClientApi
     {
         if (null === $apiKey) {
             $apiKey = $this->optionService->getOption('api_key');
-		}
+        }
 
         $options = [];
         if (defined('IMAGESEO_API_URL')) {
@@ -63,16 +62,16 @@ class ClientApi
      */
     public function getOwnerByApiKey()
     {
-		if(!$this->optionService->getOption('api_key')){
-			return null;
-		}
+        if (!$this->optionService->getOption('api_key')) {
+            return null;
+        }
 
         try {
-			$response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
-				'headers' => $this->getHeaders(),
-			]);
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
+            $response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
+                'headers' => $this->getHeaders(),
+                'timeout' => 50,
+            ]);
+            $body = json_decode(wp_remote_retrieve_body($response), true);
         } catch (\Exception $e) {
             return null;
         }
@@ -81,7 +80,7 @@ class ClientApi
         }
 
         return $body['result'];
-	}
+    }
 
     /**
      * @param string $apiKey
@@ -91,15 +90,14 @@ class ClientApi
     public function validateApiKey($apiKey = null)
     {
         try {
-			$headers = $this->getHeaders();
-			$headers['Authorization'] = $apiKey;
+            $headers = $this->getHeaders();
+            $headers['Authorization'] = $apiKey;
 
             $response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
-				'headers' => $headers,
-			]);
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-
+                'headers' => $headers,
+                'timeout' => 50,
+            ]);
+            $body = json_decode(wp_remote_retrieve_body($response), true);
         } catch (\Exception $e) {
             return null;
         }
@@ -115,7 +113,7 @@ class ClientApi
      */
     public function getLanguages()
     {
-		$apiKey = $this->optionService->getOption('api_key');
+        $apiKey = $this->optionService->getOption('api_key');
 
         $response = $this->getClient($apiKey)->getResource('Languages')->getLanguages();
 
@@ -133,9 +131,9 @@ class ClientApi
      */
     public function generateSocialMediaImage($data)
     {
-		if(!$this->optionService->getOption('api_key')){
-			return null;
-		}
+        if (!$this->optionService->getOption('api_key')) {
+            return null;
+        }
 
         list($body) = $this->getClient()->getResource('SocialMedia')->generateSocialMediaImage($data);
 

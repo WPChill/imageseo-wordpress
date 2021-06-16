@@ -30,6 +30,7 @@ class Register
                 'name'            => get_bloginfo('name'),
                 'optins'          => 'terms',
             ]),
+            'timeout' => 50,
         ]);
 
         if (is_wp_error($response)) {

@@ -14,7 +14,7 @@ import { SVGEye } from "../../../svg/Eye";
 import { SVGEyeClosed } from "../../../svg/EyeClosed";
 import getSiteLink from "../../../helpers/getSiteLink";
 import { SVGLoader } from "../../../svg/Loader";
-import { register } from "../../../services/ajax/user";
+import { login, register } from "../../../services/ajax/user";
 
 interface Props {
 	afterSubmit?: Function;
@@ -152,6 +152,7 @@ function FormRegister({ afterSubmit }: Props) {
 		setLoading(false);
 
 		setApiKey(get(data, "user.project_create.api_key", null));
+
 		if (get(data, "code", null)) {
 			Swal.fire({
 				title: __("Error!", "imageseo"),
