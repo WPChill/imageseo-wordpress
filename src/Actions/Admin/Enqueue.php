@@ -18,7 +18,7 @@ class Enqueue
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueCSS']);
         add_action('admin_enqueue_scripts', [$this, 'pluginPage']);
         add_action('admin_enqueue_scripts', [$this, 'application']);
-        add_action('admin_enqueue_scripts', [$this, 'wizard']);
+        // add_action('admin_enqueue_scripts', [$this, 'wizard']);
     }
 
     public function pluginPage($page)

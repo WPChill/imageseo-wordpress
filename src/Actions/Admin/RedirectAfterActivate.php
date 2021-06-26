@@ -10,7 +10,7 @@ class RedirectAfterActivate
 {
     public function activate()
     {
-        add_action('activated_plugin', [$this, 'redirect']);
+        // add_action('activated_plugin', [$this, 'redirect']);
     }
 
     public function redirect($plugin)

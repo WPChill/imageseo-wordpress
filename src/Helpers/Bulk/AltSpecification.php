@@ -20,7 +20,7 @@ class AltSpecification
     {
         $metas[] = [
             'id'          => self::ALL,
-            'label'       => __('All images', 'imageseo'),
+            'label'       => __('Only Media Library images', 'imageseo'),
             'conditions'  => [],
         ];
 
