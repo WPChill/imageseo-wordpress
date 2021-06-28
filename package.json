@@ -7,7 +7,7 @@
 	},
 	"scripts": {
 		"dev": "webpack -w",
-		"build": "rm -rf ./dist && NODE_ENV=production webpack && composer update --no-dev",
+		"build": "rm -rf ./dist && NODE_ENV=production webpack && composer install --no-dev",
 		"i18n-pot": "wp i18n make-pot . ./languages/imageseo.pot --headers='{\"Last-Translator\":\"ImageSEO <contact@imageseo.io>\"}' --exclude='vendor,node_modules,*.php,./src,./templates,app/styles,app/images,languages, dist/' && cp ./languages/imageseo.pot ./languages/imageseo-en_US.po",
 		"i18n-json": "po2json languages/imageseo-fr_FR.po languages/imageseo-fr_FR-imageseo-app.json -f jed1.x"
 	},
