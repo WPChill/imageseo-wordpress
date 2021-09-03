@@ -114,7 +114,7 @@ class SocialMediaHead
 
         $imgUrl = $matches['imgUrl'][0];
         $width = $matchesWidth['width'][0];
-        $width = $matchesHeight['height'][0];
+        $height = isset($matchesHeight['height'][0]) ? $matchesHeight['height'][0] : '';
 
         $html = str_replace($imgUrl, $this->getImageUrlOpenGraph(), $html);
         $html = str_replace($width, $this->getWidthOpenGraph(), $html);
