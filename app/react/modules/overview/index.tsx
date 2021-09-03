@@ -15,46 +15,60 @@ import useOptimizedTimeEstimated from "../../hooks/useOptimizedTimeEstimated";
 const { __ } = wp.i18n;
 
 const OverviewConnected = () => {
-	const data = useOptimizedTimeEstimated();
+	const optimizedTime = useOptimizedTimeEstimated();
 	const { actions } = useContext(PageContext);
+
 	return (
 		<>
-			<div className="mb-4">
-				{!isNull(data) && get(data, "minutes_by_human", 0) > 1 && (
-					<AlertSimple yellow icon={IconsAlert.EXCLAMATION}>
-						<p className="text-sm">
-							{__(
-								`Estimated time if you had to fill out your alternative texts and manually rewrite your file names`,
-								`imageseo`
-							)}{" "}
-							<strong>
-								{data.minutes_by_human}{" "}
-								{__("minutes", "imageseo")}.
-							</strong>
-						</p>
-						<p className="text-sm font-bold mt-1">
-							<span
-								className="underline font-bold cursor-pointer"
-								onClick={() => {
-									actions.setTabSelected(
-										TABS.BULK_OPTIMIZATION
-									);
-								}}
-							>
-								{__("Start a bulk optimization", "imageseo")}
-							</span>
-							{__(
-								` to fill out all your missing alt texts with SEO friendly content`,
-								`imageseo`
-							)}
-						</p>
-					</AlertSimple>
-				)}
-			</div>
 			<OverviewCountImages />
+			<div className="mt-4">
+				{!isNull(optimizedTime) &&
+					get(optimizedTime, "minutes_by_human", 0) > 1 && (
+						<AlertSimple yellow icon={IconsAlert.EXCLAMATION}>
+							<p className="text-sm">
+								{__(`You would approximately need`, `imageseo`)}{" "}
+								<strong>
+									{optimizedTime.minutes_by_human}{" "}
+									{__("minutes", "imageseo")}
+								</strong>{" "}
+								{__(
+									"to manually do it or you can do it automatically start a bulk optimization. 🚀",
+									"imageseo"
+								)}
+							</p>
+							<p className="text-sm font-bold mt-1">
+								<span
+									className="underline font-bold cursor-pointer"
+									onClick={() => {
+										actions.setTabSelected(
+											TABS.BULK_OPTIMIZATION
+										);
+									}}
+								>
+									{__(
+										"Start a bulk optimization",
+										"imageseo"
+									)}
+								</span>
+								{__(
+									` to fill out all your missing alt texts with SEO friendly content.`,
+									`imageseo`
+								)}
+							</p>
+						</AlertSimple>
+					)}
+			</div>
 			<div className="mt-4">
 				<OverviewCredit />
 			</div>
+		</>
+	);
+};
+
+const OverviewNeedRegister = () => {
+	return (
+		<>
+			<OverviewCountImages withLinks={false} withAlert={true} />
 		</>
 	);
 };
@@ -66,9 +80,9 @@ const Overview = () => {
 
 	return (
 		<>
-			{isEmpty(getApiKey()) && <SeoFact />}
-			<div className="mt-4 grid grid-cols-6 gap-16">
-				<div className="col-span-4 border-r pr-16">
+			{isEmpty(getApiKey()) && <OverviewNeedRegister />}
+			<div className="mt-4 grid grid-cols-6 gap-8">
+				<div className="col-span-4 border-r pr-8">
 					{isEmpty(getApiKey()) && (
 						<>
 							<div className=" pb-2 mb-4">
@@ -92,9 +106,6 @@ const Overview = () => {
 							}
 						>
 							<>
-								<div className="mb-4">
-									<SeoFact />
-								</div>
 								<OverviewConnected />
 							</>
 						</Suspense>

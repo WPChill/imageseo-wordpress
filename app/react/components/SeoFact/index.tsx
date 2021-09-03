@@ -9,7 +9,7 @@ const SeoFact = () => (
 		<p className="imageseo-mb-0">
 			<strong>
 				{__(
-					"SEO Fact : More than 20% of Google Organic Traffic comes from image searches",
+					"SEO Fact : More than 20% of Google traffic comes from image searches. We use AI ",
 					"imageseo"
 				)}
 			</strong>

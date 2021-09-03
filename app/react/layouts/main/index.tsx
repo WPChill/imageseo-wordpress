@@ -33,6 +33,9 @@ const SCMain = styled.div`
 	border-radius: 8px;
 `;
 
+//@ts-ignore
+const { __ } = wp.i18n;
+
 function Main() {
 	const pageTitle = usePageTitle();
 	const mainContentSelected = useMainContentSelected();
@@ -43,15 +46,25 @@ function Main() {
 			//@ts-ignore
 			mainContentSelected={mainContentSelected}
 		>
-			<div className="flex items-center border-b pb-4">
-				<img
-					src={getLinkImage("logo-blue.svg")}
-					style={{ width: 148 }}
-				/>
-				<h2 className="font-bold text-xl flex items-center">
-					<span className="mx-4">|</span>{" "}
-					<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
-				</h2>
+			<div className="border-b pb-4">
+				<div className="flex items-center">
+					<img
+						src={getLinkImage("logo-blue.svg")}
+						style={{ width: 148 }}
+					/>
+					<h2 className="font-bold text-xl flex items-center">
+						<span className="mx-4">|</span>{" "}
+						<div dangerouslySetInnerHTML={{ __html: pageTitle }} />
+					</h2>
+				</div>
+				<p className="mt-4">
+					<strong>
+						{__(
+							"SEO Fact : More than 20% of Google traffic comes from image searches. We use AI to automatically optimize your images for SEO.",
+							"imageseo"
+						)}
+					</strong>
+				</p>
 			</div>
 
 			<div className="py-4">

@@ -14,6 +14,7 @@ import { getImagesLeft } from "../../../../services/user";
 
 import { startBulkProcess } from "../../../../services/ajax/current-bulk";
 import { AlertSimple, IconsAlert } from "../../../Alerts/Simple";
+import useOptimizedTimeEstimated from "../../../../hooks/useOptimizedTimeEstimated";
 
 const BulkPrepare = () => {
 	const { state, dispatch } = useContext(BulkProcessContext);
@@ -105,6 +106,9 @@ const BulkPrepare = () => {
 		});
 	};
 
+	const timeEstimated = state.allIds.length * 90;
+	const minutesEstimated = Math.round(timeEstimated / 60);
+
 	return (
 		<>
 			<div className="grid grid-cols-5 gap-4 mt-4">
@@ -144,8 +148,24 @@ const BulkPrepare = () => {
 									"imageseo"
 								)}{" "}
 								{state.allIds.length}{" "}
-								{__("images will be optimized.", "imageseo")}
+								{__(
+									`images will be optimized using AI.`,
+									"imageseo"
+								)}
 							</h3>
+							<p className="mt-2 text-sm">
+								{__(
+									`This should save you approximately`,
+									"imageseo"
+								)}{" "}
+								<strong>
+									{__(
+										`${minutesEstimated} minutes`,
+										"imageseo"
+									)}
+								</strong>
+								.
+							</p>
 							{userImagesLeft < 10 && (
 								<div className="my-2">
 									<AlertSimple

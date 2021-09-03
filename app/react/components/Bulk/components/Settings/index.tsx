@@ -234,16 +234,14 @@ function BulkSettings() {
 																	event
 																) => {
 																	dispatch({
-																		type:
-																			"UPDATE_OPTION",
-																		payload: {
-																			key:
-																				"formatAlt",
-																			value:
-																				event
+																		type: "UPDATE_OPTION",
+																		payload:
+																			{
+																				key: "formatAlt",
+																				value: event
 																					.target
 																					.value,
-																		},
+																			},
 																	});
 																}}
 															/>
@@ -283,8 +281,8 @@ function BulkSettings() {
 													type: "UPDATE_OPTION",
 													payload: {
 														key: "formatAlt",
-														value:
-															event.target.value,
+														value: event.target
+															.value,
 													},
 												});
 											}}
@@ -303,8 +301,8 @@ function BulkSettings() {
 													type: "UPDATE_OPTION",
 													payload: {
 														key: "formatAltCustom",
-														value:
-															event.target.value,
+														value: event.target
+															.value,
 													},
 												});
 											}}
@@ -393,16 +391,10 @@ function BulkSettings() {
 									}}
 								>
 									{__(
-										"I want to optimize my image names for SEO",
+										"I also want to optimize my images names for SEO",
 										"imageseo"
 									)}
 								</label>
-								<p className="text-sm">
-									{__(
-										"It might slow the process (+10sec by images).",
-										"imageseo"
-									)}
-								</p>
 							</div>
 						</div>
 						{settings.optimizeFile && (

@@ -20,7 +20,7 @@ export enum MAIN_CONTENT {
 export default [
 	{
 		key: TABS.OVERVIEW,
-		label: __("Dashboard", "imageseo"),
+		label: __("Welcome on board", "imageseo"),
 		order: 1,
 		description: __("Metrics, get help", "imageseo"),
 		mainContent: MAIN_CONTENT.OVERVIEW,
@@ -38,7 +38,7 @@ export default [
 		key: TABS.BULK_OPTIMIZATION,
 		label: __("Bulk optimization", "imageseo"),
 		order: 1,
-		description: __("Existing image optimization", "imageseo"),
+		description: __("Existing images optimization", "imageseo"),
 		mainContent: MAIN_CONTENT.BULK_OPTIMIZATION,
 		icon: "icon-bulk.svg",
 	},

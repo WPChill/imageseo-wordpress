@@ -8,7 +8,6 @@ const { __ } = wp.i18n;
 import { BulkProcessContext } from "../../../../contexts/BulkProcessContext";
 
 import { restartBulkProcess } from "../../../../services/ajax/current-bulk";
-import LimitExcedeed from "../LimitExcedeed";
 import { SVGPlay } from "../../../../svg/Play";
 import { AlertSimple, IconsAlert } from "../../../Alerts/Simple";
 
