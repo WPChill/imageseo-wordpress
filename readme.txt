@@ -1,102 +1,88 @@
-=== Image SEO Optimizer: generate images alternative text (alt text, alt tag), name using AI ===
+=== Optimize images ALT Text (alt tag) & names for SEO using AI ===
 Contributors: gmulti
-Tags: image seo, alt, alt text, open graph, alt tag
+Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.0+
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: v2.0.5
+Stable tag: v2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Image SEO optimizer uses AI to optimize your image alternative text (alt, alt text or alt tag) and names with SEO friendly content.
+Bulk optimize images alt text (alt tag) & names for SEO using AI.
 
 == Description ==
 
-Image SEO optimizer writes image **alternative texts (alt text or alt tag)** and **names** with SEO friendly content. It can optimize image html attributes on upload or bulk your entire library. Save time with your image optimization, improve your WordPress accessibility and SEO.
+Optimize images alternative texts (alt text or alt tag) and names with SEO friendly content. Optimize image html attributes on upload or bulk your library. Save time and improve your accessibility and SEO.
 
-Beside alt tags, image SEO optimizer also generates Social Media previews for your posts using The Open Graph protocol (og tag).
+Beside alt tags, image SEO optimizer also generates Social Media preview cards for your posts using the Open Graph protocol (og tag).
 
-Nobody enjoys writing images alt text, meta titles, pinterest attributes, Twitter or Facebook card attributes and images description. Leave it to our auto alt tags generator.
+Nobody enjoys writing images alt text, Leave it to our auto alt tag generator.
 
-The plugin also allows to manually edit image names.
+The plugin also allows to manually edit image names and alt.
 
-Image SEO Optimizer is compatible with WooCommerce, NextGen Gallery, Yoast, SEOPress, All in one SEO, and all the major plugin. This included target keywords from Yoast and SEOPress.
-
-Our Image SEO works in every language and is compatible with every image format (JPEG, PNG, WebP, GIF)
+Image SEO Optimizer integrates with NextGen Gallery, Yoast, SEOPress, All in one SEO, and all the major plugin.
 
 [Get your API Key and try with your own images!](https://app.imageseo.io/register-wordpress)
 
-= What Image SEO Optimizer does ? =
+= Optimize images alt text =
 
-Image SEO helps to grow your organic and social traffic. We automatically optimize your images for Search Engines and Social Media using Artificial Intelligence.
+Image SEO grow organic and social traffic. Auto optimize your images alt for SEO using Artificial Intelligence.
 
-- Automatically fills out your images alternative texts (ALT tag or ALT text) and names when you upload images in the Library.
-- Generate social cards for Twitter, Facebook, LinkedIn and Pinterest for you post and articles.
-- Bulk optimization: automatically rewrites with SEO friendly content all the alt text and names of the images available in your library;
-- Image alt checker
-- Pinterest optimization (description, URL, ID, Media), Twitter (Twitter cards), Facebook and LinkedIn.
+- Auto write images alternative texts (alt tag or alt text) and names when you upload images in the Library.
+- Generate social cards for Twitter, Facebook, LinkedIn and Pinterest.
+- Image bulk optimization: automatically rewrites with SEO friendly content your missing alt and image names.
+- Alt tag checker
+- Pinterest (description, URL, ID, Media), Twitter (Twitter cards), Facebook and LinkedIn image optimization.
 
-Image SEO saves time, improves your ranking on image keywords and allows you to attract new visitors on your blog or gallery. The plugin has many filters, making it thus ideal to optimize WooCommerce product sheets.
-
-Example of what our image SEO plugin does :
+Example of what our image optimization plugin does.
 
 <strong>From</strong> : `<img src="1235HDFRE.JPG ">`
 <strong>To</strong> : `<img src="Landscape.JPG" alt="Landscape of a beach in California">`
 
-We rename your alt and medias for a better SEO. Get rid of your bad image names that Search Engines (Google, Bing, Qwant) dislike.
-Improve your website accessibility: image alternative texts (alt) are optimized with relevant keywords to help users with screen readers.
+Automatically write your image alt and image name for SEO.
+Optimize your accessibility: image alternative texts (alt) are optimized with relevant keywords to help users with screen readers.
 
-The plugin is ideal for  photographers, WooCommerce, newspapers,  agencies, bloggers.
+The plugin is ideal for  photographers, journalist, newspaper, agency, blogger.
 
+= WHY USE IMAGE SEO WORDPRESS PLUGIN ? =
 
-= WHY MUST YOU USE IMAGE SEO WORDPRESS PLUGIN ? =
+To grow your organic traffic : more than 20% of Google searches comes from Google Images.
+To increase your position in the SERP you need to optimize your ALT texts and rename your files.
 
-To grow your organic traffic : more than 20% of Google searches are coming from Google Images.
-To increase your position in the SERP you need to optimize your ALT texts and rename your files and medias in a good way.
-Optimizing images will have a positive impact on your global SEO.
+= GETTING STARTED WITH IMAGE SEO ? =
 
-= HOW TO GET YOUR API KEY SET UP IMAGE SEO ? =
-
-Step 1 : download and activate Image SEO Plugin.
+Step 1 : download and activate Image SEO.
 Step 2 : [create an account on Image SEO](https://app.imageseo.io/register-wordpress) to get an API Key (it's free).
-Step 3 : Enter and save your API Key in the plugin.
-Step 4 : Bulk your library / image gallery and improve your images for SEO !
+Step 3 : Enter and save your API Key.
+Step 4 : Bulk your images alt and improve your images SEO.
 
-If you need more information about Images SEO, go there: [https://imageseo.io/images-alt-and-filenames-for-seo/](https://imageseo.io/images-alt-and-filenames-for-seo/)
+Images SEO learning centre: [https://imageseo.io/images-alt-and-filenames-for-seo/](https://imageseo.io/images-alt-and-filenames-for-seo/)
+Image SEO best practices : [https://imageseo.io/blog](https://imageseo.io/blog)
 
-To know more and be up to date about image SEO best practices : [https://imageseo.io/blog](https://imageseo.io/blog)
+= How does Image SEO for ALT work ? =
 
-= How does Image SEO work ? =
-
-We use Artificial Intelligences (AI) and Machine Learning (ML) to analyze your images. Our algorithms rename your medias and fill out your ALT tags with the most relevant results. Our Web Application also provides you with optimized keywords for Search Engines. You just need to set up the plugin and we do all the job. The plugin is also great to improve your semantic.
+We use Artificial Intelligences (AI) to analyze your images and fill out your alt tags with the best results.
 
 = Features =
 
-Image SEO optimize your Media Library and your image gallery for SEO and Social Media using Artificial Intelligence.
-
-* Automatically fill out your images alternative texts (ALT Attribute for IMG) when you upload them in the library;
+* Automatically write images alternative texts (ALT Attribute for IMG) on upload.
+* Bulk alt text optimization *
 * Optimize your images data attributes for Pinterest, Facebook and Twitter (hashtag, description, URL, ID, Media, data-pin description, data-pin-media, data-pin-id);
-* See how many alternative texts (alt) are missing ;
-* Compatibility and support for Featured Images;
-* Compatibility and support for WooCommerce;
-* Compatibility and support with WordPress Gallery Plugins (NextGEN, Photo Gallery, Responsive Photo Gallery, FooGallery, etc.)
-
+* See how many alternative texts (alt) are missing
+* Compatibility and support for WooCommerce, Featured images and WordPress Gallery Plugins (NextGEN, Photo Gallery, Responsive Photo Gallery, FooGallery.
+* Optimize images alt and name for SEO
 
 = What about the Premium? =
 
-Image SEO is free for small websites (10 images optimization every month). Premium plans start at 4,99€ for for WooCommerce, Photographers and SEO Agency. We offer professional support to premium users and payment are secured by Stripe. Discover our pricing here : [https://imageseo.io/pricing/](https://imageseo.io/pricing/)
+Image SEO is free for small websites (10 images/month). Premium plans start at 4,99€ for WooCommerce, Photographer and SEO Agency. We offer professional support to premium users and payment are secured by Stripe. More info here : [https://imageseo.io/pricing/](https://imageseo.io/pricing/)
 
-= Alt text / Alt tag =
+= Auto Alt text / Alt tag =
 
 Automatically generating alt text or alt tag is the best way to optimize your image for SEO.
 
-= Image SEO Ressources =
+= Optimize Image for SEO Ressources =
 
 Look this [ultimate guides about image SEO optimization](https://imageseo.io/images-seo-optimization/) to learn everything about alternative texts (alt, alt tag or alt text), EXIF Data, Figure and Figcaption, Title text and Title tag, Legend, srcset attribute, responsive images, Lazy load, image sitemaps, etc.
-
-
-=== BE CAREFUL: PREPARE A BACKUP ===
-Before using a SEO plugin you should always backup your files and database.
 
 Bilder optimieren ; Suchmaschinenoptimierung ; Posicionamiento en buscadores;  optimización en motores de búsqueda ; Optimizar imágenes para los motores de búsqueda
 
@@ -116,7 +102,11 @@ An alt tag, also known as "alt attribute" and "alt description," is an HTML 
 
 = Do I lose my alt if I downgrade my plan ? =
 
-Of course not ! You will keep the alt texts we generated for you.
+Of course not !
+
+= What is the difference between alt text and alt tag ? =
+
+Alt text (alternative text), also known as "alt attributes," “alt descriptions," or technically incorrectly as "alt tags,” are used within an HTML code to describe the appearance and function of an image on a page. There is no difference between alt text and alt tag.
 
 = How to write all text ? =
 
@@ -135,6 +125,10 @@ We are compatible with including Featured Images, WooCommerce, NextGen Photo Gal
 Image SEO works in every language.
 
 == Changelog ==
+
+= 2.0.6 (06-26-2021) =
+Bugfix: Undefined variable
+Improved: wording & UI
 
 = 2.0.5 (06-26-2021) =
 - Removed: Wizard after activate plugin
