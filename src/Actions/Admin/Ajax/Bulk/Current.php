@@ -27,7 +27,14 @@ class Current
 
         $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
 
-        $scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+
+
+		if (function_exists('as_has_scheduled_action')) {
+            $scheduled = \as_has_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+        } elseif (function_exists('as_next_scheduled_action')) {
+            $scheduled = \as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+        }
+
 
         wp_send_json_success([
             'current'        => $settings,

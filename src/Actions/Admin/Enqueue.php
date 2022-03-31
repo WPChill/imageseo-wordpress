@@ -105,7 +105,14 @@ class Enqueue
             $limitImages = $owner['plan']['limit_images'] + $owner['bonus_stock_images'];
         }
 
-        $scheduled = as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+		if (function_exists('as_has_scheduled_action')) {
+            $scheduled = \as_has_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+        } elseif (function_exists('as_next_scheduled_action')) {
+            $scheduled = \as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
+        }
+
+
+
         $getScheduled = as_get_scheduled_actions([
             'hooks' => 'action_bulk_image_process_action_scheduler',
             'group' => 'group_bulk_image',

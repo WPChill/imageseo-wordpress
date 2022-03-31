@@ -4,7 +4,7 @@ Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.0+
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: v2.0.6
+Stable tag: v2.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,9 @@ We are compatible with including Featured Images, WooCommerce, NextGen Photo Gal
 Image SEO works in every language.
 
 == Changelog ==
+
+= 2.0.7 (03-31-2022) =
+- Improved: updated action scheduler to reduce conflicts with WP Rocket
 
 = 2.0.6 (06-26-2021) =
 Bugfix: Undefined variable

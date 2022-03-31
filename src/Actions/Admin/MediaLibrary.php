@@ -61,7 +61,7 @@ class MediaLibrary
             return $metadata;
         }
 
-        as_schedule_single_action(time() + 10, 'action_worker_on_upload_process_action_scheduler', ['attachment_id' => $attachmentId], 'on_upload_image');
+        \as_schedule_single_action(time() + 10, 'action_worker_on_upload_process_action_scheduler', ['attachment_id' => $attachmentId], 'on_upload_image');
 
         return $metadata;
     }
