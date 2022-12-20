@@ -19,3 +19,4 @@ if (!defined('ABSPATH')) {
 <input type="hidden" id="_nonce_imageseo_proxy" value="<?php echo wp_create_nonce('imageseo_proxy'); ?>">
 <input type="hidden" id="_nonce_imageseo_save_global_settings" value="<?php echo wp_create_nonce('imageseo_save_global_settings'); ?>">
 <input type="hidden" id="_nonce_imageseo_save_social_settings" value="<?php echo wp_create_nonce('imageseo_save_social_settings'); ?>">
+<input type="hidden" id="_nonce_imageseo_social_media_settings_save" value="<?php echo wp_create_nonce('social_media_settings_save'); ?>">

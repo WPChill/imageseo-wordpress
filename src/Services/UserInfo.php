@@ -17,6 +17,9 @@ class UserInfo
         }
 
         $user = imageseo_get_service('ClientApi')->getOwnerByApiKey();
+        if(!$user) {
+			return true;
+		}
         $imageLeft = ($user['bonus_stock_images'] + $user['plan']['limit_images']) - $user['current_request_images'];
 
         $this->limitExcedeed = ($imageLeft <= 0) ? true : false;

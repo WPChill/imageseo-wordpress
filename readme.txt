@@ -1,8 +1,8 @@
 === Optimize images ALT Text (alt tag) & names for SEO using AI ===
 Contributors: gmulti
 Tags: seo, alt, alt text, optimize images, alt tag
-Requires at least: 5.0+
-Tested up to: 5.8
+Requires at least: 5.8
+Tested up to: 6.1
 Requires PHP: 7.0
 Stable tag: v2.0.7
 License: GPLv2 or later
@@ -125,6 +125,9 @@ We are compatible with including Featured Images, WooCommerce, NextGen Photo Gal
 Image SEO works in every language.
 
 == Changelog ==
+
+= 2.0.8 (12-20-2022) =
+- Security:  Strengthening of security (Thanks WPScan)
 
 = 2.0.7 (03-31-2022) =
 - Improved: updated action scheduler to reduce conflicts with WP Rocket

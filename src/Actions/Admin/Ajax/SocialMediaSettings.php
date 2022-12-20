@@ -27,6 +27,13 @@ class SocialMediaSettings
             exit;
         }
 
+        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'social_media_settings_save')) {
+            wp_send_json_error([
+                'code' => 'not_authorized',
+            ]);
+            exit;
+        }
+
         $socialSettings = [
             'layout'                     => sanitize_text_field($_POST['layout']),
             'textColor'                  => sanitize_text_field($_POST['textColor']),

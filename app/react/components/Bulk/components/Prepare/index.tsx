@@ -14,10 +14,11 @@ import { getImagesLeft } from "../../../../services/user";
 
 import { startBulkProcess } from "../../../../services/ajax/current-bulk";
 import { AlertSimple, IconsAlert } from "../../../Alerts/Simple";
-import useOptimizedTimeEstimated from "../../../../hooks/useOptimizedTimeEstimated";
 
 const BulkPrepare = () => {
 	const { state, dispatch } = useContext(BulkProcessContext);
+
+	//@ts-ignore
 	const { state: userState } = useContext(UserContext);
 	const { state: settings } = useContext(BulkSettingsContext);
 

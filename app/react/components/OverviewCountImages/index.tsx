@@ -55,15 +55,17 @@ const OverviewCountImages = ({ withLinks = true, withAlert = false }) => {
 						</div>
 					</div>
 					<div className="flex -mt-1">
-						<p className="text-sm flex-1">
-							<strong>
-								{Number(percentOptimized).toFixed(2)}%
-							</strong>{" "}
-							{__(
-								"of all alternative texts optimized.",
-								"imageseo"
-							)}
-						</p>
+						{!isNaN(percentOptimized) && (
+							<p className="text-sm flex-1">
+								<strong>
+									{Number(percentOptimized).toFixed(2)}%
+								</strong>{" "}
+								{__(
+									"of all alternative texts optimized.",
+									"imageseo"
+								)}
+							</p>
+						)}
 						{withLinks && (
 							<a
 								className="text-sm underline text-blue-500"
