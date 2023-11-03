@@ -1,5 +1,5 @@
 import { filter, find, get, groupBy, isNil } from "lodash";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { SVGLoader } from "../../../svg/Loader";
 import { AlertSimple, IconsAlert } from "../../Alerts/Simple";
@@ -60,6 +60,8 @@ function SocialSettings() {
 			icon: "success",
 			confirmButtonText: __("Close", "imageseo"),
 		});
+		console.log(IMAGESEO_DATA.OPTIONS);
+		IMAGESEO_DATA.OPTIONS = options;
 	};
 
 	const listSocials = get(options, "social_media_post_types", []);

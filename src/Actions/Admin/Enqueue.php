@@ -18,8 +18,78 @@ class Enqueue
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueCSS']);
         add_action('admin_enqueue_scripts', [$this, 'pluginPage']);
         add_action('admin_enqueue_scripts', [$this, 'application']);
+	    add_action( 'rest_api_init', array( $this, 'register_routes' ) );
         // add_action('admin_enqueue_scripts', [$this, 'wizard']);
     }
+
+	public function register_routes() {
+		// The REST route for downloads reports.
+		register_rest_route(
+			'imageseo/v1',
+			'/settings_db_options',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_settings_db' ),
+				//'permission_callback' => array( $this, 'check_api_rights' ),
+			)
+		);
+	}
+
+	/**
+	 * Check if the user has the right to use the API.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return bool
+	 */
+	public function check_api_rights() {
+
+		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
+			return new \WP_Error(
+				'rest_forbidden_context',
+				esc_html__( 'Sorry, you are not allowed to see data from this endpoint.', 'download-monitor' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get the settings from the database.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return bool
+	 */
+	public function rest_settings_db() {
+		$options = imageseo_get_service( 'Option' )->getOptions();
+
+		return $this->respond( $options );
+	}
+
+	/**
+	 * Send our data
+	 *
+	 * @param $data JSON data received from report_stats.
+	 *
+	 * @return WP_REST_Response
+	 * @since 4.6.0
+	 */
+	public function respond( $data ) {
+
+		$result = new \WP_REST_Response( $data, 200 );
+
+		$result->set_headers(
+			array(
+				// @todo : comment this and if people complain about the performance, we can add it back.
+				//'Cache-Control' => 'max-age=3600, s-max-age=3600',
+				'Content-Type'  => 'application/json',
+			)
+		);
+
+		return $result;
+	}
 
     public function pluginPage($page)
     {
@@ -110,8 +180,6 @@ class Enqueue
         } elseif (function_exists('as_next_scheduled_action')) {
             $scheduled = \as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
         }
-
-
 
         $getScheduled = as_get_scheduled_actions([
             'hooks' => 'action_bulk_image_process_action_scheduler',

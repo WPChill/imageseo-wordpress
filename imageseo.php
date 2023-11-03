@@ -107,7 +107,6 @@ if (!class_exists('ActionScheduler')) {
 function imageseo_plugin_loaded()
 {
 
-
     require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
     require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
 
@@ -116,8 +115,8 @@ function imageseo_plugin_loaded()
 
         load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
 
-
         Context::getContext()->initPlugin();
+		\ImageSeoWP\Admin\SettingsPage::get_instance();
     }
 }
 

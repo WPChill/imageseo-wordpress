@@ -32,6 +32,7 @@ class PageAdmin
      */
     public function pluginMenu()
     {
+
         add_menu_page(
             'Image SEO',
             'Image SEO',
@@ -40,6 +41,8 @@ class PageAdmin
             [$this, 'pluginSettingsPage'],
            'dashicons-imageseo-logo'
         );
+
+	    add_submenu_page( 'admin.php??page=imageseo-settings', 'Settings', 'Settings', 'manage_options','imageseo-settings-page', array( $this, 'imageseo_settings' ), 16 );
     }
 
     public function menuOrderCount()
