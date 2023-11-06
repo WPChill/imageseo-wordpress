@@ -14,7 +14,7 @@ class FieldFactory {
 		$field = null;
 
 		// get value
-		$value = get_option( $option['name'], '' );
+		$value = imageseo_get_service( 'Option' )->getOption( $option['name'] );
 
 		// placeholder
 		$placeholder = ( ! empty( $option['placeholder'] ) ) ? $option['placeholder'] : '';
@@ -22,6 +22,12 @@ class FieldFactory {
 		switch ( $option['type'] ) {
 			case 'text':
 				$field = new Text( $option['name'], $value, $placeholder );
+				break;
+			case 'colorpicker':
+				$field = new Text( $option['name'], $value, $placeholder );
+				break;
+			case 'email':
+				$field = new ColorPicker( $option['name'], $value, $placeholder );
 				break;
 			case 'password':
 				$field = new Password( $option['name'], $value, $placeholder );
@@ -37,6 +43,12 @@ class FieldFactory {
 				break;
 			case 'select':
 				$field = new Select( $option['name'], $value, $option['options'] );
+				break;
+			case 'multi_checkbox':
+				$field = new MultiCheckbox( $option['name'], $value, $option['options'] );
+				break;
+			case 'sub_checkbox':
+				$field = new SubCheckbox( $option['name'], $value, $option['options'], $option['parent'] );
 				break;
 			case 'action_button':
 				$field = new ActionButton( $option['name'], $option['link'], $option['label'] );

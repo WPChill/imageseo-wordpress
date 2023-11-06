@@ -63,7 +63,7 @@ class Radio extends Admin_Fields {
 		foreach ( $this->get_options() as $key => $name ) {
 			?>
 			<label class="dlm-radio-label"><input id="setting-<?php echo esc_attr( $this->get_name() ); ?>"
-			                                      name="<?php echo esc_attr( $this->get_name() ); ?>" type="radio"
+			                                      name="imageseo[<?php echo esc_attr( $this->get_name() ); ?>]" type="radio"
 			                                      value="<?php echo esc_attr( $key ); ?>" <?php checked( $key, $this->get_value() ); ?> /><span><?php echo esc_html( $name ); ?></span></label>
 			<?php
 		}

@@ -54,15 +54,6 @@ class SettingsPage {
 	 */
 	public function pluginMenu() {
 
-		add_menu_page(
-			'Image SEO',
-			'Image SEO',
-			'manage_options',
-			Pages::SETTINGS,
-			[ $this, 'pluginSettingsPage' ],
-			'dashicons-imageseo-logo'
-		);
-
 		add_submenu_page( 'admin.php??page=imageseo-settings', 'Settings', 'Settings', 'manage_options', 'imageseo-settings-page', array(
 			$this,
 			'imageseo_settings'
@@ -120,9 +111,7 @@ class SettingsPage {
 	/**
 	 * The settings page
 	 *
-	 * @param array $array
-	 *
-	 * @return mixed
+	 * @since 2.0.9
 	 */
 	public function imageseo_settings() {
 		// initialize settings
@@ -174,12 +163,9 @@ class SettingsPage {
 						<?php
 					}
 
-					if ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) {
+					settings_fields( IMAGESEO_OPTION_GROUP );
 
-						// output correct settings_fields
-						// We change the output location so that it won't interfere with our upsells
-						$option_name = 'imageseo_' . $tab . '_' . $active_section;
-						settings_fields( $option_name );
+					if ( ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) {
 
 						echo '<table class="form-table">';
 
@@ -284,7 +270,7 @@ class SettingsPage {
 								'label'    => __( 'Email', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Register your Email on our App.', 'imageseo' ),
-								'type'     => 'text',
+								'type'     => 'email',
 								'priority' => 30,
 							),
 							array(
@@ -294,6 +280,34 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Register your password on our App', 'imageseo' ),
 								'type'     => 'password',
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'terms',
+								'std'      => '',
+								'label'    => __( 'Terms of Service', 'imageseo' ),
+								'cb_label' => '',
+								'desc'     => __( 'By checking this you agree to ImageSEO\'s <a href="https://imageseo.io/terms-conditions/">Terms of Service</a>', 'imageseo' ),
+								'type'     => 'checkbox',
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'newsletter',
+								'std'      => '',
+								'label'    => __( 'Newsletter', 'imageseo' ),
+								'cb_label' => '',
+								'desc'     => __( 'By checking this you subscribe to news and features updates, as well as occasional company announcements.', 'imageseo' ),
+								'type'     => 'checkbox',
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'register_account',
+								'std'      => '',
+								'label'    => __( 'Register', 'imageseo' ),
+								'cb_label' => '',
+								'desc'     => __( 'Click the button to go to the Application Dashoard.', 'imageseo' ),
+								'type'     => 'action_button',
+								'link'     => '#',
 								'priority' => 30,
 							),
 							array(
@@ -338,7 +352,7 @@ class SettingsPage {
 							array(
 								'name'     => 'active_alt_write_upload',
 								'std'      => '',
-								'label'    => __( 'Automatically fill out ALT Texts when you upload an image', 'imageseo' ),
+								'label'    => __( 'Fill out ALT Texts', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
 								'type'     => 'checkbox',
@@ -347,20 +361,20 @@ class SettingsPage {
 							array(
 								'name'     => 'active_rename_write_upload',
 								'std'      => '',
-								'label'    => __( 'Automatically fill out ALT Texts when you upload an image', 'imageseo' ),
+								'label'    => __( 'Rename your files', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
+								'desc'     => __( 'If you tick this box, the plugin will automatically rewrite with SEO friendly content the name of the images you will upload. You will consume one credit for each image optimized.', 'imageseo' ),
 								'type'     => 'checkbox',
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'default_language_ia',
-								'std'      => '',
-								'label'    => __( 'Automatically rename your files when you upload a media', 'imageseo' ),
+								'std'      => 'en_GB',
+								'label'    => __( 'Language', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'If you tick this box, the plugin will automatically rewrite with SEO friendly content the name of the images you will upload.', 'imageseo' ),
+								'desc'     => __( 'In which language should we write your filenames and alternative texts.', 'imageseo' ),
 								'type'     => 'select',
-								'options'  => array(),
+								'options'  => $languages,
 								'priority' => 30,
 							),
 						)
@@ -369,12 +383,16 @@ class SettingsPage {
 						'title'  => __( 'Social Media Cards Generator', 'imageseo' ),
 						'fields' => array(
 							array(
-								'name'     => 'active_alt_write_upload',
+								'name'     => 'social_media_post_types',
 								'std'      => '',
-								'label'    => __( 'Automatically fill out ALT Texts when you upload an image', 'imageseo' ),
+								'label'    => __( 'Automatic generation', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => __( 'Enable the automatic generation of Social Media Card for the selected post types. You will consume one credit by SociaL Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn).', 'imageseo' ),
+								'type'     => 'multi_checkbox',
+								'options'  => array(
+									'post' => __( 'Posts', 'imageseo' ),
+									'page' => __( 'Pages', 'imageseo' ),
+								),
 								'priority' => 30,
 							),
 						)
@@ -394,7 +412,8 @@ class SettingsPage {
 								'label'    => __( 'Author or Product price (WooCommerce only) - Subtitle', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
-								'type'     => 'checkbox',
+								'type'     => 'sub_checkbox',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -403,7 +422,8 @@ class SettingsPage {
 								'label'    => __( 'Reading time or Number of reviews (WooCommerce only) - Subtitle 2', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the reading time of an article or the number of reviews.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'type'     => 'sub_checkbox',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -412,7 +432,8 @@ class SettingsPage {
 								'label'    => __( 'Stars rating', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the stars linked to a review of your product for example.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'type'     => 'sub_checkbox',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -421,75 +442,84 @@ class SettingsPage {
 								'label'    => __( 'Display the author avatar', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Only use for post content', 'imageseo' ),
-								'type'     => 'checkbox',
+								'type'     => 'sub_checkbox',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
-						)
-					),
-					'card_layout'   => array(
-						'title'  => __( 'Card layout', 'imageseo' ),
-						'fields' => array(
 							array(
 								'name'     => 'layout',
 								'std'      => '',
-								'label'    => __( 'Author or Product price (WooCommerce only) - Subtitle', 'imageseo' ),
+								'label'    => __( 'Layout', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
-								'type'     => 'checkbox',
+								'type'     => 'select',
+								'options'  => array(
+									'CARD_LEFT'  => __( 'Card left', 'imageseo' ),
+									'CARD_RIGHT' => __( 'Card right', 'imageseo' ),
+								),
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'textAlignment',
+								'std'      => '',
+								'label'    => __( 'Text alignment', 'imageseo' ),
+								'cb_label' => '',
+								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
+								'type'     => 'select',
+								'options'  => array(
+									'top'    => __( 'Top', 'imageseo' ),
+									'center' => __( 'Center', 'imageseo' ),
+									'bottom' => __( 'Bottom', 'imageseo' ),
+								),
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'textColor',
 								'std'      => '',
-								'label'    => __( 'Reading time or Number of reviews (WooCommerce only) - Subtitle 2', 'imageseo' ),
+								'label'    => __( 'Text color', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the reading time of an article or the number of reviews.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => '',
+								'type'     => 'colorpicker',
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'contentBackgroundColor',
 								'std'      => '',
-								'label'    => __( 'Stars rating', 'imageseo' ),
+								'label'    => __( 'Background Color', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the stars linked to a review of your product for example.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => '',
+								'type'     => 'colorpicker',
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'starColor',
 								'std'      => '',
-								'label'    => __( 'Display the author avatar', 'imageseo' ),
+								'label'    => __( 'Star color', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Only use for post content', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => '',
+								'type'     => 'colorpicker',
 								'priority' => 30,
 							),
-						)
-					),
-					'images'        => array(
-						'title'  => __( 'Images', 'imageseo' ),
-						'fields' => array(
 							array(
 								'name'     => 'logoUrl',
-								'std'      => '',
-								'label'    => __( 'Author or Product price (WooCommerce only) - Subtitle', 'imageseo' ),
+								'std'      => IMAGESEO_DIRURL . 'dist/images/default_logo.png',
+								'label'    => __( 'Your logo', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => '',
+								'type'     => 'text',
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'defaultBgImg',
-								'std'      => '',
-								'label'    => __( 'Reading time or Number of reviews (WooCommerce only) - Subtitle 2', 'imageseo' ),
+								'std'      => IMAGESEO_DIR . 'dist/images/default_image.png',
+								'label'    => __( 'Default background image', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the reading time of an article or the number of reviews.', 'imageseo' ),
-								'type'     => 'checkbox',
+								'desc'     => '',
+								'type'     => 'text',
 								'priority' => 30,
 							),
 						)
-					)
+					),
 				),
 			),
 			'bulk_optimizations' => array(
@@ -528,7 +558,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'ALT text settings', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'I want to fill out and optimize my ALT Texts for SEO and Accessibility. It\'s really worth for SEO !', 'imageseo' ),
+								'desc'     => __( 'Fill out and optimize ALT Texts for SEO and Accessibility.', 'imageseo' ),
 								'type'     => 'checkbox',
 								'priority' => 30,
 							),
@@ -550,7 +580,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Format', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
+								'desc'     => __( 'Automatically write an alternative to the uploaded images.', 'imageseo' ),
 								'type'     => 'radio',
 								'options'  => array(
 									'[keyword_1] - [keyword_2]',
@@ -578,6 +608,15 @@ class SettingsPage {
 								'type'     => 'checkbox',
 								'priority' => 30,
 							),
+							array(
+								'name'     => 'start_bulk_process',
+								'std'      => '',
+								'label'    => __( 'Start optimization', 'imageseo' ),
+								'cb_label' => '',
+								'desc'     => '',
+								'type'     => 'action_button',
+								'priority' => 30,
+							),
 						)
 					)
 				),
@@ -587,55 +626,8 @@ class SettingsPage {
 		return apply_filters( 'imageseo_settings_tabs', $settings );
 	}
 
-	/**
-	 * register_settings function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function register_settings() {
-		$settings = $this->get_settings();
 
-		// register our options and settings
-		foreach ( $settings as $tab_key => $tab ) {
-
-			foreach ( $tab['sections'] as $section_key => $section ) {
-
-				$option_group = 'imageseo_' . $tab_key . '_' . $section_key;
-
-				// Check to see if $section['fields'] is set, we could be using it for upsells
-				if ( isset( $section['fields'] ) ) {
-					foreach ( $section['fields'] as $field ) {
-
-						if ( $field['type'] == 'group' ) {
-							foreach ( $field['options'] as $group_field ) {
-
-								if ( ! empty( $group_field['name'] ) ) {
-									if ( isset( $group_field['std'] ) ) {
-										add_option( $group_field['name'], $group_field['std'] );
-									}
-									register_setting( $option_group, $group_field['name'] );
-								}
-
-							}
-							continue;
-						}
-
-						if ( ! empty( $field['name'] ) ) {
-							if ( isset( $field['std'] ) ) {
-								add_option( $field['name'], $field['std'] );
-							}
-							register_setting( $option_group, $field['name'] );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private function array_first_key(
-		$a
-	) {
+	private function array_first_key( $a ) {
 		reset( $a );
 
 		return key( $a );
