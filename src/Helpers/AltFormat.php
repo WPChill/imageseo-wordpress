@@ -87,6 +87,11 @@ abstract class AltFormat
             ];
         }
 
+	    $formats[] = array(
+		    'format'      => 'CUSTOM_FORMAT',
+		    'description' => __( 'Custom template.', 'imageseo' )
+	    );
+
         return apply_filters('imageseo_alt_formats', $formats);
     }
 }

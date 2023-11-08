@@ -41,6 +41,9 @@ class FieldFactory {
 			case 'radio':
 				$field = new Radio( $option['name'], $value, $option['options'], $option['std'] );
 				break;
+			case 'format':
+				$field = new Format( $option['name'], $value, $option['options'], $option['std'] );
+				break;
 			case 'select':
 				$field = new Select( $option['name'], $value, $option['options'] );
 				break;

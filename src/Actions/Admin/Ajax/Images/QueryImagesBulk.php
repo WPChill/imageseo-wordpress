@@ -18,6 +18,7 @@ class QueryImagesBulk
     public function hooks()
     {
         add_action('wp_ajax_imageseo_query_images', [$this, 'query']);
+		add_action( 'imageseo_settings_page_bulk_optimizations_start', array( $this, 'display_images' ) );
     }
 
     public function buildSqlQuery($options)
@@ -203,4 +204,105 @@ class QueryImagesBulk
             'ids_non_optimized' => array_values(array_diff($ids, $idsOptimized)),
         ]);
     }
+
+	/**
+	 * Retrieve the total number of images, optimized and non-optimized ones
+	 *
+	 *
+	 * @return array
+	 * @since 2.0.9
+	 */
+	private function images_query() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.', 'imageseo' ) );
+		}
+
+		$options = imageseo_get_service( 'Option' )->getOptions();
+
+		$filters = array(
+			'alt_filter' => $options['altFilter'],
+			'alt_fill'   => $options['altFill'],
+			'only_optimized' => $options['optimizeAlt'],
+		);
+
+		global $wpdb;
+
+		if ( AltSpecification::WOO_PRODUCT_IMAGE === $filters['alt_filter'] ) {
+			$query = $this->buildSqlQueryWooCommerce( array_merge( $filters, [ 'only_optimized' => false ] ) );
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
+
+			$ids = array_merge( $ids, $this->queryImages->getWooCommerceIdsGallery( $filters ) );
+
+			$query        = $this->buildSqlQueryWooCommerce( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		} elseif ( AltSpecification::NEXTGEN_GALLERY === $filters['alt_filter'] ) {
+			$query = $this->buildSqlQueryNextGenGallery( array_merge( $filters, [ 'only_optimized' => false ] ) );
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
+
+			$query        = $this->buildSqlQueryNextGenGallery( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		} else {
+			$query = $this->buildSqlQuery( array_merge( $filters, [ 'only_optimized' => false ] ) );
+
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
+
+			$query        = $this->buildSqlQuery( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		}
+
+		return array(
+			'ids'               => array_values( array_filter( $ids ) ),
+			'ids_optimized'     => array_values( array_filter( $idsOptimized ) ),
+			'ids_non_optimized' => array_values( array_diff( $ids, $idsOptimized ) ),
+		);
+	}
+
+	/**
+	 * Display number of optimized and non-optimized images
+	 *
+	 * @since 2.0.9
+	 */
+	public function display_images() {
+
+		$result            = $this->images_query();
+		$result['options'] = imageseo_get_service( 'Option' )->getOptions();
+
+		if ( is_wp_error( $result ) ) {
+			return;
+		}
+		$total_images  = count( $result['ids'] );
+		$optimized     = count( $result['ids_optimized'] );
+		$non_optimized = count( $result['ids_non_optimized'] );
+		echo '<div class="card">';
+		// If there are no images found that require optimization then display a message and return.
+		if ( 0 === $total_images ) {
+			echo __( 'No images that require optimization found. Good job!', 'imageseo' );
+			echo '</div>';
+			return;
+		}
+		echo sprintf( __( 'You have optimized %s images out of %s.', 'imageseo' ), $optimized, $total_images );
+		if ( 0 !== $non_optimized ) {
+			echo sprintf( __( 'Remaining %s which will consume %s credit(s).', 'imageseo' ), $non_optimized, $non_optimized );
+		}
+		echo '</div>';
+		echo '<script type="text/javascript">imageseo_bulk_images = ' . json_encode( $result ) . ';</script>';
+	}
 }

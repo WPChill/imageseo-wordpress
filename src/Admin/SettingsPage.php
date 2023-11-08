@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Admin;
 
+use ImageSeoWP\Helpers\AltFormat;
+use ImageSeoWP\Helpers\Bulk\AltSpecification;
 use ImageSeoWP\Helpers\Pages;
 use ImageSeoWP\Admin\Settings\Fields\Admin_Fields;
 use ImageSeoWP\Admin\Settings\Fields\FieldFactory;
@@ -33,6 +35,8 @@ class SettingsPage {
 
 	private function hooks() {
 		add_action( 'admin_menu', array( $this, 'pluginMenu' ) );
+		add_action( 'admin_notices', array( $this, 'bulk_process' ) );
+		add_action( 'imageseo_settings_page_social_card_start', array( $this, 'social_card_preview' ) );
 	}
 
 	private function load_fields() {
@@ -66,7 +70,7 @@ class SettingsPage {
 	 * @return string
 	 */
 	private function get_active_tab() {
-		return ( ! empty( $_GET['tab'] ) ? sanitize_title( wp_unslash( $_GET['tab'] ) ) : 'general' );
+		return ( ! empty( $_GET['tab'] ) ? sanitize_title( wp_unslash( $_GET['tab'] ) ) : 'welcome' );
 	}
 
 	/**
@@ -127,19 +131,9 @@ class SettingsPage {
 				<?php $this->generate_tabs( $settings ); ?>
 
 				<?php
-
-				if ( ! empty( $_GET['settings-updated'] ) ) {
-					$this->need_rewrite_flush = true;
-					echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Settings successfully saved', 'download-monitor' ) . '</p></div>';
-
-					$dlm_settings_tab_saved = get_option( 'dlm_settings_tab_saved', 'general' );
-
-					echo '<script type="text/javascript">var dlm_settings_tab_saved = "' . esc_js( $dlm_settings_tab_saved ) . '";</script>';
-				}
-
 				// loop fields for this tab
 				if ( isset( $settings[ $tab ] ) ) {
-
+					do_action( 'imageseo_settings_page_' . $tab . '_start' );
 					if ( count( $settings[ $tab ]['sections'] ) > 1 ) {
 
 						?>
@@ -210,8 +204,8 @@ class SettingsPage {
 
 						echo '</table>';
 					}
+					do_action( 'imageseo_settings_page_' . $tab . '_end' );
 				}
-
 				?>
 				<div class="wp-clearfix"></div>
 				<?php
@@ -235,6 +229,15 @@ class SettingsPage {
 		$languages      = array();
 		foreach ( $language_codes as $key => $language ) {
 			$languages[ $key ] = $language['english_name'];
+		}
+		// Create options arrays.
+		$metas      = array();
+		$fill_types = array();
+		foreach ( AltSpecification::getMetas() as $meta ) {
+			$metas[ $meta['id'] ] = $meta['label'];
+		}
+		foreach ( AltSpecification::getFillType() as $fill_type ) {
+			$fill_types[ $fill_type['id'] ] = $fill_type['label'];
 		}
 
 		$settings = array(
@@ -547,10 +550,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Which images do you want to optimize?', 'imageseo' ),
 								'type'     => 'select',
-								'options'  => array(
-									'ALL'            => __( 'Only Media Library images', 'imageseo' ),
-									'FEATURED_IMAGE' => __( 'Only featured images', 'imageseo' ),
-								),
+								'options'  => $metas,
 								'priority' => 30,
 							),
 							array(
@@ -569,10 +569,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Which alt texts do you want to optimize?', 'imageseo' ),
 								'type'     => 'select',
-								'options'  => array(
-									'FILL_ALL'        => __( 'Fill out all ALT Texts', 'imageseo' ),
-									'FILL_ONLY_EMPTY' => __( 'Fill out only empty ALT Texts', 'imageseo' ),
-								),
+								'options'  => $fill_types,
 								'priority' => 30,
 							),
 							array(
@@ -581,13 +578,8 @@ class SettingsPage {
 								'label'    => __( 'Format', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Automatically write an alternative to the uploaded images.', 'imageseo' ),
-								'type'     => 'radio',
-								'options'  => array(
-									'[keyword_1] - [keyword_2]',
-									'[post_title] - [keyword_1]',
-									'[site_title] - [keyword_1]',
-									'CUSTOM_FORMAT'
-								),
+								'type'     => 'format',
+								'options'  => AltFormat::getFormats(),
 								'priority' => 30,
 							),
 							array(
@@ -613,7 +605,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Start optimization', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => '',
+								'desc'     => __( 'Before you start the optimization process please make sure you have saved all your required settings.', 'imageseo' ),
 								'type'     => 'action_button',
 								'priority' => 30,
 							),
@@ -631,5 +623,140 @@ class SettingsPage {
 		reset( $a );
 
 		return key( $a );
+	}
+
+	/**
+	 * Display a notice with the bulk process status
+	 *
+	 * @since 2.0.9
+	 */
+	public function bulk_process() {
+		$current_screen = get_current_screen();
+		// Only show the notice on the settings page and if the user is admin
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( 'admin_page_imageseo-settings-page' !== $current_screen->base ) {
+			return;
+		}
+		$bulk_settings = get_option( '_imageseo_bulk_process_settings', false );
+		// If the bulk process settings are not set, return
+		if ( false === $bulk_settings ) {
+			return;
+		}
+
+		// Display a notice with the bulk process status
+		?>
+		<div class="notice notice-info is-dismissible">
+			<p><?php echo sprintf( esc_html__( 'Optimizing %s images', 'imageseo' ), $bulk_settings['total_images'] ); ?></p>
+			<button id="get_bulk_process" class="button button-primary">Show current status</button>
+			<button id='stop_bulk_process' class="button button-primary">Stop bulk process</button>
+			<button type="button" class="notice-dismiss"><span
+					class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'imageseo' ); ?></span>
+			</button>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Display the Social Card preview
+	 *
+	 * @since 2.0.9
+	 */
+	public function social_card_preview() {
+		?>
+		<div id='imageseo-preview-image'
+		     class="imageseo-media__layout--card-left"
+		     style="border: 1px solid #999;		margin: 0 auto;	background-color: #fff;	">
+			<div class='imageseo-media__container__image'
+			     style="background-color: #ccc; backgorund-image: url({settings.defaultBgImg}); backrgroud-position:center center; background-size:cover; background-repeat:no-repeat;">
+				<div class="imageseo-media__container__content--center">
+					<img class='imageseo-media__content__logo' src={settings.logoUrl}/>
+					<div class='imageseo-media__content__title'>
+						Lorem ipsum (post_title)
+					</div>
+					<div class='imageseo-media__content__sub-title'>
+						Sub title (like price or author)
+					</div>
+					<div class='imageseo-media__content__sub-title-two'>
+						Sub title 2 (like price or author)
+					</div>
+					<img class='imageseo-media__content__avatar' src="/images/avatar-default.jpg">
+					<div class='imageseo-media__content__stars flex' style="display:none;">
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill={`${settings.starColor}`}
+							stroke={`${settings.starColor}`}
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<polygon
+								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+						</svg>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill={`${settings.starColor}`}
+							stroke={`${settings.starColor}`}
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<polygon
+								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+						</svg>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill={`${settings.starColor}`}
+							stroke={`${settings.starColor}`}
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<polygon
+								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+						</svg>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill={`${settings.starColor}`}
+							stroke={`${settings.starColor}`}
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<polygon
+								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+						</svg>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='24'
+							height='24'
+							viewBox='0 0 24 24'
+							fill={`${settings.starColor}`}
+							stroke={`${settings.starColor}`}
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						>
+							<polygon
+								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+						</svg>
+					</div>
+				</div>
+			</div>
+		<?php
 	}
 }
