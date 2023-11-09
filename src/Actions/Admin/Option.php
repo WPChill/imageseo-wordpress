@@ -2,122 +2,132 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
-if (!defined('ABSPATH')) {
-    exit;
+use ImageSeoWP\Admin\SettingsPage;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
  * @since 1.0.0
  */
-class Option
-{
-    /**
-     * @since 1.0.0
-     */
-    public function __construct()
-    {
-        $this->optionServices = imageseo_get_service('Option');
-        $this->clientServices = imageseo_get_service('ClientApi');
-    }
+class Option {
+	/**
+	 * @since 1.0.0
+	 */
+	public function __construct() {
+		$this->optionServices = imageseo_get_service( 'Option' );
+		$this->clientServices = imageseo_get_service( 'ClientApi' );
+	}
 
-    public function hooks()
-    {
-        add_action('admin_init', [$this, 'optionsInit']);
-        add_action('admin_notices', [$this, 'settingsNoticesSuccess']);
-    }
+	public function hooks() {
+		add_action( 'admin_init', [ $this, 'optionsInit' ] );
+		add_action( 'admin_notices', [ $this, 'settingsNoticesSuccess' ] );
+	}
 
-    public function settingsNoticesSuccess()
-    {
-        if (false !== get_transient('imageseo_success_settings')) {
-            delete_transient('imageseo_success_settings');
-        } else {
-            return;
-        } ?>
+	public function settingsNoticesSuccess() {
+		if ( false !== get_transient( 'imageseo_success_settings' ) ) {
+			delete_transient( 'imageseo_success_settings' );
+		} else {
+			return;
+		} ?>
 		<div class="notice notice-success">
-			<p><?php _e('Your settings have been saved.', 'imageseo'); ?></p>
+			<p><?php _e( 'Your settings have been saved.', 'imageseo' ); ?></p>
 		</div>
-    	<?php
-    }
+		<?php
+	}
 
-    /**
-     * Activate plugin.
-     */
-    public function activate()
-    {
-        update_option('imageseo_version', IMAGESEO_VERSION);
-        $options = $this->optionServices->getOptions();
+	/**
+	 * Activate plugin.
+	 */
+	public function activate() {
+		update_option( 'imageseo_version', IMAGESEO_VERSION );
+		$options = $this->optionServices->getOptions();
 
-        $this->optionServices->setOptions($options);
-    }
+		$this->optionServices->setOptions( $options );
+	}
 
-    /**
-     * Register setting options.
-     *
-     * @see admin_init
-     */
-    public function optionsInit()
-    {
-        register_setting(IMAGESEO_OPTION_GROUP, IMAGESEO_SLUG, [$this, 'sanitizeOptions']);
-    }
+	/**
+	 * Register setting options.
+	 *
+	 * @see admin_init
+	 */
+	public function optionsInit() {
+		register_setting( IMAGESEO_OPTION_GROUP, IMAGESEO_SLUG, [ $this, 'sanitizeOptions' ] );
+	}
 
-    /**
-     * Callback register_setting for sanitize options.
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    public function sanitizeOptions($options)
-    {
-        if (!isset($_POST['action']) || ('update' !== $_POST['action'] && 'imageseo_social_media_settings_save' !== $_POST['action'] && 'imageseo_valid_api_key' !== $_POST['action'])) {
-            return $options;
-        }
+	/**
+	 * Callback register_setting for sanitize options.
+	 *
+	 * @param array $options
+	 *
+	 * @return array
+	 */
+	public function sanitizeOptions( $options ) {
+		if ( ! isset( $_POST['action'] ) || ( 'update' !== $_POST['action'] && 'imageseo_social_media_settings_save' !== $_POST['action'] && 'imageseo_valid_api_key' !== $_POST['action'] ) ) {
+			return $options;
+		}
 
-	    $optionsBdd = $this->optionServices->getOptions();
-	    $newOptions = wp_parse_args( $options, $optionsBdd );
-	    switch ( $_POST['action'] ) {
-		    case 'update':
-			    $newOptions['active_alt_write_upload']    = isset( $options['active_alt_write_upload'] ) ? 1 : 0;
-			    $newOptions['active_rename_write_upload'] = isset( $options['active_rename_write_upload'] ) ? 1 : 0;
-			    $newOptions['default_language_ia']        = isset( $options['default_language_ia'] ) ? $options['default_language_ia'] : 'en';
-			    $newOptions['social_media_post_types']    = isset( $options['social_media_post_types'] ) ? $options['social_media_post_types'] : [];
-			    $newOptions['social_media_type']          = isset( $options['social_media_type'] ) ? $options['social_media_type'] : [];
+		$optionsBdd = $this->optionServices->getOptions();
+		$newOptions = wp_parse_args( $options, $optionsBdd );
 
-			    // Social Media Settings
-			    $newOptions['social_media_settings']['visibilitySubTitle']    = isset( $options['social_media_settings']['visibilitySubTitle'] ) ? 1 : 0;
-			    $newOptions['social_media_settings']['visibilitySubTitleTwo'] = isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) ? 1 : 0;
-			    $newOptions['social_media_settings']['visibilityRating']      = isset( $options['social_media_settings']['visibilityRating'] ) ? 1 : 0;
-			    $newOptions['social_media_settings']['visibilityAvatar']      = isset( $options['social_media_settings']['visibilityAvatar'] ) ? 1 : 0;
+		switch ( $_POST['action'] ) {
+			case 'update':
+				$settings_page   = SettingsPage::get_instance();
+				$current_tab     = $_POST['imageseo-tab'];
+				$current_section = $_POST['imageseo-section'];
+				$current_fields  = $settings_page->get_tab_settings( $current_tab, $current_section );
+				$missig_fields   = array();
+				// Cycle through the fields and check for missing options
+				foreach ( $current_fields as $field ) {
+					// Check to see if it's a missing field or a missing subfield
+					if ( ! isset( $options[ $field ] ) && ! isset( $options[ array_key_first( $options ) ][ $field ] ) ) {
+						$missig_fields[] = $field;
+					}
+				}
 
-			    set_transient( 'imageseo_success_settings', 1, 60 );
-			    break;
-		    case 'imageseo_valid_api_key':
-			    $newOptions['api_key'] = isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '';
-			    break;
-		    case 'imageseo_social_media_settings_save':
-			    $keys = [
-				    'layout',
-				    'textColor',
-				    'contentBackgroundColor',
-				    'textAlignment',
-				    'starColor',
-				    'defaultBgImg',
-				    'logoUrl',
-			    ];
+				// Get array difference
+				foreach ( $missig_fields as $option ) {
+					switch ( $option ) {
+						case 'active_alt_write_upload':
+							$newOptions['active_alt_write_upload'] = 0;
+							break;
+						case 'active_rename_write_upload':
+							$newOptions['active_rename_write_upload'] = 0;
+							break;
+						case 'default_language_ia':
+							$newOptions['default_language_ia'] = 'en';
+							break;
+						case 'social_media_post_types':
+							$newOptions['social_media_post_types'] = [];
+							break;
+						case 'social_media_type':
+							$newOptions['social_media_type'] = [];
+							break;
+						case 'visibilitySubTitle':
+							$newOptions['social_media_settings']['visibilitySubTitle'] = 0;
+							break;
+						case 'visibilitySubTitleTwo':
+							$newOptions['social_media_settings']['visibilitySubTitleTwo'] = 0;
+							break;
+						case 'visibilityRating':
+							$newOptions['social_media_settings']['visibilityRating'] = 0;
+							break;
+						case 'visibilityAvatar':
+							$newOptions['social_media_settings']['visibilityAvatar'] = 0;
+							break;
+						default:
+							$newOptions = apply_filters( 'imageseo_sanitize_' . $option, $newOptions, $options, $current_fields, $current_tab, $current_section );
+							break;
+					}
+				}
+				set_transient( 'imageseo_success_settings', 1, 60 );
+				break;
+			case 'imageseo_valid_api_key':
+				$newOptions['api_key'] = isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '';
+				break;
+		}
 
-			    $keysBool = [ 'visibilitySubTitle', 'visibilitySubTitleTwo', 'visibilityAvatar', 'visibilityRating' ];
-
-			    foreach ( $keys as $key ) {
-				    $newOptions['social_media_settings'][ $key ] = isset( $_POST[ $key ] ) ? sanitize_text_field( $_POST[ $key ] ) : $options['social_media_settings'][ $key ];
-			    }
-
-			    foreach ( $keysBool as $key ) {
-				    $newOptions['social_media_settings'][ $key ] = isset( $_POST[ $key ] ) && 'true' === $_POST[ $key ] ? true : false;
-			    }
-
-			    break;
-	    }
-
-        return $newOptions;
-    }
+		return $newOptions;
+	}
 }

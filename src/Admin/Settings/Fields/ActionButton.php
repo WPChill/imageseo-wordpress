@@ -60,7 +60,7 @@ class ActionButton extends Admin_Fields {
 	 */
 	public function render() {
 		?>
-		<a class="button" id="<?php echo esc_attr( sanitize_title( $this->name ) ); ?>"
+		<a class="button button-primary" id="<?php echo esc_attr( sanitize_title( $this->name ) ); ?>"
 		   href="<?php echo esc_url( $this->get_url() ); ?>"><?php echo esc_html( $this->label ); ?></a>
 		<?php
 	}

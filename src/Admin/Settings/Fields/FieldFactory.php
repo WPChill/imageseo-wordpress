@@ -24,10 +24,10 @@ class FieldFactory {
 				$field = new Text( $option['name'], $value, $placeholder );
 				break;
 			case 'colorpicker':
-				$field = new Text( $option['name'], $value, $placeholder );
+				$field = new ColorPicker( $option['name'], $value, $placeholder );
 				break;
 			case 'email':
-				$field = new ColorPicker( $option['name'], $value, $placeholder );
+				$field = new Email( $option['name'], $value, $placeholder );
 				break;
 			case 'password':
 				$field = new Password( $option['name'], $value, $placeholder );
@@ -56,12 +56,15 @@ class FieldFactory {
 			case 'action_button':
 				$field = new ActionButton( $option['name'], $option['link'], $option['label'] );
 				break;
+			case 'title':
+				$field = new Title( $option['title'] );
+				break;
 			case 'install_plugin':
 				$field = new InstallPlugin( $option['name'], $option['link'], $option['label'] );
 				break;
 			default:
 				/**
-				 * do_filter: dlm_setting_field_$type: (null) $field, (array) $option, (String) $value, (String) $placeholder
+				 * do_filter: imageseo_setting_field_$type: (null) $field, (array) $option, (String) $value, (String) $placeholder
 				 */
 				$field = apply_filters( 'imageseo_setting_field_' . $option['type'], $field, $option, $value, $placeholder );
 				break;

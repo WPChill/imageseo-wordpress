@@ -137,9 +137,13 @@ class Enqueue
      */
     public function adminEnqueueScripts($page)
     {
-		// Enqueue new admin functionality script
+	    // Enqueue new admin functionality script
 	    if ( 'admin_page_imageseo-settings-page' === $page ) {
-		    wp_enqueue_script( 'imageseo-functionality', IMAGESEO_URL_DIST . '/js/functionality.js', [ 'jquery' ], IMAGESEO_VERSION, true );
+		    wp_enqueue_script( 'imageseo-functionality', IMAGESEO_URL_DIST . '/js/functionality.js', array(
+			    'jquery',
+			    'wp-color-picker',
+		    ),                 IMAGESEO_VERSION, true );
+		    wp_enqueue_style( 'wp-color-picker' );
 	    }
         if (!in_array($page, ['toplevel_page_' . Pages::SETTINGS, 'image-seo_page_imageseo-optimization', 'upload.php', 'post.php', 'image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'image-seo_page_imageseo-social-media'], true)) {
             return;

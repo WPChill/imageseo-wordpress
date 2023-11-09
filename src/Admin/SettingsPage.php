@@ -124,7 +124,7 @@ class SettingsPage {
 		$active_section = $this->get_active_section( $settings[ $tab ]['sections'] );
 
 		?>
-		<div class="wrap dlm-admin-settings <?php echo esc_attr( $tab ) . ' ' . esc_attr( $active_section ); ?>">
+		<div class="wrap imageseo-admin-settings <?php echo esc_attr( $tab ) . ' ' . esc_attr( $active_section ); ?>">
 			<hr class="wp-header-end">
 			<form method="post" action="options.php">
 
@@ -161,7 +161,9 @@ class SettingsPage {
 
 					if ( ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) {
 
-						echo '<table class="form-table">';
+						echo '<table class="form-table imageseo-' . esc_attr( $tab ) . '">';
+						echo '<input type="hidden" name="imageseo-tab" value="' . esc_attr( $tab ) . '">';
+						echo '<input type="hidden" name="imageseo-section" value="' . esc_attr( $active_section ) . '">';
 
 						foreach ( $settings[ $tab ]['sections'][ $active_section ]['fields'] as $option ) {
 
@@ -171,10 +173,20 @@ class SettingsPage {
 								$option['type'] = '';
 							}
 
-							$tr_class = 'dlm_settings dlm_' . $option['type'] . '_setting';
+							$tr_class = 'imageseo_settings imageseo_' . $option['type'] . '_setting';
 							echo '<tr valign="top" data-setting="' . ( isset( $option['name'] ) ? esc_attr( $option['name'] ) : '' ) . '" class="' . esc_attr( $tr_class ) . '">';
 							if ( isset( $option['label'] ) && '' !== $option['label'] ) {
-								echo '<th scope="row"><label for="setting-' . esc_attr( $option['name'] ) . '">' . esc_attr( $option['label'] ) . '</a></th>';
+								echo '<th scope="row"><label for="setting-' . esc_attr( $option['name'] ) . '">' . esc_attr( $option['label'] ) . '</label>';
+								if ( isset( $option['desc'] ) && '' !== $option['desc'] ) {
+									?>
+									<div class='wpchill-tooltip'><i>[?]</i>
+										<div class='wpchill-tooltip-content'>
+											<?php echo wp_kses_post( $option['desc'] ); ?>
+										</div>
+									</div>
+									<?php
+								}
+								echo '</th>';
 							} else {
 								$cs ++;
 							}
@@ -192,10 +204,6 @@ class SettingsPage {
 							if ( null !== $field ) {
 								// render field
 								$field->render();
-
-								if ( isset( $option['desc'] ) && '' !== $option['desc'] ) {
-									echo ' <p class="imageseo-description description">' . wp_kses_post( $option['desc'] ) . '</p>';
-								}
 							}
 
 							echo '</td></tr>';
@@ -250,11 +258,17 @@ class SettingsPage {
 						'description' => __( 'SEO Fact : More than 20% of Google traffic comes from image searches. We use AI to automatically optimize your images for SEO.', 'imageseo' ),
 						'fields'      => array(
 							array(
+								'name'     => 'register_account',
+								'std'      => '',
+								'title'    => __( 'Create an account - It\'s free', 'imageseo' ),
+								'type'     => 'title',
+								'priority' => 30,
+							),
+							array(
 								'name'     => 'register_first_name',
 								'std'      => '',
 								'label'    => __( 'First Name', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Register your First Name on our App.', 'imageseo' ),
 								'type'     => 'text',
 								'priority' => 30,
 							),
@@ -263,7 +277,6 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Last name', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Register your Last Name on our App.', 'imageseo' ),
 								'type'     => 'text',
 								'priority' => 30,
 							),
@@ -272,16 +285,14 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Email', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Register your Email on our App.', 'imageseo' ),
 								'type'     => 'email',
 								'priority' => 30,
 							),
 							array(
 								'name'     => 'register_password',
 								'std'      => '',
-								'label'    => __( 'Application password', 'imageseo' ),
+								'label'    => __( 'Password', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Register your password on our App', 'imageseo' ),
 								'type'     => 'password',
 								'priority' => 30,
 							),
@@ -290,7 +301,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Terms of Service', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'By checking this you agree to ImageSEO\'s <a href="https://imageseo.io/terms-conditions/">Terms of Service</a>', 'imageseo' ),
+								'desc'     => __( 'By checking this you agree to ImageSEO\'s <a href="https://imageseo.io/terms-conditions/" target="_blank">Terms of Service</a>', 'imageseo' ),
 								'type'     => 'checkbox',
 								'priority' => 30,
 							),
@@ -308,7 +319,6 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Register', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Click the button to go to the Application Dashoard.', 'imageseo' ),
 								'type'     => 'action_button',
 								'link'     => '#',
 								'priority' => 30,
@@ -321,6 +331,13 @@ class SettingsPage {
 								'desc'     => __( 'Click the button to go to the Application Dashoard.', 'imageseo' ),
 								'type'     => 'action_button',
 								'link'     => 'https://app.imageseo.io/login',
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'already_api',
+								'std'      => '',
+								'title'    => __( 'You already have an API Key?', 'imageseo' ),
+								'type'     => 'title',
 								'priority' => 30,
 							),
 							array(
@@ -355,7 +372,7 @@ class SettingsPage {
 							array(
 								'name'     => 'active_alt_write_upload',
 								'std'      => '',
-								'label'    => __( 'Fill out ALT Texts', 'imageseo' ),
+								'label'    => __( 'Fill ALT', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
 								'type'     => 'checkbox',
@@ -364,7 +381,7 @@ class SettingsPage {
 							array(
 								'name'     => 'active_rename_write_upload',
 								'std'      => '',
-								'label'    => __( 'Rename your files', 'imageseo' ),
+								'label'    => __( 'Rename files', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'If you tick this box, the plugin will automatically rewrite with SEO friendly content the name of the images you will upload. You will consume one credit for each image optimized.', 'imageseo' ),
 								'type'     => 'checkbox',
@@ -412,9 +429,9 @@ class SettingsPage {
 							array(
 								'name'     => 'visibilitySubTitle',
 								'std'      => '',
-								'label'    => __( 'Author or Product price (WooCommerce only) - Subtitle', 'imageseo' ),
+								'label'    => __( 'Subtitle', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
+								'desc'     => __( 'Show the price product or author depending on the page ( Author or Product price (WooCommerce only) )', 'imageseo' ),
 								'type'     => 'sub_checkbox',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
@@ -422,9 +439,9 @@ class SettingsPage {
 							array(
 								'name'     => 'visibilitySubTitleTwo',
 								'std'      => '',
-								'label'    => __( 'Reading time or Number of reviews (WooCommerce only) - Subtitle 2', 'imageseo' ),
+								'label'    => __( 'Subtitle 2', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the reading time of an article or the number of reviews.', 'imageseo' ),
+								'desc'     => __( 'Show the reading time of an article or the number of reviews ( Reading time or Number of reviews (WooCommerce only) ).', 'imageseo' ),
 								'type'     => 'sub_checkbox',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
@@ -442,7 +459,7 @@ class SettingsPage {
 							array(
 								'name'     => 'visibilityAvatar',
 								'std'      => '',
-								'label'    => __( 'Display the author avatar', 'imageseo' ),
+								'label'    => __( 'Author avatar', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Only use for post content', 'imageseo' ),
 								'type'     => 'sub_checkbox',
@@ -490,7 +507,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Background Color', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => '',
+								'desc'     => __( 'Content background color', 'imageseo' ),
 								'type'     => 'colorpicker',
 								'priority' => 30,
 							),
@@ -505,7 +522,7 @@ class SettingsPage {
 							),
 							array(
 								'name'     => 'logoUrl',
-								'std'      => IMAGESEO_DIRURL . 'dist/images/default_logo.png',
+								'std'      => '',
 								'label'    => __( 'Your logo', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => '',
@@ -514,10 +531,10 @@ class SettingsPage {
 							),
 							array(
 								'name'     => 'defaultBgImg',
-								'std'      => IMAGESEO_DIR . 'dist/images/default_image.png',
-								'label'    => __( 'Default background image', 'imageseo' ),
+								'std'      => '',
+								'label'    => __( 'Background image', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => '',
+								'desc'     => __( 'Card\'s background image.', 'imageseo' ),
 								'type'     => 'text',
 								'priority' => 30,
 							),
@@ -536,7 +553,7 @@ class SettingsPage {
 							array(
 								'name'     => 'language',
 								'std'      => '',
-								'label'    => __( 'File names and alt texts', 'imageseo' ),
+								'label'    => __( 'Language', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'In which language should we write your filenames and alternative texts?', 'imageseo' ),
 								'type'     => 'select',
@@ -546,7 +563,7 @@ class SettingsPage {
 							array(
 								'name'     => 'altFilter',
 								'std'      => '',
-								'label'    => __( 'Optimize images', 'imageseo' ),
+								'label'    => __( 'Images', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Which images do you want to optimize?', 'imageseo' ),
 								'type'     => 'select',
@@ -665,98 +682,125 @@ class SettingsPage {
 	 * @since 2.0.9
 	 */
 	public function social_card_preview() {
+		$options     = imageseo_get_options();
+
+		$card_layout = ( isset( $options['layout'] ) && 'CARD_LEFT' === $options['layout'] ) ? 'imageseo-media__layout--card-left' : 'imageseo-media__layout--card-right';
 		?>
 		<div id='imageseo-preview-image'
-		     class="imageseo-media__layout--card-left"
-		     style="border: 1px solid #999;		margin: 0 auto;	background-color: #fff;	">
+		     class="<?php echo esc_attr( $card_layout ) ?> imageseo-media__container imageseo-media__container--preview"
+		     style="border: 1px solid #999;		margin: 0 auto;	background-color: <?php echo esc_attr( $options['contentBackgroundColor'] ) ?>;">
 			<div class='imageseo-media__container__image'
-			     style="background-color: #ccc; backgorund-image: url({settings.defaultBgImg}); backrgroud-position:center center; background-size:cover; background-repeat:no-repeat;">
-				<div class="imageseo-media__container__content--center">
-					<img class='imageseo-media__content__logo' src={settings.logoUrl}/>
-					<div class='imageseo-media__content__title'>
-						Lorem ipsum (post_title)
-					</div>
-					<div class='imageseo-media__content__sub-title'>
-						Sub title (like price or author)
-					</div>
-					<div class='imageseo-media__content__sub-title-two'>
-						Sub title 2 (like price or author)
-					</div>
-					<img class='imageseo-media__content__avatar' src="/images/avatar-default.jpg">
-					<div class='imageseo-media__content__stars flex' style="display:none;">
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill={`${settings.starColor}`}
-							stroke={`${settings.starColor}`}
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<polygon
-								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-						</svg>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill={`${settings.starColor}`}
-							stroke={`${settings.starColor}`}
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<polygon
-								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-						</svg>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill={`${settings.starColor}`}
-							stroke={`${settings.starColor}`}
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<polygon
-								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-						</svg>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill={`${settings.starColor}`}
-							stroke={`${settings.starColor}`}
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<polygon
-								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-						</svg>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill={`${settings.starColor}`}
-							stroke={`${settings.starColor}`}
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						>
-							<polygon
-								points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-						</svg>
-					</div>
+			     style="background-color: #ccc; background-image: url(<?php echo esc_url( $options['defaultBgImg'] ); ?>); background-position:center center; background-size:cover; background-repeat:no-repeat;">
+			</div>
+			<div class="imageseo-media__container__content imageseo-media__container__content--center">
+				<img class='imageseo-media__content__logo' src="<?php echo esc_url( $options['logoUrl'] ) ?>">
+				<div class='imageseo-media__content__title' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
+					Lorem ipsum (post_title)
+				</div>
+				<div class='imageseo-media__content__sub-title' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
+					Sub title (like price or author)
+				</div>
+				<div class='imageseo-media__content__sub-title-two' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
+					Sub title 2 (like price or author)
+				</div>
+				<img class='imageseo-media__content__avatar'
+				     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>">
+				<div class='imageseo-media__content__stars flex'
+				     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && 1 === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					>
+						<polygon
+							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+					</svg>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					>
+						<polygon
+							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+					</svg>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					>
+						<polygon
+							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+					</svg>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					>
+						<polygon
+							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+					</svg>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					>
+						<polygon
+							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+					</svg>
 				</div>
 			</div>
+		</div>
 		<?php
+	}
+
+	public function get_tab_settings( $tab, $section = false ) {
+		$tab_settings = $this->get_settings();
+		$tab_setting  = $tab_settings[ $tab ];
+		$fields       = array();
+		if ( ! empty( $tab_setting['sections'] ) ) {
+			if ( $section  ) {
+				foreach ( $tab_setting['sections'][$section]['fields'] as $field ) {
+					$fields[] = $field['name'];
+				}
+			} else {
+				foreach ( $tab_setting['sections'] as $section ) {
+					foreach ( $section['fields'] as $field ) {
+						$fields[] = $field['name'];
+					}
+				}
+			}
+		}
+
+		return $fields;
 	}
 }
