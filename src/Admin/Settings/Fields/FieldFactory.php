@@ -15,6 +15,7 @@ class FieldFactory {
 
 		// get value
 		$value = imageseo_get_service( 'Option' )->getOption( $option['name'] );
+		$default = ( ! empty( $option['std'] ) ) ? $option['std'] : '';
 
 		// placeholder
 		$placeholder = ( ! empty( $option['placeholder'] ) ) ? $option['placeholder'] : '';
@@ -22,6 +23,9 @@ class FieldFactory {
 		switch ( $option['type'] ) {
 			case 'text':
 				$field = new Text( $option['name'], $value, $placeholder );
+				break;
+			case 'hidden':
+				$field = new Hidden( $option['name'], $default );
 				break;
 			case 'colorpicker':
 				$field = new ColorPicker( $option['name'], $value, $placeholder );

@@ -1,30 +1,20 @@
-import {filter, find, get, groupBy} from "lodash";
-import React, {useContext, useState, useEffect} from "react";
+import { filter, find, get, groupBy } from "lodash";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
-import {SVGLoader} from "../../../svg/Loader";
-import {AlertSimple, IconsAlert} from "../../Alerts/Simple";
+import { SVGLoader } from "../../../svg/Loader";
+import { AlertSimple, IconsAlert } from "../../Alerts/Simple";
 
-import {Toggle} from "../../Toggle";
+import { Toggle } from "../../Toggle";
 
 //@ts-ignore
-const {__} = wp.i18n;
+const { __ } = wp.i18n;
 
-function /**/GlobalSettings() {
+function GlobalSettings() {
 	const [loading, setLoading] = useState(false);
-	// Get options from th database using REST API and fetch
-	const dbOpts = fetch('https://raldea.ro/wp-json/imageseo/v1/settings_db_options')
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json();
-		});
-
 	//@ts-ignore
-	const [options, setOptions] = useState(dbOpts);
+	const [options, setOptions] = useState(IMAGESEO_DATA.OPTIONS);
 
 	const handleClickAltWriteUpload = () => {
-
 		setOptions({
 			...options,
 			active_alt_write_upload: !get(
@@ -33,9 +23,7 @@ function /**/GlobalSettings() {
 				true
 			),
 		});
-
 	};
-
 	const handleClickRenameWriteUpload = () => {
 		setOptions({
 			...options,
@@ -82,7 +70,6 @@ function /**/GlobalSettings() {
 			icon: "success",
 			confirmButtonText: __("Close", "imageseo"),
 		});
-
 	};
 
 	return (
@@ -181,7 +168,7 @@ function /**/GlobalSettings() {
 				className="mb-4 w-full inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 max-w-2xl"
 				onClick={handleSubmit}
 			>
-				{loading && <SVGLoader className="mr-2"/>}
+				{loading && <SVGLoader className="mr-2" />}
 				{__("Save global settings", "imageseo")}
 			</button>
 

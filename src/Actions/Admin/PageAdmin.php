@@ -21,7 +21,7 @@ class PageAdmin
 
     public function hooks()
     {
-        add_action('admin_menu', [$this, 'pluginMenu']);
+        //add_action('admin_menu', [$this, 'pluginMenu']);
         add_action('admin_head', [$this, 'menuOrderCount']);
     }
 

@@ -22,6 +22,8 @@ class Register
             exit;
         }
 
+		check_ajax_referer('imageseo_ajax_nonce', '_wpnonce');
+
         if (!isset($_POST['email'], $_POST['password'], $_POST['lastname'], $_POST['firstname'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',

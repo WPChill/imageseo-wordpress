@@ -57,11 +57,17 @@ class SettingsPage {
 	 * @see admin_menu
 	 */
 	public function pluginMenu() {
-
-		add_submenu_page( 'admin.php??page=imageseo-settings', 'Settings', 'Settings', 'manage_options', 'imageseo-settings-page', array(
-			$this,
-			'imageseo_settings'
-		),                16 );
+		add_menu_page(
+			'Image SEO',
+			'Image SEO',
+			'manage_options',
+			Pages::SETTINGS,
+			array(
+				$this,
+				'imageseo_settings'
+			),
+			'dashicons-imageseo-logo'
+		);
 	}
 
 	/**
@@ -90,14 +96,15 @@ class SettingsPage {
 	 * @return string
 	 */
 	public static function get_url() {
-		return admin_url( 'admin.php?page=imageseo-settings-page' );
+		return admin_url( 'admin.php?page=imageseo-settings' );
 	}
 
 	/**
 	 * @param array $settings
 	 */
 	private function generate_tabs( $settings ) {
-
+		$user    = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
+		$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php
@@ -107,6 +114,8 @@ class SettingsPage {
 
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
+
+			echo '<div class="imageseo-remaining-credits">' . __( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits">' . absint( $credits ) . '</span></div>';
 			?>
 		</h2>
 		<?php
@@ -122,6 +131,16 @@ class SettingsPage {
 		$settings       = $this->get_settings();
 		$tab            = $this->get_active_tab();
 		$active_section = $this->get_active_section( $settings[ $tab ]['sections'] );
+		$options        = imageseo_get_options();
+		if ( ! empty( $options['api_key'] ) && isset( $options['allowed'] ) && $options['allowed'] ) {
+			?>
+			<style>
+				tr[data-setting="register_account"], tr[data-setting='register_first_name'], tr[data-setting='register_last_name'], tr[data-setting='register_email'], tr[data-setting='register_password'], tr[data-setting='terms'], tr[data-setting='newsletter'], tr[data-setting='register_account'] {
+					display: none;
+				}
+			</style>
+			<?php
+		}
 
 		?>
 		<div class="wrap imageseo-admin-settings <?php echo esc_attr( $tab ) . ' ' . esc_attr( $active_section ); ?>">
@@ -164,6 +183,7 @@ class SettingsPage {
 						echo '<table class="form-table imageseo-' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-tab" value="' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-section" value="' . esc_attr( $active_section ) . '">';
+						echo '<input type="hidden" id="imageseo-nonce" name="_nonce" value="' . wp_create_nonce( 'imageseo_ajax_nonce' ) . '">';
 
 						foreach ( $settings[ $tab ]['sections'][ $active_section ]['fields'] as $option ) {
 
@@ -325,6 +345,13 @@ class SettingsPage {
 							),
 							array(
 								'name'     => 'manage_account',
+								'std'      => '',
+								'title'    => __( 'Manage account', 'imageseo' ),
+								'type'     => 'title',
+								'priority' => 30,
+							),
+							array(
+								'name'     => 'go_to_application',
 								'std'      => '',
 								'label'    => __( 'Go to application', 'imageseo' ),
 								'cb_label' => '',
@@ -654,7 +681,7 @@ class SettingsPage {
 			return;
 		}
 
-		if ( 'admin_page_imageseo-settings-page' !== $current_screen->base ) {
+		if ( 'admin_page_imageseo-settings' !== $current_screen->base ) {
 			return;
 		}
 		$bulk_settings = get_option( '_imageseo_bulk_process_settings', false );
@@ -682,103 +709,108 @@ class SettingsPage {
 	 * @since 2.0.9
 	 */
 	public function social_card_preview() {
-		$options     = imageseo_get_options();
+		$options = imageseo_get_options();
 
 		$card_layout = ( isset( $options['layout'] ) && 'CARD_LEFT' === $options['layout'] ) ? 'imageseo-media__layout--card-left' : 'imageseo-media__layout--card-right';
 		?>
 		<div id='imageseo-preview-image'
 		     class="<?php echo esc_attr( $card_layout ) ?> imageseo-media__container imageseo-media__container--preview"
-		     style="border: 1px solid #999;		margin: 0 auto;	background-color: <?php echo esc_attr( $options['contentBackgroundColor'] ) ?>;">
+		     style="border: 1px solid #999;        margin: 0 auto;    background-color: <?php echo esc_attr( $options['contentBackgroundColor'] ) ?>;">
 			<div class='imageseo-media__container__image'
 			     style="background-color: #ccc; background-image: url(<?php echo esc_url( $options['defaultBgImg'] ); ?>); background-position:center center; background-size:cover; background-repeat:no-repeat;">
 			</div>
 			<div class="imageseo-media__container__content imageseo-media__container__content--center">
 				<img class='imageseo-media__content__logo' src="<?php echo esc_url( $options['logoUrl'] ) ?>">
-				<div class='imageseo-media__content__title' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
+				<div class='imageseo-media__content__title'
+				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;">
 					Lorem ipsum (post_title)
 				</div>
-				<div class='imageseo-media__content__sub-title' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
-					Sub title (like price or author)
-				</div>
-				<div class='imageseo-media__content__sub-title-two' style="color:<?php echo esc_attr( $options['textColor'] ) ?>">
-					Sub title 2 (like price or author)
-				</div>
-				<img class='imageseo-media__content__avatar'
-				     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>">
-				<div class='imageseo-media__content__stars flex'
-				     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && 1 === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<polygon
-							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-					</svg>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<polygon
-							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-					</svg>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<polygon
-							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-					</svg>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<polygon
-							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-					</svg>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-						stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<polygon
-							points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-					</svg>
-				</div>
+				<div class='imageseo-media__content__sub-title'
+				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitle'] ) && '1' === $options['social_media_settings']['visibilitySubTitle'] ) ? '' : 'display:none;' ?>;"
+				">
+				Sub title (like price or author)
 			</div>
+			<div class='imageseo-media__content__sub-title-two'
+			     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && '1' === $options['social_media_settings']['visibilitySubTitleTwo'] ) ? '' : 'display:none;' ?>;">
+				Sub title 2 (like price or author)
+			</div>
+			<img class='imageseo-media__content__avatar'
+			     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>"
+			     style="<?php echo ( isset( $options['social_media_settings']['visibilityAvatar'] ) && '1' === $options['social_media_settings']['visibilityAvatar'] ) ? '' : 'display:none;' ?>">
+			<div class='imageseo-media__content__stars flex'
+			     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && '1' === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					width='24'
+					height='24'
+					viewBox='0 0 24 24'
+					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				>
+					<polygon
+						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+				</svg>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					width='24'
+					height='24'
+					viewBox='0 0 24 24'
+					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				>
+					<polygon
+						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+				</svg>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					width='24'
+					height='24'
+					viewBox='0 0 24 24'
+					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				>
+					<polygon
+						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+				</svg>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					width='24'
+					height='24'
+					viewBox='0 0 24 24'
+					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				>
+					<polygon
+						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+				</svg>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					width='24'
+					height='24'
+					viewBox='0 0 24 24'
+					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
+					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				>
+					<polygon
+						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+				</svg>
+			</div>
+		</div>
 		</div>
 		<?php
 	}
@@ -788,8 +820,8 @@ class SettingsPage {
 		$tab_setting  = $tab_settings[ $tab ];
 		$fields       = array();
 		if ( ! empty( $tab_setting['sections'] ) ) {
-			if ( $section  ) {
-				foreach ( $tab_setting['sections'][$section]['fields'] as $field ) {
+			if ( $section ) {
+				foreach ( $tab_setting['sections'][ $section ]['fields'] as $field ) {
 					$fields[] = $field['name'];
 				}
 			} else {
