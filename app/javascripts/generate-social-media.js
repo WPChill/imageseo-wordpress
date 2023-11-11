@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			method: "POST",
 			data: {
 				action: "imageseo_check_current_process",
-				post_id: postId
+				post_id: postId,
+				_wpnonce:imageseo_ajax_nonce
 			},
 			success: response => {
 				const {
@@ -45,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				method: "POST",
 				data: {
 					action: "imageseo_generate_social_media",
-					post_id: $(this).data("id")
+					post_id: $(this).data("id"),
+					_wpnonce:imageseo_ajax_nonce
 				},
 				success: () => {
 					handlePingCurrent = setInterval(

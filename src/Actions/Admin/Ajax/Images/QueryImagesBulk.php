@@ -142,6 +142,7 @@ class QueryImagesBulk
 
     public function query()
     {
+		check_ajax_referer( 'imageseo_ajax_nonce', '_wpnonce');
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
@@ -214,7 +215,7 @@ class QueryImagesBulk
 	 */
 	private function images_query() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.', 'imageseo' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'imageseo' ) );
 		}
 
 		$options = imageseo_get_service( 'Option' )->getOptions();
@@ -294,13 +295,13 @@ class QueryImagesBulk
 		echo '<div class="card">';
 		// If there are no images found that require optimization then display a message and return.
 		if ( 0 === $total_images ) {
-			echo __( 'No images that require optimization found. Good job!', 'imageseo' );
+			echo esc_html__( 'No images that require optimization found. Good job!', 'imageseo' );
 			echo '</div>';
 			return;
 		}
-		echo sprintf( __( 'You have optimized %s images out of %s.', 'imageseo' ), $optimized, $total_images );
+		echo sprintf( esc_html__( 'You have optimized %s images out of %s.', 'imageseo' ), absint( $optimized ), absint( $total_images ) );
 		if ( 0 !== $non_optimized ) {
-			echo sprintf( __( 'Remaining %s which will consume %s credit(s).', 'imageseo' ), $non_optimized, $non_optimized );
+			echo sprintf( esc_html__( 'Remaining %s which will consume %s credit(s).', 'imageseo' ), absint( $non_optimized ), absint( $non_optimized ) );
 		}
 		echo '</div>';
 		echo '<script type="text/javascript">imageseo_bulk_images = ' . json_encode( $result ) . ';</script>';

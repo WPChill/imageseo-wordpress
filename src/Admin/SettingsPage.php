@@ -115,7 +115,7 @@ class SettingsPage {
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
 
-			echo '<div class="imageseo-remaining-credits">' . __( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits">' . absint( $credits ) . '</span></div>';
+			echo '<div class="imageseo-remaining-credits">' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits">' . absint( $credits ) . '</span></div>';
 			?>
 		</h2>
 		<?php
@@ -183,7 +183,7 @@ class SettingsPage {
 						echo '<table class="form-table imageseo-' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-tab" value="' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-section" value="' . esc_attr( $active_section ) . '">';
-						echo '<input type="hidden" id="imageseo-nonce" name="_nonce" value="' . wp_create_nonce( 'imageseo_ajax_nonce' ) . '">';
+						echo '<input type="hidden" id="imageseo-nonce" name="_nonce" value="' . wp_create_nonce( 'imageseo_ajax_nonce' ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput
 
 						foreach ( $settings[ $tab ]['sections'][ $active_section ]['fields'] as $option ) {
 
@@ -693,7 +693,7 @@ class SettingsPage {
 		// Display a notice with the bulk process status
 		?>
 		<div class="notice notice-info is-dismissible">
-			<p><?php echo sprintf( esc_html__( 'Optimizing %s images', 'imageseo' ), $bulk_settings['total_images'] ); ?></p>
+			<p><?php echo sprintf( esc_html__( 'Optimizing %s images', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?></p>
 			<button id="get_bulk_process" class="button button-primary">Show current status</button>
 			<button id='stop_bulk_process' class="button button-primary">Stop bulk process</button>
 			<button type="button" class="notice-dismiss"><span

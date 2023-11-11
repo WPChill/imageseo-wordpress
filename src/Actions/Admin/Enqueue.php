@@ -50,12 +50,14 @@ class Enqueue
             return;
         }
 
-        if (in_array($page, ['upload.php'], true)) {
-            wp_enqueue_script('imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', ['jquery', 'wp-i18n']);
-        }
+	    if ( in_array( $page, [ 'upload.php' ], true ) ) {
+		    wp_enqueue_script( 'imageseo-admin-js', IMAGESEO_URL_DIST . '/media-upload.js', [ 'jquery', 'wp-i18n' ] );
+		    wp_add_inline_script( 'imageseo-admin-js', 'const imageseo_upload_nonce = ' . wp_create_nonce( 'imageseo_upload_nonce' ) . ';', 'before' );
+	    }
 
         if (in_array($page, ['post.php'], true)) {
             wp_enqueue_script('imageseo-admin-generate-social-media-js', IMAGESEO_URL_DIST . '/generate-social-media.js', ['jquery'], IMAGESEO_VERSION, true);
+	        wp_add_inline_script( 'imageseo-admin-js', 'const imageseo_ajax_nonce = ' . wp_create_nonce( 'imageseo_ajax_nonce' ) . ';', 'before' );
         }
     }
 }

@@ -90,6 +90,8 @@ class MediaLibrary
 
     public function ajaxAltUpdate()
     {
+	    check_ajax_referer( 'imageseo_upload_nonce', '_nonce' );
+
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
@@ -129,24 +131,24 @@ class MediaLibrary
                 <?php
             } ?>
 
-            <div id="wrapper-imageseo-alt-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-alt">
+            <div id="wrapper-imageseo-alt-<?php echo esc_attr( $attachmentId ); ?>" class="wrapper-imageseo-input-alt">
                 <input
                     type="text"
                     name="imageseo-alt"
-                    data-id="<?php echo $attachmentId; ?>"
+                    data-id="<?php echo esc_attr( $attachmentId ); ?>"
                     class="imageseo-alt-ajax large-text"
-                    id="imageseo-alt-<?php echo $attachmentId; ?>"
-                    value="<?php echo $alt; ?>"
-                    placeholder="<?php echo esc_html('Enter alt attribute', 'imageseo'); ?>"
+                    id="imageseo-alt-<?php echo esc_attr( $attachmentId ); ?>"
+                    value="<?php echo esc_attr( $alt ); ?>"
+                    placeholder="<?php echo esc_attr('Enter alt attribute', 'imageseo'); ?>"
                 />
-                <button class="button" data-id="<?php echo $attachmentId; ?>">
-                    <span><?php _e('Submit', 'imageseo'); ?></span>
+                <button class="button" data-id="<?php echo esc_attr( $attachmentId ); ?>">
+                    <span><?php esc_html_e('Submit', 'imageseo'); ?></span>
                     <div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
                 </button>
             </div>
             <br />
-            <a id="imageseo-analyze-<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId), 'imageseo_generate_alt')); ?>" class="button button-primary">
-                <?php _e('Generate alt automatically', 'imageseo'); ?>
+            <a id="imageseo-analyze-<?php echo esc_attr( $attachmentId ); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId), 'imageseo_generate_alt')); ?>" class="button button-primary">
+                <?php esc_html_e('Generate alt automatically', 'imageseo'); ?>
             </a>
         </div>
         <?php
@@ -157,26 +159,26 @@ class MediaLibrary
         $oldMetadata = get_post_meta($attachmentId, '_old_wp_attached_file', true); ?>
         <div class="media-column-imageseo">
             <span class="text" style="margin-bottom:5px; display:block;"><?php esc_html_e('Choose a new file name.', 'imageseo'); ?></span>
-            <div id="wrapper-imageseo-filename-<?php echo $attachmentId; ?>" class="wrapper-imageseo-input-filename">
+            <div id="wrapper-imageseo-filename-<?php echo esc_attr( $attachmentId ); ?>" class="wrapper-imageseo-input-filename">
                 <input
                     type="text"
                     name="imageseo-filename"
-                    data-id="<?php echo $attachmentId; ?>"
+                    data-id="<?php echo esc_attr( $attachmentId ); ?>"
                     class="imageseo-filename-ajax large-text"
-                    id="imageseo-filename-<?php echo $attachmentId; ?>"
-                    value="<?php echo $filename; ?>"
+                    id="imageseo-filename-<?php echo esc_attr( $attachmentId ); ?>"
+                    value="<?php echo esc_attr( $filename ); ?>"
                     placeholder="<?php echo esc_html('Enter NEW filename', 'imageseo'); ?>"
                 />
-                <button class="button" data-id="<?php echo $attachmentId; ?>">
-                    <span><?php _e('Submit', 'imageseo'); ?></span>
+                <button class="button" data-id="<?php echo esc_attr( $attachmentId ); ?>">
+                    <span><?php esc_html_e('Submit', 'imageseo'); ?></span>
                     <div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
                 </button>
 
             </div>
-            <span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo $attachmentId; ?>"></span>
+            <span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo esc_attr( $attachmentId ); ?>"></span>
             <br />
-            <a id="imageseo-rename-file<?php echo $attachmentId; ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
-                <?php echo __('Rename file automatically', 'imageseo'); ?>
+            <a id="imageseo-rename-file<?php echo esc_attr( $attachmentId ); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
+                <?php echo esc_html__('Rename file automatically', 'imageseo'); ?>
             </a>
 
         </div>

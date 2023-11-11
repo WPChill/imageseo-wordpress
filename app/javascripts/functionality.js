@@ -49,6 +49,12 @@ class imageSEO_Bulk {
 		formData.append("optimizeAlt", optimizeAlt);
 		formData.append("optimizeFile", optimizeFile);
 		formData.append("altFilter", altFilter);
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		//@ts-ignore
 		formData.append("wantValidateResult", false);
 		//@ts-ignore
@@ -66,6 +72,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_restart_bulk");
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
 			method: "POST",
@@ -79,6 +91,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_get_preview_bulk");
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
 			method: "POST",
@@ -92,6 +110,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_get_current_bulk");
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
 			method: "POST",
@@ -113,6 +137,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_stop_bulk");
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
 			method: "POST",
@@ -131,6 +161,12 @@ class imageSEO_Bulk {
 
 		formData.append("action", "imageseo_query_images");
 		formData.append("filters", JSON.stringify(get(options, "filters", {})));
+		formData.append(
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 
 		const response = await fetch(ajaxurl, {
 			method: "POST",

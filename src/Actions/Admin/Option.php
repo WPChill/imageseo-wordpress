@@ -32,7 +32,7 @@ class Option {
 			return;
 		} ?>
 		<div class="notice notice-success">
-			<p><?php _e( 'Your settings have been saved.', 'imageseo' ); ?></p>
+			<p><?php esc_html_e( 'Your settings have been saved.', 'imageseo' ); ?></p>
 		</div>
 		<?php
 	}
@@ -64,6 +64,11 @@ class Option {
 	 * @return array
 	 */
 	public function sanitizeOptions( $options ) {
+		// Verify nonce
+		if ( ! isset( $_POST['imageseo-nonce'] ) || ! wp_verify_nonce( $_POST['imageseo-nonce'], 'imageseo_ajax_nonce' ) ) {
+			wp_die( esc_html__( 'Cheatin&#8217; uh?', 'imageseo' ) );
+		}
+
 		if ( ! isset( $_POST['action'] ) || ( 'update' !== $_POST['action'] && 'imageseo_social_media_settings_save' !== $_POST['action'] && 'imageseo_valid_api_key' !== $_POST['action'] ) ) {
 			return $options;
 		}

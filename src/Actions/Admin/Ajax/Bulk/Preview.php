@@ -65,6 +65,7 @@ class Preview
 
     public function process()
     {
+	    check_ajax_referer('imageseo_ajax_nonce', '_wpnonce');
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',

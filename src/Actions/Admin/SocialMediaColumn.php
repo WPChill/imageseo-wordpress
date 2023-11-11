@@ -76,10 +76,10 @@ class SocialMediaColumn
 
                 if (!$url && !$this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
-                    <p><?php _e('No social image', 'imageseo'); ?></p>
+                    <p><?php esc_html_e('No social image', 'imageseo'); ?></p>
                     <?php if (!$limitExcedeed) { ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" class="button">
-                            <?php _e('Generate', 'imageseo'); ?>
+                            <?php esc_html_e('Generate', 'imageseo'); ?>
                         </a>
                     <?php } else { ?>
                         <a
@@ -87,35 +87,35 @@ class SocialMediaColumn
                             target="_blank"
                             href="https://app.imageseo.io/plan"
                         >
-                            <?php _e('Get more credits', 'imageseo'); ?>
+                            <?php esc_html_e('Get more credits', 'imageseo'); ?>
                         </a>
                     <?php } ?>
                     <?php
                 } elseif (!$url && $this->imageSocialService->isCurrentProcess($postId)) {
                     ?>
                      <img
-                        src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
+                        src="<?php echo esc_url( IMAGESEO_URL_DIST ); ?>/images/rotate-cw.svg"
                         style="animation:imageseo-rotation 1s infinite linear;"
                     />
-                    <?php _e('Current loading... Reload the page.', 'imageseo'); ?>
+                    <?php esc_html_e('Current loading... Reload the page.', 'imageseo'); ?>
                     <?php
                 } elseif ($url) {
                     if ($this->imageSocialService->isCurrentProcess($postId)) {
                         ?>
                          <img
-                            src="<?php echo IMAGESEO_URL_DIST; ?>/images/rotate-cw.svg"
+                            src="<?php echo esc_url( IMAGESEO_URL_DIST ); ?>/images/rotate-cw.svg"
                             style="animation:imageseo-rotation 1s infinite linear;"
                         />
-                        <?php _e('Current regeneration...', 'imageseo'); ?>
+                        <?php esc_html_e('Current regeneration...', 'imageseo'); ?>
                         <?php
                     } ?>
                     <div>
-                        <img src="<?php echo $url; ?>" width="100" style="object-fit:contain;" />
+                        <img src="<?php echo esc_url( $url ); ?>" width="100" style="object-fit:contain;" />
                     </div>
 
                     <?php if (!$limitExcedeed) { ?>
                         <a href="<?php echo esc_url($adminGenerateUrl); ?>" style="display:inline-block;">
-                            <?php _e('Update', 'imageseo'); ?>
+                            <?php esc_html_e('Update', 'imageseo'); ?>
                         </a>
                     <?php } ?>
                     <?php
