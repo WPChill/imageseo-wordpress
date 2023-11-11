@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
 				action: "imageseo_media_alt_update",
 				post_id: attachment,
 				alt: alt_text,
-				_nonce:imageseo_upload_nonce
+				_nonce: imageseo_upload_nonce
 			},
 			function () {
 				if (alert) {

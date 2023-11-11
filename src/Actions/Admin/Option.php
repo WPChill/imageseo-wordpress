@@ -65,7 +65,7 @@ class Option {
 	 */
 	public function sanitizeOptions( $options ) {
 		// Verify nonce
-		if ( ! isset( $_POST['imageseo-nonce'] ) || ! wp_verify_nonce( $_POST['imageseo-nonce'], 'imageseo_ajax_nonce' ) ) {
+		if ( ! isset( $_POST['_nonce'] ) || ! wp_verify_nonce( $_POST['_nonce'], 'imageseo_ajax_nonce' ) ) {
 			wp_die( esc_html__( 'Cheatin&#8217; uh?', 'imageseo' ) );
 		}
 
