@@ -104,7 +104,7 @@ class imageSEO_Bulk {
 			const optimized = json_response.data.current.id_images_optimized;
 			$wrapper.find('.imageseo-bulk-process-status').remove();
 			if ('undefined' !== typeof optimized) {
-				$wrapper.append('<p class="imageseo-bulk-process-status">Optimized images:' + optimized.length + '</p>');
+				$wrapper.append('<p class="imageseo-bulk-process-status">' + __('Optimized images:', 'imageseo') + optimized.length + '</p>');
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class imageSEO_Bulk {
 		let json_response = await response.json();
 		button.removeAttr('disabled');
 		if (json_response.success) {
-			$wrapper.append('<p>Bulk process stopped.</p>');
+			$wrapper.append('<p>' + __('Bulk process stopped.', 'imageseo') + '</p>');
 		}
 	}
 
@@ -148,6 +148,7 @@ class imageseo_Settings {
 	constructor() {
 		this.init();
 		this.setConditions();
+		this.createFilePicker();
 	}
 
 	init() {
@@ -212,19 +213,19 @@ class imageseo_Settings {
 		jQuery('#setting-defaultBgImg').on('change', function (e) {
 			const $this = jQuery(this),
 				  $val  = $this.val();
-			instance.socialCard.find('.imageseo-media__container__image').css('background-image', $val);
+			instance.socialCard.find('.imageseo-media__container__image').css('background-image', 'url( ' + $val + ')');
 		});
 
 		instance.setColorPickers();
 
 		jQuery('table.imageseo-bulk_optimizations').find('input,select').on('change', function (e) {
-			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<p>Please save changes in order to start the optimization process.</p>');
+			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<p>' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</p>');
 		});
 
 		jQuery('#register_account').on('click', function (e) {
 			e.preventDefault();
-			const button = jQuery(this),
-				  data   = {
+			const button   = jQuery(this),
+				  data     = {
 					  firstname  : jQuery('#setting-register_first_name').val(),
 					  lastname   : jQuery('#setting-register_last_name').val(),
 					  password   : jQuery('#setting-register_password').val(),
@@ -243,10 +244,10 @@ class imageseo_Settings {
 					jQuery('#setting-api_key').val(api_key);
 					instance.validateApiKey(api_key);
 				} else {
-					if ( 'unknown_error' !==  response.data.code ) {
+					if ('unknown_error' !== response.data.code) {
 						button.after('<p>' + response.data.code + '</p>');
 					} else {
-						button.after('<p>There was an error processing your request. Please try again later.</p>');
+						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
 					}
 				}
 			});
@@ -308,7 +309,7 @@ class imageseo_Settings {
 		const json_response = await response.json();
 		if (json_response.success) {
 			if (json_response.data.user.is_active) {
-				jQuery('#setting-api_key').closest('tr').append('<p>API key is valid.</p>');
+				jQuery('#setting-api_key').closest('tr').append('<p>' + __('API key is valid.', 'imageseo') + '</p>');
 				setTimeout(function () {
 					window.location.reload();
 				}, 3000);
@@ -319,22 +320,22 @@ class imageseo_Settings {
 	checkRegisterFormData(data) {
 		const instance = this;
 		if (!data.firstname) {
-			return {success: false, code: 'Please enter your firstname'};
+			return {success: false, code: __('Please enter your first name', 'imageseo')};
 		}
 		if (!data.lastname) {
-			return {success: false, code: 'Please enter your lastname'};
+			return {success: false, code: __('Please enter your last name', 'imageseo')};
 		}
 		if (!data.email) {
-			return {success: false, code: 'Please enter your email'};
+			return {success: false, code: __('Please enter your email', 'imageseo')};
 		}
 		if (!data.password) {
-			return {success: false, code: 'Please enter your password'};
+			return {success: false, code: __('Please enter your password', 'imageseo')};
 		}
 		if (!data.terms) {
-			return {success: false, code: 'Please accept the terms and conditions'};
+			return {success: false, code: __('Please accept the terms and conditions', 'imageseo')};
 		}
 		if (!instance.checkIfEmail(data.email)) {
-			return {success: false, error: true, code: 'Please enter a valid email address'};
+			return {success: false, error: true, code: __('Please enter a valid email address', 'imageseo')};
 		}
 		return {success: true};
 	}
@@ -351,11 +352,11 @@ class imageseo_Settings {
 
 		formData.append("action", "imageseo_register");
 		formData.append(
-		 "_wpnonce",
-		 document
-		 .querySelector("#imageseo-nonce")
-		 .getAttribute("value")
-		 );
+			"_wpnonce",
+			document
+				.querySelector("#imageseo-nonce")
+				.getAttribute("value")
+		);
 		formData.append("firstname", data.firstname);
 		formData.append("lastname", data.lastname);
 		formData.append("email", data.email);
@@ -380,6 +381,31 @@ class imageseo_Settings {
 		if (!jQuery('#setting-optimizeAlt').is(':checked')) {
 			jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').hide();
 		}
+	}
+
+	createFilePicker() {
+		jQuery('.imageseo-file-picker').click(function (e) {
+			e.preventDefault();
+			const button = jQuery(this),
+				  frame  = wp.media(
+					  {
+						  button  : {
+							  text: 'Select'
+						  },
+						  multiple: false
+					  }
+				  );
+
+			// When a file is selected, run a callback
+			frame.on('select', function () {
+				const attachment = frame.state().get('selection').first().toJSON();
+				// Do something with the selected file URL, e.g., insert it into a text field
+				button.closest('.imageseo-file-picker-wrapper').find('.imageseo-file-picker-src').val(attachment.url).change();
+				button.closest('.imageseo-file-picker-wrapper').find('.imageseo-file-picker-image').attr('src', attachment.url).change();
+			});
+
+			frame.open();
+		});
 	}
 }
 

@@ -8,6 +8,7 @@ Author URI: https://imageseo.io/
 Text Domain: imageseo
 Domain Path: /languages/
 Version: 2.0.7
+Requires at least: 5.0
 License: GPLv2
 */
 

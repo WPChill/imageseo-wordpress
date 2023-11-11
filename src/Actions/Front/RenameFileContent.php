@@ -43,39 +43,13 @@ class RenameFileContent
         return false;
     }
 
-    /**
-     * @deprecated 2.0.0
-     *
-     * @return void
-     */
-    public function hooks()
-    {
-        // if (is_admin() &&
-        // (!wp_doing_ajax() || (wp_doing_ajax() && isset($_SERVER['HTTP_REFERER']) && false !== strpos($_SERVER['HTTP_REFERER'], 'wp-admin')))) {
-        //     return;
-        // }
-        // if (is_admin() && (!wp_doing_ajax() || $this->no_translate_action_ajax())) {
-        //     return;
-        // }
-
-        // add_action('init', [$this, 'updateContentFile'], 12);
-    }
-
-    public function updateContentFile()
-    {
-        if (!apply_filters('imageseo_frontend_active_rename_file', true)) {
-            return;
-        }
-
-        $file = apply_filters('imageseo_debug_file', IMAGESEO_DIR . '/content.html');
-
-        if (false && file_exists($file)) {
-            echo $this->update(file_get_contents($file));
-            exit;
-        } else {
-            ob_start([$this, 'update']);
-        }
-    }
+	/**
+	 * @return void
+	 * @deprecated 2.0.0
+	 *
+	 */
+	public function hooks() {
+	}
 
     public function getAttachmentIdByUrl($url)
     {

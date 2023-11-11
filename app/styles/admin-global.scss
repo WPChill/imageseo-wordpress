@@ -706,3 +706,19 @@ WPCHill Tooltips
 	text-decoration: none;
 	white-space: nowrap;
 }
+
+.imageseo-file-picker-wrapper {
+	max-width:300px;
+	width:auto;
+	height:auto;
+	max-height:300px;
+	display:block;
+	.imageseo-file-picker-image {
+		display: block;
+		max-width: 100%;
+		width: auto;
+		height: auto;
+		position: relative;
+		max-height: 250px;
+	}
+}

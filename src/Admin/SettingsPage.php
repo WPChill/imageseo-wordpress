@@ -550,10 +550,10 @@ class SettingsPage {
 							array(
 								'name'     => 'logoUrl',
 								'std'      => '',
-								'label'    => __( 'Your logo', 'imageseo' ),
+								'label'    => __( 'Logo', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => '',
-								'type'     => 'text',
+								'type'     => 'file_picker',
 								'priority' => 30,
 							),
 							array(
@@ -562,7 +562,7 @@ class SettingsPage {
 								'label'    => __( 'Background image', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Card\'s background image.', 'imageseo' ),
-								'type'     => 'text',
+								'type'     => 'file_picker',
 								'priority' => 30,
 							),
 						)
@@ -681,7 +681,7 @@ class SettingsPage {
 			return;
 		}
 
-		if ( 'admin_page_imageseo-settings' !== $current_screen->base ) {
+		if ( 'toplevel_page_imageseo-settings' !== $current_screen->base ) {
 			return;
 		}
 		$bulk_settings = get_option( '_imageseo_bulk_process_settings', false );

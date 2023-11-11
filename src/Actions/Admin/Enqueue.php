@@ -16,90 +16,18 @@ class Enqueue
     {
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueCSS']);
-        add_action('admin_enqueue_scripts', [$this, 'application']);
-	    add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-        // add_action('admin_enqueue_scripts', [$this, 'wizard']);
     }
 
-	public function register_routes() {
-		// The REST route for downloads reports.
-		register_rest_route(
-			'imageseo/v1',
-			'/settings_db_options',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array( $this, 'rest_settings_db' ),
-				//'permission_callback' => array( $this, 'check_api_rights' ),
-			)
-		);
-	}
-
 	/**
-	 * Check if the user has the right to use the API.
+	 * Enqueue admin CSS
 	 *
-	 * @param WP_REST_Request $request The request.
+	 * @see admin_enqueue_scripts
 	 *
-	 * @return bool
+	 * @param string $page
 	 */
-	public function check_api_rights() {
-
-		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
-			return new \WP_Error(
-				'rest_forbidden_context',
-				esc_html__( 'Sorry, you are not allowed to see data from this endpoint.', 'download-monitor' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
-		return true;
+	public function adminEnqueueCSS( $page ) {
+		wp_enqueue_style( 'imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global.css', [], IMAGESEO_VERSION );
 	}
-
-	/**
-	 * Get the settings from the database.
-	 *
-	 * @param WP_REST_Request $request The request.
-	 *
-	 * @return bool
-	 */
-	public function rest_settings_db() {
-		$options = imageseo_get_service( 'Option' )->getOptions();
-
-		return $this->respond( $options );
-	}
-
-	/**
-	 * Send our data
-	 *
-	 * @param $data JSON data received from report_stats.
-	 *
-	 * @return WP_REST_Response
-	 * @since 4.6.0
-	 */
-	public function respond( $data ) {
-
-		$result = new \WP_REST_Response( $data, 200 );
-
-		$result->set_headers(
-			array(
-				// @todo : comment this and if people complain about the performance, we can add it back.
-				//'Cache-Control' => 'max-age=3600, s-max-age=3600',
-				'Content-Type'  => 'application/json',
-			)
-		);
-
-		return $result;
-	}
-
-    public function adminEnqueueCSS($page)
-    {
-        wp_enqueue_style('imageseo-admin-global-css', IMAGESEO_URL_DIST . '/css/admin-global.css', [], IMAGESEO_VERSION);
-
-        if (!in_array($page, ['edit.php', 'toplevel_page_' . Pages::SETTINGS, 'image-seo_page_imageseo-optimization', 'upload.php', 'post.php', 'image-seo_page_imageseo-options', 'image-seo_page_imageseo-social-media'], true)) {
-            return;
-        }
-
-        wp_enqueue_style('imageseo-admin-css', IMAGESEO_URL_DIST . '/css/imageseo-tw.css', [], IMAGESEO_VERSION);
-    }
 
     /**
      * @see admin_enqueue_scripts
@@ -109,10 +37,12 @@ class Enqueue
     public function adminEnqueueScripts($page)
     {
 	    // Enqueue new admin functionality script
-	    if ( 'admin_page_imageseo-settings' === $page ) {
+	    if ( 'toplevel_page_imageseo-settings' === $page ) {
+		    wp_enqueue_media();
 		    wp_enqueue_script( 'imageseo-functionality', IMAGESEO_URL_DIST . '/functionality.js', array(
 			    'jquery',
 			    'wp-color-picker',
+			    'wp-i18n'
 		    ),                 IMAGESEO_VERSION, true );
 		    wp_enqueue_style( 'wp-color-picker' );
 	    }
@@ -127,117 +57,5 @@ class Enqueue
         if (in_array($page, ['post.php'], true)) {
             wp_enqueue_script('imageseo-admin-generate-social-media-js', IMAGESEO_URL_DIST . '/generate-social-media.js', ['jquery'], IMAGESEO_VERSION, true);
         }
-    }
-
-    public function application($page)
-    {
-        if (!in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {
-            return;
-        }
-
-        $apiKey = imageseo_get_option('api_key');
-        if (isset($_GET['wizard']) && !$apiKey) {
-            return;
-        }
-
-        $owner = imageseo_get_service('ClientApi')->getOwnerByApiKey();
-        $options = imageseo_get_service('Option')->getOptions();
-        $languages = imageseo_get_service('ClientApi')->getLanguages();
-
-        $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
-        $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
-        $currentProcessed = get_option('_imageseo_bulk_process_settings');
-        $lastBulkProcess = get_option('_imageseo_pause_bulk_process');
-
-        $limitImages = 10;
-        if (null !== $owner && isset($owner['plan']['limit_images'])) {
-            $limitImages = $owner['plan']['limit_images'] + $owner['bonus_stock_images'];
-        }
-
-		if (function_exists('as_has_scheduled_action')) {
-            $scheduled = \as_has_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
-        } elseif (function_exists('as_next_scheduled_action')) {
-            $scheduled = \as_next_scheduled_action('action_bulk_image_process_action_scheduler', [], 'group_bulk_image');
-        }
-
-        $getScheduled = as_get_scheduled_actions([
-            'hooks' => 'action_bulk_image_process_action_scheduler',
-            'group' => 'group_bulk_image',
-        ]);
-
-        $urlRecount = admin_url('admin-post.php?action=imageseo_recount_images');
-        $urlRecount = wp_nonce_url($urlRecount, 'imageseo_recount_images');
-
-        $data = [
-            'API_KEY'                        => imageseo_get_option('api_key'),
-            'API_URL'                        => IMAGESEO_API_URL,
-            'APP_URL'                        => IMAGESEO_APP_URL,
-            'ADMIN_URL_PAGE_MONITORS'        => admin_url('options-general.php?page=' . Pages::SETTINGS),
-            'URL_DIST'                       => IMAGESEO_URL_DIST,
-            'LIBRARY_URL'                    => admin_url('upload.php?mode=list'),
-            'SITE_URL'                       => IMAGESEO_SITE_URL,
-            'ADMIN_AJAX'                     => admin_url('admin-ajax.php'),
-            'USER'                           => $owner,
-            'OPTIONS'                        => $options,
-            'LANGUAGES'                      => $languages,
-            'NEXT_SCHEDULED'                 => $scheduled ? $scheduled : false,
-            'LIMIT_EXCEDEED'                 => imageseo_get_service('UserInfo')->hasLimitExcedeed() ? true : false,
-            'CURRENT_PROCESSED'              => $currentProcessed ? $currentProcessed : null,
-            'IS_FINISH'                      => false !== get_option('_imageseo_bulk_is_finish') ? true : false,
-            'LAST_PROCESSED'                 => $lastBulkProcess ? $lastBulkProcess : null,
-            'TOTAL_ALT_NO_OPTIMIZE'          => $totalAltNoOptimize,
-            'PERCENT_TRAFFIC_LOOSE'          => $percentLoose,
-            'LIMIT_IMAGES'                   => $limitImages,
-            'ALT_FORMATS'                    => AltFormat::getFormats(),
-            'ALT_SPECIFICATION'              => AltSpecification::getMetas(),
-            'ALT_FILL_TYPE'                  => AltSpecification::getFillType(),
-            'PAGE_BUILDERS'                  => imageseo_get_service('WordPressData')->getPageBuilders(),
-            'URL_RECOUNT'                    => $urlRecount,
-            'SOCIAL_POST_TYPES'              => imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia(),
-        ];
-
-        wp_register_script('imageseo-application', IMAGESEO_URL_DIST . '/application.js', ['wp-i18n'], IMAGESEO_VERSION, true);
-        wp_enqueue_script('imageseo-application');
-
-        if (function_exists('wp_set_script_translations')) {
-            wp_set_script_translations('imageseo-application', 'imageseo', IMAGESEO_LANGUAGES);
-        }
-
-        wp_localize_script('imageseo-application', 'IMAGESEO_DATA', $data);
-    }
-
-    public function wizard($page)
-    {
-        if (!in_array($page, ['image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'toplevel_page_' . Pages::SETTINGS], true)) {
-            return;
-        }
-
-        if (!isset($_GET['wizard']) || imageseo_get_option('api_key')) {
-            return;
-        }
-
-        $totalAltNoOptimize = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt();
-        $percentLoose = imageseo_get_service('ImageLibrary')->getPercentLooseTraffic($totalAltNoOptimize);
-
-        $data = [
-            'API_KEY'                        => imageseo_get_option('api_key'),
-            'API_URL'                        => IMAGESEO_API_URL,
-            'APP_URL'                        => IMAGESEO_APP_URL,
-            'URL_DIST'                       => IMAGESEO_URL_DIST,
-            'SITE_URL'                       => IMAGESEO_SITE_URL,
-            'ADMIN_AJAX'                     => admin_url('admin-ajax.php'),
-            'TOTAL_ALT_NO_OPTIMIZE'          => $totalAltNoOptimize,
-            'PERCENT_TRAFFIC_LOOSE'          => $percentLoose,
-            'SETTINGS_URL'                   => admin_url('admin.php?page=imageseo-settings'),
-        ];
-
-        wp_register_script('imageseo-wizard', IMAGESEO_URL_DIST . '/wizard.js', ['wp-i18n'], IMAGESEO_VERSION, true);
-        wp_enqueue_script('imageseo-wizard');
-
-        if (function_exists('wp_set_script_translations')) {
-            wp_set_script_translations('imageseo-wizard', 'imageseo', IMAGESEO_LANGUAGES);
-        }
-
-        wp_localize_script('imageseo-wizard', 'IMAGESEO_DATA', $data);
     }
 }

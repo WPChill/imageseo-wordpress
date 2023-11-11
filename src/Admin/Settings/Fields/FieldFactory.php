@@ -14,7 +14,7 @@ class FieldFactory {
 		$field = null;
 
 		// get value
-		$value = imageseo_get_service( 'Option' )->getOption( $option['name'] );
+		$value   = imageseo_get_service( 'Option' )->getOption( $option['name'] );
 		$default = ( ! empty( $option['std'] ) ) ? $option['std'] : '';
 
 		// placeholder
@@ -23,6 +23,9 @@ class FieldFactory {
 		switch ( $option['type'] ) {
 			case 'text':
 				$field = new Text( $option['name'], $value, $placeholder );
+				break;
+			case 'file_picker':
+				$field = new FilePicker( $option['name'], $value, $placeholder );
 				break;
 			case 'hidden':
 				$field = new Hidden( $option['name'], $default );
