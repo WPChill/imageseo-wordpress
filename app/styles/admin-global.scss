@@ -696,16 +696,16 @@ WPCHill Tooltips
 	cursor: default;
 }
 
-.imageseo-remaining-credits {
+.imageseo-tabs-info {
 	float: right;
 	margin-left: .5em;
 	padding: 5px 10px;
 	font-size: 14px;
 	line-height: 1.71428571;
-	font-weight: 600;
 	color: #50575e;
 	text-decoration: none;
 	white-space: nowrap;
+	font-weight:lighter;
 }
 
 .imageseo-file-picker-wrapper {
@@ -725,4 +725,8 @@ WPCHill Tooltips
 	.imageseo-file-picker {
 		margin-bottom:15px;
 	}
+}
+
+.imageseo-settings-warning {
+	display:block;
 }

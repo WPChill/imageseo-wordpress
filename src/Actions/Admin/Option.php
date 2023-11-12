@@ -65,10 +65,9 @@ class Option {
 	 */
 	public function sanitizeOptions( $options ) {
 		// Verify nonce
-		if ( ! isset( $_POST['_nonce'] ) || ! wp_verify_nonce( $_POST['_nonce'], 'imageseo_ajax_nonce' ) ) {
+		if ( ! isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( $_POST['_nonce'], IMAGESEO_OPTION_GROUP . '-options' ) ) {
 			wp_die( esc_html__( 'Cheatin&#8217; uh?', 'imageseo' ) );
 		}
-
 		if ( ! isset( $_POST['action'] ) || ( 'update' !== $_POST['action'] && 'imageseo_social_media_settings_save' !== $_POST['action'] && 'imageseo_valid_api_key' !== $_POST['action'] ) ) {
 			return $options;
 		}

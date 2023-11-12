@@ -104,7 +104,11 @@ class SettingsPage {
 	 */
 	private function generate_tabs( $settings ) {
 		$user    = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
-		$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
+		$credits = 0;
+		if ( $user ) {
+			$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
+		}
+
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php
@@ -115,7 +119,15 @@ class SettingsPage {
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
 
-			echo '<div class="imageseo-remaining-credits">' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits">' . absint( $credits ) . '</span></div>';
+			$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
+			$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
+			if ( 0 !== absint( $totalNoAlt ) ) {
+				$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> don\'t have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
+			} else {
+				$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
+			}
+			echo '<div class="imageseo-tabs-info">' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span> <a href="https://app.imageseo.io/plan" target="_blank">Buy more!</a></div>';
+			echo '<div class="imageseo-tabs-info">' . wp_kses_post( $info_text ) . '</div>';
 			?>
 		</h2>
 		<?php
@@ -183,7 +195,6 @@ class SettingsPage {
 						echo '<table class="form-table imageseo-' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-tab" value="' . esc_attr( $tab ) . '">';
 						echo '<input type="hidden" name="imageseo-section" value="' . esc_attr( $active_section ) . '">';
-						echo '<input type="hidden" id="imageseo-nonce" name="_nonce" value="' . wp_create_nonce( 'imageseo_ajax_nonce' ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput
 
 						foreach ( $settings[ $tab ]['sections'][ $active_section ]['fields'] as $option ) {
 
@@ -381,6 +392,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Validate your API Key', 'imageseo' ),
 								'cb_label' => '',
+								'link'     => '#',
 								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
 								'type'     => 'action_button',
 								'priority' => 30,
@@ -710,33 +722,36 @@ class SettingsPage {
 	 */
 	public function social_card_preview() {
 		$options = imageseo_get_options();
+		$options = wp_parse_args( $options, imageseo_get_service( 'Option' )->getOptionsDefault() );
 
-		$card_layout = ( isset( $options['layout'] ) && 'CARD_LEFT' === $options['layout'] ) ? 'imageseo-media__layout--card-left' : 'imageseo-media__layout--card-right';
+		$card_layout    = ( isset( $options['social_media_settings']['layout'] ) && 'CARD_LEFT' === $options['social_media_settings']['layout'] ) ? 'imageseo-media__layout--card-left' : 'imageseo-media__layout--card-right';
+		$logo_url       = ( isset( $options['logoUrl'] ) && '' !== $options['logoUrl'] ) ? $options['logoUrl'] : IMAGESEO_DIRURL . '/dist/images/default_logo.png';
+		$background_url = ( isset( $options['defaultBgImg'] ) && '' !== $options['defaultBgImg'] ) ? $options['defaultBgImg'] : IMAGESEO_DIRURL . '/dist/images/favicon.png';
 		?>
 		<div id='imageseo-preview-image'
 		     class="<?php echo esc_attr( $card_layout ) ?> imageseo-media__container imageseo-media__container--preview"
 		     style="border: 1px solid #999;        margin: 0 auto;    background-color: <?php echo esc_attr( $options['contentBackgroundColor'] ) ?>;">
 			<div class='imageseo-media__container__image'
-			     style="background-color: #ccc; background-image: url(<?php echo esc_url( $options['defaultBgImg'] ); ?>); background-position:center center; background-size:cover; background-repeat:no-repeat;">
+			     style="background-color: #ccc; background-image: url(<?php echo esc_url( $background_url ); ?>); background-position:center center; background-size:cover; background-repeat:no-repeat;">
 			</div>
 			<div class="imageseo-media__container__content imageseo-media__container__content--center">
-				<img class='imageseo-media__content__logo' src="<?php echo esc_url( $options['logoUrl'] ) ?>">
+				<img class='imageseo-media__content__logo' src="<?php echo esc_url( $logo_url ) ?>">
 				<div class='imageseo-media__content__title'
 				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;">
 					Lorem ipsum (post_title)
 				</div>
 				<div class='imageseo-media__content__sub-title'
-				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitle'] ) && '1' === $options['social_media_settings']['visibilitySubTitle'] ) ? '' : 'display:none;' ?>;"
+				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitle'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitle'] || true === $options['social_media_settings']['visibilitySubTitle'] ) ) ? '' : 'display:none;' ?>;"
 				">
 				Sub title (like price or author)
 			</div>
 			<div class='imageseo-media__content__sub-title-two'
-			     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && '1' === $options['social_media_settings']['visibilitySubTitleTwo'] ) ? '' : 'display:none;' ?>;">
+			     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
 				Sub title 2 (like price or author)
 			</div>
 			<img class='imageseo-media__content__avatar'
 			     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>"
-			     style="<?php echo ( isset( $options['social_media_settings']['visibilityAvatar'] ) && '1' === $options['social_media_settings']['visibilityAvatar'] ) ? '' : 'display:none;' ?>">
+			     style="<?php echo ( isset( $options['social_media_settings']['visibilityAvatar'] ) && ( '1' === $options['social_media_settings']['visibilityAvatar'] ) || true === $options['social_media_settings']['visibilityAvatar'] ) ? '' : 'display:none;' ?>">
 			<div class='imageseo-media__content__stars flex'
 			     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && '1' === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
 				<svg

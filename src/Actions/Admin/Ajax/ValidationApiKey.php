@@ -27,7 +27,7 @@ class ValidationApiKey
             ]);
             exit;
         }
-		check_ajax_referer('imageseo_ajax_nonce', '_wpnonce');
+	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
 
         if (!isset($_POST['api_key'])) {
             wp_send_json_error([

@@ -142,7 +142,7 @@ class QueryImagesBulk
 
     public function query()
     {
-		check_ajax_referer( 'imageseo_ajax_nonce', '_wpnonce');
+	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
@@ -218,11 +218,11 @@ class QueryImagesBulk
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'imageseo' ) );
 		}
 
-		$options = imageseo_get_service( 'Option' )->getOptions();
+		$options = wp_parse_args( imageseo_get_service( 'Option' )->getOptions(), imageseo_get_service( 'Option' )->getOptionsDefault() );
 
 		$filters = array(
-			'alt_filter' => $options['altFilter'],
-			'alt_fill'   => $options['altFill'],
+			'alt_filter'     => $options['altFilter'],
+			'alt_fill'       => $options['altFill'],
 			'only_optimized' => $options['optimizeAlt'],
 		);
 

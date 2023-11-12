@@ -14,32 +14,35 @@ class Option
     /**
      * @var array
      */
-    protected $optionsDefault = [
-        'api_key'                       => '',
-        'allowed'                       => false,
-        'active_alt_write_upload'       => 1,
-        'active_rename_write_upload'    => 1,
-        'default_language_ia'           => 'en',
-        'alt_template_default'          => AltFormat::ALT_SIMPLE,
-        'social_media_post_types'       => [
-            'post',
-        ],
-        'social_media_type'             => [
-            SocialMedia::OPEN_GRAPH['name'],
-        ],
-        'social_media_settings'         => [
-            'layout'                    => 'CARD_LEFT',
-            'textColor'                 => '#000000',
-            'contentBackgroundColor'    => '#ffffff',
-            'starColor'                 => '#F8CA00',
-            'visibilitySubTitle'        => true,
-            'visibilitySubTitleTwo'     => true,
-            'visibilityRating'          => false,
-            'visibilityAvatar'          => true,
-            'logoUrl'                   => IMAGESEO_URL_DIST . '/images/favicon.png',
-            'defaultBgImg'              => IMAGESEO_URL_DIST . '/images/default_logo.png',
-        ],
-    ];
+	protected $optionsDefault = [
+		'api_key'                    => '',
+		'allowed'                    => false,
+		'active_alt_write_upload'    => 1,
+		'active_rename_write_upload' => 1,
+		'default_language_ia'        => 'en',
+		'alt_template_default'       => AltFormat::ALT_SIMPLE,
+		'social_media_post_types'    => [
+			'post',
+		],
+		'social_media_type'          => [
+			SocialMedia::OPEN_GRAPH['name'],
+		],
+		'social_media_settings'      => [
+			'layout'                 => 'CARD_LEFT',
+			'textColor'              => '#000000',
+			'contentBackgroundColor' => '#ffffff',
+			'starColor'              => '#F8CA00',
+			'visibilitySubTitle'     => true,
+			'visibilitySubTitleTwo'  => true,
+			'visibilityRating'       => false,
+			'visibilityAvatar'       => true,
+			'logoUrl'                => IMAGESEO_URL_DIST . '/images/favicon.png',
+			'defaultBgImg'           => IMAGESEO_URL_DIST . '/images/default_logo.png',
+		],
+		'altFilter'                  => 'ALL',
+		'altFill'                    => 'FILL_ALL',
+		'optimizeAlt'                => 0
+	];
 
     /**
      * Get options default.

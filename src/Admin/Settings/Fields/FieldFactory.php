@@ -58,9 +58,12 @@ class FieldFactory {
 				$field = new MultiCheckbox( $option['name'], $value, $option['options'] );
 				break;
 			case 'sub_checkbox':
-				$field = new SubCheckbox( $option['name'], $value, $option['options'], $option['parent'] );
+				$field = new SubCheckbox( $option['name'], $value, $option['label'], $option['parent'] );
 				break;
 			case 'action_button':
+				if ( ! isset( $option['link'] ) ) {
+					$option['link'] = '#';
+				}
 				$field = new ActionButton( $option['name'], $option['link'], $option['label'] );
 				break;
 			case 'title':

@@ -1,3 +1,5 @@
+const {__} = wp.i18n;
+
 class imageSEO_Bulk {
 	constructor() {
 		this.init();
@@ -52,7 +54,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		//@ts-ignore
@@ -75,7 +77,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		//@ts-ignore
@@ -94,7 +96,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		//@ts-ignore
@@ -113,7 +115,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		//@ts-ignore
@@ -140,7 +142,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		//@ts-ignore
@@ -164,7 +166,7 @@ class imageSEO_Bulk {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 
@@ -255,7 +257,8 @@ class imageseo_Settings {
 		instance.setColorPickers();
 
 		jQuery('table.imageseo-bulk_optimizations').find('input,select').on('change', function (e) {
-			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<p>' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</p>');
+			jQuery('.imageseo-settings-warning').remove();
+			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<span class="imageseo-settings-warning">' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</span>');
 		});
 
 		jQuery('#register_account').on('click', function (e) {
@@ -271,7 +274,8 @@ class imageseo_Settings {
 				  }
 			const response = instance.checkRegisterFormData(data);
 			if (!response.success) {
-				button.after('<p>' + response.code + '</p>');
+				jQuery('p.imageseo-register-form-error').remove();
+				button.after('<p class="imageseo-register-form-error">' + response.code + '</p>');
 				return;
 			}
 			instance.register(data).then(function (response) {
@@ -331,7 +335,7 @@ class imageseo_Settings {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		formData.append("api_key", apiKey);
@@ -345,24 +349,22 @@ class imageseo_Settings {
 		const json_response = await response.json();
 		if (json_response.success) {
 			if (json_response.data.user.is_active) {
-				jQuery('#setting-api_key').closest('tr').append('<p>' + __('API key is valid.', 'imageseo') + '</p>');
+				jQuery('.imageseo-settings-warning').remove();
+				jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is valid.', 'imageseo') + '</span>');
 				setTimeout(function () {
 					window.location.reload();
-				}, 3000);
+				}, 1500);
 			}
 		}
 	}
 
 	checkRegisterFormData(data) {
 		const instance = this;
-		if (!data.firstname) {
-			return {success: false, code: __('Please enter your first name', 'imageseo')};
-		}
-		if (!data.lastname) {
-			return {success: false, code: __('Please enter your last name', 'imageseo')};
-		}
 		if (!data.email) {
 			return {success: false, code: __('Please enter your email', 'imageseo')};
+		}
+		if (!instance.checkIfEmail(data.email)) {
+			return {success: false, error: true, code: __('Please enter a valid email address', 'imageseo')};
 		}
 		if (!data.password) {
 			return {success: false, code: __('Please enter your password', 'imageseo')};
@@ -370,9 +372,7 @@ class imageseo_Settings {
 		if (!data.terms) {
 			return {success: false, code: __('Please accept the terms and conditions', 'imageseo')};
 		}
-		if (!instance.checkIfEmail(data.email)) {
-			return {success: false, error: true, code: __('Please enter a valid email address', 'imageseo')};
-		}
+
 		return {success: true};
 	}
 
@@ -390,7 +390,7 @@ class imageseo_Settings {
 		formData.append(
 			"_wpnonce",
 			document
-				.querySelector("#imageseo-nonce")
+				.querySelector("#_wpnonce")
 				.getAttribute("value")
 		);
 		formData.append("firstname", data.firstname);
