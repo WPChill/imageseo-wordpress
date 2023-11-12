@@ -7,15 +7,10 @@ const env = process.env.NODE_ENV || "development";
 module.exports = {
 	entry: {
 		"media-upload": "./app/javascripts/media-upload.js",
-		/*"deactivate-intent":
-		"./app/javascripts/react/deactivate-intent.module.js",*/
 		"generate-social-media": "./app/javascripts/generate-social-media.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		"functionality": "./app/javascripts/functionality.js",
 		"admin-global-css": "./app/styles/admin-global.scss",
-		//application: "./app/react/modules/index.tsx",
-		//wizard: "./app/react/modules/wizard.tsx",
-		//"imageseo-tw": "./app/styles/index.css",
 	},
 	output: {
 		path: __dirname + "/dist",

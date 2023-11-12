@@ -156,7 +156,9 @@ class MediaLibrary
 
     public function renderFilename($attachmentId)
     {
-        $oldMetadata = get_post_meta($attachmentId, '_old_wp_attached_file', true); ?>
+	    $oldMetadata = get_post_meta( $attachmentId, '_old_wp_attached_file', true );
+	    $filename    = $this->generateFilename->getFilenameByAttachmentId( $attachmentId );
+		?>
         <div class="media-column-imageseo">
             <span class="text" style="margin-bottom:5px; display:block;"><?php esc_html_e('Choose a new file name.', 'imageseo'); ?></span>
             <div id="wrapper-imageseo-filename-<?php echo esc_attr( $attachmentId ); ?>" class="wrapper-imageseo-input-filename">
@@ -167,7 +169,7 @@ class MediaLibrary
                     class="imageseo-filename-ajax large-text"
                     id="imageseo-filename-<?php echo esc_attr( $attachmentId ); ?>"
                     value="<?php echo esc_attr( $filename ); ?>"
-                    placeholder="<?php echo esc_html('Enter NEW filename', 'imageseo'); ?>"
+                    placeholder="<?php echo esc_attr__('Enter NEW filename', 'imageseo'); ?>"
                 />
                 <button class="button" data-id="<?php echo esc_attr( $attachmentId ); ?>">
                     <span><?php esc_html_e('Submit', 'imageseo'); ?></span>
@@ -180,7 +182,6 @@ class MediaLibrary
             <a id="imageseo-rename-file<?php echo esc_attr( $attachmentId ); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
                 <?php echo esc_html__('Rename file automatically', 'imageseo'); ?>
             </a>
-
         </div>
         <?php
     }

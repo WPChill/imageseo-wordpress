@@ -17,7 +17,6 @@ class QueryImagesBulk
 
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_query_images', [$this, 'query']);
 		add_action( 'imageseo_settings_page_bulk_optimizations_start', array( $this, 'display_images' ) );
     }
 
@@ -140,71 +139,6 @@ class QueryImagesBulk
         return $sqlQuery;
     }
 
-    public function query()
-    {
-	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
-
-        $filters = [];
-        try {
-            $filters = (isset($_POST['filters'])) ? json_decode(stripslashes($_POST['filters']), true) : [];
-        } catch (\Exception $e) {
-            $filters = [];
-        }
-
-        global $wpdb;
-
-        if (AltSpecification::WOO_PRODUCT_IMAGE === $filters['alt_filter']) {
-            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
-
-            $ids = array_merge($ids, $this->queryImages->getWooCommerceIdsGallery($filters));
-
-            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        } elseif (AltSpecification::NEXTGEN_GALLERY === $filters['alt_filter']) {
-            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
-
-            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        } else {
-            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
-
-            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        }
-
-        wp_send_json_success([
-            'ids'               => array_values(array_filter($ids)),
-            'ids_optimized'     => array_values(array_filter($idsOptimized)),
-            'ids_non_optimized' => array_values(array_diff($ids, $idsOptimized)),
-        ]);
-    }
 
 	/**
 	 * Retrieve the total number of images, optimized and non-optimized ones
