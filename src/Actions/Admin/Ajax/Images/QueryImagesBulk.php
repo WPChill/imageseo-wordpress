@@ -231,6 +231,7 @@ class QueryImagesBulk
 		if ( 0 === $total_images ) {
 			echo esc_html__( 'No images that require optimization found. Good job!', 'imageseo' );
 			echo '</div>';
+
 			return;
 		}
 		echo sprintf( esc_html__( 'You have optimized %s images out of %s.', 'imageseo' ), absint( $optimized ), absint( $total_images ) );

@@ -729,4 +729,49 @@ WPCHill Tooltips
 
 .imageseo-settings-warning {
 	display:block;
+	margin-top:10px;
+}
+
+.imageseo-info-header {
+	border-bottom: 1px solid #ccc;
+	padding: 15px 20px;
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr 1.5fr;
+	background: #fff;
+	width: calc(100% + 20px);
+	box-sizing: border-box;
+	margin-left: -20px;
+
+	p {
+		margin:0 auto;
+		font-size:13px;
+		line-height:26px;
+	}
+
+	.imageseo-info-header__optimization {
+		text-align:left;
+	}
+
+	.imageseo-info-header__credits{
+		text-align:right;
+	}
+
+	.imageseo-info-header__support {
+		text-align:right;
+
+		a {
+			span {
+				vertical-align: middle;
+				position: relative;
+				top: -2px;
+				padding-right: 10px;
+				font-size: 16px;
+				line-height: 21px;
+			}
+		}
+	}
+
+	.imageseo-info-header__logo img {
+		max-height: 35px;
+	}
 }

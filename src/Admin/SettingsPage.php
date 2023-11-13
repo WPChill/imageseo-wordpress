@@ -103,12 +103,6 @@ class SettingsPage {
 	 * @param array $settings
 	 */
 	private function generate_tabs( $settings ) {
-		$user    = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
-		$credits = 0;
-		if ( $user ) {
-			$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
-		}
-
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php
@@ -118,16 +112,6 @@ class SettingsPage {
 
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
-
-			$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
-			$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
-			if ( 0 !== absint( $totalNoAlt ) ) {
-				$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> don\'t have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
-			} else {
-				$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
-			}
-			echo '<div class="imageseo-tabs-info">' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span> <a href="https://app.imageseo.io/plan" target="_blank">Buy more!</a></div>';
-			echo '<div class="imageseo-tabs-info">' . wp_kses_post( $info_text ) . '</div>';
 			?>
 		</h2>
 		<?php
@@ -153,7 +137,7 @@ class SettingsPage {
 			</style>
 			<?php
 		}
-
+		$this->display_header();
 		?>
 		<div class="wrap imageseo-admin-settings <?php echo esc_attr( $tab ) . ' ' . esc_attr( $active_section ); ?>">
 			<hr class="wp-header-end">
@@ -704,13 +688,12 @@ class SettingsPage {
 
 		// Display a notice with the bulk process status
 		?>
-		<div class="notice notice-info is-dismissible">
-			<p><?php echo sprintf( esc_html__( 'Optimizing %s images', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?></p>
-			<button id="get_bulk_process" class="button button-primary">Show current status</button>
-			<button id='stop_bulk_process' class="button button-primary">Stop bulk process</button>
-			<button type="button" class="notice-dismiss"><span
-					class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'imageseo' ); ?></span>
-			</button>
+		<div class="notice notice-info">
+			<p class="imageseo-optimization-status"><?php echo sprintf( esc_html__( 'Optimizing %s images!', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?><?php wp_kses_post( __( 'Optimized <span class="imageseo-optimization__optimized_images">%s</span> images', 'imageseo' ), 0 ); ?></p>
+			<button id="get_bulk_process"
+			        class="button button-primary"><?php esc_html_e( 'Update status', 'imageseo' ); ?></button>
+			<button id='stop_bulk_process'
+			        class="button button-primary"><?php esc_html_e( 'Stop process', 'imageseo' ); ?></button>
 		</div>
 		<?php
 	}
@@ -849,5 +832,42 @@ class SettingsPage {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Display the header of the settings page
+	 *
+	 * @since 3.0.0
+	 */
+	public function display_header() {
+		$user    = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
+		$credits = 0;
+		if ( $user ) {
+			$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
+		}
+		$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
+		$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
+		if ( 0 !== absint( $totalNoAlt ) ) {
+			$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> don\'t have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
+		} else {
+			$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
+		}
+		?>
+		<div class="imageseo-info-header">
+			<div class="imageseo-info-header__logo">
+				<img src="<?php echo esc_url( IMAGESEO_URL_DIST . '/images/logo-blue.svg' ); ?>">
+			</div>
+			<div class='imageseo-info-header__optimization'>
+				<?php echo '<p>' . esc_html( $info_text ) . '</p>'; ?>
+			</div>
+			<div class='imageseo-info-header__credits'>
+				<?php echo '<p>' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span>  <a href="https://app.imageseo.io/plan" target="_blank" class="button button-primary">' . esc_html__( 'Buy more!', 'imageseo' ) . '</a></p>'; ?>
+			</div>
+			<div class="imageseo-info-header__support">
+				<a href="https://imageseo.io/documentation/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-external'></span><?php echo esc_html__( 'Documentation', 'imageseo' ); ?></a>
+				<a href="https://imageseo.io/support/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-email-alt'></span><?php echo esc_html__( 'Contact us for support!' , 'imageseo' ); ?></a>
+			</div>
+		</div>
+		<?php
 	}
 }
