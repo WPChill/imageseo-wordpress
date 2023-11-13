@@ -136,6 +136,17 @@ class SettingsPage {
 				}
 			</style>
 			<?php
+		} else {
+			?>
+			<style>
+				a.nav-tab[href$='imageseo-settings&tab=settings'],
+				a.nav-tab[href$='imageseo-settings&tab=social_card'],
+				a.nav-tab[href$='imageseo-settings&tab=bulk_optimizations'] {
+					pointer-events: none;
+					opacity: 0.3;
+				}
+			</style>
+			<?php
 		}
 		$this->display_header();
 		?>
@@ -232,7 +243,7 @@ class SettingsPage {
 				?>
 				<div class="wp-clearfix"></div>
 				<?php
-				if ( isset( $settings[ $tab ] ) && ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) ) {
+				if ( 'welcome' !== $tab && isset( $settings[ $tab ] ) && ( isset( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) && ! empty( $settings[ $tab ]['sections'][ $active_section ]['fields'] ) ) ) {
 					?>
 					<p class="submit">
 						<input type="submit" class="button-primary"
@@ -272,72 +283,6 @@ class SettingsPage {
 						'title'       => __( 'Welcome on board', 'imageseo' ),
 						'description' => __( 'SEO Fact : More than 20% of Google traffic comes from image searches. We use AI to automatically optimize your images for SEO.', 'imageseo' ),
 						'fields'      => array(
-							array(
-								'name'     => 'register_account',
-								'std'      => '',
-								'title'    => __( 'Create an account - It\'s free', 'imageseo' ),
-								'type'     => 'title',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'register_first_name',
-								'std'      => '',
-								'label'    => __( 'First Name', 'imageseo' ),
-								'cb_label' => '',
-								'type'     => 'text',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'register_last_name',
-								'std'      => '',
-								'label'    => __( 'Last name', 'imageseo' ),
-								'cb_label' => '',
-								'type'     => 'text',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'register_email',
-								'std'      => '',
-								'label'    => __( 'Email', 'imageseo' ),
-								'cb_label' => '',
-								'type'     => 'email',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'register_password',
-								'std'      => '',
-								'label'    => __( 'Password', 'imageseo' ),
-								'cb_label' => '',
-								'type'     => 'password',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'terms',
-								'std'      => '',
-								'label'    => __( 'Terms of Service', 'imageseo' ),
-								'cb_label' => '',
-								'desc'     => __( 'By checking this you agree to ImageSEO\'s <a href="https://imageseo.io/terms-conditions/" target="_blank">Terms of Service</a>', 'imageseo' ),
-								'type'     => 'checkbox',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'newsletter',
-								'std'      => '',
-								'label'    => __( 'Newsletter', 'imageseo' ),
-								'cb_label' => '',
-								'desc'     => __( 'By checking this you subscribe to news and features updates, as well as occasional company announcements.', 'imageseo' ),
-								'type'     => 'checkbox',
-								'priority' => 30,
-							),
-							array(
-								'name'     => 'register_account',
-								'std'      => '',
-								'label'    => __( 'Register', 'imageseo' ),
-								'cb_label' => '',
-								'type'     => 'action_button',
-								'link'     => '#',
-								'priority' => 30,
-							),
 							array(
 								'name'     => 'manage_account',
 								'std'      => '',
@@ -455,8 +400,8 @@ class SettingsPage {
 								'label'    => __( 'Subtitle', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the price product or author depending on the page ( Author or Product price (WooCommerce only) )', 'imageseo' ),
-								'type'     => 'sub_checkbox',
 								'parent'   => 'social_media_settings',
+								'type'     => 'checkbox',
 								'priority' => 30,
 							),
 							array(
@@ -465,7 +410,7 @@ class SettingsPage {
 								'label'    => __( 'Subtitle 2', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the reading time of an article or the number of reviews ( Reading time or Number of reviews (WooCommerce only) ).', 'imageseo' ),
-								'type'     => 'sub_checkbox',
+								'type'     => 'checkbox',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
@@ -475,7 +420,7 @@ class SettingsPage {
 								'label'    => __( 'Stars rating', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Show the stars linked to a review of your product for example.', 'imageseo' ),
-								'type'     => 'sub_checkbox',
+								'type'     => 'checkbox',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
@@ -485,7 +430,7 @@ class SettingsPage {
 								'label'    => __( 'Author avatar', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'Only use for post content', 'imageseo' ),
-								'type'     => 'sub_checkbox',
+								'type'     => 'checkbox',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
@@ -496,6 +441,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
 								'type'     => 'select',
+								'parent'   => 'social_media_settings',
 								'options'  => array(
 									'CARD_LEFT'  => __( 'Card left', 'imageseo' ),
 									'CARD_RIGHT' => __( 'Card right', 'imageseo' ),
@@ -509,6 +455,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
 								'type'     => 'select',
+								'parent'   => 'social_media_settings',
 								'options'  => array(
 									'top'    => __( 'Top', 'imageseo' ),
 									'center' => __( 'Center', 'imageseo' ),
@@ -523,6 +470,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => '',
 								'type'     => 'colorpicker',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -532,6 +480,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Content background color', 'imageseo' ),
 								'type'     => 'colorpicker',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -541,6 +490,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => '',
 								'type'     => 'colorpicker',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -550,6 +500,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => '',
 								'type'     => 'file_picker',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 							array(
@@ -559,6 +510,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Card\'s background image.', 'imageseo' ),
 								'type'     => 'file_picker',
+								'parent'   => 'social_media_settings',
 								'priority' => 30,
 							),
 						)
@@ -654,6 +606,79 @@ class SettingsPage {
 				),
 			),
 		);
+		$options  = imageseo_get_options();
+		if ( empty( $options['api_key'] ) || ! isset( $options['allowed'] ) || ! $options['allowed'] ) {
+			array_merge(
+				array(
+					array(
+						'name'     => 'register_account',
+						'std'      => '',
+						'title'    => __( 'Create an account - It\'s free', 'imageseo' ),
+						'type'     => 'title',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'register_first_name',
+						'std'      => '',
+						'label'    => __( 'First Name', 'imageseo' ),
+						'cb_label' => '',
+						'type'     => 'text',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'register_last_name',
+						'std'      => '',
+						'label'    => __( 'Last name', 'imageseo' ),
+						'cb_label' => '',
+						'type'     => 'text',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'register_email',
+						'std'      => '',
+						'label'    => __( 'Email', 'imageseo' ),
+						'cb_label' => '',
+						'type'     => 'email',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'register_password',
+						'std'      => '',
+						'label'    => __( 'Password', 'imageseo' ),
+						'cb_label' => '',
+						'type'     => 'password',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'terms',
+						'std'      => '',
+						'label'    => __( 'Terms of Service', 'imageseo' ),
+						'cb_label' => '',
+						'desc'     => __( 'By checking this you agree to ImageSEO\'s <a href="https://imageseo.io/terms-conditions/" target="_blank">Terms of Service</a>', 'imageseo' ),
+						'type'     => 'checkbox',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'newsletter',
+						'std'      => '',
+						'label'    => __( 'Newsletter', 'imageseo' ),
+						'cb_label' => '',
+						'desc'     => __( 'By checking this you subscribe to news and features updates, as well as occasional company announcements.', 'imageseo' ),
+						'type'     => 'checkbox',
+						'priority' => 30,
+					),
+					array(
+						'name'     => 'register_account',
+						'std'      => '',
+						'label'    => __( 'Register', 'imageseo' ),
+						'cb_label' => '',
+						'type'     => 'action_button',
+						'link'     => '#',
+						'priority' => 30,
+					)
+				),
+				$settings['welcome']['sections']['welcome']['fields'] );
+		}
 
 		return apply_filters( 'imageseo_settings_tabs', $settings );
 	}
@@ -704,111 +729,45 @@ class SettingsPage {
 	 * @since 2.0.9
 	 */
 	public function social_card_preview() {
-		$options = imageseo_get_options();
-		$options = wp_parse_args( $options, imageseo_get_service( 'Option' )->getOptionsDefault() );
-
+		$options        = imageseo_get_options();
+		$options        = wp_parse_args( $options, imageseo_get_service( 'Option' )->getOptionsDefault() );
 		$card_layout    = ( isset( $options['social_media_settings']['layout'] ) && 'CARD_LEFT' === $options['social_media_settings']['layout'] ) ? 'imageseo-media__layout--card-left' : 'imageseo-media__layout--card-right';
-		$logo_url       = ( isset( $options['logoUrl'] ) && '' !== $options['logoUrl'] ) ? $options['logoUrl'] : IMAGESEO_DIRURL . '/dist/images/default_logo.png';
-		$background_url = ( isset( $options['defaultBgImg'] ) && '' !== $options['defaultBgImg'] ) ? $options['defaultBgImg'] : IMAGESEO_DIRURL . '/dist/images/favicon.png';
+		$logo_url       = ( isset( $options['social_media_settings']['logoUrl'] ) && '' !== $options['social_media_settings']['logoUrl'] ) ? $options['social_media_settings']['logoUrl'] : IMAGESEO_DIRURL . '/dist/images/default_logo.png';
+		$background_url = ( isset( $options['social_media_settings']['defaultBgImg'] ) && '' !== $options['social_media_settings']['defaultBgImg'] ) ? $options['social_media_settings']['defaultBgImg'] : IMAGESEO_DIRURL . '/dist/images/favicon.png';
 		?>
 		<div id='imageseo-preview-image'
 		     class="<?php echo esc_attr( $card_layout ) ?> imageseo-media__container imageseo-media__container--preview"
-		     style="border: 1px solid #999;        margin: 0 auto;    background-color: <?php echo esc_attr( $options['contentBackgroundColor'] ) ?>;">
+		     style="border: 1px solid #999;        margin: 0 auto;    background-color: <?php echo esc_attr( $options['social_media_settings']['contentBackgroundColor'] ) ?>;">
 			<div class='imageseo-media__container__image'
 			     style="background-color: #ccc; background-image: url(<?php echo esc_url( $background_url ); ?>); background-position:center center; background-size:cover; background-repeat:no-repeat;">
 			</div>
 			<div class="imageseo-media__container__content imageseo-media__container__content--center">
 				<img class='imageseo-media__content__logo' src="<?php echo esc_url( $logo_url ) ?>">
 				<div class='imageseo-media__content__title'
-				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;">
+				     style="color:<?php echo esc_attr( $options['social_media_settings']['textColor'] ) ?>;">
 					Lorem ipsum (post_title)
 				</div>
 				<div class='imageseo-media__content__sub-title'
-				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitle'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitle'] || true === $options['social_media_settings']['visibilitySubTitle'] ) ) ? '' : 'display:none;' ?>;"
-				">
-				Sub title (like price or author)
+				     style="color:<?php echo esc_attr( $options['social_media_settings']['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitle'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitle'] || true === $options['social_media_settings']['visibilitySubTitle'] ) ) ? '' : 'display:none;' ?>;">
+					Sub title (like price or author)
+				</div>
+				<div class='imageseo-media__content__sub-title-two'
+				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
+					Sub title 2 (like price or author)
+				</div>
+				<img class='imageseo-media__content__avatar'
+				     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>"
+				     style="<?php echo ( isset( $options['social_media_settings']['visibilityAvatar'] ) && ( '1' === $options['social_media_settings']['visibilityAvatar'] ) || true === $options['social_media_settings']['visibilityAvatar'] ) ? '' : 'display:none;' ?>">
+				<div class='imageseo-media__content__stars flex'
+				     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && '1' === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
+					<?php
+					echo $this->start_display( $options );
+					echo $this->start_display( $options );
+					echo $this->start_display( $options );
+					echo $this->start_display( $options );
+					?>
+				</div>
 			</div>
-			<div class='imageseo-media__content__sub-title-two'
-			     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
-				Sub title 2 (like price or author)
-			</div>
-			<img class='imageseo-media__content__avatar'
-			     src="<?php echo esc_url( IMAGESEO_DIRURL . '/dist/images/avatar-default.jpg' ); ?>"
-			     style="<?php echo ( isset( $options['social_media_settings']['visibilityAvatar'] ) && ( '1' === $options['social_media_settings']['visibilityAvatar'] ) || true === $options['social_media_settings']['visibilityAvatar'] ) ? '' : 'display:none;' ?>">
-			<div class='imageseo-media__content__stars flex'
-			     style="<?php echo ( isset( $options['social_media_settings']['visibilityRating'] ) && '1' === $options['social_media_settings']['visibilityRating'] ) ? '' : 'display:none;' ?>">
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-				>
-					<polygon
-						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-				</svg>
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-				>
-					<polygon
-						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-				</svg>
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-				>
-					<polygon
-						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-				</svg>
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-				>
-					<polygon
-						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-				</svg>
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill="<?php echo esc_attr( $options['starColor'] ) ?>"
-					stroke="<?php echo esc_attr( $options['starColor'] ) ?>"
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-				>
-					<polygon
-						points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
-				</svg>
-			</div>
-		</div>
 		</div>
 		<?php
 	}
@@ -848,7 +807,7 @@ class SettingsPage {
 		$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
 		$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
 		if ( 0 !== absint( $totalNoAlt ) ) {
-			$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> don\'t have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
+			$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> doesn\'t (don\'t) have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
 		} else {
 			$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
 		}
@@ -858,16 +817,35 @@ class SettingsPage {
 				<img src="<?php echo esc_url( IMAGESEO_URL_DIST . '/images/logo-blue.svg' ); ?>">
 			</div>
 			<div class='imageseo-info-header__optimization'>
-				<?php echo '<p>' . esc_html( $info_text ) . '</p>'; ?>
+				<?php echo '<p>' . wp_kses_post( $info_text ) . '</p>'; ?>
 			</div>
 			<div class='imageseo-info-header__credits'>
-				<?php echo '<p>' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span>  <a href="https://app.imageseo.io/plan" target="_blank" class="button button-primary">' . esc_html__( 'Buy more!', 'imageseo' ) . '</a></p>'; ?>
+				<?php echo '<p>' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span></p><p><a href="https://app.imageseo.io/plan" target="_blank" class="button button-primary">' . esc_html__( 'Buy more!', 'imageseo' ) . '</a></p>'; ?>
 			</div>
-			<div class="imageseo-info-header__support">
-				<a href="https://imageseo.io/documentation/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-external'></span><?php echo esc_html__( 'Documentation', 'imageseo' ); ?></a>
-				<a href="https://imageseo.io/support/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-email-alt'></span><?php echo esc_html__( 'Contact us for support!' , 'imageseo' ); ?></a>
-			</div>
+			<!--<div class="imageseo-info-header__support">
+				<a href="https://imageseo.io/documentation/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-external'></span><?php /*echo esc_html__( 'Documentation', 'imageseo' ); */ ?></a>
+				<a href="https://imageseo.io/support/" target="_blank" class="button button-secondary"><span class='dashicons dashicons-email-alt'></span><?php /*echo esc_html__( 'Contact us for support!' , 'imageseo' ); */ ?></a>
+			</div>-->
 		</div>
+		<?php
+	}
+
+	public function start_display( $options ) {
+		?>
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			width='24'
+			height='24'
+			viewBox='0 0 24 24'
+			fill="<?php echo esc_attr( $options['social_media_settings']['starColor'] ) ?>"
+			stroke="<?php echo esc_attr( $options['social_media_settings']['starColor'] ) ?>"
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+		>
+			<polygon
+				points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
+		</svg>
 		<?php
 	}
 }

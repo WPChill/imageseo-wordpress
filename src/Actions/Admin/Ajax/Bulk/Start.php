@@ -16,9 +16,11 @@ class Start
     public function start()
     {
 	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
+
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
+                'response' => __('You are not authorized to perform this action', 'imageseo'),
             ]);
             exit;
         }
@@ -26,6 +28,7 @@ class Start
         if (!isset($_POST['data'])) {
             wp_send_json_error([
                 'code' => 'missing_parameters',
+                'response' => __('Missing parameters', 'imageseo'),
             ]);
 
             return;
@@ -33,9 +36,14 @@ class Start
 
         $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
 
-        if ($limitExcedeed) {
-            wp_send_json_error();
-        }
+	    if ( $limitExcedeed ) {
+		    wp_send_json_error(
+			    array(
+				    'code'     => 'limit_exceeded',
+				    'response' => __( 'User limit excedeed', 'imageseo' )
+			    )
+		    );
+	    }
 
 	    $data = explode( ',', $_POST['data'] );
 

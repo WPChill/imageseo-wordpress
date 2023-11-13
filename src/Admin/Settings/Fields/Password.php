@@ -9,7 +9,7 @@ class Password extends Admin_Fields {
 	 */
 	public function render() {
 		?>
-		<input id="setting-<?php echo esc_attr( $this->get_name() ); ?>" class="regular-text" type="password"
+		<input id="setting-<?php echo esc_attr( $this->get_id() ); ?>" class="regular-text" type="password"
 		       name="imageseo[<?php echo esc_attr( $this->get_name() ); ?>]"
 		       value="<?php echo esc_attr( $this->get_value() ); ?>" <?php $this->e_placeholder(); ?> />
 		<?php

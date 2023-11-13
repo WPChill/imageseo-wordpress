@@ -3,51 +3,6 @@
 namespace ImageSeoWP\Admin\Settings\Fields;
 
 class MultiCheckbox extends Admin_Fields {
-
-	/** @var String */
-	private $cb_label;
-
-	/**
-	 * DLM_Admin_Fields_Field_Checkbox constructor.
-	 *
-	 * @param String $name
-	 * @param String $value
-	 * @param String $options
-	 */
-	public function __construct( $name, $value, $options ) {
-		$this->options = $options;
-		parent::__construct( $name, $value, '' );
-	}
-
-	/**
-	 * @return array
-	 */
-	public function get_options() {
-		return $this->options;
-	}
-
-	/**
-	 * @param array $options
-	 */
-	public function set_options( $options ) {
-		$this->options = $options;
-	}
-
-	/**
-	 * @return String
-	 */
-	public function get_cb_label() {
-		return $this->cb_label;
-	}
-
-	/**
-	 * @param String $cb_label
-	 */
-	public function set_cb_label( $cb_label ) {
-		$this->cb_label = $cb_label;
-	}
-
-
 	/**
 	 * Renders field
 	 */
@@ -60,7 +15,7 @@ class MultiCheckbox extends Admin_Fields {
 				<?php foreach ( $this->get_options() as $key => $name ) {
 					?>
 					<div class="wpchill-toggle">
-						<input class="wpchill-toggle__input" id="setting-<?php echo esc_attr( $this->get_name() ); ?>"
+						<input class="wpchill-toggle__input" id="setting-<?php echo esc_attr( $this->get_id() ); ?>"
 						       name="imageseo[<?php echo esc_attr( $this->get_name() ); ?>][]"
 						       type="checkbox"
 						       value="<?php echo esc_attr( $key ); ?>" <?php echo in_array( $key, $values ) ? 'checked="checked"' : '' ?>>

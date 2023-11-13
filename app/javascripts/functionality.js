@@ -10,6 +10,7 @@ class imageSEO_Bulk {
 		// Start bulk process
 		jQuery('#start_bulk_process').on('click', function (e) {
 			e.preventDefault();
+			jQuery(this).attr('disabled', 'disabled').addClass('disabled');
 			instance.startBulkProcess(imageseo_bulk_images.ids, imageseo_bulk_images.options);
 		});
 		// Show bulk preview
@@ -67,6 +68,9 @@ class imageSEO_Bulk {
 		const json_response = await response.json();
 		if (json_response.success) {
 			window.location.reload()
+		} else {
+			jQuery('.imageseo-settings-warning').remove();
+			jQuery('#start_bulk_process').attr('disabled', false).removeClass('disabled').after('<span class="imageseo-settings-warning">' + json_response.data.response + '</span>');
 		}
 	}
 
@@ -128,9 +132,8 @@ class imageSEO_Bulk {
 		button.removeAttr('disabled');
 		if (json_response.success) {
 			const optimized = json_response.data.current.id_images_optimized;
-			$wrapper.find('.imageseo-bulk-process-status').remove();
 			if ('undefined' !== typeof optimized) {
-				$wrapper.append('<p class="imageseo-bulk-process-status">' + __('Optimized images:', 'imageseo') + optimized.length + '</p>');
+				$wrapper.find('span.imageseo-optimization__optimized_images').text(optimized.length);
 			}
 		}
 	}
@@ -271,7 +274,8 @@ class imageseo_Settings {
 					  email      : jQuery('#setting-register_email').val(),
 					  terms      : jQuery('#setting-terms').is(':checked'),
 					  newsletters: jQuery('#setting-newsletter').is(':checked'),
-				  }
+				  };
+			button.attr('disabled', 'disabled').addClass('disabled');
 			const response = instance.checkRegisterFormData(data);
 			if (!response.success) {
 				jQuery('p.imageseo-register-form-error').remove();
@@ -295,6 +299,7 @@ class imageseo_Settings {
 
 		jQuery('#validate_api_key').on('click', function (e) {
 			e.preventDefault();
+			jQuery(this).attr('disabled', 'disabled').addClass('disabled');
 			const key = jQuery('#setting-api_key').val();
 			instance.validateApiKey(key);
 		});

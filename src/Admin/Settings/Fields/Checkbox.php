@@ -4,37 +4,6 @@ namespace ImageSeoWP\Admin\Settings\Fields;
 
 class Checkbox extends Admin_Fields {
 
-	/** @var String */
-	private $cb_label;
-
-	/**
-	 * DLM_Admin_Fields_Field_Checkbox constructor.
-	 *
-	 * @param String $name
-	 * @param String $value
-	 * @param String $cb_label
-	 */
-	public function __construct( $name, $value, $cb_label ) {
-		$this->cb_label = $cb_label;
-		parent::__construct( $name, $value, '' );
-	}
-
-
-	/**
-	 * @return String
-	 */
-	public function get_cb_label() {
-		return $this->cb_label;
-	}
-
-	/**
-	 * @param String $cb_label
-	 */
-	public function set_cb_label( $cb_label ) {
-		$this->cb_label = $cb_label;
-	}
-
-
 	/**
 	 * Renders field
 	 */
@@ -42,7 +11,7 @@ class Checkbox extends Admin_Fields {
 		?>
 		<div>
 			<div class="wpchill-toggle">
-				<input class="wpchill-toggle__input" id="setting-<?php echo esc_attr( $this->get_name() ); ?>"
+				<input class="wpchill-toggle__input" id="setting-<?php echo esc_attr( $this->get_id() ); ?>"
 				       name="imageseo[<?php echo esc_attr( $this->get_name() ); ?>]" type="checkbox"
 				       value="1" <?php checked( '1', $this->get_value() ); ?>>
 				<div class="wpchill-toggle__items">

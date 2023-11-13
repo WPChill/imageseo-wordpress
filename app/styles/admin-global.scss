@@ -736,20 +736,28 @@ WPCHill Tooltips
 	border-bottom: 1px solid #ccc;
 	padding: 15px 20px;
 	display: grid;
-	grid-template-columns: 1fr 3fr 1fr 1.5fr;
+	grid-template-columns: 1fr 3fr 1fr;
 	background: #fff;
 	width: calc(100% + 20px);
 	box-sizing: border-box;
 	margin-left: -20px;
 
 	p {
-		margin:0 auto;
-		font-size:13px;
-		line-height:26px;
+		margin: 0 auto;
+		font-size: 13px;
+	}
+
+	.imageseo-info-header__logo {
+		display: flex;
+		align-items: center;
 	}
 
 	.imageseo-info-header__optimization {
-		text-align:left;
+		text-align: center;
+		display: flex;
+		align-content: center;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.imageseo-info-header__credits{

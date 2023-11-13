@@ -22,17 +22,15 @@ class InstallPlugin extends Admin_Fields {
 	 *
 	 * @since 4.6.0
 	 */
-	public function __construct( $name, $link, $label ) {
-
-		if ( ! is_array( explode( '/', $link ) ) ) {
+	public function __construct( $option, $value ) {
+		parent::__construct( $option, '' );
+		if ( ! is_array( explode( '/', $this->get_link() ) ) ) {
 			return;
 		}
 
-		$this->plugin_path = $link;
-		$slug              = explode( '/', $link );
+		$this->plugin_path = $this->get_link();
+		$slug              = explode( '/', $this->get_link() );
 		$this->slug        = $slug[0];
-		$this->label       = $label;
-		parent::__construct( $name, '', '' );
 	}
 
 	/**
