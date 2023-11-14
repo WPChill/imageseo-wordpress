@@ -131,9 +131,10 @@ class imageSEO_Bulk {
 		let json_response = await response.json();
 		button.removeAttr('disabled');
 		if (json_response.success) {
+
 			const optimized = json_response.data.current.id_images_optimized;
 			if ('undefined' !== typeof optimized) {
-				$wrapper.find('span.imageseo-optimization__optimized_images').text(optimized.length);
+				$wrapper.find('span.imageseo-optimization__optimized_images').text(__('Optimized: ', 'imageseo') + optimized.length + __(' images', 'imageseo'));
 			}
 		}
 	}
@@ -195,48 +196,7 @@ class imageseo_Settings {
 	init() {
 		const instance = this;
 
-		jQuery('#setting-visibilitySubTitle').on('change', function (e) {
-			const $this = jQuery(this);
-			if ($this.is(':checked')) {
-				instance.socialCard.find('.imageseo-media__content__sub-title').show();
-			} else {
-				instance.socialCard.find('.imageseo-media__content__sub-title').hide();
-			}
-		});
-		jQuery('#setting-visibilitySubTitleTwo').on('change', function (e) {
-			const $this = jQuery(this);
-			if ($this.is(':checked')) {
-				instance.socialCard.find('.imageseo-media__content__sub-title-two').show();
-			} else {
-				instance.socialCard.find('.imageseo-media__content__sub-title-two').hide();
-			}
-		});
-		jQuery('#setting-visibilityRating').on('change', function (e) {
-			const $this = jQuery(this);
-			if ($this.is(':checked')) {
-				instance.socialCard.find('.imageseo-media__content__stars').show();
-				jQuery('tr[data-setting="starColor"]').show();
-			} else {
-				instance.socialCard.find('.imageseo-media__content__stars').hide();
-				jQuery('tr[data-setting="starColor"]').hide();
-			}
-		});
-		jQuery('#setting-visibilityAvatar').on('change', function (e) {
-			const $this = jQuery(this);
-			if ($this.is(':checked')) {
-				instance.socialCard.find('.imageseo-media__content__avatar').show();
-			} else {
-				instance.socialCard.find('.imageseo-media__content__avatar').hide();
-			}
-		});
-		jQuery('#setting-optimizeAlt').on('change', function (e) {
-			const $this = jQuery(this);
-			if ($this.is(':checked')) {
-				jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').show();
-			} else {
-				jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').hide();
-			}
-		});
+
 		jQuery('#setting-layout').on('change', function (e) {
 			const $this = jQuery(this),
 				  $val  = $this.val();
@@ -266,8 +226,9 @@ class imageseo_Settings {
 
 		jQuery('#register_account').on('click', function (e) {
 			e.preventDefault();
-			const button   = jQuery(this),
-				  data     = {
+
+			const button = jQuery(this),
+				  data   = {
 					  firstname  : jQuery('#setting-register_first_name').val(),
 					  lastname   : jQuery('#setting-register_last_name').val(),
 					  password   : jQuery('#setting-register_password').val(),
@@ -276,6 +237,7 @@ class imageseo_Settings {
 					  newsletters: jQuery('#setting-newsletter').is(':checked'),
 				  };
 			button.attr('disabled', 'disabled').addClass('disabled');
+			button.after('<p class="imageseo-register-form-error">' + __('Registering your account and validating API KEY, please wait', 'imageseo') + '</p>');
 			const response = instance.checkRegisterFormData(data);
 			if (!response.success) {
 				jQuery('p.imageseo-register-form-error').remove();
@@ -284,7 +246,12 @@ class imageseo_Settings {
 			}
 			instance.register(data).then(function (response) {
 				if (response.success) {
-					const api_key = response.data.user.project_create.api_key;
+					if ('undefined' !== typeof response.data.user && null !== response.data.user) {
+						const api_key = response.data.user.project_create.api_key;
+					} else {
+						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
+					}
+
 					jQuery('#setting-api_key').val(api_key);
 					instance.validateApiKey(api_key);
 				} else {
@@ -299,8 +266,15 @@ class imageseo_Settings {
 
 		jQuery('#validate_api_key').on('click', function (e) {
 			e.preventDefault();
-			jQuery(this).attr('disabled', 'disabled').addClass('disabled');
-			const key = jQuery('#setting-api_key').val();
+			const key    = jQuery('#setting-api_key').val(),
+				  button = jQuery(this);
+			button.parent().find('.imageseo-settings-warning').remove();
+			if ('' === key) {
+				button.after('<p class="imageseo-settings-warning">' + __('Please enter a valid API Key', 'imageseo') + '</p>');
+				return;
+			}
+			button.attr('disabled', 'disabled').addClass('disabled');
+			button.after('<p class="imageseo-settings-warning">' + __('Validating API KEY, please wait', 'imageseo') + '</p>');
 			instance.validateApiKey(key);
 		});
 	}
@@ -353,12 +327,17 @@ class imageseo_Settings {
 
 		const json_response = await response.json();
 		if (json_response.success) {
-			if (json_response.data.user.is_active) {
+			if ('undefined' !== typeof json_response.data.user && null !== json_response.data.user) {
+				if (json_response.data.user.is_active) {
+					jQuery('.imageseo-settings-warning').remove();
+					jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is valid.', 'imageseo') + '</span>');
+					setTimeout(function () {
+						window.location.reload();
+					}, 1500);
+				}
+			} else {
 				jQuery('.imageseo-settings-warning').remove();
-				jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is valid.', 'imageseo') + '</span>');
-				setTimeout(function () {
-					window.location.reload();
-				}, 1500);
+				jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is invalid.', 'imageseo') + '</span>');
 			}
 		}
 	}
@@ -422,6 +401,61 @@ class imageseo_Settings {
 		if (!jQuery('#setting-optimizeAlt').is(':checked')) {
 			jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').hide();
 		}
+		if ('CUSTOM_FORMAT' !== jQuery('input[type="radio"][name="imageseo[formatAlt]"]:checked').val()) {
+			jQuery('tr[data-setting="formatAltCustom"]').hide();
+		} else {
+			jQuery('tr[data-setting="formatAltCustom"]').show();
+		}
+		jQuery('#setting-visibilitySubTitle').on('change', function (e) {
+			const $this = jQuery(this);
+			if ($this.is(':checked')) {
+				instance.socialCard.find('.imageseo-media__content__sub-title').show();
+			} else {
+				instance.socialCard.find('.imageseo-media__content__sub-title').hide();
+			}
+		});
+		jQuery('#setting-visibilitySubTitleTwo').on('change', function (e) {
+			const $this = jQuery(this);
+			if ($this.is(':checked')) {
+				instance.socialCard.find('.imageseo-media__content__sub-title-two').show();
+			} else {
+				instance.socialCard.find('.imageseo-media__content__sub-title-two').hide();
+			}
+		});
+		jQuery('#setting-visibilityRating').on('change', function (e) {
+			const $this = jQuery(this);
+			if ($this.is(':checked')) {
+				instance.socialCard.find('.imageseo-media__content__stars').show();
+				jQuery('tr[data-setting="starColor"]').show();
+			} else {
+				instance.socialCard.find('.imageseo-media__content__stars').hide();
+				jQuery('tr[data-setting="starColor"]').hide();
+			}
+		});
+		jQuery('#setting-visibilityAvatar').on('change', function (e) {
+			const $this = jQuery(this);
+			if ($this.is(':checked')) {
+				instance.socialCard.find('.imageseo-media__content__avatar').show();
+			} else {
+				instance.socialCard.find('.imageseo-media__content__avatar').hide();
+			}
+		});
+		jQuery('#setting-optimizeAlt').on('change', function (e) {
+			const $this = jQuery(this);
+			if ($this.is(':checked')) {
+				jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').show();
+			} else {
+				jQuery('tr[data-setting="altFill"],tr[data-setting="formatAlt"],tr[data-setting="formatAltCustom"]').hide();
+			}
+		});
+		jQuery('input[type="radio"][name="imageseo[formatAlt]"]').on('change', function () {
+			console.log(jQuery(this).val());
+			if ('CUSTOM_FORMAT' !== this.value) {
+				jQuery('tr[data-setting="formatAltCustom"]').hide();
+			} else {
+				jQuery('tr[data-setting="formatAltCustom"]').show();
+			}
+		});
 	}
 
 	createFilePicker() {

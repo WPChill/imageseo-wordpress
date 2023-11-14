@@ -211,7 +211,7 @@ class QueryImagesBulk
 	}
 
 	/**
-	 * Display number of optimized and non-optimized images
+	 * Add the required JS variables to the page
 	 *
 	 * @since 2.0.9
 	 */
@@ -219,26 +219,6 @@ class QueryImagesBulk
 
 		$result            = $this->images_query();
 		$result['options'] = imageseo_get_service( 'Option' )->getOptions();
-
-		if ( is_wp_error( $result ) ) {
-			return;
-		}
-		$total_images  = count( $result['ids'] );
-		$optimized     = count( $result['ids_optimized'] );
-		$non_optimized = count( $result['ids_non_optimized'] );
-		echo '<div class="card">';
-		// If there are no images found that require optimization then display a message and return.
-		if ( 0 === $total_images ) {
-			echo esc_html__( 'No images that require optimization found. Good job!', 'imageseo' );
-			echo '</div>';
-
-			return;
-		}
-		echo sprintf( esc_html__( 'You have optimized %s images out of %s.', 'imageseo' ), absint( $optimized ), absint( $total_images ) );
-		if ( 0 !== $non_optimized ) {
-			echo sprintf( esc_html__( 'Remaining %s which will consume %s credit(s).', 'imageseo' ), absint( $non_optimized ), absint( $non_optimized ) );
-		}
-		echo '</div>';
 		echo '<script type="text/javascript">imageseo_bulk_images = ' . json_encode( $result ) . ';</script>';
 	}
 }

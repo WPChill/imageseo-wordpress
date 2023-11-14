@@ -1,12 +1,12 @@
-=== Optimize images ALT Text (alt tag) & names for SEO using AI ===
-Contributors: gmulti
+=== Optimize Images ALT Text (alt tag) & names for SEO using AI ===
+Contributors: wpchill, silkalns
 Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.8
-Tested up to: 6.1
+Tested up to: 6.4
 Requires PHP: 7.0
 Stable tag: v3.0.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Bulk optimize images alt text (alt tag) & names for SEO using AI.
 

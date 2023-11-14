@@ -8,6 +8,7 @@ class MultiCheckbox extends Admin_Fields {
 	 */
 	public function render() {
 		$values = $this->get_value();
+		$i      = 1;
 		?>
 		<div>
 			<label><?php echo wp_kses_post( $this->get_cb_label() ); ?></label>
@@ -15,7 +16,8 @@ class MultiCheckbox extends Admin_Fields {
 				<?php foreach ( $this->get_options() as $key => $name ) {
 					?>
 					<div class="wpchill-toggle">
-						<input class="wpchill-toggle__input" id="setting-<?php echo esc_attr( $this->get_id() ); ?>"
+						<input class="wpchill-toggle__input"
+						       id="setting-<?php echo esc_attr( $this->get_id() . '-' . $i ); ?>"
 						       name="imageseo[<?php echo esc_attr( $this->get_name() ); ?>][]"
 						       type="checkbox"
 						       value="<?php echo esc_attr( $key ); ?>" <?php echo in_array( $key, $values ) ? 'checked="checked"' : '' ?>>
@@ -34,7 +36,10 @@ class MultiCheckbox extends Admin_Fields {
 						</div>
 					</div>
 					<?php echo esc_html( $name ); ?>
-				<?php } ?>
+					<?php
+					$i ++;
+				}
+				?>
 			</div>
 		</div>
 		<?php

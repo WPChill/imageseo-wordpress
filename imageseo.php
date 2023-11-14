@@ -1,16 +1,42 @@
 <?php
-/*
-Plugin Name: Image SEO
-Plugin URI: https://imageseo.io
-Description: Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images. Stop doing this mistake and take control back on your WordPress Medias !
-Author: Image SEO
-Author URI: https://imageseo.io/
-Text Domain: imageseo
-Domain Path: /languages/
-Version: 3.0.0
-Requires at least: 5.0
-License: GPLv2
-*/
+/**
+ * Plugin Name:              Image SEO
+ * Plugin URI:               https://imageseo.io
+ * Description:              Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images.
+ * Author:                   WPChill
+ * Version:                  3.0.0
+ * Author URI:               https://www.wpchill.com/
+ * License:                  GPLv3 or later
+ * License URI:              http://www.gnu.org/licenses/gpl-3.0.html
+ * Requires PHP:             7.0
+ * Text Domain:              imageseo
+ * Domain Path:              /languages/
+ *
+ * Copyright 2019-2023        WPUmbrella      aurelio@wp-umbrella.com
+ * Copyright 24.10.2023       WPChill         heyyy@wpchill.com
+ *
+ *
+ * Original Plugin URI:      https://imageseo.io
+ * Original Author URI:      https://imageseo.io
+ * Original Author:          https://profiles.wordpress.org/gmulti/
+ *
+ * NOTE:
+ *
+ * WP Umbrella has transferred ownership to WPChill on: 24th of October, 2023.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 3, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
 if (!defined('ABSPATH')) {
     exit;

@@ -112,6 +112,14 @@ class SettingsPage {
 
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
+			$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
+			$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
+			if ( 0 !== absint( $totalNoAlt ) ) {
+				$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> doesn\'t (don\'t) have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
+			} else {
+				$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
+			}
+			echo '<div class="imageseo-info-text">' . wp_kses_post( $info_text ) . '</div>';
 			?>
 		</h2>
 		<?php
@@ -608,7 +616,7 @@ class SettingsPage {
 		);
 		$options  = imageseo_get_options();
 		if ( empty( $options['api_key'] ) || ! isset( $options['allowed'] ) || ! $options['allowed'] ) {
-			array_merge(
+			$settings['welcome']['sections']['welcome']['fields'] = array_merge(
 				array(
 					array(
 						'name'     => 'register_account',
@@ -677,7 +685,8 @@ class SettingsPage {
 						'priority' => 30,
 					)
 				),
-				$settings['welcome']['sections']['welcome']['fields'] );
+				$settings['welcome']['sections']['welcome']['fields']
+			);
 		}
 
 		return apply_filters( 'imageseo_settings_tabs', $settings );
@@ -714,7 +723,8 @@ class SettingsPage {
 		// Display a notice with the bulk process status
 		?>
 		<div class="notice notice-info">
-			<p class="imageseo-optimization-status"><?php echo sprintf( esc_html__( 'Optimizing %s images!', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?><?php wp_kses_post( __( 'Optimized <span class="imageseo-optimization__optimized_images">%s</span> images', 'imageseo' ), 0 ); ?></p>
+			<p class="imageseo-optimization-status"><?php echo sprintf( esc_html__( 'Optimizing %s images!', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?>
+				<span class='imageseo-optimization__optimized_images'></span></p>
 			<button id="get_bulk_process"
 			        class="button button-primary"><?php esc_html_e( 'Update status', 'imageseo' ); ?></button>
 			<button id='stop_bulk_process'
@@ -804,20 +814,12 @@ class SettingsPage {
 		if ( $user ) {
 			$credits = absint( $user['plan']['limit_images'] ) + absint( $user['bonus_stock_images'] ) - absint( $user['current_request_images'] );
 		}
-		$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
-		$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
-		if ( 0 !== absint( $totalNoAlt ) ) {
-			$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> doesn\'t (don\'t) have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
-		} else {
-			$info_text = __( 'Congrats, all your images have alt text!', 'imageseo' );
-		}
 		?>
 		<div class="imageseo-info-header">
 			<div class="imageseo-info-header__logo">
 				<img src="<?php echo esc_url( IMAGESEO_URL_DIST . '/images/logo-blue.svg' ); ?>">
 			</div>
 			<div class='imageseo-info-header__optimization'>
-				<?php echo '<p>' . wp_kses_post( $info_text ) . '</p>'; ?>
 			</div>
 			<div class='imageseo-info-header__credits'>
 				<?php echo '<p>' . esc_html__( 'Remaining credits:', 'imageseo' ) . '<span id="imageseo-remaining-credits"><strong>' . absint( $credits ) . '</strong></span></p><p><a href="https://app.imageseo.io/plan" target="_blank" class="button button-primary">' . esc_html__( 'Buy more!', 'imageseo' ) . '</a></p>'; ?>
