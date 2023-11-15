@@ -16,8 +16,8 @@ class SeopressTargetKeyword
             return '';
         }
 
-        list($attachmentId) = $params;
-        $numberKeyword = (isset($params['number'])) ? $params['number'] : 1;
+	    $attachmentId  = $params['attachmentId'];
+	    $numberKeyword = ( isset( $params['number'] ) ) ? $params['number'] : 1;
 
         $id = imageseo_get_service('QueryImages')->getPostByAttachmentId($attachmentId);
         if (!$id) {
