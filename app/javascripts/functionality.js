@@ -245,13 +245,20 @@ class imageseo_Settings {
 				return;
 			}
 			instance.register(data).then(function (response) {
+				let api_key = false;
+
 				if (response.success) {
 					if ('undefined' !== typeof response.data.user && null !== response.data.user) {
-						const api_key = response.data.user.project_create.api_key;
+						api_key = response.data.user['project_create']['api_key'];
 					} else {
 						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
+						return;
 					}
 
+					if (!api_key) {
+						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
+						return;
+					}
 					jQuery('#setting-api_key').val(api_key);
 					instance.validateApiKey(api_key);
 				} else {

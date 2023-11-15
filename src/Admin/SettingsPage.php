@@ -128,7 +128,7 @@ class SettingsPage {
 	/**
 	 * The settings page
 	 *
-	 * @since 2.0.9
+	 * @since 3.0.0
 	 */
 	public function imageseo_settings() {
 		// initialize settings
@@ -702,7 +702,7 @@ class SettingsPage {
 	/**
 	 * Display a notice with the bulk process status
 	 *
-	 * @since 2.0.9
+	 * @since 3.0.0
 	 */
 	public function bulk_process() {
 		$current_screen = get_current_screen();
@@ -736,7 +736,7 @@ class SettingsPage {
 	/**
 	 * Display the Social Card preview
 	 *
-	 * @since 2.0.9
+	 * @since 3.0.0
 	 */
 	public function social_card_preview() {
 		$options        = imageseo_get_options();

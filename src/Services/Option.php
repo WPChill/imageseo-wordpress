@@ -38,6 +38,7 @@ class Option
 			'visibilityAvatar'       => true,
 			'logoUrl'                => IMAGESEO_URL_DIST . '/images/favicon.png',
 			'defaultBgImg'           => IMAGESEO_URL_DIST . '/images/default_logo.png',
+			'textAlignment'          => 'top'
 		],
 		'altFilter'                  => 'ALL',
 		'altFill'                    => 'FILL_ALL',

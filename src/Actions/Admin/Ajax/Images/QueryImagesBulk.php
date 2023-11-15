@@ -17,7 +17,7 @@ class QueryImagesBulk
 
     public function hooks()
     {
-		add_action( 'imageseo_settings_page_bulk_optimizations_start', array( $this, 'display_images' ) );
+		add_action( 'imageseo_settings_page_bulk_optimizations_start', array( $this, 'script_data' ) );
     }
 
     public function buildSqlQuery($options)
@@ -145,7 +145,7 @@ class QueryImagesBulk
 	 *
 	 *
 	 * @return array
-	 * @since 2.0.9
+	 * @since 3.0.0
 	 */
 	private function images_query() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -213,9 +213,9 @@ class QueryImagesBulk
 	/**
 	 * Add the required JS variables to the page
 	 *
-	 * @since 2.0.9
+	 * @since 3.0.0
 	 */
-	public function display_images() {
+	public function script_data() {
 
 		$result            = $this->images_query();
 		$result['options'] = imageseo_get_service( 'Option' )->getOptions();

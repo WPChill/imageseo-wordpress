@@ -126,6 +126,10 @@ Image SEO works in every language.
 
 == Changelog ==
 
+= 3.0.0 - xx.xx.2023 =
+Changed: Admin Dashboard & Functionality Change
+Fixed: Settings not reflecting changes ( [#13](https://github.com/WPChill/imageseo-wordpress/issues/13) )
+
 = 2.0.8 (12-20-2022) =
 - Security:  Strengthening of security (Thanks WPScan)
 
