@@ -89,7 +89,6 @@ class Option {
 						$missig_fields[] = $field;
 					}
 				}
-
 				// Get array difference
 				foreach ( $missig_fields as $option ) {
 					switch ( $option ) {
@@ -119,6 +118,9 @@ class Option {
 							break;
 						case 'visibilityAvatar':
 							$newOptions['social_media_settings']['visibilityAvatar'] = 0;
+							break;
+						case 'optimizeFile':
+							$newOptions['optimizeFile'] = 0;
 							break;
 						default:
 							$newOptions = apply_filters( 'imageseo_sanitize_' . $option, $newOptions, $options, $current_fields, $current_tab, $current_section );
