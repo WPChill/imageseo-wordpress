@@ -281,6 +281,12 @@ class SettingsPage {
 		foreach ( AltSpecification::getFillType() as $fill_type ) {
 			$fill_types[ $fill_type['id'] ] = $fill_type['label'];
 		}
+		// Get all post types
+		$all_post_types = imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia();
+		$allowed_post_types = array();
+		foreach( $all_post_types as $post_type ){
+			$allowed_post_types[ $post_type->name ] = $post_type->label;
+		}
 
 		$settings = array(
 			'welcome'            => array(
@@ -385,10 +391,7 @@ class SettingsPage {
 								'cb_label' => '',
 								'desc'     => __( 'Enable the automatic generation of Social Media Card for the selected post types. You will consume one credit by SociaL Media Cards created (1 page = 1 Social media card working on Twitter, Facebook and LinkedIn).', 'imageseo' ),
 								'type'     => 'multi_checkbox',
-								'options'  => array(
-									'post' => __( 'Posts', 'imageseo' ),
-									'page' => __( 'Pages', 'imageseo' ),
-								),
+								'options'  => $allowed_post_types,
 								'priority' => 30,
 							),
 						)
@@ -715,8 +718,9 @@ class SettingsPage {
 			return;
 		}
 		$bulk_settings = get_option( '_imageseo_bulk_process_settings', false );
+
 		// If the bulk process settings are not set, return
-		if ( false === $bulk_settings ) {
+		if ( false === $bulk_settings || empty( $bulk_settings ) ) {
 			return;
 		}
 
