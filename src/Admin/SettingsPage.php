@@ -326,7 +326,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'You API Key', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
+								'desc'     => '',
 								'type'     => 'password',
 								'priority' => 30,
 							),
@@ -336,7 +336,7 @@ class SettingsPage {
 								'label'    => __( 'Validate your API Key', 'imageseo' ),
 								'cb_label' => '',
 								'link'     => '#',
-								'desc'     => __( 'If you tick this box, the plugin will automatically write an alternative to the images you will upload.', 'imageseo' ),
+								'desc'     => '',
 								'type'     => 'action_button',
 								'priority' => 30,
 							),
@@ -450,7 +450,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Layout', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
+								'desc'     => '',
 								'type'     => 'select',
 								'parent'   => 'social_media_settings',
 								'options'  => array(
@@ -464,7 +464,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Text alignment', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Show the price product or author depending on the page', 'imageseo' ),
+								'desc'     => '',
 								'type'     => 'select',
 								'parent'   => 'social_media_settings',
 								'options'  => array(
@@ -489,7 +489,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'Background Color', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => __( 'Content background color', 'imageseo' ),
+								'desc'     => '',
 								'type'     => 'colorpicker',
 								'parent'   => 'social_media_settings',
 								'priority' => 30,
@@ -726,7 +726,7 @@ class SettingsPage {
 
 		// Display a notice with the bulk process status
 		?>
-		<div class="notice notice-info">
+		<div class="imageseo-bulk-optimization-process notice notice-info">
 			<p class="imageseo-optimization-status"><?php echo sprintf( esc_html__( 'Optimizing %s images!', 'imageseo' ), absint( $bulk_settings['total_images'] ) ); ?>
 				<span class='imageseo-optimization__optimized_images'></span></p>
 			<button id="get_bulk_process"

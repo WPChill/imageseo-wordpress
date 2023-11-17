@@ -727,9 +727,10 @@ WPCHill Tooltips
 	}
 }
 
-.imageseo-settings-warning {
-	display:block;
-	margin-top:10px;
+.imageseo-settings-response-info {
+	display:inline-block;
+	margin-top:5px;
+	margin-left:10px;
 }
 
 .imageseo-info-header {
@@ -789,4 +790,13 @@ WPCHill Tooltips
 	line-height:26px;
 	text-align:right;
 	float:right;
+}
+/**
+ * Optimization process notice
+ */
+.imageseo-bulk-optimization-process {
+	display: grid;
+	grid-template-columns: 3.2fr 0.4fr 0.4fr;
+	grid-gap: 10px;
+	padding:10px;
 }

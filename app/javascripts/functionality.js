@@ -10,7 +10,7 @@ class imageSEO_Bulk {
 		// Start bulk process
 		jQuery('#start_bulk_process').on('click', function (e) {
 			e.preventDefault();
-			jQuery(this).attr('disabled', 'disabled').addClass('disabled');
+			jQuery(this).attr('disabled', 'disabled').addClass('disabled').after('<span class="imageseo-settings-response-info">' + __('Bulk process started, please wait', 'imageseo') + '</span>');
 			instance.startBulkProcess(imageseo_bulk_images.ids, imageseo_bulk_images.options);
 		});
 		// Show bulk preview
@@ -69,8 +69,8 @@ class imageSEO_Bulk {
 		if (json_response.success) {
 			window.location.reload()
 		} else {
-			jQuery('.imageseo-settings-warning').remove();
-			jQuery('#start_bulk_process').attr('disabled', false).removeClass('disabled').after('<span class="imageseo-settings-warning">' + json_response.data.response + '</span>');
+			jQuery('.imageseo-settings-response-info').remove();
+			jQuery('#start_bulk_process').attr('disabled', false).removeClass('disabled').after('<span class="imageseo-settings-response-info">' + json_response.data.response + '</span>');
 		}
 	}
 
@@ -129,12 +129,19 @@ class imageSEO_Bulk {
 		});
 
 		let json_response = await response.json();
+		if (json_response.data['finish']) {
+			$wrapper.find('span.imageseo-optimization__optimized_images').text(__('Optimization finished, page will reload in a couple of seconds.', 'imageseo'));
+			setTimeout(
+				function () {
+					window.location.reload()
+				}, 2000);
+		}
 		button.removeAttr('disabled');
 		if (json_response.success) {
 
 			const optimized = json_response.data.current.id_images_optimized;
 			if ('undefined' !== typeof optimized) {
-				$wrapper.find('span.imageseo-optimization__optimized_images').text(__('Optimized: ', 'imageseo') + optimized.length + __(' images', 'imageseo'));
+				$wrapper.find('span.imageseo-optimization__optimized_images').text(__('Optimized: ', 'imageseo') + optimized.length + __(' images.', 'imageseo'));
 			}
 		}
 	}
@@ -159,6 +166,12 @@ class imageSEO_Bulk {
 		button.removeAttr('disabled');
 		if (json_response.success) {
 			$wrapper.append('<p>' + __('Bulk process stopped.', 'imageseo') + '</p>');
+			setTimeout(
+				function () {
+					window.location.reload()
+				},
+				1500
+			);
 		}
 	}
 
@@ -220,8 +233,8 @@ class imageseo_Settings {
 		instance.setColorPickers();
 
 		jQuery('table.imageseo-bulk_optimizations').find('input,select').on('change', function (e) {
-			jQuery('.imageseo-settings-warning').remove();
-			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<span class="imageseo-settings-warning">' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</span>');
+			jQuery('.imageseo-settings-response-info').remove();
+			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<span class="imageseo-settings-response-info">' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</span>');
 		});
 
 		jQuery('#register_account').on('click', function (e) {
@@ -275,13 +288,13 @@ class imageseo_Settings {
 			e.preventDefault();
 			const key    = jQuery('#setting-api_key').val(),
 				  button = jQuery(this);
-			button.parent().find('.imageseo-settings-warning').remove();
+			jQuery('.imageseo-imageseo-settings-response-info').remove();
 			if ('' === key) {
-				button.after('<p class="imageseo-settings-warning">' + __('Please enter a valid API Key', 'imageseo') + '</p>');
+				button.after('<span class="imageseo-settings-response-info">' + __('Please enter a valid API Key', 'imageseo') + '</span>');
 				return;
 			}
 			button.attr('disabled', 'disabled').addClass('disabled');
-			button.after('<p class="imageseo-settings-warning">' + __('Validating API KEY, please wait', 'imageseo') + '</p>');
+			button.after('<span class="imageseo-settings-response-info">' + __('Validating API KEY, please wait', 'imageseo') + '</span>');
 			instance.validateApiKey(key);
 		});
 	}
@@ -333,19 +346,18 @@ class imageseo_Settings {
 		});
 
 		const json_response = await response.json();
+		jQuery('.imageseo-settings-response-info').remove();
 		if (json_response.success) {
 			if ('undefined' !== typeof json_response.data.user && null !== json_response.data.user) {
 				if (json_response.data.user.is_active) {
-					jQuery('.imageseo-settings-warning').remove();
-					jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is valid.', 'imageseo') + '</span>');
-					setTimeout(function () {
-						window.location.reload();
-					}, 1500);
+					jQuery('#validate_api_key').after('<span class="imageseo-settings-response-info">' + __('API key is valid.', 'imageseo') + '</span>');
 				}
 			} else {
-				jQuery('.imageseo-settings-warning').remove();
-				jQuery('#setting-api_key').after('<span class="imageseo-settings-warning">' + __('API key is invalid.', 'imageseo') + '</span>');
+				jQuery('#validate_api_key').after('<span class="imageseo-settings-response-info">' + __('API key is invalid.', 'imageseo') + '</span>');
 			}
+			setTimeout(function () {
+				window.location.reload();
+			}, 1500);
 		}
 	}
 
@@ -402,6 +414,7 @@ class imageseo_Settings {
 	};
 
 	setConditions() {
+		const instance = this;
 		if (!jQuery('#setting-visibilityRating').is(':checked')) {
 			jQuery('tr[data-setting="starColor"]').hide();
 		}
