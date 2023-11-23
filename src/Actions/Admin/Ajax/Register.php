@@ -54,7 +54,7 @@ class Register
         }
 		// Create the email subject and body
 	    $subject = __( 'Welcome to Image SEO', 'imageseo' );
-	    $body    = __( 'Welcome to Image SEO', 'imageseo' ) . "\n\n" . __( 'You can now log in to your account with the following credentials:', 'imageseo' ) . "\n\n" . __( 'Email:', 'imageseo' ) . ' ' . $email . "\n" . __( 'Password:', 'imageseo' ) . ' ' . $password . "\n\n" . __( 'You can change your password in your account settings.', 'imageseo' ) . "\n\n";
+	    $body    = __( 'Welcome to Image SEO', 'imageseo' ) . "\n\n" . __( 'You can now log in to your account with the following credentials:', 'imageseo' ) . "\n\n" . __( 'Email:', 'imageseo' ) . ' ' . $email . "\n" . __( 'Password:', 'imageseo' ) . "\n\n";
 		// Email the client with the credentials
 	    wp_mail( $email, $subject, $body );
 
