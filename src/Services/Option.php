@@ -19,7 +19,7 @@ class Option
 		'allowed'                    => false,
 		'active_alt_write_upload'    => 1,
 		'active_rename_write_upload' => 1,
-		'default_language_ia'        => 'en',
+		'default_language_ia'        => IMAGESEO_LOCALE,
 		'alt_template_default'       => AltFormat::ALT_SIMPLE,
 		'social_media_post_types'    => [
 			'post',
@@ -42,7 +42,8 @@ class Option
 		],
 		'altFilter'                  => 'ALL',
 		'altFill'                    => 'FILL_ALL',
-		'optimizeAlt'                => 0
+		'optimizeAlt'                => 0,
+		'language'                   => IMAGESEO_LOCALE,
 	];
 
     /**

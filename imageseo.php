@@ -71,7 +71,7 @@ define('IMAGESEO_TEMPLATES_ADMIN', IMAGESEO_TEMPLATES . '/admin');
 define('IMAGESEO_TEMPLATES_ADMIN_NOTICES', IMAGESEO_TEMPLATES_ADMIN . '/notices');
 define('IMAGESEO_TEMPLATES_ADMIN_PAGES', IMAGESEO_TEMPLATES_ADMIN . '/pages');
 define('IMAGESEO_TEMPLATES_ADMIN_METABOXES', IMAGESEO_TEMPLATES_ADMIN . '/metaboxes');
-
+define( 'IMAGESEO_LOCALE', get_locale() );
 /**
  * Check compatibility this ImageSeo with WordPress config.
  */

@@ -361,7 +361,7 @@ class SettingsPage {
 							),
 							array(
 								'name'     => 'default_language_ia',
-								'std'      => 'en_GB',
+								'std'      => IMAGESEO_LOCALE,
 								'label'    => __( 'Language', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'In which language should we write your filenames and alternative texts.', 'imageseo' ),
@@ -528,7 +528,7 @@ class SettingsPage {
 						'fields'      => array(
 							array(
 								'name'     => 'language',
-								'std'      => '',
+								'std'      => IMAGESEO_LOCALE,
 								'label'    => __( 'Language', 'imageseo' ),
 								'cb_label' => '',
 								'desc'     => __( 'In which language should we write your filenames and alternative texts?', 'imageseo' ),

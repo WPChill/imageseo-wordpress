@@ -99,7 +99,7 @@ class Option {
 							$newOptions['active_rename_write_upload'] = 0;
 							break;
 						case 'default_language_ia':
-							$newOptions['default_language_ia'] = 'en';
+							$newOptions['default_language_ia'] = IMAGESEO_LOCALE;
 							break;
 						case 'social_media_post_types':
 							$newOptions['social_media_post_types'] = [];
