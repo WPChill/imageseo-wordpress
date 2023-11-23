@@ -12,9 +12,10 @@ class MultiCheckbox extends Admin_Fields {
 		?>
 		<div>
 			<label><?php echo wp_kses_post( $this->get_cb_label() ); ?></label>
-			<div>
-				<?php foreach ( $this->get_options() as $key => $name ) {
-					?>
+
+			<?php foreach ( $this->get_options() as $key => $name ) {
+				?>
+				<div class="wpchill-multitoggle-wrapper">
 					<div class="wpchill-toggle">
 						<input class="wpchill-toggle__input"
 						       id="setting-<?php echo esc_attr( $this->get_id() . '-' . $i ); ?>"
@@ -36,11 +37,11 @@ class MultiCheckbox extends Admin_Fields {
 						</div>
 					</div>
 					<?php echo esc_html( $name ); ?>
-					<?php
-					$i ++;
-				}
-				?>
-			</div>
+				</div>
+				<?php
+				$i ++;
+			}
+			?>
 		</div>
 		<?php
 	}

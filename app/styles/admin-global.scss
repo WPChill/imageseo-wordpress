@@ -429,7 +429,6 @@
 	td,
 	.dlm-accordeon-group {
 		margin: 0 auto;
-		padding: 0 !important;
 	}
 	td .dlm-groupped-settings__box,
 	.dlm-accordeon-group .dlm-groupped-settings__box {
@@ -809,4 +808,8 @@ WPCHill Tooltips
 	grid-template-columns: 3.2fr 0.4fr 0.4fr;
 	grid-gap: 10px;
 	padding:10px;
+}
+
+.wpchill-multitoggle-wrapper {
+	margin-bottom:10px;
 }

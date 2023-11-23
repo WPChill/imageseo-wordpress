@@ -139,7 +139,7 @@ class SettingsPage {
 		if ( ! empty( $options['api_key'] ) && isset( $options['allowed'] ) && $options['allowed'] ) {
 			?>
 			<style>
-				tr[data-setting="register_account"], tr[data-setting='register_first_name'], tr[data-setting='register_last_name'], tr[data-setting='register_email'], tr[data-setting='register_password'], tr[data-setting='terms'], tr[data-setting='newsletter'], tr[data-setting='register_account'] {
+				tr[data-setting="register_account"], tr[data-setting='register_first_name'], tr[data-setting='register_last_name'], tr[data-setting='register_email'], tr[data-setting='register_password'], tr[data-setting='terms'], tr[data-setting='newsletter'], tr[data-setting='register_account'], tr[data-setting='manage_account'], tr[data-setting='already_api'] {
 					display: none;
 				}
 			</style>
