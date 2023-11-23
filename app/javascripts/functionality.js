@@ -16,32 +16,22 @@ class imageSEO_Bulk {
 		// Show bulk preview
 		jQuery('#get_bulk_process').on('click', function (e) {
 			e.preventDefault();
-			const button   = jQuery(this),
-				  $wrapper = button.closest('.notice');
+			const button = jQuery(this), $wrapper = button.closest('.notice');
 			button.attr('disabled', 'disabled');
 			instance.getCurrentBulk($wrapper, button);
 		});
 		// Stop bulk process
 		jQuery('#stop_bulk_process').on('click', function (e) {
 			e.preventDefault();
-			const button   = jQuery(this),
-				  $wrapper = button.closest('.notice');
+			const button = jQuery(this), $wrapper = button.closest('.notice');
 			button.attr('disabled', 'disabled');
 			instance.stopCurrentProcess($wrapper, button);
 		});
 	}
 
-	async startBulkProcess(
-		data,
-		{
-			formatAlt,
-			formatAltCustom,
-			language,
-			optimizeAlt,
-			optimizeFile,
-			altFilter
-		}
-	) {
+	async startBulkProcess(data, {
+		formatAlt, formatAltCustom, language, optimizeAlt, optimizeFile, altFilter
+	}) {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_start_bulk");
@@ -52,18 +42,14 @@ class imageSEO_Bulk {
 		formData.append("optimizeAlt", optimizeAlt);
 		formData.append("optimizeFile", optimizeFile);
 		formData.append("altFilter", altFilter);
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		//@ts-ignore
 		formData.append("wantValidateResult", false);
 		//@ts-ignore
 		const response      = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 		const json_response = await response.json();
 		if (json_response.success) {
@@ -78,16 +64,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_restart_bulk");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		return await response.json();
@@ -97,16 +79,12 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_get_preview_bulk");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		return await response.json();
@@ -116,25 +94,20 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_get_current_bulk");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		let json_response = await response.json();
 		if (json_response.data['finish']) {
 			$wrapper.find('span.imageseo-optimization__optimized_images').text(__('Optimization finished, page will reload in a couple of seconds.', 'imageseo'));
-			setTimeout(
-				function () {
-					window.location.reload()
-				}, 2000);
+			setTimeout(function () {
+				window.location.reload()
+			}, 2000);
 		}
 		button.removeAttr('disabled');
 		if (json_response.success) {
@@ -150,28 +123,21 @@ class imageSEO_Bulk {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_stop_bulk");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		let json_response = await response.json();
 		button.removeAttr('disabled');
 		if (json_response.success) {
 			$wrapper.append('<p>' + __('Bulk process stopped.', 'imageseo') + '</p>');
-			setTimeout(
-				function () {
-					window.location.reload()
-				},
-				1500
-			);
+			setTimeout(function () {
+				window.location.reload()
+			}, 1500);
 		}
 	}
 
@@ -180,16 +146,12 @@ class imageSEO_Bulk {
 
 		formData.append("action", "imageseo_query_images");
 		formData.append("filters", JSON.stringify(get(options, "filters", {})));
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData
+			method: "POST", body: formData
 		});
 
 		return await response.json();
@@ -199,6 +161,8 @@ class imageSEO_Bulk {
 class imageseo_Settings {
 	socialCard   = jQuery('#imageseo-preview-image');
 	colorPickers = '.imageseo-colorpicker';
+	initialState = {};
+	changedState = {};
 
 	constructor() {
 		this.init();
@@ -209,10 +173,22 @@ class imageseo_Settings {
 	init() {
 		const instance = this;
 
+		// Set initial state of the settings based on the inputs that exist on the page
+		jQuery('.imageseo-admin-settings').find('input,select').each(function () {
+			const $this = jQuery(this), $type = $this.attr('type');
+			switch ($type) {
+				case 'radio':
+				case 'checkbox':
+					instance.initialState[$this.attr('name')] = $this.is(':checked') ? 'on' : 'off';
+					break;
+				default:
+					instance.initialState[$this.attr('name')] = $this.val();
+					break;
+			}
+		});
 
 		jQuery('#setting-layout').on('change', function (e) {
-			const $this = jQuery(this),
-				  $val  = $this.val();
+			const $this = jQuery(this), $val = $this.val();
 			if ('CARD_LEFT' === $val) {
 				instance.socialCard.removeClass('imageseo-media__layout--card-right').addClass('imageseo-media__layout--card-left');
 			} else {
@@ -220,35 +196,61 @@ class imageseo_Settings {
 			}
 		});
 		jQuery('#setting-logoUrl').on('change', function (e) {
-			const $this = jQuery(this),
-				  $val  = $this.val();
+			const $this = jQuery(this), $val = $this.val();
 			instance.socialCard.find('.imageseo-media__content__logo').attr('src', $val);
 		});
 		jQuery('#setting-defaultBgImg').on('change', function (e) {
-			const $this = jQuery(this),
-				  $val  = $this.val();
+			const $this = jQuery(this), $val = $this.val();
 			instance.socialCard.find('.imageseo-media__container__image').css('background-image', 'url( ' + $val + ')');
 		});
 
 		instance.setColorPickers();
 
-		jQuery('table.imageseo-bulk_optimizations').find('input,select').on('change', function (e) {
-			jQuery('.imageseo-settings-response-info').remove();
-			jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<span class="imageseo-settings-response-info">' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</span>');
-		});
+		jQuery('table.imageseo-bulk_optimizations').find('input,select').on(
+			'change', function (e) {
+				const $element = jQuery(this), $name = $element.attr('name'), $val = $element.val(),
+					  $type                                                        = $element.attr('type');
+				jQuery('.imageseo-settings-response-info').remove();
+
+				switch ($type) {
+					case 'radio':
+					case 'checkbox':
+						const currentState = $element.is(':checked') ? 'on' : 'off';
+						if (instance.initialState[$name] === currentState) {
+							delete instance.changedState[$name];
+						} else {
+							instance.changedState[$name] = currentState;
+						}
+						break;
+					default:
+						if (instance.initialState[$name] === $val) {
+							delete instance.changedState[$name];
+						} else {
+							instance.changedState[$name] = $val;
+						}
+						break;
+				}
+				// Check if there are any changes, if so, disable the start bulk process button
+				if (0 !== Object.keys(instance.changedState).length) {
+					jQuery('#start_bulk_process').attr('disabled', true).addClass('disabled').after('<span class="imageseo-settings-response-info">' + __('Please save changes in order to start the optimization process.', 'imageseo') + '</span>');
+				} else {
+					jQuery('#start_bulk_process').removeAttr('disabled').removeClass('disabled');
+					jQuery('.imageseo-settings-response-info').remove();
+				}
+
+			});
 
 		jQuery('#register_account').on('click', function (e) {
 			e.preventDefault();
 
-			const button = jQuery(this),
-				  data   = {
-					  firstname  : jQuery('#setting-register_first_name').val(),
-					  lastname   : jQuery('#setting-register_last_name').val(),
-					  password   : jQuery('#setting-register_password').val(),
-					  email      : jQuery('#setting-register_email').val(),
-					  terms      : jQuery('#setting-terms').is(':checked'),
-					  newsletters: jQuery('#setting-newsletter').is(':checked'),
-				  };
+			const button = jQuery(this), data = {
+				firstname  : jQuery('#setting-register_first_name').val(),
+				lastname   : jQuery('#setting-register_last_name').val(),
+				password   : jQuery('#setting-register_password').val(),
+				email      : jQuery('#setting-register_email').val(),
+				terms      : jQuery('#setting-terms').is(':checked'),
+				newsletters: jQuery('#setting-newsletter').is(':checked'),
+			};
 			button.attr('disabled', 'disabled').addClass('disabled');
 			button.after('<p class="imageseo-register-form-error">' + __('Registering your account and validating API KEY, please wait', 'imageseo') + '</p>');
 			const response = instance.checkRegisterFormData(data);
@@ -286,8 +288,7 @@ class imageseo_Settings {
 
 		jQuery('#validate_api_key').on('click', function (e) {
 			e.preventDefault();
-			const key    = jQuery('#setting-api_key').val(),
-				  button = jQuery(this);
+			const key = jQuery('#setting-api_key').val(), button = jQuery(this);
 			jQuery('.imageseo-imageseo-settings-response-info').remove();
 			if ('' === key) {
 				button.after('<span class="imageseo-settings-response-info">' + __('Please enter a valid API Key', 'imageseo') + '</span>');
@@ -302,8 +303,7 @@ class imageseo_Settings {
 	setColorPickers() {
 		const instance = this;
 		jQuery(instance.colorPickers).each(function () {
-			const $this = jQuery(this),
-				  input = $this.closest('tr').find('input');
+			const $this = jQuery(this), input = $this.closest('tr').find('input');
 			input.wpColorPicker(
 				{
 					change: function (event, ui) {
@@ -322,8 +322,7 @@ class imageseo_Settings {
 								break;
 						}
 					}
-				}
-			);
+				});
 		});
 	}
 
@@ -331,18 +330,14 @@ class imageseo_Settings {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_valid_api_key");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		formData.append("api_key", apiKey);
 
 		//@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		const json_response = await response.json();
@@ -390,12 +385,9 @@ class imageseo_Settings {
 		const formData = new FormData();
 
 		formData.append("action", "imageseo_register");
-		formData.append(
-			"_wpnonce",
-			document
-				.querySelector("#_wpnonce")
-				.getAttribute("value")
-		);
+		formData.append("_wpnonce", document
+			.querySelector("#_wpnonce")
+			.getAttribute("value"));
 		formData.append("firstname", data.firstname);
 		formData.append("lastname", data.lastname);
 		formData.append("email", data.email);
@@ -406,8 +398,7 @@ class imageseo_Settings {
 
 //@ts-ignore
 		const response = await fetch(ajaxurl, {
-			method: "POST",
-			body  : formData,
+			method: "POST", body: formData,
 		});
 
 		return await response.json();
@@ -469,7 +460,6 @@ class imageseo_Settings {
 			}
 		});
 		jQuery('input[type="radio"][name="imageseo[formatAlt]"]').on('change', function () {
-			console.log(jQuery(this).val());
 			if ('CUSTOM_FORMAT' !== this.value) {
 				jQuery('tr[data-setting="formatAltCustom"]').hide();
 			} else {
@@ -481,15 +471,11 @@ class imageseo_Settings {
 	createFilePicker() {
 		jQuery('.imageseo-file-picker').click(function (e) {
 			e.preventDefault();
-			const button = jQuery(this),
-				  frame  = wp.media(
-					  {
-						  button  : {
-							  text: 'Select'
-						  },
-						  multiple: false
-					  }
-				  );
+			const button = jQuery(this), frame = wp.media({
+															  button     : {
+																  text: 'Select'
+															  }, multiple: false
+														  });
 
 			// When a file is selected, run a callback
 			frame.on('select', function () {
