@@ -41,6 +41,7 @@ class Admin_Fields {
 		$this->cb_label    = ! empty( $option['cb_label'] ) ? $option['cb_label'] : '';
 		$this->link        = ! empty( $option['link'] ) ? $option['link'] : '';
 		$this->id          = $this->name;
+		$this->title       = ! empty( $option['title'] ) ? $option['title'] : '';
 	}
 
 	public function get_id() {

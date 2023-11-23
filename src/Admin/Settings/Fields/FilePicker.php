@@ -8,6 +8,9 @@ class FilePicker extends Admin_Fields {
 	 * Renders field
 	 */
 	public function render() {
+		if ( '' === $this->get_value() ) {
+			$this->set_value( $this->get_default() );
+		}
 		?>
 		<div class="imageseo-file-picker-wrapper">
 			<img src="<?php echo esc_url( $this->get_value() ); ?>" class="imageseo-file-picker-image">

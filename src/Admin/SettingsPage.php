@@ -282,12 +282,23 @@ class SettingsPage {
 			$fill_types[ $fill_type['id'] ] = $fill_type['label'];
 		}
 		// Get all post types
-		$all_post_types = imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia();
+		$all_post_types     = imageseo_get_service( 'WordPressData' )->getAllPostTypesSocialMedia();
 		$allowed_post_types = array();
-		foreach( $all_post_types as $post_type ){
+		foreach ( $all_post_types as $post_type ) {
 			$allowed_post_types[ $post_type->name ] = $post_type->label;
 		}
-
+		$current_user = wp_get_current_user();
+		$user_info    = array(
+			'email'      => '',
+			'first_name' => '',
+			'last_name'  => ''
+		);
+		// Check if current user is administrator
+		if ( in_array( 'administrator', $current_user->roles ) ) {
+			$user_info['email']      = $current_user->user_email;
+			$user_info['first_name'] = $current_user->user_firstname;
+			$user_info['last_name']  = $current_user->user_lastname;
+		}
 		$settings = array(
 			'welcome'            => array(
 				'title'       => __( 'Welcome on board', 'imageseo' ),
@@ -607,6 +618,7 @@ class SettingsPage {
 				),
 			),
 		);
+
 		$options  = imageseo_get_options();
 		if ( empty( $options['api_key'] ) || ! isset( $options['allowed'] ) || ! $options['allowed'] ) {
 			$settings['welcome']['sections']['welcome']['fields'] = array_merge(
@@ -620,7 +632,7 @@ class SettingsPage {
 					),
 					array(
 						'name'     => 'register_first_name',
-						'std'      => '',
+						'std'      => $user_info['first_name'],
 						'label'    => __( 'First Name', 'imageseo' ),
 						'cb_label' => '',
 						'type'     => 'text',
@@ -628,7 +640,7 @@ class SettingsPage {
 					),
 					array(
 						'name'     => 'register_last_name',
-						'std'      => '',
+						'std'      => $user_info['last_name'],
 						'label'    => __( 'Last name', 'imageseo' ),
 						'cb_label' => '',
 						'type'     => 'text',
@@ -636,7 +648,7 @@ class SettingsPage {
 					),
 					array(
 						'name'     => 'register_email',
-						'std'      => '',
+						'std'      => $user_info['email'],
 						'label'    => __( 'Email', 'imageseo' ),
 						'cb_label' => '',
 						'type'     => 'email',
@@ -812,7 +824,8 @@ class SettingsPage {
 		<div class="imageseo-info-header">
 			<div class="imageseo-info-header__logo">
 				<img src="<?php echo esc_url( IMAGESEO_URL_DIST . '/images/logo-blue.svg' ); ?>">
-				<a href="https://app.imageseo.io/login" target="_blank" class="button button-secondary imageseo-website"><?php esc_html_e( 'Visit website', 'imageseo' ); ?>
+				<a href="https://app.imageseo.io/login" target="_blank"
+				   class="button button-secondary imageseo-website"><?php esc_html_e( 'Visit website', 'imageseo' ); ?>
 					<span class='dashicons dashicons-external'></span></a>
 			</div>
 			<div class='imageseo-info-header__optimization'>
