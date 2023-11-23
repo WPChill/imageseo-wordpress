@@ -751,6 +751,16 @@ WPCHill Tooltips
 	.imageseo-info-header__logo {
 		display: flex;
 		align-items: center;
+
+		.imageseo-website {
+			margin-left:15px;
+			.dashicons {
+				font-size: 20px;
+				line-height: 20px;
+				vertical-align: middle;
+			}
+		}
+
 	}
 
 	.imageseo-info-header__optimization {

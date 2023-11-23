@@ -305,16 +305,6 @@ class SettingsPage {
 								'priority' => 30,
 							),
 							array(
-								'name'     => 'go_to_application',
-								'std'      => '',
-								'label'    => __( 'Go to application', 'imageseo' ),
-								'cb_label' => '',
-								'desc'     => __( 'Click the button to go to the Application Dashoard.', 'imageseo' ),
-								'type'     => 'action_button',
-								'link'     => 'https://app.imageseo.io/login',
-								'priority' => 30,
-							),
-							array(
 								'name'     => 'already_api',
 								'std'      => '',
 								'title'    => __( 'You already have an API Key?', 'imageseo' ),
@@ -822,6 +812,8 @@ class SettingsPage {
 		<div class="imageseo-info-header">
 			<div class="imageseo-info-header__logo">
 				<img src="<?php echo esc_url( IMAGESEO_URL_DIST . '/images/logo-blue.svg' ); ?>">
+				<a href="https://app.imageseo.io/login" target="_blank" class="button button-secondary imageseo-website"><?php esc_html_e( 'Visit website', 'imageseo' ); ?>
+					<span class='dashicons dashicons-external'></span></a>
 			</div>
 			<div class='imageseo-info-header__optimization'>
 			</div>
