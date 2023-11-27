@@ -17,7 +17,7 @@ class QueryImagesBulk
 
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_query_images', [$this, 'query']);
+		add_action( 'imageseo_settings_page_bulk_optimizations_start', array( $this, 'script_data' ) );
     }
 
     public function buildSqlQuery($options)
@@ -139,68 +139,86 @@ class QueryImagesBulk
         return $sqlQuery;
     }
 
-    public function query()
-    {
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error([
-                'code' => 'not_authorized',
-            ]);
-            exit;
-        }
 
-        $filters = [];
-        try {
-            $filters = (isset($_POST['filters'])) ? json_decode(stripslashes($_POST['filters']), true) : [];
-        } catch (\Exception $e) {
-            $filters = [];
-        }
+	/**
+	 * Retrieve the total number of images, optimized and non-optimized ones
+	 *
+	 *
+	 * @return array
+	 * @since 3.0.0
+	 */
+	private function images_query() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'imageseo' ) );
+		}
 
-        global $wpdb;
+		$options = wp_parse_args( imageseo_get_service( 'Option' )->getOptions(), imageseo_get_service( 'Option' )->getOptionsDefault() );
 
-        if (AltSpecification::WOO_PRODUCT_IMAGE === $filters['alt_filter']) {
-            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
+		$filters = array(
+			'alt_filter'     => $options['altFilter'],
+			'alt_fill'       => $options['altFill'],
+			'only_optimized' => $options['optimizeAlt'],
+		);
 
-            $ids = array_merge($ids, $this->queryImages->getWooCommerceIdsGallery($filters));
+		global $wpdb;
 
-            $query = $this->buildSqlQueryWooCommerce(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        } elseif (AltSpecification::NEXTGEN_GALLERY === $filters['alt_filter']) {
-            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
+		if ( AltSpecification::WOO_PRODUCT_IMAGE === $filters['alt_filter'] ) {
+			$query = $this->buildSqlQueryWooCommerce( array_merge( $filters, [ 'only_optimized' => false ] ) );
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
 
-            $query = $this->buildSqlQueryNextGenGallery(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        } else {
-            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => false]));
-            $ids = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($ids)) {
-                $ids = call_user_func_array('array_merge', $ids);
-            }
+			$ids = array_merge( $ids, $this->queryImages->getWooCommerceIdsGallery( $filters ) );
 
-            $query = $this->buildSqlQuery(array_merge($filters, ['only_optimized' => true]));
-            $idsOptimized = $wpdb->get_results($query, ARRAY_N);
-            if (!empty($idsOptimized)) {
-                $idsOptimized = call_user_func_array('array_merge', $idsOptimized);
-            }
-        }
+			$query        = $this->buildSqlQueryWooCommerce( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		} elseif ( AltSpecification::NEXTGEN_GALLERY === $filters['alt_filter'] ) {
+			$query = $this->buildSqlQueryNextGenGallery( array_merge( $filters, [ 'only_optimized' => false ] ) );
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
 
-        wp_send_json_success([
-            'ids'               => array_values(array_filter($ids)),
-            'ids_optimized'     => array_values(array_filter($idsOptimized)),
-            'ids_non_optimized' => array_values(array_diff($ids, $idsOptimized)),
-        ]);
-    }
+			$query        = $this->buildSqlQueryNextGenGallery( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		} else {
+			$query = $this->buildSqlQuery( array_merge( $filters, [ 'only_optimized' => false ] ) );
+
+			$ids   = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $ids ) ) {
+				$ids = call_user_func_array( 'array_merge', $ids );
+			}
+
+			$query        = $this->buildSqlQuery( array_merge( $filters, [ 'only_optimized' => true ] ) );
+			$idsOptimized = $wpdb->get_results( $query, ARRAY_N );
+			if ( ! empty( $idsOptimized ) ) {
+				$idsOptimized = call_user_func_array( 'array_merge', $idsOptimized );
+			}
+		}
+
+		return array(
+			'ids'               => array_values( array_filter( $ids ) ),
+			'ids_optimized'     => array_values( array_filter( $idsOptimized ) ),
+			'ids_non_optimized' => array_values( array_diff( $ids, $idsOptimized ) ),
+		);
+	}
+
+	/**
+	 * Add the required JS variables to the page
+	 *
+	 * @since 3.0.0
+	 */
+	public function script_data() {
+
+		$result            = $this->images_query();
+		$result['options'] = imageseo_get_service( 'Option' )->getOptions();
+		echo '<script type="text/javascript">imageseo_bulk_images = ' . json_encode( $result ) . ';</script>';
+	}
 }

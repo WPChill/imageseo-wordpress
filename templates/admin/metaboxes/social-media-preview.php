@@ -8,7 +8,7 @@ $postId = isset($_GET['post']) ? (int) $_GET['post'] : null;
 if (!$postId) {
     ?>
 
-    <p><?php _e('The card will be generated when your article is published!', 'imageseo'); ?>
+    <p><?php esc_html_e('The card will be generated when your article is published!', 'imageseo'); ?>
 
     <?php
     return;
@@ -22,17 +22,17 @@ $adminGenerateUrl = wp_nonce_url($adminGenerateUrl, 'imageseo_generate_manual_so
 
 if (!$url && !$process) {
     ?>
-    <p><?php _e('No social image', 'imageseo'); ?></p>
+    <p><?php esc_html_e('No social image', 'imageseo'); ?></p>
 
     <?php
 } else {
-        $text = __('Update', 'imageseo'); ?>
-    <img id="imageseo-social-media-image" src="<?php echo $url; ?>" />
+        $text = esc_html__('Update', 'imageseo'); ?>
+    <img id="imageseo-social-media-image" src="<?php echo esc_url( $url ); ?>" />
 
     <?php
     }
 ?>
 
-<a href="<?php echo $adminGenerateUrl; ?>" class="button" style="display: flex; align-items: center;">
-    <?php echo $text; ?>
+<a href="<?php echo esc_url( $adminGenerateUrl ); ?>" class="button" style="display: flex; align-items: center;">
+    <?php echo wp_kses_post( $text ); ?>
 </a>

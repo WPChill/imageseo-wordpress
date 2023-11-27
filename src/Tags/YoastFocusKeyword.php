@@ -20,8 +20,8 @@ class YoastFocusKeyword
             return '';
         }
 
-        list($attachmentId) = $params;
-        $id = imageseo_get_service('QueryImages')->getPostByAttachmentId($attachmentId);
+	    $attachmentId = absint( $params[0] );
+	    $id           = imageseo_get_service( 'QueryImages' )->getPostByAttachmentId( $attachmentId );
         if (!$id) {
             return '';
         }

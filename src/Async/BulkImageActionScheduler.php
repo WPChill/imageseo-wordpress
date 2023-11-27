@@ -9,11 +9,13 @@ add_action('action_bulk_image_process_action_scheduler', 'bulk_image_process_act
 
 function bulk_image_process_action_scheduler()
 {
-    try {
-        $optionBulkProcess = get_option('_imageseo_bulk_process_settings');
-        if (!$optionBulkProcess) {
-            return false;
-        }
+	try {
+		$optionBulkProcess             = get_option( '_imageseo_bulk_process_settings' );
+		$options                       = imageseo_get_options();
+		$optionBulkProcess['settings'] = array_merge( $optionBulkProcess['settings'], $options );
+		if ( ! $optionBulkProcess ) {
+			return false;
+		}
 
         if (AltSpecification::NEXTGEN_GALLERY === $optionBulkProcess['settings']['altFilter']) {
             imageseo_bulk_image_process_nextgen($optionBulkProcess);

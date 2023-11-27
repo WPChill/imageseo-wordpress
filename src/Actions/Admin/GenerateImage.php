@@ -30,10 +30,11 @@ class GenerateImage
 
     public function generateSocialMediaManually()
     {
-        $redirectUrl = admin_url('edit.php');
-        if ('post' !== $postType) {
-            $redirectUrl .= '?post_type=' . $postType;
-        }
+	    $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
+	    $redirectUrl = admin_url('edit.php');
+	    if ('post' !== $postType) {
+		    $redirectUrl .= '?post_type=' . $postType;
+	    }
 
         if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_generate_manual_social_media')) {
             wp_redirect($redirectUrl);
@@ -45,15 +46,8 @@ class GenerateImage
             exit;
         }
 
-        $postType = (isset($_GET['post_type'])) ? $_GET['post_type'] : 'post';
-        $redirectUrl = admin_url('edit.php');
-        if ('post' !== $postType) {
-            $redirectUrl .= '?post_type=' . $postType;
-        }
-
         if (!isset($_GET['post_id'])) {
             wp_redirect($redirectUrl);
-
             return;
         }
 

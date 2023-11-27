@@ -227,16 +227,16 @@ class SocialMediaHead
         }
 
         global $wp;
-        echo '<meta property="og:title" content="' . wp_get_document_title() . '">';
+        echo '<meta property="og:title" content="' . esc_attr( wp_get_document_title() ) . '">';
         echo "\n";
-        echo '<meta property="twitter:title" content="' . wp_get_document_title() . '">';
+        echo '<meta property="twitter:title" content="' . esc_attr( wp_get_document_title() ) . '">';
         echo "\n";
         if (is_singular()) {
             $desc = str_replace(' [&hellip;]', '&hellip;', wp_strip_all_tags(get_the_excerpt()));
             if ('' != $desc) {
-                echo '<meta property="og:description" content="' . $desc . '">';
+                echo '<meta property="og:description" content="' . esc_attr( $desc ) . '">';
                 echo "\n";
-                echo sprintf('<meta name="twitter:description" content="%s">', $desc);
+                echo sprintf('<meta name="twitter:description" content="%s">', esc_attr( $desc ) );
                 echo "\n";
             }
         }
@@ -250,16 +250,16 @@ class SocialMediaHead
 
         echo '<meta name="twitter:card" content="summary_large_image">';
         echo "\n";
-        echo sprintf('<meta name="twitter:image" content="%s">', $url);
+        echo sprintf('<meta name="twitter:image" content="%s">', esc_url( $url ) );
         echo "\n";
-        echo sprintf('<meta property="og:image:width" content="%s">', $width);
+        echo sprintf('<meta property="og:image:width" content="%s">', esc_attr( $width ) );
         echo "\n";
-        echo sprintf('<meta property="og:image:height" content="%s">', $height);
+        echo sprintf('<meta property="og:image:height" content="%s">', esc_attr( $height ) );
         echo "\n";
-        echo sprintf('<meta property="og:image" content="%s">', $url);
+        echo sprintf('<meta property="og:image" content="%s">', esc_url( $url ) );
         echo "\n";
         if (is_ssl()) {
-            echo sprintf('<meta property="og:image:secure_url" content="%s">', $url);
+            echo sprintf('<meta property="og:image:secure_url" content="%s">', esc_url( $url ) );
             echo "\n";
         }
     }

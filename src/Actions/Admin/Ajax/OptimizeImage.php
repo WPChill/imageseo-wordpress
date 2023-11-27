@@ -19,7 +19,6 @@ class OptimizeImage
 
     public function hooks()
     {
-        add_action('wp_ajax_imageseo_preview_data_report', [$this, 'getPreviewDataReport']);
         add_action('wp_ajax_imageseo_optimize_alt', [$this, 'optimizeAlt']);
         add_action('wp_ajax_imageseo_optimize_filename', [$this, 'optimizeFilename']);
 

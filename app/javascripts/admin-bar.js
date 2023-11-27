@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	})
 
-	const percent = Math.round((totalAlts * 100) / totalImages)
+	const percent = ( 0 !== totalAlts && 0 !== totalImages ) ?  Math.round((totalAlts * 100) / totalImages) : 0;
 	let color = 'red'
 	if (percent > 40 && percent < 70) {
 		color = 'orange'

@@ -97,13 +97,13 @@ class GenerateImageSocial
 
     public function prepare($postId)
     {
+	    if(!imageseo_get_api_key()){
+		    return false;
+	    }
+
         $limitExcedeed = imageseo_get_service('UserInfo')->hasLimitExcedeed();
         if ($limitExcedeed) {
             return;
-		}
-
-		if(!imageseo_get_api_key()){
-			return false;
 		}
 
         $post = get_post($postId);
@@ -131,9 +131,9 @@ class GenerateImageSocial
 
         $featuredImgUrl = apply_filters('imageseo_get_post_thumbnail_social_media', get_the_post_thumbnail_url($postId, 'full'), $postId);
 
-        if (!$featuredImgUrl) {
-            $featuredImgUrl = $settings['defaultBgImg'];
-        }
+	    if ( ! $featuredImgUrl ) {
+		    $featuredImgUrl = $settings['defaultBgImg'];
+	    }
 
         $isAlreadyGenerate = get_post_meta($postId, '_imageseo_social_media_image_is_generate', true);
         $transientCurrentProcess = get_transient('_imageseo_filename_social_process');
@@ -162,7 +162,6 @@ class GenerateImageSocial
                 'visibilitySubTitleTwo'            => $settings['visibilitySubTitleTwo'],
                 'visibilityAvatar'                 => $settings['visibilityAvatar'],
                 'visibilityRating'                 => $visibilityRating,
-                'layout'                           => $settings['layout'],
                 'textAlignment'                    => $settings['textAlignment'],
                 'logoUrl'                          => $settings['logoUrl'],
                 'avatarUrl'                        => $avatarUrl,

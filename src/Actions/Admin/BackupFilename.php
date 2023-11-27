@@ -32,12 +32,12 @@ class BackupFilename
      */
     public function process()
     {
-        $redirectUrl = admin_url('post.php?post=' . $this->getAttachmentId() . '&action=edit');
+	    $redirectUrl = admin_url( 'post.php?post=' . $this->getAttachmentId() . '&action=edit' );
 
-        if (!wp_verify_nonce($_GET['_wpnonce'], 'imageseo_backup_rename_file')) {
-            wp_redirect($redirectUrl);
-            exit;
-        }
+	    if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'imageseo_backup_rename_file' ) ) {
+		    wp_redirect( $redirectUrl );
+		    exit;
+	    }
 
         if (!current_user_can('manage_options')) {
             wp_redirect($redirectUrl);

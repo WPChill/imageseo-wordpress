@@ -24,6 +24,8 @@ class SocialMediaGenerate
 
     public function pingCheckCurrentProcess()
     {
+
+	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',
@@ -59,6 +61,7 @@ class SocialMediaGenerate
 
     public function generate()
     {
+	    check_ajax_referer( IMAGESEO_OPTION_GROUP . '-options', '_wpnonce' );
         if (!current_user_can('manage_options')) {
             wp_send_json_error([
                 'code' => 'not_authorized',

@@ -7,3 +7,4 @@ git
 dist
 vendor
 content.html
+*.zip

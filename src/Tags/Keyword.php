@@ -15,8 +15,8 @@ class Keyword
         if (null === $params) {
             return '';
         }
-        list($attachmentId) = $params;
-        $numberAlt = (isset($params['number'])) ? $params['number'] : 1;
+	    $attachmentId = absint( $params[0] );
+	    $numberAlt    = ( isset( $params['number'] ) ) ? $params['number'] : 1;
 
         $report = imageseo_get_service('ReportImage')->getReportByAttachmentId($attachmentId);
         if (!$report) {
