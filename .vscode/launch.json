@@ -1,0 +1,20 @@
+{
+	"name": "Listen for XDebug",
+	"type": "php",
+	"request": "launch",
+	"port": 9003,
+	"pathMappings": {
+		"/var/www/html/wp-content/plugins/imageseo-wordpress": "${workspaceFolder}"
+	},
+	"configurations": [
+		{
+			"name": "Listen for Xdebug",
+			"type": "php",
+			"request": "launch",
+			"port": 9003,
+			"pathMappings": {
+				"/var/www/html/wp-content/plugins/imageseo-wordpress": "${workspaceFolder}"
+			}
+		}
+	]
+}

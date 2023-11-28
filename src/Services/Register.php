@@ -15,7 +15,7 @@ class Register
 
     public function register($email, $password, $options = [])
     {
-        $response = wp_remote_post(IMAGESEO_API_URL . '/v1/customers/create', [
+        $response = wp_remote_post(IMAGESEO_API_URL . '/auth/register', [
             'headers' => [
                 'Content-Type' => 'application/json',
             ],

@@ -180,7 +180,7 @@ class GenerateImageSocial
                 update_post_meta($postId, '_imageseo_social_media_image_is_generate', true);
 
                 $client = imageseo_get_service('ClientApi')->getClient();
-                $url = $client->getOptions()['host'] . '/v1/external/projects/credits';
+                $url = $client->getOptions()['host'] . '/projects/credits';
                 $client->getHttpClient()->request(
                     'POST',
                     $url

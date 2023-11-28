@@ -16,11 +16,15 @@ class UserInfo
             return $this->limitExcedeed;
         }
 
-        $user = imageseo_get_service('ClientApi')->getOwnerByApiKey();
+        $data = imageseo_get_service('ClientApi')->getOwnerByApiKey();
+		if(!isset($data['user'])){
+			return true;
+		}
+		$user = $data['user'];
         if(!$user) {
 			return true;
 		}
-        $imageLeft = ($user['bonus_stock_images'] + $user['plan']['limit_images']) - $user['current_request_images'];
+        $imageLeft = ($user['bonusStockImages'] + $user['plan']['limitImages']) - $user['currentRequestImages'];
 
         $this->limitExcedeed = ($imageLeft <= 0) ? true : false;
 

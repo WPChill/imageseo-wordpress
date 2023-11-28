@@ -67,7 +67,7 @@ class ClientApi
         }
 
         try {
-            $response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
+            $response = wp_remote_get(IMAGESEO_API_URL . '/projects/owner', [
                 'headers' => $this->getHeaders(),
                 'timeout' => 50,
             ]);
@@ -75,11 +75,12 @@ class ClientApi
         } catch (\Exception $e) {
             return null;
         }
-        if (!$body['success']) {
-            return null;
-        }
 
-        return $body['result'];
+		if(!isset($body['user']) || !isset($body['project'])){
+			return null;
+		}
+
+        return $body;
     }
 
     /**
@@ -93,7 +94,7 @@ class ClientApi
             $headers = $this->getHeaders();
             $headers['Authorization'] = $apiKey;
 
-            $response = wp_remote_get(IMAGESEO_API_URL . '/v1/external/projects/owner', [
+            $response = wp_remote_get(IMAGESEO_API_URL . '/projects/owner', [
                 'headers' => $headers,
                 'timeout' => 50,
             ]);
@@ -101,11 +102,12 @@ class ClientApi
         } catch (\Exception $e) {
             return null;
         }
-        if (!$body['success']) {
-            return null;
-        }
+		
+		if(!isset($body['user']) || !isset($body['project'])){
+			return null;
+		}
 
-        return $body['result'];
+        return $body;
     }
 
     /**
