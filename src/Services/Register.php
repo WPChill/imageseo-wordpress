@@ -3,54 +3,54 @@
 namespace ImageSeoWP\Services;
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 class Register
 {
-    public function __construct()
-    {
-        $this->optionServices = imageseo_get_service('Option');
-    }
+	public function __construct()
+	{
+		$this->optionServices = imageseo_get_service('Option');
+	}
 
-    public function register($email, $password, $options = [])
-    {
-        $response = wp_remote_post(IMAGESEO_API_URL . '/auth/register', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-            'body' => json_encode([
-                'firstname'       => isset($options['firstname']) ? $options['firstname'] : '',
-                'lastname'        => isset($options['lastname']) ? $options['lastname'] : '',
-                'newsletters'     => isset($options['newsletters']) ? $options['newsletters'] : false,
-                'email'           => $email,
-                'password'        => $password,
-                'wp_url'          => site_url(),
-                'withProject'     => true,
-                'name'            => get_bloginfo('name'),
-                'optins'          => 'terms',
-            ]),
-            'timeout' => 50,
-        ]);
+	public function register($email, $password, $options = [])
+	{
+		$response = wp_remote_post(IMAGESEO_API_URL . '/auth/register-from-plugin', [
+			'headers' => [
+				'Content-Type' => 'application/json',
+			],
+			'body' => json_encode([
+				'firstname'       => isset($options['firstname']) ? $options['firstname'] : '',
+				'lastname'        => isset($options['lastname']) ? $options['lastname'] : '',
+				'newsletters'     => isset($options['newsletters']) ? $options['newsletters'] : false,
+				'email'           => $email,
+				'password'        => $password,
+				'wp_url'          => site_url(),
+				'withProject'     => true,
+				'name'            => get_bloginfo('name'),
+				'optins'          => 'terms',
+			]),
+			'timeout' => 50,
+		]);
 
-        if (is_wp_error($response)) {
-            return null;
-        }
+		if (is_wp_error($response)) {
+			return null;
+		}
 
-        $body = json_decode(wp_remote_retrieve_body($response), true);
+		$body = json_decode(wp_remote_retrieve_body($response), true);
+		$responseCode = wp_remote_retrieve_response_code($response);
+		if ($responseCode !== 201) {
+			return null;
+		}
 
-        if (!$body['success']) {
-            return null;
-        }
+		$user = $body;
 
-        $user = $body['result'];
+		$options = $this->optionServices->getOptions();
 
-        $options = $this->optionServices->getOptions();
+		$options['api_key'] = $user['projects'][0]['apiKey'];
+		$options['allowed'] = true;
+		$this->optionServices->setOptions($options);
 
-        $options['api_key'] = $user['project_create']['api_key'];
-        $options['allowed'] = true;
-        $this->optionServices->setOptions($options);
-
-        return $user;
-    }
+		return $user;
+	}
 }

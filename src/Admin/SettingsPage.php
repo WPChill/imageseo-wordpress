@@ -815,10 +815,11 @@ class SettingsPage {
 	 * @since 3.0.0
 	 */
 	public function display_header() {
-		$data    = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
-		$user = $data['user'];
+		$data = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
+
 		$credits = 0;
-		if ( $user ) {
+		if ( isset($data['user'])) {
+			$user = $data['user'];
 			$credits = absint( $user['plan']['limitImages'] ) + absint( $user['bonusStockImages'] ) - absint( $user['currentRequestImages'] );
 		}
 		?>
