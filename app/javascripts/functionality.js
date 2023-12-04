@@ -263,8 +263,8 @@ class imageseo_Settings {
 				let api_key = false;
 
 				if (response.success) {
-					if ('undefined' !== typeof response.data.user && null !== response.data.user) {
-						api_key = response.data.user['project_create']['api_key'];
+					if ('undefined' !== typeof response.data.projects && null !== response.data.projects) {
+						api_key = response.data.projects.apiKey;
 					} else {
 						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
 						return;
@@ -277,8 +277,10 @@ class imageseo_Settings {
 					jQuery('#setting-api_key').val(api_key);
 					instance.validateApiKey(api_key);
 				} else {
-					if ('unknown_error' !== response.data.code) {
-						button.after('<p>' + response.data.code + '</p>');
+					if ('unknown_error' !== response.data.message) {
+						response.data.message.forEach(function (message) {
+							button.after('<p>' + message + '</p>');
+						});
 					} else {
 						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
 					}
