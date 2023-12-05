@@ -47,12 +47,18 @@ class Register
             exit;
         }
 
+	    if ( isset( $newUser['success'] ) && ! $newUser['success'] && isset( $newUser['data']['message'] ) ) {
+		    wp_send_json_error(
+			    $newUser['data']
+		    );
+	    }
+
         if (null === $newUser) {
             wp_send_json_error([
                 'code' => 'unknown_error',
             ]);
         }
-		
+
         wp_send_json_success([
             'user' => $newUser,
         ]);

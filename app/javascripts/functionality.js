@@ -257,14 +257,15 @@ class imageseo_Settings {
 			if (!response.success) {
 				jQuery('p.imageseo-register-form-error').remove();
 				button.after('<p class="imageseo-register-form-error">' + response.code + '</p>');
+				button.removeAttr('disabled').removeClass('disabled');
 				return;
 			}
 			instance.register(data).then(function (response) {
 				let api_key = false;
-
+				jQuery( 'p.imageseo-register-form-error' ).remove();
 				if (response.success) {
-					if ('undefined' !== typeof response.data.projects && null !== response.data.projects) {
-						api_key = response.data.projects.apiKey;
+					if ('undefined' !== typeof response.data.user.projects && null !== response.data.user.projects) {
+						api_key = response.data.user.projects[0].apiKey;
 					} else {
 						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
 						return;
@@ -277,13 +278,12 @@ class imageseo_Settings {
 					jQuery('#setting-api_key').val(api_key);
 					instance.validateApiKey(api_key);
 				} else {
-					if ('unknown_error' !== response.data.message) {
-						response.data.message.forEach(function (message) {
-							button.after('<p>' + message + '</p>');
-						});
+					if ('unknown_error' !== response.data.message && 'unknown_error' !== response.data.code) {
+						button.after('<p class="imageseo-register-form-error">' + response.data.message + '</p>');
 					} else {
-						button.after('<p>' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
+						button.after('<p class="imageseo-register-form-error">' + __('There was an error processing your request. Please try again later.', 'imageseo') + '</p>');
 					}
+					button.removeAttr('disabled').removeClass('disabled');
 				}
 			});
 		});

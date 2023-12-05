@@ -21,6 +21,7 @@ class Alt
 	public function generateForAttachmentId($attachmentId, $query = [])
 	{
 		$report = $this->reportImageService->getReportByAttachmentId($attachmentId);
+
 		if (!$report) {
 			try {
 				$response = $this->reportImageService->generateReportByAttachmentId($attachmentId, $query);
@@ -36,7 +37,6 @@ class Alt
 					'error' => $response['error']
 				];
 			}
-
 
 			$report = $response;
 		}

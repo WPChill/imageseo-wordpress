@@ -51,7 +51,6 @@ class ClientApi
         }
 
         $this->client = new Client($apiKey, $options);
-
         return $this->client;
     }
 
@@ -102,7 +101,7 @@ class ClientApi
         } catch (\Exception $e) {
             return null;
         }
-		
+
 		if(!isset($body['user']) || !isset($body['project'])){
 			return null;
 		}

@@ -40,6 +40,9 @@ class Register
 		$body = json_decode(wp_remote_retrieve_body($response), true);
 		$responseCode = wp_remote_retrieve_response_code($response);
 		if ($responseCode !== 201) {
+			if ( isset( $body['message'] )  ) {
+				return array( 'success' => false, 'data' => array( 'message' => $body['message'], 'code' => $responseCode ) );
+			}
 			return null;
 		}
 
