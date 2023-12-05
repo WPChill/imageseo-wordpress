@@ -13,19 +13,12 @@
 			"ImageSeoWP\\": "src/"
 		}
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/imageseo/imageseo-php",
-			"no-api": true
-		}
-	],
 	"require-dev": {
 		"squizlabs/php_codesniffer": "*",
 		"friendsofphp/php-cs-fixer": "^2.18"
 	},
 	"require": {
-		"imageseo/imageseo-php": "dev-new-api",
+		"imageseo/imageseo-php": "^1.0",
 		"cocur/slugify": "^3.1"
 	}
 }
