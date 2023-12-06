@@ -9,27 +9,30 @@ use ImageSeoWP\Async\QueryTotalImagesBackgroundProcess;
 
 class Activation
 {
-    public function __construct()
-    {
-        $this->processQueryImagesNoAlt = new QueryImagesNoAltBackgroundProcess();
-        $this->processQueryTotalImages = new QueryTotalImagesBackgroundProcess();
-    }
+	public $processQueryImagesNoAlt;
+	public $processQueryTotalImages;
 
-    public function activate()
-    {
-        $this->processCountImages();
-    }
+	public function __construct()
+	{
+		$this->processQueryImagesNoAlt = new QueryImagesNoAltBackgroundProcess();
+		$this->processQueryTotalImages = new QueryTotalImagesBackgroundProcess();
+	}
 
-    public function processCountImages()
-    {
-        $this->processQueryImagesNoAlt->push_to_queue([
-            'query_images_no_alt' => true,
-        ]);
-        $this->processQueryImagesNoAlt->save()->dispatch();
+	public function activate()
+	{
+		$this->processCountImages();
+	}
 
-        $this->processQueryTotalImages->push_to_queue([
-            'query_total_images' => true,
-        ]);
-        $this->processQueryTotalImages->save()->dispatch();
-    }
+	public function processCountImages()
+	{
+		$this->processQueryImagesNoAlt->push_to_queue([
+			'query_images_no_alt' => true,
+		]);
+		$this->processQueryImagesNoAlt->save()->dispatch();
+
+		$this->processQueryTotalImages->push_to_queue([
+			'query_total_images' => true,
+		]);
+		$this->processQueryTotalImages->save()->dispatch();
+	}
 }

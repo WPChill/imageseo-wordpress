@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
 
 class ValidationApiKey
 {
+	public $optionServices;
+	public $clientServices;
+	
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');

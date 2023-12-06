@@ -4,7 +4,8 @@
 	"themes": [],
 	"config": {
 		"WP_DEBUG": true,
-		"SCRIPT_DEBUG": true
+		"SCRIPT_DEBUG": true,
+		"ALTERNATE_WP_CRON": true
 	},
 	"port": 8888
 }

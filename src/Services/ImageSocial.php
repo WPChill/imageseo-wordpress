@@ -11,7 +11,7 @@ use ImageSeoWP\Helpers\SocialMedia;
 class ImageSocial
 {
     protected $transientProcess = null;
-
+	protected $optionService = null;
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');

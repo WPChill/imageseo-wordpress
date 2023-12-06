@@ -11,6 +11,7 @@ use ImageSeoWP\Exception\NoRenameFile;
 
 class GenerateFilename
 {
+	public $reportImageService;
     public function __construct()
     {
         $this->reportImageService = imageseo_get_service('ReportImage');

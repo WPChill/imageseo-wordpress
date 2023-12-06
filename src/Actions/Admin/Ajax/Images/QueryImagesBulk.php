@@ -10,6 +10,7 @@ use ImageSeoWP\Helpers\Bulk\AltSpecification;
 
 class QueryImagesBulk
 {
+	public $queryImages;
     public function __construct()
     {
         $this->queryImages = imageseo_get_service('QueryImages');

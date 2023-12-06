@@ -10,6 +10,9 @@ use ImageSeoWP\Async\GenerateImageBackgroundProcess;
 
 class SocialMediaGenerate
 {
+	protected $imageSocialService;
+	protected $process;
+	
     public function __construct()
     {
         $this->imageSocialService = imageseo_get_service('ImageSocial');

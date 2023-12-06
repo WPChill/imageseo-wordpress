@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Option {
+	public $optionServices;
+	public $clientServices;
+	
 	/**
 	 * @since 1.0.0
 	 */

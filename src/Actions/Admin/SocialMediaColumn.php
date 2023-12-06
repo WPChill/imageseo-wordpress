@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
 
 class SocialMediaColumn
 {
+	public $optionService;
+	public $imageSocialService;
+	
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');

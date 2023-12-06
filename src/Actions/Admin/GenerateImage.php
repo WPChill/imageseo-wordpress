@@ -10,6 +10,11 @@ use ImageSeoWP\Async\GenerateImageBackgroundProcess;
 
 class GenerateImage
 {
+	protected $optionServices;
+	protected $imageSocialService;
+	protected $generateImageSocialService;
+	protected $process;
+	
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');

@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
 
 class MediaLibraryFilters
 {
+	public $optionServices;
+	public $reportImageServices;
+	
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');

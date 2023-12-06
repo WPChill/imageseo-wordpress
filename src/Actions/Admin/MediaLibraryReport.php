@@ -10,6 +10,10 @@ use ImageSeoWP\Exception\NoRenameFile;
 
 class MediaLibraryReport
 {
+	public $generateFilename;
+	public $reportImageService;
+	public $altService;
+	
     public function __construct()
     {
         $this->generateFilename = imageseo_get_service('GenerateFilename');

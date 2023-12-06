@@ -10,6 +10,9 @@ use ImageSeoWP\Helpers\AttachmentMeta;
 
 class ReportImage
 {
+	public $clientService;
+	public $optionService;
+
 	public function __construct()
 	{
 		$this->clientService = imageseo_get_service('ClientApi');

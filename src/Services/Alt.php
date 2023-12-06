@@ -8,6 +8,10 @@ if (!defined('ABSPATH')) {
 
 class Alt
 {
+	public $reportImageService;
+	public $optionServices;
+	public $tagsToStringServices;
+
 	public function __construct()
 	{
 		$this->reportImageService = imageseo_get_service('ReportImage');

@@ -22,6 +22,7 @@ class Admin_Fields {
 	private $desc;
 	private $label;
 	private $link;
+	private $id;
 
 	/**
 	 * Admin_Fields constructor.

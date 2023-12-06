@@ -8,6 +8,10 @@ if (!defined('ABSPATH')) {
 
 class Content
 {
+	public $reportImageService;
+	public $altService;
+	public $pinterestService;
+	
     public function __construct()
     {
         $this->reportImageService = imageseo_get_service('ReportImage');

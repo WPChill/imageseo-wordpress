@@ -10,6 +10,8 @@ use ImageSeoWP\Helpers\ServerSoftware;
 
 class RewriteRuleFilename
 {
+	public $generateFilename;
+	
     public function __construct()
     {
         $this->generateFilename = imageseo_get_service('GenerateFilename');

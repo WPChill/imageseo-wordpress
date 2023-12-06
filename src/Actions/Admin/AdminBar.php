@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 class AdminBar
 {
+	protected $reportImageServices;
     public function __construct()
     {
         $this->reportImageServices = imageseo_get_service('ReportImage');

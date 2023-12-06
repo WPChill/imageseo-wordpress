@@ -11,7 +11,7 @@ use ImageSeo\Client\Client;
 class ClientApi
 {
     protected $client = null;
-
+	public $optionService;
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');

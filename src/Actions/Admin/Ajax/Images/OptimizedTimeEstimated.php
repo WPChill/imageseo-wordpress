@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 class OptimizedTimeEstimated
 {
+	public $altService;
     public function __construct()
     {
         $this->altService = imageseo_get_service('Alt');

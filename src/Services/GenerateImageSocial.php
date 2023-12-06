@@ -10,6 +10,8 @@ use ImageSeoWP\Helpers\SocialMedia;
 
 class GenerateImageSocial
 {
+	public $clientApiService;
+	
     public function __construct()
     {
         $this->clientApiService = imageseo_get_service('ClientApi');

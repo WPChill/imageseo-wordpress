@@ -10,6 +10,10 @@ use ImageSeoWP\Exception\NoRenameFile;
 
 class OptimizeImage
 {
+	public $tagsToStringService;
+	public $generateFilename;
+	public $altService;
+	
     public function __construct()
     {
         $this->tagsToStringService = imageseo_get_service('TagsToString');

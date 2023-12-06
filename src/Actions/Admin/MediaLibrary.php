@@ -8,6 +8,11 @@ if (!defined('ABSPATH')) {
 
 class MediaLibrary
 {
+	public $optionService;
+	public $reportImageService;
+	public $generateFilename;
+	public $altService;
+	
     public function __construct()
     {
         $this->optionService = imageseo_get_service('Option');
