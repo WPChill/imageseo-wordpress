@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b6f0655d33a425c28286ddffe61dfb3",
+    "content-hash": "e97648f350088b8744107ebf06d18a01",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -77,28 +77,28 @@
         },
         {
             "name": "imageseo/imageseo-php",
-            "version": "v1.0.7",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ImageSEO/imageseo-php.git",
-                "reference": "0cde6427255eddb74183ad955d1b8c7856121ebf"
+                "url": "https://github.com/imageseo/imageseo-php",
+                "reference": "9a9644309b26c1db62a7fe3d03f813345cd23d4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ImageSEO/imageseo-php/zipball/0cde6427255eddb74183ad955d1b8c7856121ebf",
-                "reference": "0cde6427255eddb74183ad955d1b8c7856121ebf",
+                "url": "https://api.github.com/repos/imageseo/imageseo-php/zipball/9a9644309b26c1db62a7fe3d03f813345cd23d4e",
+                "reference": "9a9644309b26c1db62a7fe3d03f813345cd23d4e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "ImageSeo\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -120,10 +120,9 @@
             ],
             "support": {
                 "email": "support@imageseo.io",
-                "issues": "https://github.com/ImageSEO/imageseo-php/issues",
                 "source": "https://github.com/imageseo/imageseo-php"
             },
-            "time": "2020-02-08T15:31:28+00:00"
+            "time": "2023-12-06T12:43:01+00:00"
         }
     ],
     "packages-dev": [
@@ -2424,7 +2423,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "imageseo/imageseo-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

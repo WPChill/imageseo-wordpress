@@ -129,6 +129,7 @@ class ReportImage
 					'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : 0,
 					'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : 0,
 				], $query);
+
 			} catch (\Exception $e) {
 				$result = $reportImages->generateReportFromUrl([
 					'lang'     => $language,

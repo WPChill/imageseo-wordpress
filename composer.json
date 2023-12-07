@@ -17,8 +17,15 @@
 		"squizlabs/php_codesniffer": "*",
 		"friendsofphp/php-cs-fixer": "^2.18"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/imageseo/imageseo-php",
+			"no-api": true
+		}
+	],
 	"require": {
-		"imageseo/imageseo-php": "^1.0",
+		"imageseo/imageseo-php": "dev-master",
 		"cocur/slugify": "^3.1"
 	}
 }

@@ -49,7 +49,12 @@ class TagsToString
      */
     public function __call($name, $params)
     {
+
         $tagsAvailable = $this->getTagsAvailable();
+
+	    if ( ! isset( $params['attachmentId'] ) ) {
+		    $params['attachmentId'] = $params[0];
+	    }
 
         if (0 === strpos($name, 'keyword')) {
             $splitKeyword = explode('_', $name);
@@ -103,6 +108,7 @@ class TagsToString
      */
     public function replace($template, $attachmentId)
     {
+
         $tags = $this->getTags($template);
 
         if (!array_key_exists(1, $tags)) {
@@ -112,11 +118,10 @@ class TagsToString
         $tagsAvailable = $this->getTagsAvailable();
 
         foreach ($tags[1] as $key => $tag) {
-            $value = $this->getValueFromTag($tag, ['attachmentId' => $attachmentId]);
+           $value = $this->getValueFromTag($tag, ['attachmentId' => $attachmentId]);
 
             $template = str_replace($tags[0][$key], $value, $template);
         }
-
         $template = trim($template);
         $template = ltrim($template, '-');
 

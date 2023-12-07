@@ -768,7 +768,7 @@ class SettingsPage {
 					Sub title (like price or author)
 				</div>
 				<div class='imageseo-media__content__sub-title-two'
-				     style="color:<?php echo esc_attr( $options['textColor'] ) ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
+				     style="color:<?php echo ( isset( $options['social_media_settings']['textColor'] )  ?  esc_attr( $options['social_media_settings']['textColor'] ) : '' ); ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
 					Sub title 2 (like price or author)
 				</div>
 				<img class='imageseo-media__content__avatar'

@@ -11,7 +11,7 @@ use ImageSeoWP\Helpers\SocialMedia;
 class GenerateImageSocial
 {
 	public $clientApiService;
-	
+
     public function __construct()
     {
         $this->clientApiService = imageseo_get_service('ClientApi');
@@ -168,7 +168,7 @@ class GenerateImageSocial
                 'logoUrl'                          => $settings['logoUrl'],
                 'avatarUrl'                        => $avatarUrl,
                 'bgImgUrl'                         => $featuredImgUrl,
-                'nbGoodStars'                      => $nbGoodStars,
+                'nbGoodStars'                      => (string)$nbGoodStars,
             ]);
 
             if (isset($result['attachment_id'])) {
