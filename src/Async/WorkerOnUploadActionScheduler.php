@@ -62,16 +62,21 @@ function imageSeoProcessOnUpload($attachmentId)
         $fileRootDirectories = explode('/', $metadata['file']);
         $oldFilename = $fileRootDirectories[count($fileRootDirectories) - 1];
     }
+	$formatAlt = imageseo_get_service( 'Option' )->getOption( 'formatAlt' );
+	// Optimize Alt
+	if ( $activeAltOnUpload ) {
+		// Check format settings
+		if ( ! empty( $formatAlt ) ) {
+			$format = 'CUSTOM_FORMAT' === $formatAlt ? imageseo_get_service( 'Option' )->getOption( 'formatAltCustom' ) : $formatAlt;
+		} else {
+			$format = AltFormat::ALT_SIMPLE;
+		}
 
-    // Optimize Alt
-    if ($activeAltOnUpload) {
-        $format = 'CUSTOM_FORMAT' === $optionBulkProcess['settings']['formatAlt'] ? $optionBulkProcess['settings']['formatAltCustom'] : $optionBulkProcess['settings']['formatAlt'];
+		$format = apply_filters( 'imageseo_format_alt_on_upload', $format );
+		$alt    = imageseo_get_service( 'TagsToString' )->replace( $format, $attachmentId );
 
-        $format = apply_filters('imageseo_format_alt_on_upload', AltFormat::ALT_SIMPLE);
-        $alt = imageseo_get_service('TagsToString')->replace($format, $attachmentId);
-
-        imageseo_get_service('Alt')->updateAlt($attachmentId, $alt);
-    }
+		imageseo_get_service( 'Alt' )->updateAlt( $attachmentId, $alt );
+	}
 
     // Optimize file
     if ($activeRenameOnUpload) {

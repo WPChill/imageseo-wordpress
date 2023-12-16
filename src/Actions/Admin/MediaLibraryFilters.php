@@ -10,7 +10,7 @@ class MediaLibraryFilters
 {
 	public $optionServices;
 	public $reportImageServices;
-	
+
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
@@ -34,7 +34,11 @@ class MediaLibraryFilters
             return;
         }
 
-        $isEmpty = filter_input(INPUT_GET, 'alt_is_empty', FILTER_SANITIZE_STRING);
+	    $isEmpty = 0;
+	    if ( isset( $_GET['alt_is_empty'] ) ) {
+		    $isEmpty = htmlspecialchars( $_GET['alt_is_empty'] );
+	    }
+
         $selected = (int) $isEmpty > 0 ? $isEmpty : '-1'; ?>
         <select name="alt_is_empty" id="alt_is_empty" class="">
             <option value="-1" <?php selected($selected, '-1'); ?>><?php esc_html_e('All (alt empty or not)', 'imageseo'); ?></option>
