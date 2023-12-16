@@ -112,7 +112,13 @@ class SettingsPage {
 
 				echo '<a href="' . esc_url( add_query_arg( 'tab', $key, self::get_url() ) ) . '" class="nav-tab' . ( ( $this->get_active_tab() === $key ) ? ' nav-tab-active' : '' ) . '">' . esc_html( $title ) . ( ( isset( $section['badge'] ) && true === $section['badge'] ) ? ' <span class="dlm-upsell-badge">PAID</span>' : '' ) . '</a>';
 			}
-			$total      = imageseo_get_service( 'QueryImages' )->getTotalImages();
+			// Do no cache and force query to get the total number of images in order to display precise information
+			$total      = imageseo_get_service( 'QueryImages' )->getTotalImages(
+				array(
+					'withCache'  => false,
+					'forceQuery' => true
+				)
+			);
 			$totalNoAlt = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt();
 			if ( 0 !== absint( $totalNoAlt ) ) {
 				$info_text = sprintf( __( 'There are <strong>%s</strong> images in your media library and <strong>%s</strong> doesn\'t (don\'t) have an alternative text.', 'imageseo' ), absint( $total ), absint( $totalNoAlt ) );
@@ -619,7 +625,7 @@ class SettingsPage {
 			),
 		);
 
-		$options  = imageseo_get_options();
+		$options = imageseo_get_options();
 		if ( empty( $options['api_key'] ) || ! isset( $options['allowed'] ) || ! $options['allowed'] ) {
 			$settings['welcome']['sections']['welcome']['fields'] = array_merge(
 				array(
@@ -768,7 +774,7 @@ class SettingsPage {
 					Sub title (like price or author)
 				</div>
 				<div class='imageseo-media__content__sub-title-two'
-				     style="color:<?php echo ( isset( $options['social_media_settings']['textColor'] )  ?  esc_attr( $options['social_media_settings']['textColor'] ) : '' ); ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
+				     style="color:<?php echo( isset( $options['social_media_settings']['textColor'] ) ? esc_attr( $options['social_media_settings']['textColor'] ) : '' ); ?>;<?php echo ( isset( $options['social_media_settings']['visibilitySubTitleTwo'] ) && ( '1' === $options['social_media_settings']['visibilitySubTitleTwo'] || true === $options['social_media_settings']['visibilitySubTitleTwo'] ) ) ? '' : 'display:none;' ?>;">
 					Sub title 2 (like price or author)
 				</div>
 				<img class='imageseo-media__content__avatar'
@@ -818,8 +824,8 @@ class SettingsPage {
 		$data = imageseo_get_service( 'ClientApi' )->getOwnerByApiKey();
 
 		$credits = 0;
-		if ( isset($data['user'])) {
-			$user = $data['user'];
+		if ( isset( $data['user'] ) ) {
+			$user    = $data['user'];
 			$credits = absint( $user['plan']['limitImages'] ) + absint( $user['bonusStockImages'] ) - absint( $user['currentRequestImages'] );
 		}
 		?>
