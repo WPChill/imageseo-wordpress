@@ -81,12 +81,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imageseo/imageseo-php",
-                "reference": "48bd603018900165121d11597a9d69ae28397303"
+                "reference": "40e5ff349fca7f329bfa22aa8c6986e549724519"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imageseo/imageseo-php/zipball/48bd603018900165121d11597a9d69ae28397303",
-                "reference": "48bd603018900165121d11597a9d69ae28397303",
+                "url": "https://api.github.com/repos/imageseo/imageseo-php/zipball/40e5ff349fca7f329bfa22aa8c6986e549724519",
+                "reference": "40e5ff349fca7f329bfa22aa8c6986e549724519",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "email": "support@imageseo.io",
                 "source": "https://github.com/imageseo/imageseo-php"
             },
-            "time": "2023-12-08T07:35:25+00:00"
+            "time": "2023-12-18T10:53:26+00:00"
         }
     ],
     "packages-dev": [

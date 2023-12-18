@@ -333,7 +333,7 @@ class SettingsPage {
 								'std'      => '',
 								'label'    => __( 'You API Key', 'imageseo' ),
 								'cb_label' => '',
-								'desc'     => '',
+								'desc'     => __( 'Password should contain at least one number, one special character and one uppercase letter.', 'imageseo' ),
 								'type'     => 'password',
 								'priority' => 30,
 							),
