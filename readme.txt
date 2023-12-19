@@ -4,7 +4,7 @@ Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.8
 Tested up to: 6.4
 Requires PHP: 7.0
-Stable tag: v3.0.0
+Stable tag: 3.0.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,9 +126,12 @@ Image SEO works in every language.
 
 == Changelog ==
 
-= 3.0.0 - xx.xx.2023 =
-Changed: Admin Dashboard & Functionality Change
+= 3.0.0 - 19.12.2023 =
+Changed: Major Admin Dashboard & Functionality Change
 Fixed: Settings not reflecting changes ( [#13](https://github.com/WPChill/imageseo-wordpress/issues/13) )
+Changed: Updated Action Scheduler
+Changed: Default language set to site language
+Fixed: Media Library compatibility with Download Monitor
 
 = 2.0.8 (12-20-2022) =
 - Security:  Strengthening of security (Thanks WPScan)
