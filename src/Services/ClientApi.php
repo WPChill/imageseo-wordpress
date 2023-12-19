@@ -116,13 +116,7 @@ class ClientApi
     {
         $apiKey = $this->optionService->getOption('api_key');
 
-        $response = $this->getClient($apiKey)->getResource('Languages')->getLanguages();
-
-        if (!$response['success']) {
-            return null;
-        }
-
-        return $response['result'];
+        return $this->getClient($apiKey)->getResource('Languages')->getLanguages();
     }
 
     /**

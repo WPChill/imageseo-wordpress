@@ -273,10 +273,11 @@ class SettingsPage {
 		if ( ! function_exists( 'wp_get_available_translations' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 		}
-		$language_codes = \wp_get_available_translations();
+		$language_codes = imageseo_get_service( 'ClientApi' )->getLanguages();
 		$languages      = array();
-		foreach ( $language_codes as $key => $language ) {
-			$languages[ $key ] = $language['english_name'];
+
+		foreach ( $language_codes as $language ) {
+			$languages[ $language['code'] ] = $language['name'];
 		}
 		// Create options arrays.
 		$metas      = array();
@@ -544,7 +545,7 @@ class SettingsPage {
 						'description' => __( 'SEO Fact : More than 20% of Google traffic comes from image searches. We use AI to automatically optimize your images for SEO.', 'imageseo' ),
 						'fields'      => array(
 							array(
-								'name'     => 'language',
+								'name'     => 'default_language_ia',
 								'std'      => IMAGESEO_LOCALE,
 								'label'    => __( 'Language', 'imageseo' ),
 								'cb_label' => '',
