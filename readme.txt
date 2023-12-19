@@ -133,6 +133,9 @@ Changed: Updated Action Scheduler
 Changed: Default language set to site language
 Fixed: Media Library compatibility with Download Monitor
 
+= 2.0.9 15.11.2023 =
+- Fixed: Empty ALT response
+
 = 2.0.8 (12-20-2022) =
 - Security:  Strengthening of security (Thanks WPScan)
 

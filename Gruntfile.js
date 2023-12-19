@@ -120,6 +120,11 @@ module.exports = function ( grunt ) {
 					'!tsconfig.json',
 					'!travis.yml',
 					'!phpunit.xml.dist',
+					'!friendsofphp',
+					'!squizlabs',
+					'!bin',
+					'doctrine',
+					'!php-cs-fixer',
 				],
 				dest: 'build/'
 			}
@@ -161,6 +166,11 @@ module.exports = function ( grunt ) {
 					'!tsconfig.json',
 					'!travis.yml',
 					'!phpunit.xml.dist',
+					'!friendsofphp',
+					'!squizlabs',
+					'!bin',
+					'doctrine',
+					'!php-cs-fixer',
 				],
 				dest: '<%= pkg.name %>'
 			}
