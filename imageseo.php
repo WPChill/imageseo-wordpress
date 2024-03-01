@@ -138,6 +138,7 @@ function imageseo_plugin_loaded()
 {
 	require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
 	require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
+	OnUploadImage::getInstance();
 	if (imageseo_is_compatible()) {
 		require_once __DIR__ . '/imageseo-functions.php';
 

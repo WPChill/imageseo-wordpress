@@ -26,7 +26,6 @@
 	],
 	"require": {
 		"imageseo/imageseo-php": "dev-master",
-		"cocur/slugify": "^3.1",
-		"deliciousbrains/wp-background-processing": "^1.3"
+		"cocur/slugify": "^3.1"
 	}
 }
