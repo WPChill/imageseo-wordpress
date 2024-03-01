@@ -8,3 +8,4 @@ dist
 vendor
 content.html
 *.zip
+debug.log

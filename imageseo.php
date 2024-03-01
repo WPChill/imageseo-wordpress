@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:              Image SEO
  * Plugin URI:               https://imageseo.io
@@ -39,12 +40,13 @@
  */
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 use ImageSeoWP\Context;
+use ImageSeoWP\Processes\OnUploadImage;
 
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
@@ -58,6 +60,7 @@ define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
 define('IMAGESEO_API_URL', 'https://api.imageseo.com');
+// define('IMAGESEO_API_URL', 'http://192.168.1.148:3000');
 
 define('IMAGESEO_APP_URL', 'https://app.imageseo.io');
 define('IMAGESEO_SITE_URL', 'https://imageseo.io');
@@ -71,20 +74,20 @@ define('IMAGESEO_TEMPLATES_ADMIN', IMAGESEO_TEMPLATES . '/admin');
 define('IMAGESEO_TEMPLATES_ADMIN_NOTICES', IMAGESEO_TEMPLATES_ADMIN . '/notices');
 define('IMAGESEO_TEMPLATES_ADMIN_PAGES', IMAGESEO_TEMPLATES_ADMIN . '/pages');
 define('IMAGESEO_TEMPLATES_ADMIN_METABOXES', IMAGESEO_TEMPLATES_ADMIN . '/metaboxes');
-define( 'IMAGESEO_LOCALE', get_locale() );
+define('IMAGESEO_LOCALE', get_locale());
 /**
  * Check compatibility this ImageSeo with WordPress config.
  */
 function imageseo_is_compatible()
 {
-    // Check php version.
-    if (version_compare(PHP_VERSION, IMAGESEO_PHP_MIN) < 0) {
-        add_action('admin_notices', 'imageseo_php_min_compatibility');
+	// Check php version.
+	if (version_compare(PHP_VERSION, IMAGESEO_PHP_MIN) < 0) {
+		add_action('admin_notices', 'imageseo_php_min_compatibility');
 
-        return false;
-    }
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 /**
@@ -92,35 +95,35 @@ function imageseo_is_compatible()
  */
 function imageseo_php_min_compatibility()
 {
-    if (!file_exists(IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php')) {
-        return;
-    }
+	if (!file_exists(IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php')) {
+		return;
+	}
 
-    include_once IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php';
+	include_once IMAGESEO_TEMPLATES_ADMIN_NOTICES . '/php-min.php';
 }
 
 function imageseo_plugin_activate()
 {
-    if (!imageseo_is_compatible()) {
-        return;
-    }
+	if (!imageseo_is_compatible()) {
+		return;
+	}
 
-    require_once __DIR__ . '/imageseo-functions.php';
+	require_once __DIR__ . '/imageseo-functions.php';
 
-    Context::getContext()->activatePlugin();
+	Context::getContext()->activatePlugin();
 }
 
 function imageseo_plugin_deactivate()
 {
-    require_once __DIR__ . '/imageseo-functions.php';
+	require_once __DIR__ . '/imageseo-functions.php';
 
-    Context::getContext()->deactivatePlugin();
+	Context::getContext()->deactivatePlugin();
 }
 
 function imageseo_plugin_uninstall()
 {
-    delete_option(IMAGESEO_SLUG);
-    delete_option('imageseo_version');
+	delete_option(IMAGESEO_SLUG);
+	delete_option('imageseo_version');
 }
 
 if (!class_exists('ActionScheduler')) {
@@ -133,18 +136,21 @@ if (!class_exists('ActionScheduler')) {
  */
 function imageseo_plugin_loaded()
 {
+	require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
+	require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
+	if (imageseo_is_compatible()) {
+		require_once __DIR__ . '/imageseo-functions.php';
 
-    require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
-    require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
+		load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
 
-    if (imageseo_is_compatible()) {
-        require_once __DIR__ . '/imageseo-functions.php';
+		Context::getContext()->initPlugin();
 
-        load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
+		new \ImageSeoWP\V2\RestApi();
 
-        Context::getContext()->initPlugin();
 		\ImageSeoWP\Admin\SettingsPage::get_instance();
-    }
+		\ImageSeoWP\Admin\SettingsPageV2::get_instance();
+		\ImageSeoWP\Services\BulkOptimizer::getInstance();
+	}
 }
 
 register_activation_hook(__FILE__, 'imageseo_plugin_activate');

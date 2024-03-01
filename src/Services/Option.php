@@ -3,7 +3,7 @@
 namespace ImageSeoWP\Services;
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 use ImageSeoWP\Helpers\AltFormat;
@@ -11,9 +11,9 @@ use ImageSeoWP\Helpers\SocialMedia;
 
 class Option
 {
-    /**
-     * @var array
-     */
+	/**
+	 * @var array
+	 */
 	protected $optionsDefault = [
 		'api_key'                    => '',
 		'allowed'                    => false,
@@ -46,66 +46,83 @@ class Option
 		'language'                   => IMAGESEO_LOCALE,
 	];
 
-    /**
-     * Get options default.
-     *
-     * @return array
-     */
-    public function getOptionsDefault()
-    {
-        return $this->optionsDefault;
-    }
+	/**
+	 * Get options default.
+	 *
+	 * @return array
+	 */
+	public function getOptionsDefault()
+	{
+		return $this->convert_to_camel_case($this->optionsDefault);
+	}
 
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return apply_filters(
-            'imageseo_get_options',
-            wp_parse_args(get_option(IMAGESEO_SLUG), $this->getOptionsDefault())
-        );
-    }
+	/**
+	 * @return array
+	 */
+	public function getOptions()
+	{
+		return apply_filters(
+			'imageseo_get_options',
+			wp_parse_args(get_option(IMAGESEO_SLUG), $this->getOptionsDefault())
+		);
+	}
 
-    /**
-     * @param string $name
-     *
-     * @return array
-     */
-    public function getOption($name)
-    {
-        $options = $this->getOptions();
-        if (!array_key_exists($name, $options)) {
-            return null;
-        }
+	/**
+	 * @param string $name
+	 *
+	 * @return array
+	 */
+	public function getOption($name)
+	{
+		$options = $this->getOptions();
+		if (!array_key_exists($name, $options)) {
+			return null;
+		}
 
-        return apply_filters('imageseo_' . $name . '_option', $options[$name]);
-    }
+		return apply_filters('imageseo_' . $name . '_option', $options[$name]);
+	}
 
-    /**
-     * @param array $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        update_option(IMAGESEO_SLUG, $options);
+	/**
+	 * @param array $options
+	 *
+	 * @return $this
+	 */
+	public function setOptions($options)
+	{
+		update_option(IMAGESEO_SLUG, $options);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setOptionByKey($key, $value)
-    {
-        $options = $this->getOptions();
-        $options[$key] = $value;
-        $this->setOptions($options);
+	/**
+	 * @param string $key
+	 * @param mixed  $value
+	 *
+	 * @return $this
+	 */
+	public function setOptionByKey($key, $value)
+	{
+		$options = $this->getOptions();
+		$options[$key] = $value;
+		$this->setOptions($options);
 
-        return $this;
-    }
+		return $this;
+	}
+
+	private function convert_to_camel_case($options)
+	{
+		$camelCased = [];
+
+		foreach ($options as $key => $value) {
+			if (strpos($key, '_') === -1) {
+				$camelCased[$key] = $value;
+				continue;
+			};
+
+			$camelCaseKey = lcfirst(str_replace('_', '', ucwords($key, '_')));
+			$camelCased[$camelCaseKey] = $value;
+		}
+
+		return $camelCased;
+	}
 }
