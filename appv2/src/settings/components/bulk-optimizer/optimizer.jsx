@@ -5,7 +5,6 @@ import {
 	Button,
 	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
-	__experimentalHeading as Heading,
 	Placeholder,
 } from '@wordpress/components';
 import useSettings from '../../hooks/useSettings';
@@ -13,8 +12,8 @@ import apiFetch from '@wordpress/api-fetch';
 import { useOptimizerStatus } from '../../hooks/useOptimizerStatus';
 
 export const Optimizer = () => {
-	const { global } = useSettings();
-	const { data, isLoading, error, isFetching, mutate } = useOptimizerStatus();
+	const { global, options } = useSettings();
+	const { data, isLoading, error, mutate } = useOptimizerStatus();
 
 	const optimizeCb = async () => {
 		await apiFetch({
@@ -61,16 +60,31 @@ export const Optimizer = () => {
 		<div className="optimizer">
 			{data?.status === 'idle' && (
 				<>
-					<Text>
-						{sprintf(
-							__(
-								"There are %1$s images in your media library and %2$s don't have an alternative text.",
-								'imageseo'
-							),
-							global.totalImages,
-							global.totalNoAlt
-						)}
-					</Text>
+					{options?.altFilter === 'NEXTGEN_GALLERY' && (
+						<Text>
+							{sprintf(
+								__(
+									"There are %1$s images in your NEXTGEN library and %2$s don't have an alternative text.",
+									'imageseo'
+								),
+								global.bulkQuery.ids.length || 0,
+								global.bulkQuery.nonOptimized.length || 0
+							)}
+						</Text>
+					)}
+					{options?.altFilter !== 'NEXTGEN_GALLERY' && (
+						<Text>
+							{sprintf(
+								__(
+									"There are %1$s images in your media library and %2$s don't have an alternative text.",
+									'imageseo'
+								),
+								global.totalImages,
+								global.totalNoAlt
+							)}
+						</Text>
+					)}
+
 					<Spacer marginY="5" />
 					<Button
 						isPrimary

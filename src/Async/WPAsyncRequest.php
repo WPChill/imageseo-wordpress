@@ -2,6 +2,7 @@
 
 namespace ImageSeoWP\Async;
 
+$base_url = (defined('DOCKER_ENV') ? 'http://host.docker.internal' : 'http://localhost');
 /**
  * WP Async Request.
  */
@@ -35,6 +36,9 @@ abstract class WPAsyncRequest
 	 * @var mixed
 	 */
 	protected $identifier;
+	protected $query_args;
+	protected $query_url;
+	protected $post_args;
 	/**
 	 * Data.
 	 *
@@ -78,6 +82,10 @@ abstract class WPAsyncRequest
 		$url = add_query_arg($this->get_query_args(), $this->get_query_url());
 		$args = $this->get_post_args();
 
+		if (function_exists('getenv_docker')) {
+			$url = str_replace('localhost', 'host.docker.internal', $url);
+		}
+
 		return wp_remote_post(esc_url_raw($url), $args);
 	}
 
@@ -88,7 +96,7 @@ abstract class WPAsyncRequest
 	 */
 	protected function get_query_args()
 	{
-		if (property_exists($this, 'query_args')) {
+		if (property_exists($this, 'query_args') && !empty($this->query_args)) {
 			return $this->query_args;
 		}
 
@@ -112,7 +120,7 @@ abstract class WPAsyncRequest
 	 */
 	protected function get_query_url()
 	{
-		if (property_exists($this, 'query_url')) {
+		if (property_exists($this, 'query_url') && !empty($this->query_url)) {
 			return $this->query_url;
 		}
 
@@ -133,7 +141,7 @@ abstract class WPAsyncRequest
 	 */
 	protected function get_post_args()
 	{
-		if (property_exists($this, 'post_args')) {
+		if (property_exists($this, 'post_args') && !empty($this->post_args)) {
 			return $this->post_args;
 		}
 

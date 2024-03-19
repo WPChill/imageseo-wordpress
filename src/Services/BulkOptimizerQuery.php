@@ -159,7 +159,6 @@ class BulkOptimizerQuery
 
 	public function getImages()
 	{
-
 		global $wpdb;
 
 		if (AltSpecification::WOO_PRODUCT_IMAGE === $this->options['altFilter']) {

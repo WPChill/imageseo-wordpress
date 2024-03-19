@@ -36,23 +36,7 @@ class Enqueue
 	public function adminEnqueueScripts($page)
 	{
 
-		// Enqueue new admin functionality script
 		if ('toplevel_page_imageseo-settings' === $page) {
-			wp_enqueue_media();
-			wp_enqueue_script(
-				'imageseo-functionality',
-				IMAGESEO_URL_DIST . '/functionality.js',
-				array(
-					'jquery',
-					'wp-color-picker',
-					'wp-i18n'
-				),
-				IMAGESEO_VERSION,
-				true
-			);
-			wp_enqueue_style('wp-color-picker');
-		}
-		if ('toplevel_page_imageseo-settings-2' === $page) {
 			$asset_script_path = IMAGESEO_DIR_DIST . '/settingsv2/index.asset.php';
 			$asset_file = require $asset_script_path;
 			wp_enqueue_media();

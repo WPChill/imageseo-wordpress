@@ -4,7 +4,6 @@ import {
 	__experimentalDivider as Divider,
 	ToggleControl,
 	SelectControl,
-	CheckboxControl,
 } from '@wordpress/components';
 import useSettings from '../../hooks/useSettings';
 import { __ } from '@wordpress/i18n';
@@ -64,7 +63,9 @@ export const Form = () => {
 					setOptions({ defaultLanguageIa: value });
 				}}
 				value={
-					options?.defaultLanguageIa || global?.currentLanguage || ''
+					options?.defaultLanguageIa ||
+					global?.currentLanguage ||
+					'en'
 				}
 			/>
 			<Divider style={{ marginTop: 15, marginBottom: 15 }} />

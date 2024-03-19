@@ -45,8 +45,11 @@ if (!defined('ABSPATH')) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use ImageSeoWP\Admin\SettingsPage;
 use ImageSeoWP\Context;
 use ImageSeoWP\Processes\OnUploadImage;
+use ImageSeoWP\Services\BulkOptimizer;
+use ImageSeoWP\V2\RestApi;
 
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
@@ -136,21 +139,27 @@ if (!class_exists('ActionScheduler')) {
  */
 function imageseo_plugin_loaded()
 {
-	require_once IMAGESEO_DIR . '/src/Async/BulkImageActionScheduler.php';
-	require_once IMAGESEO_DIR . '/src/Async/WorkerOnUploadActionScheduler.php';
-	OnUploadImage::getInstance();
+
 	if (imageseo_is_compatible()) {
 		require_once __DIR__ . '/imageseo-functions.php';
-
 		load_plugin_textdomain('imageseo', false, IMAGESEO_DIR_LANGUAGES);
 
 		Context::getContext()->initPlugin();
 
-		new \ImageSeoWP\V2\RestApi();
+		/**
+		 * Async process for background upload process
+		 */
+		OnUploadImage::getInstance();
 
-		\ImageSeoWP\Admin\SettingsPage::get_instance();
-		\ImageSeoWP\Admin\SettingsPageV2::get_instance();
-		\ImageSeoWP\Services\BulkOptimizer::getInstance();
+		/**
+		 * Render the settings page
+		 */
+		SettingsPage::get_instance();
+
+		/**
+		 * We need this here so that the bulk optimizer is always available.
+		 */
+		BulkOptimizer::getInstance();
 	}
 }
 

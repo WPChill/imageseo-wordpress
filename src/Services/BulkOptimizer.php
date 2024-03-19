@@ -3,6 +3,7 @@
 namespace ImageSeoWP\Services;
 
 use ImageSeoWP\Helpers\AttachmentMeta;
+use ImageSeoWP\Traits\ApiHandler;
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -10,14 +11,8 @@ if (!defined('ABSPATH')) {
 
 class BulkOptimizer
 {
+	use ApiHandler;
 	public $batchSize = 10;
-	public $altService;
-	public $clientService;
-	public $optionService;
-	public $fileService;
-	public $bulkOptimizerQuery;
-	public $generateFilename;
-
 	public $defaultLastReport = [
 		'total' => 0,
 		'optimized' => 0,
@@ -30,7 +25,6 @@ class BulkOptimizer
 
 	public static function getInstance()
 	{
-
 		if (!isset(self::$instance) && !(self::$instance instanceof BulkOptimizer)) {
 			self::$instance = new BulkOptimizer();
 		}
@@ -40,12 +34,7 @@ class BulkOptimizer
 
 	public function __construct()
 	{
-		$this->clientService = imageseo_get_service('ClientApi');
-		$this->optionService = imageseo_get_service('Option');
-		$this->bulkOptimizerQuery = imageseo_get_service('BulkOptimizerQuery');
-		$this->altService = imageseo_get_service('Alt');
-		$this->fileService = imageseo_get_service('UpdateFile');
-		$this->generateFilename = imageseo_get_service('GenerateFilename');
+		$this->setServices();
 
 		add_action('process_image_batch', [$this, 'processImageBatch'], 10, 2);
 		add_action('check_image_batch', [$this, 'checkImageBatch'], 10, 1);
@@ -84,6 +73,7 @@ class BulkOptimizer
 	public function start()
 	{
 		$images = $this->bulkOptimizerQuery->getImages();
+		$options = imageseo_get_options();
 
 		$image_data = [
 			'ids' => $images['ids'],
@@ -91,6 +81,7 @@ class BulkOptimizer
 			'optimizedIds' => [],
 			'failedIds' => [],
 			'batchIds' => [],
+			'library' => $options['altFilter']
 		];
 
 		$report = [
@@ -131,6 +122,8 @@ class BulkOptimizer
 	public function processImageBatch($batch_number, $timestamp)
 	{
 		$image_data = get_option('imageseo_bulk_image_data');
+		$isNextGen = $image_data['library'] === 'NEXTGEN_GALLERY';
+
 		$totalImages = count($image_data['ids']);
 		$startIndex = $batch_number * $this->batchSize;
 		$endIndex = min($startIndex + $this->batchSize, $totalImages) - 1;
@@ -139,12 +132,7 @@ class BulkOptimizer
 
 		$images = [];
 		foreach ($currentBatchIds as $id) {
-			$attachmentUrl = wp_get_attachment_url($id);
-			$images[] = [
-				"internalId" => $id,
-				"url" => $attachmentUrl,
-				"requestUrl" => get_site_url(),
-			];
+			$images[] = $this->createApiImage($id, $isNextGen);
 		}
 
 		$result = $this->sendRequestToApi($images);
@@ -179,6 +167,7 @@ class BulkOptimizer
 	public function checkImageBatch($batch_number)
 	{
 		$optimizeFilename = $this->optionService->getOption('optimizeFile');
+		$isNextGen = $this->optionService->getOption('altFilter') === 'NEXTGEN_GALLERY';
 		$image_data = get_option('imageseo_bulk_image_data', false);
 		if ($image_data && !isset($image_data['batchIds'][$batch_number])) {
 			$totalImages = count($image_data['ids']);
@@ -232,18 +221,27 @@ class BulkOptimizer
 		$failed = [];
 		foreach ($batchData as $image) {
 			if ($image['resolved']) {
-				$attachmentId = $image['internalId'];
+				$attachmentId = $isNextGen
+					? imageseo_get_service('QueryNextGen')->getPostIdByNextGenId($image['internalId']) : $image['internalId'];
+
 				update_post_meta($attachmentId, AttachmentMeta::REPORT, $image);
 
-				$this->altService->updateAlt($image['internalId'], $image['altText']);
+				$isNextGen
+					? imageseo_get_service('QueryNextGen')->updateAlt($image['internalId'], $image['altText'])
+					: $this->altService->updateAlt($image['internalId'], $image['altText']);
 
 				if ($optimizeFilename) {
-					$extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
+					$extension = $this->extractExtension($image['imageUrl']);
 
-					$this->fileService->updateFilename(
-						$image['internalId'],
-						sprintf('%s.%s', $image['filename'], $extension)
-					);
+					$isNextGen
+						? $this->fileService->updateFilenameForNextGen(
+							$image['internalId'],
+							sprintf('%s.%s', $image['filename'], $extension)
+						)
+						: $this->fileService->updateFilename(
+							$image['internalId'],
+							sprintf('%s.%s', $image['filename'], $extension)
+						);
 				}
 
 				$optimized[] = $image['internalId'];
@@ -275,59 +273,14 @@ class BulkOptimizer
 		);
 	}
 
-	private function getItemsByBatchId($batchId)
+	/**
+	 * Extracts the file extension from a given URL.
+	 *
+	 * @param string $url The URL from which to extract the file extension.
+	 * @return string The file extension.
+	 */
+	public function extractExtension($url)
 	{
-		try {
-			$response = wp_remote_get(
-				// IMAGESEO_API_URL/projects/v2/images/,
-				'http://192.168.1.148:3000/projects/v2/images/' . $batchId,
-				[
-					'headers' => [
-						'Content-Type' => 'application/json',
-						'Authorization' => 'Bearer ' . $this->optionService->getOption('apiKey')
-					],
-				]
-			);
-
-			if (is_wp_error($response)) {
-				throw new \Exception($response->get_error_message());
-			}
-
-			$result = wp_remote_retrieve_body($response);
-			return json_decode($result, true);
-		} catch (\Exception $e) {
-			return $e;
-		}
-	}
-
-	private function sendRequestToApi($images)
-	{
-		$dataObj = [
-			'images' => $images,
-			'lang' => $this->optionService->getOption('defaultLanguageIa')
-		];
-
-		try {
-			$response = wp_remote_post(
-				// IMAGESEO_API_URL/projects/v2/images,
-				'http://192.168.1.148:3000/projects/v2/images',
-				[
-					'headers' => [
-						'Content-Type' => 'application/json',
-						'Authorization' => 'Bearer ' . $this->optionService->getOption('apiKey')
-					],
-					'body' => json_encode($dataObj)
-				]
-			);
-
-			if (is_wp_error($response)) {
-				throw new \Exception($response->get_error_message());
-			}
-
-			$result = wp_remote_retrieve_body($response);
-			return json_decode($result, true);
-		} catch (\Exception $e) {
-			return $e;
-		}
+		return pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
 	}
 }

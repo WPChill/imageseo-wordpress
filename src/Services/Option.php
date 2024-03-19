@@ -6,7 +6,6 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-use ImageSeoWP\Helpers\AltFormat;
 use ImageSeoWP\Helpers\SocialMedia;
 
 class Option
@@ -20,7 +19,7 @@ class Option
 		'active_alt_write_upload'    => 1,
 		'active_rename_write_upload' => 1,
 		'default_language_ia'        => IMAGESEO_LOCALE,
-		'alt_template_default'       => AltFormat::ALT_SIMPLE,
+		'alt_template_default'       => '[keyword_1] - [keyword_2]',
 		'social_media_post_types'    => [
 			'post',
 		],

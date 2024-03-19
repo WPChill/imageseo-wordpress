@@ -2,6 +2,8 @@
 
 namespace ImageSeoWP\Actions\Admin;
 
+use ImageSeoWP\Processes\OnUploadImage;
+
 if (!defined('ABSPATH')) {
 	exit;
 }
@@ -34,6 +36,7 @@ class MediaLibrary
 
 		add_filter('wp_generate_attachment_metadata', [$this, 'createProcessOnUpload'], 10, 2);
 		add_action('delete_attachment', [$this, 'updateDeleteCount'], 100);
+		add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
 	}
 
 	public function muteOnUpload()
@@ -47,8 +50,8 @@ class MediaLibrary
 			return $metadata;
 		}
 
-		$activeAltOnUpload = $this->optionService->getOption('active_alt_write_upload');
-		$activeRenameOnUpload = $this->optionService->getOption('active_rename_write_upload');
+		$activeAltOnUpload = $this->optionService->getOption('activeAltWriteUpload');
+		$activeRenameOnUpload = $this->optionService->getOption('activeRenameWriteUpload');
 
 		$total = get_option('imageseo_get_total_images');
 		if ($total) {
@@ -66,8 +69,14 @@ class MediaLibrary
 			return $metadata;
 		}
 
-		\as_schedule_single_action(time() + 10, 'action_worker_on_upload_process_action_scheduler', ['attachment_id' => $attachmentId], 'on_upload_image');
+		$asyncRequest = OnUploadImage::getInstance();
+		$asyncRequest->data([
+			'attachment_id' => $attachmentId,
+			'active_alt_on_upload' => $activeAltOnUpload,
+			'active_rename_on_upload' => $activeRenameOnUpload,
+		]);
 
+		$asyncRequest->dispatch();
 		return $metadata;
 	}
 
@@ -115,63 +124,25 @@ class MediaLibrary
 	 */
 	public function manageMediaColumns($columns)
 	{
-		$columns['imageseo_alt'] = __('Alt', 'imageseo');
-		$columns['imageseo_filename'] = __('Filename ImageSEO', 'imageseo');
+		$columns['imageseo_alt'] = __('Alt (imageseo)', 'imageseo');
+		$columns['imageseo_filename'] = __('Filename (imageseo)', 'imageseo');
 
 		return $columns;
 	}
 
 	protected function renderAlt($attachmentId)
 	{
-		$alt = wp_strip_all_tags($this->altService->getAlt($attachmentId));
-		$haveAlreadyReport = $this->reportImageService->haveAlreadyReportByAttachmentId($attachmentId); ?>
-		<div class="media-column-imageseo">
-			<?php
-			if (empty($alt)) {
-			?>
-				<div class="media-column-imageseo--no_alt">
-					<span class="dashicons dashicons-dismiss"></span>
-					<span class="text"><?php esc_html_e('This image has not alt attribute !', 'imageseo'); ?>
-				</div>
-			<?php
-			} ?>
-
-			<div id="wrapper-imageseo-alt-<?php echo esc_attr($attachmentId); ?>" class="wrapper-imageseo-input-alt">
-				<input type="text" name="imageseo-alt" data-id="<?php echo esc_attr($attachmentId); ?>" class="imageseo-alt-ajax large-text" id="imageseo-alt-<?php echo esc_attr($attachmentId); ?>" value="<?php echo esc_attr($alt); ?>" placeholder="<?php echo esc_attr('Enter alt attribute', 'imageseo'); ?>" />
-				<button class="button" data-id="<?php echo esc_attr($attachmentId); ?>">
-					<span><?php esc_html_e('Submit', 'imageseo'); ?></span>
-					<div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
-				</button>
-			</div>
-			<br />
-			<a id="imageseo-analyze-<?php echo esc_attr($attachmentId); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_generate_alt&attachment_id=' . $attachmentId), 'imageseo_generate_alt')); ?>" class="button button-primary">
-				<?php esc_html_e('Generate alt automatically', 'imageseo'); ?>
-			</a>
+		$alt = wp_strip_all_tags($this->altService->getAlt($attachmentId)); ?>
+		<div class="media-column-imageseo-alt" data-id="<?php echo absint($attachmentId); ?>" data-alt="<?php echo $alt; ?>">
 		</div>
 	<?php
 	}
 
 	public function renderFilename($attachmentId)
 	{
-		$oldMetadata = get_post_meta($attachmentId, '_old_wp_attached_file', true);
-		$filename    = $this->generateFilename->getFilenameByAttachmentId($attachmentId);
+		$filename = $this->generateFilename->getFilenameByAttachmentId($attachmentId);
 	?>
-		<div class="media-column-imageseo">
-			<span class="text" style="margin-bottom:5px; display:block;"><?php esc_html_e('Choose a new file name.', 'imageseo'); ?></span>
-			<div id="wrapper-imageseo-filename-<?php echo esc_attr($attachmentId); ?>" class="wrapper-imageseo-input-filename">
-				<input type="text" name="imageseo-filename" data-id="<?php echo esc_attr($attachmentId); ?>" class="imageseo-filename-ajax large-text" id="imageseo-filename-<?php echo esc_attr($attachmentId); ?>" value="<?php echo esc_attr($filename); ?>" placeholder="<?php echo esc_attr__('Enter NEW filename', 'imageseo'); ?>" />
-				<button class="button" data-id="<?php echo esc_attr($attachmentId); ?>">
-					<span><?php esc_html_e('Submit', 'imageseo'); ?></span>
-					<div class="imageseo-loading imageseo-loading--library" style="display:none"></div>
-				</button>
-
-			</div>
-			<span class="text" style="margin-bottom:5px; display:block;" id="imageseo-message-<?php echo esc_attr($attachmentId); ?>"></span>
-			<br />
-			<a id="imageseo-rename-file<?php echo esc_attr($attachmentId); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=imageseo_rename_attachment&attachment_id=' . $attachmentId), 'imageseo_rename_attachment')); ?>" class="button button-primary">
-				<?php echo esc_html__('Rename file automatically', 'imageseo'); ?>
-			</a>
-		</div>
+		<div class="media-column-imageseo-filename" data-id="<?php echo absint($attachmentId); ?>" data-filename="<?php echo esc_html($filename); ?>"></div>
 <?php
 	}
 
@@ -189,5 +160,34 @@ class MediaLibrary
 				$this->renderFilename($attachmentId);
 				break;
 		}
+	}
+
+	/**
+	 * enqueue scripts and styles for the media library
+	 *
+	 * @param [type] $page
+	 * @return void
+	 */
+	public function enqueue_scripts($page)
+	{
+		if ($page !== 'upload.php') {
+			return;
+		}
+
+		$asset_script_path = IMAGESEO_DIR_DIST . '/adminv2/index.asset.php';
+		$asset_file = require $asset_script_path;
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'imageseo-admin-v2',
+			IMAGESEO_URL_DIST . '/adminv2/index.js',
+			$asset_file['dependencies'],
+			$asset_file['version'],
+		);
+		wp_enqueue_style(
+			'imageseo-admin-v2',
+			IMAGESEO_URL_DIST . '/adminv2/index.css',
+			['wp-components'],
+			$asset_file['version'],
+		);
 	}
 }

@@ -1,8 +1,6 @@
 <?php
 
-namespace ImageSeoWP\V2;
-
-use ImageSeoWP\Processes\OnUploadImage;
+namespace ImageSeoWP\Actions;
 
 if (!defined('ABSPATH')) {
 	exit;
@@ -10,52 +8,60 @@ if (!defined('ABSPATH')) {
 
 class RestApi
 {
-	public function __construct()
+	public $namespace = 'imageseo/v1';
+
+	public function hooks()
 	{
 		add_action('rest_api_init', [$this, 'register_routes']);
 	}
 
 	public function register_routes()
 	{
-		register_rest_route('imageseo/v1', '/settings/', [
+		register_rest_route($this->namespace, '/settings/', [
 			'methods' => 'GET',
 			'callback' => [$this, 'get_settings'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/settings/', [
+		register_rest_route($this->namespace, '/settings/', [
 			'methods' => 'POST',
 			'callback' => [$this, 'update_settings'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/register/', [
+		register_rest_route($this->namespace, '/register/', [
 			'methods' => 'POST',
 			'callback' => [$this, 'register'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/validate-api-key/', [
+		register_rest_route($this->namespace, '/validate-api-key/', [
 			'methods' => 'POST',
 			'callback' => [$this, 'validate_api_key'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/start-bulk-optimizer/', [
+		register_rest_route($this->namespace, '/start-bulk-optimizer/', [
 			'methods' => 'POST',
 			'callback' => [$this, 'start_bulk_optimizer'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/get-bulk-optimizer-status/', [
+		register_rest_route($this->namespace, '/get-bulk-optimizer-status/', [
 			'methods' => 'GET',
 			'callback' => [$this, 'get_bulk_optimizer_status'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 
-		register_rest_route('imageseo/v1', '/stop-bulk-optimizer/', [
+		register_rest_route($this->namespace, '/stop-bulk-optimizer/', [
 			'methods' => 'POST',
 			'callback' => [$this, 'stop_bulk_optimizer'],
+			'permission_callback' => [$this, 'settings_permissions_check']
+		]);
+
+		register_rest_route($this->namespace, '/optimize-image/', [
+			'methods' => 'POST',
+			'callback' => [$this, 'optimize_image'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
 	}
@@ -68,7 +74,6 @@ class RestApi
 	public function get_settings($request)
 	{
 		$options = $this->convert_to_camel_case(imageseo_get_options());
-
 		return new \WP_REST_Response($options, 200);
 	}
 
@@ -76,15 +81,6 @@ class RestApi
 	{
 		$settings = $request->get_json_params();
 		update_option(IMAGESEO_SLUG, $this->sanitize_settings($settings));
-
-		$processor = OnUploadImage::getInstance();
-		$processor->push_to_queue([
-			'attachment_id' => 1,
-			'filename' => 'test.jpg'
-		]);
-
-		$processor->save()->dispatch();
-
 		return new \WP_REST_Response($settings, 200);
 	}
 
@@ -147,6 +143,31 @@ class RestApi
 		return new \WP_REST_Response($owner, 200);
 	}
 
+	public function optimize_image($request)
+	{
+		$optimizer = imageseo_get_service('Optimizer');
+		$data = $request->get_json_params();
+		$action = $data['action'] ?? 'optimizeAll';
+		$return = null;
+
+		switch ($action) {
+			case 'optimizeAll':
+				$return = $optimizer->getAndSetOptimizedImage($data['id']);
+				break;
+			case 'optimizeAlt':
+				$return = $optimizer->getAndSetAlt($data['id']);
+				break;
+			case 'optimizeFilename':
+				$return = $optimizer->getAndUpdateFilename($data['id']);
+				break;
+			default:
+				$return = $optimizer->getAndSetOptimizedImage($data['id']);
+				break;
+		}
+
+		return new \WP_REST_Response($return, 200);
+	}
+
 	public function start_bulk_optimizer()
 	{
 		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
@@ -187,12 +208,12 @@ class RestApi
 				case 'active_alt_write_upload':
 				case 'activeAltWriteUpload':
 					$options['activeAltWriteUpload'] = (bool) $value;
-					$options['activeAltWriteUpload'] = (bool) $value;
+					$options['active_alt_write_upload'] = (bool) $value;
 					break;
 				case 'activeRenameWriteUpload':
 				case 'active_rename_write_upload':
 					$options['activeRenameWriteUpload'] = (bool) $value;
-					$options['activeRenameWriteUpload'] = (bool) $value;
+					$options['active_rename_write_upload'] = (bool) $value;
 					break;
 				case 'default_language_ia':
 				case 'defaultLanguageIa':
@@ -222,6 +243,9 @@ class RestApi
 					break;
 				case 'optimizeAlt':
 					$options['optimizeAlt'] = (bool) $value;
+					break;
+				case 'optimizeFile':
+					$options['optimizeFile'] = (bool) $value;
 					break;
 				case 'language':
 					$options['language'] = sanitize_text_field($value);

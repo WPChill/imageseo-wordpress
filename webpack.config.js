@@ -11,7 +11,6 @@ module.exports = {
 		"admin-bar": "./app/javascripts/admin-bar.js",
 		functionality: "./app/javascripts/functionality.js",
 		"admin-global-css": "./app/styles/admin-global.scss",
-		"settings-v2": "./app/v2/settings.jsx",
 	},
 	output: {
 		path: __dirname + "/dist",

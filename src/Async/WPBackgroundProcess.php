@@ -37,7 +37,20 @@ abstract class WPBackgroundProcess extends WPAsyncRequest
 	 * @access protected
 	 */
 	protected $cron_hook_identifier;
-
+	/**
+	 * The interval for running the background process via cron.
+	 *
+	 * @var int
+	 * @access protected
+	 * @since 1.0.0
+	 * @see WPBackgroundProcess
+	 */
+	protected $cron_interval;
+	/**
+	 * The amount of time (in seconds) to lock the queue for processing.
+	 *
+	 * @var int
+	 */
 	protected $queue_lock_time = 60;
 	/**
 	 * Cron_interval_identifier
@@ -715,13 +728,14 @@ abstract class WPBackgroundProcess extends WPAsyncRequest
 			// Background process already running.
 			exit;
 		}
+
 		if ($this->is_queue_empty()) {
 			// No data to process.
 			$this->clear_scheduled_event();
 			exit;
 		}
-		$this->handle();
-		exit;
+
+		$this->dispatch();
 	}
 
 	/**

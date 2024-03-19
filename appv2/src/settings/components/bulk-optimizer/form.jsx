@@ -3,26 +3,20 @@ import { __ } from '@wordpress/i18n';
 import useSettings from '../../hooks/useSettings';
 
 export const Form = () => {
-	const { options, setOptions } = useSettings();
-
+	const { options, setOptions, global } = useSettings();
 	return (
 		<div className="form">
 			<SelectControl
 				label={__('Images to optimize', 'imageseo')}
-				value={options?.altFiller || 'ALL'}
+				value={options?.altFilter || 'ALL'}
 				onChange={(value) => {
-					setOptions({ altFiller: value });
+					console.log(value);
+					setOptions({ altFilter: value });
 				}}
-				options={[
-					{
-						value: 'ALL',
-						label: __('Only media library images', 'imageseo'),
-					},
-					{
-						value: 'FEATURED_IMAGE',
-						label: __('Only featured images', 'imageseo'),
-					},
-				]}
+				options={(global.altSpecification || []).map((alt) => ({
+					value: alt.id,
+					label: alt.label,
+				}))}
 			/>
 			<SelectControl
 				label={__('Optimize alt text', 'imageseo')}

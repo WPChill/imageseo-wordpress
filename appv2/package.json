@@ -4,7 +4,9 @@
 	"description": "",
 	"scripts": {
 		"build:settings": "wp-scripts build src/settings/index.js --output-path=../dist/settingsv2",
-		"start:settings": "wp-scripts start src/settings/index.js --output-path=../dist/settingsv2"
+		"start:settings": "wp-scripts start src/settings/index.js --output-path=../dist/settingsv2",
+		"build:admin": "wp-scripts build src/admin/index.js --output-path=../dist/adminv2",
+		"start:admin": "wp-scripts start src/admin/index.js --output-path=../dist/adminv2"
 	},
 	"author": "",
 	"devDependencies": {
