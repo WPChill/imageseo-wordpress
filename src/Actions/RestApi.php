@@ -2,13 +2,15 @@
 
 namespace ImageSeoWP\Actions;
 
+use WP_REST_Response;
+
 if (!defined('ABSPATH')) {
 	exit;
 }
 
 class RestApi
 {
-	public $namespace = 'imageseo/v1';
+	public string $namespace = 'imageseo/v1';
 
 	public function hooks()
 	{
@@ -64,27 +66,33 @@ class RestApi
 			'callback' => [$this, 'optimize_image'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
+
+		register_rest_route($this->namespace, '/save-property/', [
+			'methods' => 'POST',
+			'callback' => [$this, 'save_property'],
+			'permission_callback' => [$this, 'settings_permissions_check']
+		]);
 	}
 
-	public function settings_permissions_check($request)
+	public function settings_permissions_check(): bool
 	{
 		return current_user_can('manage_options');
 	}
 
-	public function get_settings($request)
+	public function get_settings(): WP_REST_Response
 	{
 		$options = $this->convert_to_camel_case(imageseo_get_options());
-		return new \WP_REST_Response($options, 200);
+		return new WP_REST_Response($options, 200);
 	}
 
-	public function update_settings($request)
+	public function update_settings($request): WP_REST_Response
 	{
 		$settings = $request->get_json_params();
 		update_option(IMAGESEO_SLUG, $this->sanitize_settings($settings));
-		return new \WP_REST_Response($settings, 200);
+		return new WP_REST_Response($settings, 200);
 	}
 
-	public function register($request)
+	public function register($request): WP_REST_Response
 	{
 		$data = $request->get_json_params();
 		$required = ['email', 'password', 'firstName', 'lastName', 'terms'];
@@ -97,7 +105,7 @@ class RestApi
 		}
 
 		if (!empty($missing)) {
-			return new \WP_REST_Response([
+			return new WP_REST_Response([
 				'message' => __('Missing required fields', 'imageseo'),
 				'fields' => $missing
 			], 400);
@@ -112,48 +120,44 @@ class RestApi
 		]);
 
 		if ($user === null) {
-			return new \WP_REST_Response([
+			return new WP_REST_Response([
 				'message' => __('Error registering user', 'imageseo')
 			], 500);
 		}
 
 		$this->_validate_api_key($user['projects'][0]['apiKey']);
 
-		return new \WP_REST_Response($user, 200);
+		return new WP_REST_Response($user, 200);
 	}
 
-	public function validate_api_key($request)
+	public function validate_api_key($request): WP_REST_Response
 	{
 		$data = $request->get_json_params();
 
 		$owner = $this->_validate_api_key($data['apiKey']);
 
-		return new \WP_REST_Response($owner, 200);
+		return new WP_REST_Response($owner, 200);
 	}
 
-	private function _validate_api_key($apiKey)
+	private function _validate_api_key($apiKey): WP_REST_Response
 	{
 		$owner = imageseo_get_service('ClientApi')->validateApiKey($apiKey);
 		if ($owner === null) {
-			return new \WP_REST_Response([
+			return new WP_REST_Response([
 				'message' => __('Invalid API Key', 'imageseo')
 			], 400);
 		}
 
-		return new \WP_REST_Response($owner, 200);
+		return new WP_REST_Response($owner, 200);
 	}
 
-	public function optimize_image($request)
+	public function optimize_image($request): WP_REST_Response
 	{
 		$optimizer = imageseo_get_service('Optimizer');
 		$data = $request->get_json_params();
 		$action = $data['action'] ?? 'optimizeAll';
-		$return = null;
 
 		switch ($action) {
-			case 'optimizeAll':
-				$return = $optimizer->getAndSetOptimizedImage($data['id']);
-				break;
 			case 'optimizeAlt':
 				$return = $optimizer->getAndSetAlt($data['id']);
 				break;
@@ -165,34 +169,69 @@ class RestApi
 				break;
 		}
 
-		return new \WP_REST_Response($return, 200);
+		return new WP_REST_Response($return, 200);
 	}
 
-	public function start_bulk_optimizer()
+	public function save_property($request): WP_REST_Response
+	{
+		$optimizer = imageseo_get_service('Optimizer');
+		$data = $request->get_json_params();
+		$action = $data['action'] ?? '';
+
+		switch ($action) {
+			case 'saveAlt':
+				$optimizer->_updateAlt([
+					'internalId' => $data['id'],
+					'altText' => $data['value']
+				]);
+
+				$return = ['altText' => $data['value']];
+				$optimizer->getAndUpdateMeta($data['id'], 'altText', $data['value']);
+				break;
+			case 'saveFilename':
+				$filename = $optimizer->_updateFilename(
+					$data['id'],
+					[
+						'internalId' => $data['id'],
+						'filename' => $data['value']
+					]
+				);
+				$return = ['filename' => $filename];
+				$optimizer->getAndUpdateMeta($data['id'], 'filename', $filename);
+				break;
+			default:
+				$return = ['error' => 'Invalid action'];
+				break;
+		}
+
+		return new WP_REST_Response($return, 200);
+	}
+
+	public function start_bulk_optimizer(): WP_REST_Response
 	{
 		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
 		$data = $bulkOptimizer->start();
 
-		return new \WP_REST_Response($data, 200);
+		return new WP_REST_Response($data, 200);
 	}
 
-	public function get_bulk_optimizer_status()
+	public function get_bulk_optimizer_status(): WP_REST_Response
 	{
 		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
 		$data = $bulkOptimizer->getStatus();
 
-		return new \WP_REST_Response($data, 200);
+		return new WP_REST_Response($data, 200);
 	}
 
-	public function stop_bulk_optimizer()
+	public function stop_bulk_optimizer(): WP_REST_Response
 	{
 		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
 		$data = $bulkOptimizer->stop();
 
-		return new \WP_REST_Response($data, 200);
+		return new WP_REST_Response($data, 200);
 	}
 
-	private function sanitize_settings($settings)
+	private function sanitize_settings($settings): array
 	{
 		$options = $this->convert_to_camel_case(imageseo_get_options());
 		foreach ($settings as $key => $value) {
@@ -274,7 +313,7 @@ class RestApi
 		return $options;
 	}
 
-	private function convert_to_camel_case($options)
+	private function convert_to_camel_case($options): array
 	{
 		$camelCased = [];
 
@@ -282,7 +321,7 @@ class RestApi
 			if (strpos($key, '_') === -1) {
 				$camelCased[$key] = $value;
 				continue;
-			};
+			}
 
 			$camelCaseKey = lcfirst(str_replace('_', '', ucwords($key, '_')));
 			$camelCased[$camelCaseKey] = $value;

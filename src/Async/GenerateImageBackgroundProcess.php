@@ -22,12 +22,11 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 	}
 
 	/**
-	 * @param object $post
+	 * @param \WP_Post $post
 	 *
 	 * @return string
 	 */
-	protected function getSubTitle($post)
-	{
+	protected function getSubTitle( \WP_Post $post): string {
 		switch ($post->post_type) {
 			case 'product':
 				if (!function_exists('wc_get_product')) {
@@ -47,12 +46,11 @@ class GenerateImageBackgroundProcess extends WPBackgroundProcess
 	}
 
 	/**
-	 * @param object $post
+	 * @param \WP_Post $post
 	 *
 	 * @return string
 	 */
-	protected function getSubTitleTwo($post)
-	{
+	protected function getSubTitleTwo( \WP_Post $post): string {
 		switch ($post->post_type) {
 			case 'product':
 				if (!function_exists('wc_get_product')) {

@@ -12,8 +12,8 @@ if (!defined('ABSPATH')) {
 class BulkOptimizer
 {
 	use ApiHandler;
-	public $batchSize = 10;
-	public $defaultLastReport = [
+	public int $batchSize = 10;
+	public array $defaultLastReport = [
 		'total' => 0,
 		'optimized' => 0,
 		'failed' => 0,
@@ -23,7 +23,7 @@ class BulkOptimizer
 
 	public static $instance;
 
-	public static function getInstance()
+	public static function getInstance(): BulkOptimizer
 	{
 		if (!isset(self::$instance) && !(self::$instance instanceof BulkOptimizer)) {
 			self::$instance = new BulkOptimizer();
@@ -40,7 +40,7 @@ class BulkOptimizer
 		add_action('check_image_batch', [$this, 'checkImageBatch'], 10, 1);
 	}
 
-	public function getStatus()
+	public function getStatus(): array
 	{
 		$image_data = get_option('imageseo_bulk_image_data', false);
 		$report = get_option('imageseo_bulk_optimizer_last_report', $this->defaultLastReport);
@@ -50,27 +50,21 @@ class BulkOptimizer
 				'status' => 'idle',
 				'report' => $report
 			];
-		} else {
-			$report['total'] = count($image_data['ids']);
-			$report['optimized'] = count($image_data['optimizedIds']);
-			$report['failed'] = count($image_data['failedIds'] ?? []);
-			$report['remaining'] = $report['total'] - $report['optimized'] - $report['failed'];
-			$report['skipped'] = $report['failed'];
-
-			return [
-				'status' => get_option('imageseo_bulk_optimizer_status', 'idle'),
-				'report' => $report
-			];
 		}
 
+		$report['total'] = count($image_data['ids']);
+		$report['optimized'] = count($image_data['optimizedIds']);
+		$report['failed'] = count($image_data['failedIds'] ?? []);
+		$report['remaining'] = $report['total'] - $report['optimized'] - $report['failed'];
+		$report['skipped'] = $report['failed'];
 
 		return [
 			'status' => get_option('imageseo_bulk_optimizer_status', 'idle'),
-			'report' => get_option('imageseo_bulk_optimizer_last_report', $this->defaultLastReport)
+			'report' => $report
 		];
 	}
 
-	public function start()
+	public function start(): array
 	{
 		$images = $this->bulkOptimizerQuery->getImages();
 		$options = imageseo_get_options();
@@ -109,7 +103,7 @@ class BulkOptimizer
 		];
 	}
 
-	public function stop()
+	public function stop(): array
 	{
 		update_option('imageseo_bulk_optimizer_status', 'idle');
 		delete_option('imageseo_bulk_image_data');
@@ -121,6 +115,15 @@ class BulkOptimizer
 
 	public function processImageBatch($batch_number, $timestamp)
 	{
+		$limitExceeded = imageseo_get_service('UserInfo')->hasLimitExcedeed();
+		if ($limitExceeded) {
+			$report = get_option('imageseo_bulk_optimizer_last_report', $this->defaultLastReport);
+			$report['errors'][] = __('You have reached the limit of images to optimize', 'imageseo');
+			update_option('imageseo_bulk_optimizer_last_report', $report);
+			update_option('imageseo_bulk_optimizer_status', 'idle');
+			return;
+		}
+
 		$image_data = get_option('imageseo_bulk_image_data');
 		$isNextGen = $image_data['library'] === 'NEXTGEN_GALLERY';
 
@@ -136,9 +139,9 @@ class BulkOptimizer
 		}
 
 		$result = $this->sendRequestToApi($images);
-		if (is_wp_error($result)) {
+		if ($result instanceof \Exception) {
 			$report = get_option('imageseo_bulk_optimizer_last_report', $this->defaultLastReport);
-			$report['errors'][] = $result->get_error_message();
+			$report['errors'][] = $result->getMessage();
 			update_option('imageseo_bulk_optimizer_last_report', $report);
 			update_option('imageseo_bulk_optimizer_status', 'idle');
 			return;
@@ -186,12 +189,16 @@ class BulkOptimizer
 			return;
 		}
 
+		if (!$image_data || !isset($image_data['batchIds'][$batch_number])) {
+			update_option('imageseo_bulk_optimizer_status', 'idle');
+			return;
+		}
+
 		$batchId = $image_data['batchIds'][$batch_number];
 		$batchData = $this->getItemsByBatchId($batchId);
 		$report = get_option('imageseo_bulk_optimizer_last_report');
-
-		if (is_wp_error($batchData)) {
-			$report['errors'][] = $batchData->get_error_message();
+		if ($batchData instanceof \Exception) {
+			$report['errors'][] = $batchData->getMessage();
 			update_option('imageseo_bulk_optimizer_last_report', $report);
 			update_option('imageseo_bulk_optimizer_status', 'idle');
 			return;
@@ -279,7 +286,7 @@ class BulkOptimizer
 	 * @param string $url The URL from which to extract the file extension.
 	 * @return string The file extension.
 	 */
-	public function extractExtension($url)
+	public function extractExtension($url): string
 	{
 		return pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
 	}

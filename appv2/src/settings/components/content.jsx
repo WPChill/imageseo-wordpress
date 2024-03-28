@@ -56,7 +56,10 @@ export const Content = ({ heading, children, saveButton }) => {
 								</ExternalLink>
 							</div>
 							<div className="cta">
-								<Text>Remaining credits: {limit}</Text>
+								<Text>
+									{__('Remaining credits:', 'imageseo')}{' '}
+									{limit}
+								</Text>
 								<span>
 									<Button variant="primary">
 										{__('Buy more!', 'imageseo')}
@@ -68,7 +71,7 @@ export const Content = ({ heading, children, saveButton }) => {
 					<CardBody className={className}>{children}</CardBody>
 
 					<CardFooter>
-						<Text></Text>
+						<Text>{''}</Text>
 						{saveButton && (
 							<Button type="submit" variant="secondary">
 								{__('Save', 'imageseo')}

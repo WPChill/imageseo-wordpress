@@ -2,6 +2,7 @@
 
 namespace ImageSeoWP\Services;
 
+use Exception;
 use ImageSeoWP\Helpers\AttachmentMeta;
 use ImageSeoWP\Traits\ApiHandler;
 
@@ -12,11 +13,11 @@ if (!defined('ABSPATH')) {
 class Optimizer
 {
 	use ApiHandler;
+
 	public static $instance;
 
 	public static function getInstance()
 	{
-
 		if (!isset(self::$instance) && !(self::$instance instanceof Optimizer)) {
 			self::$instance = new Optimizer();
 		}
@@ -36,7 +37,12 @@ class Optimizer
 		if (!empty($imageMeta) && isset($imageMeta['timestamp']) && (time() - $imageMeta['timestamp']) < 86400) {
 
 			$this->_updateAlt($imageMeta);
+
 			return $imageMeta;
+		}
+
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
+			return ['error' => 'limit exceeded'];
 		}
 
 		$image = $this->_requestOptimization($attachmentId);
@@ -59,7 +65,12 @@ class Optimizer
 		if (!empty($imageMeta) && isset($imageMeta['timestamp']) && (time() - $imageMeta['timestamp']) < 86400) {
 
 			$filename = $this->_updateFilename($imageMeta['internalId'], $imageMeta);
+
 			return array_merge($imageMeta, ['filename' => $filename]);
+		}
+
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
+			return ['error' => 'limit exceeded'];
 		}
 
 		$image = $this->_requestOptimization($attachmentId);
@@ -80,6 +91,10 @@ class Optimizer
 		// 86400 = 1 day
 		if (!empty($imageMeta) && isset($imageMeta['timestamp']) && (time() - $imageMeta['timestamp']) < 86400) {
 			return $imageMeta;
+		}
+
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
+			return ['error' => 'limit exceeded'];
 		}
 
 		$image = $this->_requestOptimization($attachmentId);
@@ -104,30 +119,32 @@ class Optimizer
 
 		$response = $this->sendRequestToApi($images, true);
 
-		if ($response instanceof \Exception) {
+		if ($response instanceof Exception) {
 			error_log($response->getMessage());
+
 			return;
 		}
 
 		$batchId = $response['batchId'];
-		$items = $this->getItemsByBatchId($batchId);
-		if ($items instanceof \Exception) {
+		$items   = $this->getItemsByBatchId($batchId);
+		if ($items instanceof Exception) {
 			error_log($items->getMessage());
+
 			return;
 		}
 
-		$image = $items[0];
+		$image              = $items[0];
 		$image['timestamp'] = time();
 
 		return $image;
 	}
 
-	private function _updateAlt($image)
+	public function _updateAlt($image)
 	{
 		$this->altService->updateAlt($image['internalId'], $image['altText']);
 	}
 
-	private function _updateFilename($attachmentId, $image)
+	public function _updateFilename($attachmentId, $image): string
 	{
 		$extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
 		$this->fileService->updateFilename(
@@ -136,5 +153,15 @@ class Optimizer
 		);
 
 		return sprintf('%s.%s', $image['filename'], $extension);
+	}
+
+	public function getAndUpdateMeta($attachmentId, $prop, $val)
+	{
+		$meta = get_post_meta($attachmentId, AttachmentMeta::REPORT, true);
+		if (empty($meta)) {
+			$meta = [];
+		}
+		$meta[$prop] = $val;
+		update_post_meta($attachmentId, AttachmentMeta::REPORT, $meta);
 	}
 }

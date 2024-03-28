@@ -49,7 +49,6 @@ use ImageSeoWP\Admin\SettingsPage;
 use ImageSeoWP\Context;
 use ImageSeoWP\Processes\OnUploadImage;
 use ImageSeoWP\Services\BulkOptimizer;
-use ImageSeoWP\V2\RestApi;
 
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
@@ -63,8 +62,6 @@ define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
 define('IMAGESEO_API_URL', 'https://api.imageseo.com');
-// define('IMAGESEO_API_URL', 'http://192.168.1.148:3000');
-
 define('IMAGESEO_APP_URL', 'https://app.imageseo.io');
 define('IMAGESEO_SITE_URL', 'https://imageseo.io');
 define('IMAGESEO_LANGUAGES', IMAGESEO_DIR . '/languages/');

@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) {
 
 class MediaLibraryFilters
 {
-	public $optionServices;
-	public $reportImageServices;
+	public object $optionServices;
+	public object $reportImageServices;
 
     public function __construct()
     {

@@ -9,3 +9,4 @@ vendor
 content.html
 *.zip
 debug.log
+.idea

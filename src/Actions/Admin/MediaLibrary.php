@@ -10,10 +10,10 @@ if (!defined('ABSPATH')) {
 
 class MediaLibrary
 {
-	public $optionService;
-	public $reportImageService;
-	public $generateFilename;
-	public $altService;
+	public object $optionService;
+	public object $reportImageService;
+	public object $generateFilename;
+	public object $altService;
 
 	public function __construct()
 	{
@@ -83,7 +83,7 @@ class MediaLibrary
 	/**
 	 * @param int $attachmentId
 	 */
-	public function updateDeleteCount($attachmentId)
+	public function updateDeleteCount( int $attachmentId)
 	{
 		if (!wp_attachment_is_image($attachmentId)) {
 			return;
@@ -147,10 +147,10 @@ class MediaLibrary
 	}
 
 	/**
-	 * @param string $columnName    Name of the custom column.
-	 * @param int    $attachment_id Attachment ID.
+	 * @param string $columnName Name of the custom column.
+	 * @param $attachmentId
 	 */
-	public function manageMediaCustomColumn($columnName, $attachmentId)
+	public function manageMediaCustomColumn( string $columnName, $attachmentId)
 	{
 		switch ($columnName) {
 			case 'imageseo_alt':

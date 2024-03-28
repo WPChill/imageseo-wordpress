@@ -11,8 +11,8 @@ use ImageSeoWP\Async\QueryTotalImagesBackgroundProcess;
 
 class UpdateCounterImages
 {
-	public $processQueryImagesNoAlt;
-	public $processQueryTotalImages;
+	public QueryImagesNoAltBackgroundProcess $processQueryImagesNoAlt;
+	public QueryTotalImagesBackgroundProcess $processQueryTotalImages;
 
     public function __construct()
     {

@@ -7,12 +7,31 @@ import {
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { apiCall } from './utils';
+import { apiCall, saveProperty } from './utils';
 
 export function RenameFile({ attachmentId, filename }) {
 	const [currentFilename, setCurrentFilename] = useState(filename);
 	const [isOptimizing, setIsOptimizing] = useState(false);
-
+	const saveFilename = async () => {
+		if (isOptimizing) return;
+		setIsOptimizing(true);
+		saveProperty({
+			id: attachmentId,
+			action: 'saveFilename',
+			value: currentFilename,
+		})
+			.then((r) => {
+				setIsOptimizing(false);
+				if (r?.error) {
+					return;
+				}
+				setCurrentFilename(r.filename || '');
+			})
+			.catch((e) => {
+				console.error(e);
+				setIsOptimizing(false);
+			});
+	};
 	const requestOptimize = async () => {
 		if (isOptimizing) return;
 		setIsOptimizing(true);
@@ -22,7 +41,7 @@ export function RenameFile({ attachmentId, filename }) {
 				if (r?.error) {
 					return;
 				}
-				setCurrentFilename(r.altText || '');
+				setCurrentFilename(r.filename || '');
 			})
 			.catch((e) => {
 				console.error(e);
@@ -45,6 +64,7 @@ export function RenameFile({ attachmentId, filename }) {
 							style={{
 								margin: '0 6px',
 							}}
+							onClick={saveFilename}
 							isPrimary
 							isBusy={isOptimizing}
 						>

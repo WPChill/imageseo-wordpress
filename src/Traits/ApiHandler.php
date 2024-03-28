@@ -43,6 +43,10 @@ trait ApiHandler
 
 	private function _getNGUrl($id)
 	{
+		if (!class_exists('C_Gallery_Storage')) {
+			throw new \Exception('C_Gallery_Storage class not found. Maybe NextGen Gallery is not installed.');
+		}
+
 		$storage = \C_Gallery_Storage::get_instance();
 		return $storage->get_image_url($id);
 	}
@@ -51,14 +55,12 @@ trait ApiHandler
 	 * Retrieves items by batch ID from the API.
 	 *
 	 * @param int $batchId The ID of the batch.
-	 * @return array|WP_Exception The response body as an array or an Exception object if an error occurs.
 	 */
 	private function getItemsByBatchId($batchId)
 	{
 		try {
 			$response = wp_remote_get(
-				// IMAGESEO_API_URL/projects/v2/images/,
-				'http://192.168.1.148:3000/projects/v2/images/' . $batchId,
+				IMAGESEO_API_URL . '/projects/v2/images/' . $batchId,
 				[
 					'headers' => [
 						'Content-Type' => 'application/json',
@@ -78,12 +80,6 @@ trait ApiHandler
 		}
 	}
 
-	/**
-	 * Sends a request to the API with the given images.
-	 *
-	 * @param array $images An array of images to send to the API.
-	 * @return mixed|WP_Exception The response from the API, or an exception if an error occurred.
-	 */
 	private function sendRequestToApi($images, $single = false)
 	{
 		$dataObj = [
@@ -93,8 +89,7 @@ trait ApiHandler
 
 		try {
 			$response = wp_remote_post(
-				// IMAGESEO_API_URL/projects/v2/images,
-				'http://192.168.1.148:3000/projects/v2/' . ($single ? 'image' : 'images') . '/',
+				IMAGESEO_API_URL . '/projects/v2/' . ($single ? 'image' : 'images') . '/',
 				[
 					'headers' => [
 						'Content-Type' => 'application/json',

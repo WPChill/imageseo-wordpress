@@ -27,7 +27,12 @@ export function App() {
 
 	return (
 		<Content heading={__('ImageSEO', 'imageseo')}>
-			<ToggleGroupControl onChange={onChangeCb} value={tab} isBlock>
+			<ToggleGroupControl
+				label=""
+				onChange={onChangeCb}
+				value={tab}
+				isBlock
+			>
 				<ToggleGroupControlOption
 					type="button"
 					value="welcome"
