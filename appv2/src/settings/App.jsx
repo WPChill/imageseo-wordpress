@@ -1,4 +1,5 @@
 import {
+	SnackbarList,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
@@ -15,7 +16,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const activeTab = urlParams.get('activeTab');
 
 export function App() {
-	const { options } = useSettings();
+	const { options, notices, removeNotice } = useSettings();
 	const [tab, setTab] = useState(activeTab || 'welcome');
 
 	const onChangeCb = (value) => {
@@ -26,41 +27,44 @@ export function App() {
 	};
 
 	return (
-		<Content heading={__('ImageSEO', 'imageseo')}>
-			<ToggleGroupControl
-				label=""
-				onChange={onChangeCb}
-				value={tab}
-				isBlock
-			>
-				<ToggleGroupControlOption
-					type="button"
-					value="welcome"
-					label={__('Welcome', 'imageseo')}
-				/>
-				<ToggleGroupControlOption
-					disabled={!options?.allowed || false}
-					type="button"
-					value="socialcard"
-					label={__('Social card', 'imageseo')}
-				/>
-				<ToggleGroupControlOption
-					disabled={!options?.allowed || false}
-					type="button"
-					value="bulkoptimizer"
-					label={__('Bulk optimization', 'imageseo')}
-				/>
-				<ToggleGroupControlOption
-					disabled={!options?.allowed || false}
-					type="button"
-					value="settings"
-					label={__('Settings', 'imageseo')}
-				/>
-			</ToggleGroupControl>
-			{tab === 'welcome' && <Welcome />}
-			{tab === 'socialcard' && <SocialCard />}
-			{tab === 'bulkoptimizer' && <BulkOptimizer />}
-			{tab === 'settings' && <Settings />}
-		</Content>
+		<>
+			<Content heading={__('ImageSEO', 'imageseo')}>
+				<ToggleGroupControl
+					label=""
+					onChange={onChangeCb}
+					value={tab}
+					isBlock
+				>
+					<ToggleGroupControlOption
+						type="button"
+						value="welcome"
+						label={__('Welcome', 'imageseo')}
+					/>
+					<ToggleGroupControlOption
+						disabled={!options?.allowed || false}
+						type="button"
+						value="socialcard"
+						label={__('Social card', 'imageseo')}
+					/>
+					<ToggleGroupControlOption
+						disabled={!options?.allowed || false}
+						type="button"
+						value="bulkoptimizer"
+						label={__('Bulk optimization', 'imageseo')}
+					/>
+					<ToggleGroupControlOption
+						disabled={!options?.allowed || false}
+						type="button"
+						value="settings"
+						label={__('Settings', 'imageseo')}
+					/>
+				</ToggleGroupControl>
+				{tab === 'welcome' && <Welcome />}
+				{tab === 'socialcard' && <SocialCard />}
+				{tab === 'bulkoptimizer' && <BulkOptimizer />}
+				{tab === 'settings' && <Settings />}
+			</Content>
+			<SnackbarList notices={notices} onRemove={removeNotice} />
+		</>
 	);
 }

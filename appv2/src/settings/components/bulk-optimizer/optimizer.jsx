@@ -12,7 +12,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { useOptimizerStatus } from '../../hooks/useOptimizerStatus';
 
 export const Optimizer = () => {
-	const { global, options } = useSettings();
+	const { global, options, addNotice } = useSettings();
 	const { data, isLoading, error, mutate } = useOptimizerStatus();
 
 	const optimizeCb = async () => {
@@ -21,6 +21,10 @@ export const Optimizer = () => {
 			method: 'POST',
 		});
 		mutate();
+		addNotice({
+			status: 'success',
+			content: __('Optimizer started', 'imageseo'),
+		});
 	};
 
 	const cancelOptimizerCb = async () => {
@@ -29,6 +33,10 @@ export const Optimizer = () => {
 			method: 'POST',
 		});
 		mutate();
+		addNotice({
+			status: 'success',
+			content: __('Optimizer stopped', 'imageseo'),
+		});
 	};
 
 	if (isLoading) {

@@ -16,11 +16,12 @@ import useSettings from '../hooks/useSettings';
 import apiFetch from '@wordpress/api-fetch';
 
 export const Welcome = () => {
-	const { options, global, setOptions } = useSettings();
+	const { options, global, setOptions, addNotice } = useSettings();
 	const [loadingRequest, setLoadingRequest] = useState(false);
 	const [alreadyRegistered, setAlreadyRegistered] = useState(
 		options?.allowed
 	);
+	const [errorMsg, setErrorMsg] = useState('');
 
 	const [form, setForm] = useState({
 		firstName: global?.user?.firstName || '',
@@ -33,16 +34,40 @@ export const Welcome = () => {
 
 	const validateApiKey = async () => {
 		try {
+			setErrorMsg('');
 			setLoadingRequest(true);
-			await apiFetch({
+			const data = await apiFetch({
 				path: '/imageseo/v1/validate-api-key',
 				method: 'POST',
 				data: { apiKey: options.apiKey },
 			});
 
+			if (typeof data?.data?.message !== 'undefined') {
+				setOptions({
+					allowed: false,
+				});
+				setErrorMsg(data?.data?.message);
+				addNotice({
+					status: 'error',
+					content: data?.data?.message,
+				});
+			}
+
 			setLoadingRequest(false);
+			setOptions({
+				allowed: true,
+			});
+
+			addNotice({
+				status: 'success',
+				content: __('API key validated', 'imageseo'),
+			});
 		} catch (error) {
 			setLoadingRequest(false);
+			addNotice({
+				status: 'error',
+				content: __('Error validating API key', 'imageseo'),
+			});
 			console.error('Error validating API key:', error);
 		}
 	};
@@ -56,6 +81,10 @@ export const Welcome = () => {
 			});
 
 			if (response?.message) {
+				addNotice({
+					status: 'error',
+					content: response?.message,
+				});
 				throw new Error('Something went wrong');
 			}
 
@@ -66,11 +95,20 @@ export const Welcome = () => {
 				},
 				false
 			);
+			addNotice({
+				status: 'success',
+				content: __('Account created', 'imageseo'),
+			});
+
 			setAlreadyRegistered(true);
 			setLoadingRequest(false);
 		} catch (error) {
 			console.log(error);
 			setLoadingRequest(false);
+			addNotice({
+				status: 'error',
+				content: __('Error registering account', 'imageseo'),
+			});
 			console.error('Error registering account:', error);
 		}
 	};
@@ -149,6 +187,9 @@ export const Welcome = () => {
 										</FlexItem>
 									)}
 								</Flex>
+								{errorMsg && (
+									<Text variant="error">{errorMsg}</Text>
+								)}
 							</div>
 						) : (
 							<div

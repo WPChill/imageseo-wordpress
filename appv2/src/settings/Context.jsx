@@ -8,6 +8,7 @@ import {
 } from '@wordpress/element';
 import { useDebouncedState } from './hooks/useDebouncedState';
 import { saveOptions } from './utils';
+import { __ } from '@wordpress/i18n';
 
 const initialState = {
 	// eslint-disable-next-line no-undef
@@ -36,6 +37,7 @@ const reducer = (state, action) => {
 export const SettingsContext = createContext(initialState);
 export const SettingsProvider = ({ children }) => {
 	const isInitialMount = useRef(true);
+	const [notices, setNotices] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [debouncedOptions, setDebouncedOptions] = useDebouncedState(
@@ -58,11 +60,30 @@ export const SettingsProvider = ({ children }) => {
 		setLoading(false);
 	}, [setLoading]);
 
+	const addNotice = (notice) => {
+		const newNotice = {
+			id: new Date().getTime(),
+			...notice,
+			content: notice?.content || '',
+			politeness: notice?.politeness || 'polite',
+			actions: notice?.actions || [],
+			explicitDismiss: notice?.explicitDismiss || false,
+		};
+		setNotices((prev) => [...prev, newNotice]);
+	};
+
+	const removeNotice = (id) => {
+		setNotices((prev) => prev.filter((n) => n.id !== id));
+	};
+
 	const contextValue = {
 		options: state.options,
 		global: state.global,
 		loading,
 		setOptions,
+		addNotice,
+		removeNotice,
+		notices,
 	};
 
 	useEffect(() => {
@@ -73,7 +94,13 @@ export const SettingsProvider = ({ children }) => {
 
 		saveOptions(`imageseo/v1/settings`, debouncedOptions)
 			.then(() => setLoading(false))
-			.catch((e) => console.warn(e));
+			.catch((e) => {
+				console.warn(e);
+				addNotice({
+					status: 'error',
+					content: __('Error saving options', 'imageseo'),
+				});
+			});
 	}, [debouncedOptions, getInitialValues]);
 	return (
 		<SettingsContext.Provider value={contextValue}>
