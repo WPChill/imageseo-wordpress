@@ -13,14 +13,17 @@ export const useUser = (apiKey) => {
 			onError: () => {
 				setInitialLoad(false);
 			},
-			onSuccess: () => {
+			onSuccess: (successData) => {
 				setInitialLoad(false);
-				if (data?.data?.message) {
+
+				if (successData?.message) {
 					setOptions({ allowed: false });
 					addNotice({
 						status: 'error',
-						content: data.data.message,
+						content: successData.message,
 					});
+
+					return;
 				}
 				setOptions({ allowed: true });
 			},

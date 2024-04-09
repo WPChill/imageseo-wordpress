@@ -51,6 +51,7 @@ export const Welcome = () => {
 					status: 'error',
 					content: data?.data?.message,
 				});
+				return;
 			}
 
 			setLoadingRequest(false);
