@@ -19,15 +19,15 @@ class BulkOptimizer
 	use SimpleLock;
 
 	// Internal
-	public bool $debug = true;
-	public string $debugOption = 'imageseo_bulk_optimizer_debug';
-	public string $lockName = 'imageseo_bulk_optimizer_lock';
+	public $debug = true;
+	public $debugOption = 'imageseo_bulk_optimizer_debug';
+	public $lockName = 'imageseo_bulk_optimizer_lock';
 
 	// Usability
-	public int $batchSize = 10;
+	public $batchSize = 10;
 
 	// Default report
-	public array $defaultLastReport = [
+	public $defaultLastReport = [
 		'total' => 0,
 		'optimized' => 0,
 		'failed' => 0,
