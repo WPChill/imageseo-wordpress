@@ -7,7 +7,7 @@ export const useUser = (apiKey) => {
 	const [initialLoad, setInitialLoad] = useState(true);
 	const { setOptions, addNotice } = useSettings();
 	const { data, error, isLoading, mutate } = useSWR(
-		['/imageseo/v1/validate-api-key', { apiKey }],
+		[apiKey ? '/imageseo/v1/validate-api-key' : null, { apiKey }],
 		fetcherPost,
 		{
 			onError: () => {
@@ -22,10 +22,9 @@ export const useUser = (apiKey) => {
 						status: 'error',
 						content: successData.message,
 					});
-
-					return;
 				}
-				setOptions({ allowed: true });
+
+				setOptions({ allowed: true }, true);
 			},
 		}
 	);

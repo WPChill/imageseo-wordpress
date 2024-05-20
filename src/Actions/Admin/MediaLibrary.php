@@ -83,7 +83,7 @@ class MediaLibrary
 	/**
 	 * @param int $attachmentId
 	 */
-	public function updateDeleteCount( int $attachmentId)
+	public function updateDeleteCount(int $attachmentId)
 	{
 		if (!wp_attachment_is_image($attachmentId)) {
 			return;
@@ -150,7 +150,7 @@ class MediaLibrary
 	 * @param string $columnName Name of the custom column.
 	 * @param $attachmentId
 	 */
-	public function manageMediaCustomColumn( string $columnName, $attachmentId)
+	public function manageMediaCustomColumn(string $columnName, $attachmentId)
 	{
 		switch ($columnName) {
 			case 'imageseo_alt':
@@ -181,13 +181,13 @@ class MediaLibrary
 			'imageseo-admin-v2',
 			IMAGESEO_URL_DIST . '/adminv2/index.js',
 			$asset_file['dependencies'],
-			$asset_file['version'],
+			$asset_file['version']
 		);
 		wp_enqueue_style(
 			'imageseo-admin-v2',
 			IMAGESEO_URL_DIST . '/adminv2/index.css',
 			['wp-components'],
-			$asset_file['version'],
+			$asset_file['version']
 		);
 	}
 }

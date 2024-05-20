@@ -12,8 +12,7 @@ import useSettings from '../../hooks/useSettings';
 import { MediaUploader } from '../media/media-uploader';
 
 export const Form = () => {
-	const { options, setOptions, loading } = useSettings();
-
+	const { options, setOptions } = useSettings();
 	return (
 		<div>
 			<ToggleControl
@@ -152,7 +151,6 @@ export const Form = () => {
 							options.socialMediaSettings?.textColor || '#000000'
 						}
 						onChange={(value) => {
-							console.log(value);
 							setOptions({
 								...options,
 								socialMediaSettings: {
@@ -190,7 +188,10 @@ export const Form = () => {
 						label={__('Star color', 'imageseo')}
 					>
 						<ColorPicker
-							value={options.socialMediaSettings?.starColor}
+							defaultValue={
+								options.socialMediaSettings?.starColor ||
+								'#F8CA00'
+							}
 							onChange={(value) => {
 								setOptions({
 									...options,

@@ -11,14 +11,15 @@ import { SocialCard } from './components/social-card';
 import useSettings from './hooks/useSettings';
 import { BulkOptimizer } from './components/bulk-optimizer';
 import { Settings } from './components/settings';
+import { ErrorLog } from './components/error-log';
 
 const urlParams = new URLSearchParams(window.location.search);
 const activeTab = urlParams.get('activeTab');
+const debugLog = localStorage.getItem('imageseo_debug_log');
 
 export function App() {
 	const { options, notices, removeNotice } = useSettings();
 	const [tab, setTab] = useState(activeTab || 'welcome');
-
 	const onChangeCb = (value) => {
 		setTab(value);
 		const url = new URL(window.location.href);
@@ -64,6 +65,7 @@ export function App() {
 				{tab === 'bulkoptimizer' && <BulkOptimizer />}
 				{tab === 'settings' && <Settings />}
 			</Content>
+			{debugLog && <ErrorLog />}
 			<SnackbarList notices={notices} onRemove={removeNotice} />
 		</>
 	);

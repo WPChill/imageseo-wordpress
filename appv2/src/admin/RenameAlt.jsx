@@ -8,13 +8,20 @@ import {
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { apiCall, saveProperty } from './utils';
+import { eventBus } from './EventBus';
 
 export function RenameAlt({ attachmentId, alt }) {
 	const [currentAlt, setCurrentAlt] = useState(alt);
 	const [isOptimizing, setIsOptimizing] = useState(false);
+	const [requested, setRequested] = useState(false);
+	const [done, setDone] = useState(null);
+	const [action, setAction] = useState('');
+
 	const saveAlt = async () => {
 		if (isOptimizing) return;
 		setIsOptimizing(true);
+		setDone(false);
+		setAction('save');
 		saveProperty({
 			id: attachmentId,
 			action: 'saveAlt',
@@ -26,15 +33,29 @@ export function RenameAlt({ attachmentId, alt }) {
 					return;
 				}
 				setCurrentAlt(r.altText || '');
+				setRequested(true);
+				setDone(true);
+				eventBus.publish('snackbar', {
+					content: __('Alt saved', 'imageseo'),
+					status: 'info',
+				});
 			})
 			.catch((e) => {
 				console.error(e);
 				setIsOptimizing(false);
+				setRequested(true);
+				setDone(false);
+				eventBus.publish('snackbar', {
+					content: __('Something went wrong!', 'imageseo'),
+					status: 'error',
+				});
 			});
 	};
 	const requestOptimize = async () => {
 		if (isOptimizing) return;
 		setIsOptimizing(true);
+		setDone(false);
+		setAction('optimize');
 		apiCall({ id: attachmentId, action: 'optimizeAlt' })
 			.then((r) => {
 				setIsOptimizing(false);
@@ -42,10 +63,22 @@ export function RenameAlt({ attachmentId, alt }) {
 					return;
 				}
 				setCurrentAlt(r.altText || '');
+				setRequested(true);
+				setDone(true);
+				eventBus.publish('snackbar', {
+					content: __('Alt optimized', 'imageseo'),
+					status: 'info',
+				});
 			})
 			.catch((e) => {
+				eventBus.publish('snackbar', {
+					content: __('Something went wrong!', 'imageseo'),
+					status: 'error',
+				});
 				console.error(e);
 				setIsOptimizing(false);
+				setRequested(true);
+				setDone(false);
 			});
 	};
 	return (
@@ -66,15 +99,21 @@ export function RenameAlt({ attachmentId, alt }) {
 						onClick={saveAlt}
 						isPrimary
 						isBusy={isOptimizing}
+						// icon={requested && done ? 'yes' : undefined}
 					>
-						{__('Save', 'imageseo')}
+						{action === 'save' && requested && done
+							? __('Saved', 'imageseo')
+							: __('Save', 'imageseo')}
 					</Button>
 					<Button
 						variant="tertiary"
 						onClick={requestOptimize}
 						isBusy={isOptimizing}
+						// icon={requested && done ? 'yes' : undefined}
 					>
-						{__('Auto-optimize', 'imageseo')}
+						{action === 'optimize' && requested && done
+							? __('Optimized', 'imageseo')
+							: __('Optimize', 'imageseo')}
 					</Button>
 				</ButtonGroup>
 			</FlexItem>

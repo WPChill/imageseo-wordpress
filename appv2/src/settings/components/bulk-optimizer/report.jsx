@@ -18,7 +18,9 @@ export const Report = () => {
 				<div className={`${className ? className : ''}`}>
 					<Divider style={{ marginTop: 15, marginBottom: 15 }} />
 					<Heading level={4}>
-						{__('Current report', 'imageseo')}
+						{data?.status === 'running'
+							? __('Current report', 'imageseo')
+							: __('Last report', 'imageseo')}
 					</Heading>
 					<Text>
 						{__('Optimized: ', 'imageseo')} {data?.report.optimized}

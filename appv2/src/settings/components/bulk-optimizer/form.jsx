@@ -1,17 +1,19 @@
 import { SelectControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import useSettings from '../../hooks/useSettings';
+import { useImageQuery } from '../../hooks/useImageQuery';
 
 export const Form = () => {
 	const { options, setOptions, global } = useSettings();
+	const { mutate } = useImageQuery();
 	return (
 		<div className="form">
 			<SelectControl
 				label={__('Images to optimize', 'imageseo')}
 				value={options?.altFilter || 'ALL'}
 				onChange={(value) => {
-					console.log(value);
 					setOptions({ altFilter: value });
+					mutate();
 				}}
 				options={(global.altSpecification || []).map((alt) => ({
 					value: alt.id,
@@ -23,6 +25,7 @@ export const Form = () => {
 				value={options?.altFill || 'FILL_ALL'}
 				onChange={(value) => {
 					setOptions({ altFill: value });
+					mutate();
 				}}
 				options={[
 					{

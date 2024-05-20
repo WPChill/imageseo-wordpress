@@ -5,6 +5,7 @@ import {
 	useRef,
 	useState,
 	useCallback,
+	useMemo,
 } from '@wordpress/element';
 import { useDebouncedState } from './hooks/useDebouncedState';
 import { saveOptions } from './utils';
@@ -20,6 +21,7 @@ const initialState = {
 const actionTypes = {
 	SET_ACTIVE_TAB: 'SET_ACTIVE_TAB',
 	SET_OPTIONS: 'SET_OPTIONS',
+	OPTIONS_MODIFIED: 'OPTIONS_MODIFIED',
 };
 
 const reducer = (state, action) => {
@@ -28,6 +30,11 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				options: { ...state.options, ...action.payload },
+			};
+		case actionTypes.OPTIONS_MODIFIED:
+			return {
+				...state,
+				optionsModified: action.payload,
 			};
 		default:
 			return state;
@@ -49,18 +56,13 @@ export const SettingsProvider = ({ children }) => {
 		(options, withoutSave = false) => {
 			dispatch({ type: actionTypes.SET_OPTIONS, payload: options });
 			if (withoutSave) return;
+			dispatch({ type: actionTypes.OPTIONS_MODIFIED, payload: true });
 			setDebouncedOptions({ ...state.options, ...options });
 		},
 		[setDebouncedOptions, state.options]
 	);
 
-	const getInitialValues = useCallback(async () => {
-		setLoading(true);
-
-		setLoading(false);
-	}, [setLoading]);
-
-	const addNotice = (notice) => {
+	const addNotice = useCallback((notice) => {
 		const newNotice = {
 			id: new Date().getTime(),
 			...notice,
@@ -70,38 +72,63 @@ export const SettingsProvider = ({ children }) => {
 			explicitDismiss: notice?.explicitDismiss || false,
 		};
 		setNotices((prev) => [...prev, newNotice]);
-	};
+	}, []);
 
-	const removeNotice = (id) => {
+	const removeNotice = useCallback((id) => {
 		setNotices((prev) => prev.filter((n) => n.id !== id));
-	};
+	}, []);
 
-	const contextValue = {
-		options: state.options,
-		global: state.global,
-		loading,
-		setOptions,
-		addNotice,
-		removeNotice,
-		notices,
-	};
+	const contextValue = useMemo(
+		() => ({
+			options: state.options,
+			global: state.global,
+			loading,
+			setOptions,
+			addNotice,
+			removeNotice,
+			notices,
+		}),
+		[
+			addNotice,
+			loading,
+			notices,
+			removeNotice,
+			setOptions,
+			state.global,
+			state.options,
+		]
+	);
+
+	const debuncedMemo = useMemo(() => debouncedOptions, [debouncedOptions]);
 
 	useEffect(() => {
-		if (isInitialMount.current) {
-			isInitialMount.current = false;
-			return;
-		}
+		if (isInitialMount.current) return;
+		if (!state.optionsModified) return;
 
-		saveOptions(`imageseo/v1/settings`, debouncedOptions)
-			.then(() => setLoading(false))
+		saveOptions(`imageseo/v1/settings`, debuncedMemo)
+			.then(() => {
+				setLoading(false);
+				addNotice({
+					status: 'info',
+					content: __('Options saved', 'imageseo'),
+				});
+			})
 			.catch((e) => {
 				console.warn(e);
 				addNotice({
 					status: 'error',
 					content: __('Error saving options', 'imageseo'),
 				});
+				setLoading(false);
 			});
-	}, [debouncedOptions, getInitialValues]);
+	}, [addNotice, debuncedMemo, state.optionsModified]);
+
+	useEffect(() => {
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+		}
+	}, []);
+
 	return (
 		<SettingsContext.Provider value={contextValue}>
 			{children}

@@ -23,7 +23,6 @@ trait ApiHandler
 		$this->bulkOptimizerQuery = imageseo_get_service('BulkOptimizerQuery');
 	}
 
-
 	/**
 	 * Creates an API image object.
 	 *
@@ -60,7 +59,8 @@ trait ApiHandler
 	{
 		try {
 			$response = wp_remote_get(
-				IMAGESEO_API_URL . '/projects/v2/images/' . $batchId,
+				// IMAGESEO_API_URL . '/projects/v2/images/' . $batchId,
+				'http://host.docker.internal:3000' . '/projects/v2/images/' . $batchId,
 				[
 					'headers' => [
 						'Content-Type' => 'application/json',
@@ -89,14 +89,15 @@ trait ApiHandler
 
 		try {
 			$response = wp_remote_post(
-				IMAGESEO_API_URL . '/projects/v2/' . ($single ? 'image' : 'images') . '/',
+				// IMAGESEO_API_URL . '/projects/v2/' . ($single ? 'image' : 'images') . '/',
+				'http://host.docker.internal:3000/projects/v2/' . ($single ? 'image' : 'images') . '/',
 				[
 					'headers' => [
 						'Content-Type' => 'application/json',
 						'Authorization' => 'Bearer ' . $this->optionService->getOption('apiKey')
 					],
 					'body' => json_encode($dataObj),
-					'timeout' => 45,
+					'timeout' => $single ? 45 : 10,
 				]
 			);
 

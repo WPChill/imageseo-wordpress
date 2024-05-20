@@ -3,256 +3,209 @@
 namespace ImageSeoWP\Services\File;
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit; // Exit if accessed directly
 }
 
 class UpdateFile
 {
-    /**
-     * @param int    $attachmentId
-     * @param string $newFilename
-     *
-     * @return bool
-     */
-    public function updateFilename($attachmentId, $newFilename)
-    {
-        list($filenameWithoutExtension, $extension) = explode('.', $newFilename);
-        $metadata = wp_get_attachment_metadata($attachmentId);
+	/**
+	 * Updates the filename of an attachment.
+	 *
+	 * @param int $attachmentId The attachment ID.
+	 * @param string $newFilename The new filename.
+	 * @return bool True if successful, false otherwise.
+	 */
+	public function updateFilename($attachmentId, $newFilename)
+	{
+		if (!$newFilename) {
+			return false;
+		}
 
-        $uploadDirectoryData = wp_get_upload_dir();
+		$metadata = wp_get_attachment_metadata($attachmentId);
+		if (!$metadata || !isset($metadata['file'])) {
+			return false;
+		}
 
-        $fileRootDirectories = explode('/', $metadata['file']);
-        $oldFilename = $basicOldFileName = $fileRootDirectories[count($fileRootDirectories) - 1];
-        $fileRoot = str_replace($oldFilename, '', $metadata['file']);
+		$uploadDirectoryData = wp_get_upload_dir();
+		$fileRootDirectories = explode('/', $metadata['file']);
+		$oldFilename = end($fileRootDirectories);
+		$fileRoot = str_replace($oldFilename, '', $metadata['file']);
+		$src = $uploadDirectoryData['basedir'] . '/' . $metadata['file'];
 
-        if (isset($metadata['original_image'])) {
-            $oldFilename = $metadata['original_image'];
-        }
+		if (!file_exists($src)) {
+			return false;
+		}
 
-        $src = sprintf('%s/%s%s', $uploadDirectoryData['basedir'], $fileRoot, $basicOldFileName);
+		$newMetadata = $this->processFileUpdate($attachmentId, $src, $oldFilename, $newFilename, $metadata, $fileRoot, $uploadDirectoryData['basedir']);
+		if (!$newMetadata) {
+			return false;
+		}
 
-        if (!file_exists($src)) {
-            return;
-        }
+		return $this->finalizeUpdate($attachmentId, $newMetadata, $newMetadata['uniqueNewFilename']);
+	}
 
-        try {
-            $newMetadata = $metadata;
+	/**
+	 * Handles the processing of the file update, including renaming and metadata adjustment.
+	 */
+	private function processFileUpdate($attachmentId, $src, $oldFilename, $newFilename, $metadata, $fileRoot, $baseDir)
+	{
+		$oldFilenameWithoutExtension = pathinfo($oldFilename, PATHINFO_FILENAME);
+		$extension = pathinfo($newFilename, PATHINFO_EXTENSION);
+		$newFilenameWithoutExtension = pathinfo($newFilename, PATHINFO_FILENAME);
 
-            list($oldFilenameWithoutExtension, $oldExtension) = explode('.', $oldFilename);
+		// Find a unique filename in the target directory
+		$uniqueNewFilename = $this->findUniqueFilename($baseDir . '/' . $fileRoot, $newFilenameWithoutExtension, $extension);
+		$destination = $baseDir . '/' . $fileRoot . $uniqueNewFilename;
 
-            // Basic file
-            $newBasicFile = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $basicOldFileName);
-            $destination = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $src);
+		if (!@rename($src, $destination)) {
+			return false;
+		}
 
-            $oldUrl = wp_get_attachment_image_src($attachmentId, 'full')[0];
-            $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
+		$oldUrl = wp_get_attachment_url($attachmentId);
+		$newUrl = str_replace($oldFilenameWithoutExtension, pathinfo($uniqueNewFilename, PATHINFO_FILENAME), $oldUrl);
 
-            rename($src, $destination);
+		$this->updatePostmetas($oldUrl, $newUrl);
+		$this->updatePosts($oldUrl, $newUrl);
 
-            $this->updatePostmetas($oldUrl, $newUrl);
-            $this->updatePosts($oldUrl, $newUrl);
+		// Update metadata for all sizes using the unique new filename
+		$newMetadata = $metadata;
+		$newMetadata['file'] = $fileRoot . $uniqueNewFilename; // Use the unique filename
+		$newMetadata['uniqueNewFilename'] = $uniqueNewFilename;
+		foreach ($metadata['sizes'] as $key => $size) {
+			$srcBySize = $baseDir . '/' . $fileRoot . $size['file'];
+			$newFileBySize = str_replace($oldFilenameWithoutExtension, pathinfo($uniqueNewFilename, PATHINFO_FILENAME), $size['file']);
+			$destinationBySize = $baseDir . '/' . $fileRoot . $newFileBySize;
 
-            $newMetadata['file'] = \sprintf('%s%s', $fileRoot, $newBasicFile);
+			if (file_exists($srcBySize) && @rename($srcBySize, $destinationBySize)) {
+				$newMetadata['sizes'][$key]['file'] = $newFileBySize;
 
-            $filesSizesAlreadyCheck = [];
-            // Multiple Sizes
-            foreach ($metadata['sizes'] as $key => $size) {
-                $srcBySize = sprintf('%s/%s%s', $uploadDirectoryData['basedir'], $fileRoot, $size['file']);
+				$oldUrl = wp_get_attachment_image_src($attachmentId, $key)[0];
+				$newUrl = str_replace($oldFilenameWithoutExtension, pathinfo($uniqueNewFilename, PATHINFO_FILENAME), $oldUrl);
 
-                if (!file_exists($srcBySize) && !isset($filesSizesAlreadyCheck[$size['file']])) {
-                    continue;
-                }
+				$this->updatePostmetas($oldUrl, $newUrl);
+				$this->updatePosts($oldUrl, $newUrl);
+			}
+		}
 
-                if (!isset($filesSizesAlreadyCheck[$size['file']])) {
-                    $newFileBySize = str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $size['file']);
-                    $destinationBySize = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcBySize);
+		return $newMetadata;
+	}
 
-                    $filesSizesAlreadyCheck[$size['file']] = $newFileBySize;
-                    $newMetadata['sizes'][$key]['file'] = $newFileBySize;
-                    rename($srcBySize, $destinationBySize);
+	/**
+	 * Updates filename for NextGen gallery images.
+	 *
+	 * @param int $attachmentId The attachment ID.
+	 * @param string $newFilename The new filename.
+	 * @return bool True if successful, false otherwise.
+	 */
+	public function updateFilenameForNextGen($attachmentId, $newFilename)
+	{
+		if (!$newFilename) {
+			return false;
+		}
 
-                    $oldUrl = wp_get_attachment_image_src($attachmentId, $key)[0];
-                    $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
+		$storage = \C_Gallery_Storage::get_instance();
+		$imageObj = imageseo_get_service('QueryNextGen')->getImage($attachmentId);
 
-                    $this->updatePostmetas($oldUrl, $newUrl);
-                    $this->updatePosts($oldUrl, $newUrl);
-                } else {
-                    $newMetadata['sizes'][$key]['file'] = $filesSizesAlreadyCheck[$size['file']];
-                }
-            }
+		if (!$imageObj) {
+			return false;
+		}
 
-            // Original Image
-            if (isset($metadata['original_image'])) {
-                $srcOriginal = sprintf('%s/%s%s', $uploadDirectoryData['basedir'], $fileRoot, $metadata['original_image']);
-                if (\file_exists($srcOriginal)) {
-                    $newFileOriginal = str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $metadata['original_image']);
-                    $srcOriginal = sprintf('%s/%s%s', $uploadDirectoryData['basedir'], $fileRoot, $metadata['original_image']);
-                    $destinationOriginal = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcOriginal);
+		$oldPaths = [
+			'backup' => $storage->get_backup_abspath($imageObj),
+			'full'   => $storage->get_image_abspath($imageObj),
+			'thumbs' => $storage->get_image_abspath($imageObj, 'thumbs'),
+		];
 
-                    rename($srcOriginal, $destinationOriginal);
+		$oldUrl = $storage->get_image_url($imageObj);
+		$imageObj->filename = $newFilename;
+		$newUrl = $storage->get_image_url($imageObj);
 
-                    $newMetadata['original_image'] = $newFileOriginal;
+		foreach ($oldPaths as $type => $srcPath) {
+			if (!file_exists($srcPath)) {
+				continue;
+			}
 
-                    $oldUrl = wp_get_original_image_url($attachmentId);
-                    $newUrl = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $oldUrl);
+			$extension = pathinfo($newFilename, PATHINFO_EXTENSION);
+			$newFilenameWithoutExtension = pathinfo($newFilename, PATHINFO_FILENAME);
+			$newFilenameWithPrefix = $type === 'thumbs' ? sprintf('thumbs_%s', $newFilenameWithoutExtension) : $newFilenameWithoutExtension;
 
-                    $this->updatePostmetas($oldUrl, $newUrl);
-                    $this->updatePosts($oldUrl, $newUrl);
-                }
-            }
-        } catch (\Exception $th) {
-        }
+			$uniqueNewFilename = $this->findUniqueFilename(dirname($srcPath), $newFilenameWithPrefix, $extension);
+			$destinationPath = dirname($srcPath) . '/' . $uniqueNewFilename;
 
-        wp_update_attachment_metadata($attachmentId, $newMetadata);
-        update_attached_file($attachmentId, $newMetadata['file']);
-        wp_update_post([
-            'ID'         => $attachmentId,
-            'post_title' => $filenameWithoutExtension,
-            'post_name'  => sanitize_title($filenameWithoutExtension),
-        ]);
+			if (!@rename($srcPath, $destinationPath)) {
+				return false;
+			}
+		}
 
-        update_post_meta($attachmentId, '_old_wp_attachment_metadata', $metadata);
-        update_post_meta($attachmentId, '_old_wp_attached_file', $metadata['file']);
-    }
+		$this->updatePostmetas($oldUrl, $newUrl);
+		$this->updatePosts($oldUrl, $newUrl);
 
-    /**
-     * @param int    $attachmentId
-     * @param string $newFilename
-     *
-     * @return bool
-     */
-    public function updateFilenameForNextGen($attachmentId, $newFilename)
-    {
-        list($filenameWithoutExtension, $extension) = explode('.', $newFilename);
-        $storage = \C_Gallery_Storage::get_instance();
-        $imageObj = imageseo_get_service('QueryNextGen')->getImage($attachmentId);
-        $oldPaths = [
-            'backup' => $storage->get_backup_abspath($imageObj),
-            'full'   => $storage->get_image_abspath($imageObj),
-            'thumbs' => $storage->get_image_abspath($imageObj, 'thumbs'),
-        ];
+		$image_mapper = \C_Image_Mapper::get_instance();
+		$image_mapper->save($imageObj);
 
-        $imageObj->image_slug = $filenameWithoutExtension;
-        $imageObj->filename = $newFilename;
+		return true;
+	}
 
-        $newFilenameThumbs = sprintf('thumbs_%s', $newFilename);
-        $newFilenameBackup = sprintf('%s_backup', $newFilename);
+	/**
+	 * Updates post meta to reflect the new image URLs.
+	 */
+	private function updatePostmetas($oldUrl, $newUrl)
+	{
+		global $wpdb;
+		$wpdb->query($wpdb->prepare("UPDATE $wpdb->postmeta SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_value LIKE %s", $oldUrl, $newUrl, '%' . $wpdb->esc_like($oldUrl) . '%'));
+	}
 
-        if (isset($imageObj->meta_data['backup'])) {
-            $imageObj->meta_data['backup']['filename'] = $newFilename; // No use backup var
-        }
-        if (isset($imageObj->meta_data['full'])) {
-            $imageObj->meta_data['full']['filename'] = $newFilename;
-        }
-        if (isset($imageObj->meta_data['thumbnail'])) {
-            $imageObj->meta_data['thumbnail']['filename'] = $newFilenameThumbs;
-        }
+	/**
+	 * Updates posts to replace old image URLs with new ones.
+	 */
+	private function updatePosts($oldUrl, $newUrl)
+	{
+		global $wpdb;
+		$wpdb->query($wpdb->prepare("UPDATE $wpdb->posts SET post_content = REPLACE(post_content, %s, %s) WHERE post_content LIKE %s", $oldUrl, $newUrl, '%' . $wpdb->esc_like($oldUrl) . '%'));
+	}
 
-        try {
-            foreach ($oldPaths as $key => $srcPath) {
-                if (!file_exists($srcPath)) {
-                    continue;
-                }
-                $fileRootDirectories = explode('/', $srcPath);
-                $oldFilename = $fileRootDirectories[count($fileRootDirectories) - 1];
-                $fileRoot = str_replace($oldFilename, '', $srcPath);
+	private function finalizeUpdate($attachmentId, $newMetadata, $newFilenameWithoutExtension)
+	{
+		// Store the original metadata and file path before updating
+		$originalMetadata = wp_get_attachment_metadata($attachmentId);
+		$originalFilePath = get_attached_file($attachmentId);
 
-                list($oldFilenameWithoutExtension, $oldExtension) = explode('.', $oldFilename);
+		wp_update_attachment_metadata($attachmentId, $newMetadata);
+		update_attached_file($attachmentId, $newMetadata['file']);
 
-                switch ($key) {
-                    case 'thumbs':
-                        $destinationPath = \str_replace($oldFilenameWithoutExtension, sprintf('thumbs_%s', $filenameWithoutExtension), $srcPath);
-                        break;
-                    default:
-                        $destinationPath = \str_replace($oldFilenameWithoutExtension, $filenameWithoutExtension, $srcPath);
-                        break;
-                }
+		// Update the post title and slug based on the new filename
+		wp_update_post([
+			'ID' => $attachmentId,
+			'post_title' => $newFilenameWithoutExtension,
+			'post_name' => sanitize_title($newFilenameWithoutExtension),
+		]);
 
-                @rename($srcPath, $destinationPath);
-            }
-        } catch (\Exception $e) {
-            return;
-        }
+		// Save the original metadata and file path as post meta for potential rollback
+		update_post_meta($attachmentId, '_old_wp_attachment_metadata', $originalMetadata);
+		update_post_meta($attachmentId, '_old_wp_attached_file', $originalFilePath);
 
-        $image_mapper = \C_Image_Mapper::get_instance();
-        $image_mapper->save($imageObj);
-    }
+		return true;
+	}
 
-    // Mass update of all the meta with the new filenames
-    public function updatePostmetas($baseImageUrl, $newImageUrl)
-    {
-        global $wpdb;
-        $query = $wpdb->prepare("UPDATE $wpdb->postmeta
-			SET meta_value = '%s'
-			WHERE meta_key <> '_original_filename'
-			AND (TRIM(meta_value) = '%s'
-			OR TRIM(meta_value) = '%s'
-		);", $newImageUrl, $baseImageUrl, str_replace(' ', '%20', $baseImageUrl));
-        $query_revert = $wpdb->prepare("UPDATE $wpdb->postmeta
-			SET meta_value = '%s'
-			WHERE meta_key <> '_original_filename'
-			AND meta_value = '%s';
-		", $baseImageUrl, $newImageUrl);
-        $wpdb->query($query);
-    }
+	/**
+	 * Finds a unique filename by appending a numeric suffix if the original filename already exists.
+	 *
+	 * @param string $directory The directory to check in.
+	 * @param string $filename The initial filename to check.
+	 * @param string $extension The file extension.
+	 * @return string Returns a unique filename with numeric suffix if necessary.
+	 */
+	private function findUniqueFilename($directory, $filename, $extension)
+	{
+		$baseFilename = $filename;
+		$i = 1;
 
-    // Mass update of all the articles with the new filenames
-    public function updatePosts($baseImageUrl, $newImageUrl)
-    {
-        global $wpdb;
+		// Check if the full filename exists, and append a suffix until it doesn't
+		while (file_exists($directory . '/' . $filename . '.' . $extension)) {
+			$filename = $baseFilename . '-' . $i;
+			$i++;
+		}
 
-        // Content
-        $query = $wpdb->prepare("UPDATE $wpdb->posts
-			SET post_content = REPLACE(post_content, '%s', '%s')
-			WHERE post_status != 'inherit'
-			AND post_status != 'trash'
-			AND post_type != 'attachment'
-			AND post_type NOT LIKE '%acf-%'
-			AND post_type NOT LIKE '%edd_%'
-			AND post_type != 'shop_order'
-			AND post_type != 'shop_order_refund'
-			AND post_type != 'nav_menu_item'
-			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $baseImageUrl, $newImageUrl);
-        $query_revert = $wpdb->prepare("UPDATE $wpdb->posts
-			SET post_content = REPLACE(post_content, '%s', '%s')
-			WHERE post_status != 'inherit'
-			AND post_status != 'trash'
-			AND post_type != 'attachment'
-			AND post_type NOT LIKE '%acf-%'
-			AND post_type NOT LIKE '%edd_%'
-			AND post_type != 'shop_order'
-			AND post_type != 'shop_order_refund'
-			AND post_type != 'nav_menu_item'
-			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $newImageUrl, $baseImageUrl);
-        $wpdb->query($query);
-
-        // Excerpt
-        $query = $wpdb->prepare("UPDATE $wpdb->posts
-			SET post_excerpt = REPLACE(post_excerpt, '%s', '%s')
-			WHERE post_status != 'inherit'
-			AND post_status != 'trash'
-			AND post_type != 'attachment'
-			AND post_type NOT LIKE '%acf-%'
-			AND post_type NOT LIKE '%edd_%'
-			AND post_type != 'shop_order'
-			AND post_type != 'shop_order_refund'
-			AND post_type != 'nav_menu_item'
-			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $baseImageUrl, $newImageUrl);
-        $query_revert = $wpdb->prepare("UPDATE $wpdb->posts
-			SET post_excerpt = REPLACE(post_excerpt, '%s', '%s')
-			WHERE post_status != 'inherit'
-			AND post_status != 'trash'
-			AND post_type != 'attachment'
-			AND post_type NOT LIKE '%acf-%'
-			AND post_type NOT LIKE '%edd_%'
-			AND post_type != 'shop_order'
-			AND post_type != 'shop_order_refund'
-			AND post_type != 'nav_menu_item'
-			AND post_type != 'revision'
-			AND post_type != 'auto-draft'", $newImageUrl, $baseImageUrl);
-        $wpdb->query($query);
-    }
+		return $filename . '.' . $extension;
+	}
 }

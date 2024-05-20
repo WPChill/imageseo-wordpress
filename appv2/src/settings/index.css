@@ -101,6 +101,10 @@
 			.padded {
 				padding: 20px;
 			}
+
+			.logo {
+				max-width: 100px;
+			}
 		}
 	}
 

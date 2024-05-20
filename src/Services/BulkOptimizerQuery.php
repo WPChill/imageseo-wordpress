@@ -21,50 +21,39 @@ class BulkOptimizerQuery
 			),
 		);
 	}
+
 	public function buildSqlQuery($options)
 	{
 		global $wpdb;
+
 		$sqlQuery = "SELECT {$wpdb->posts}.ID ";
 		$sqlQuery .= "FROM {$wpdb->posts} ";
 
-		// == INNER JOIN
-		switch ($options['altFilter']) {
-			case AltSpecification::FEATURED_IMAGE:
-				$sqlQuery .= "INNER JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.meta_value AND  {$wpdb->postmeta}.meta_key = '_thumbnail_id' ) ";
-				break;
-		}
+		// == LEFT JOIN for alt text
+		$sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmAltText ON ( {$wpdb->posts}.ID = pmAltText.post_id AND pmAltText.meta_key = '_wp_attachment_image_alt' ) ";
 
-		switch ($options['altFill']) {
-			case AltSpecification::FILL_ONLY_EMPTY:
-				$sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOnlyEmpty ON ( {$wpdb->posts}.ID = pmOnlyEmpty.post_id ) ";
-				$sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOnlyEmpty2 ON ({$wpdb->posts}.ID = pmOnlyEmpty2.post_id AND pmOnlyEmpty2.meta_key = '_wp_attachment_image_alt' ) ";
+		// == LEFT JOIN for optimized images
+		$sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmOptimized ON ( {$wpdb->posts}.ID = pmOptimized.post_id AND pmOptimized.meta_key = '_imageseo_report' ) ";
 
-				break;
-		}
+		// == LEFT JOIN for fully optimized flag
+		$sqlQuery .= "LEFT JOIN {$wpdb->postmeta} AS pmFullyOptimized ON ( {$wpdb->posts}.ID = pmFullyOptimized.post_id AND pmFullyOptimized.meta_key = '_imageseo_fully_optimized' ) ";
 
-		if ($options['onlyOptimized']) {
-			$sqlQuery .= "INNER JOIN {$wpdb->postmeta} AS pmOptimized ON ( {$wpdb->posts}.ID = pmOptimized.post_id ) ";
-		}
-
-		// == WHERE
+		// == WHERE clause
 		$sqlQuery .= 'WHERE 1=1 ';
-		if ($options['onlyOptimized']) {
-			$sqlQuery .= "AND ( pmOptimized.meta_key = '_imageseo_report' ) ";
-		}
-
-		switch ($options['altFill']) {
-			case AltSpecification::FILL_ONLY_EMPTY:
-				$sqlQuery .= "AND (
-                    ( pmOnlyEmpty.meta_key = '_wp_attachment_image_alt' AND pmOnlyEmpty.meta_value = '' )
-                    OR
-                    pmOnlyEmpty2.post_id IS NULL
-                  )  ";
-				break;
-		}
-
-		$sqlQuery .= "AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/gif' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') ";
+		$sqlQuery .= "AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') ";
 		$sqlQuery .= "AND {$wpdb->posts}.post_type = 'attachment' ";
 		$sqlQuery .= "AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private')) ";
+
+		if ($options['onlyOptimized']) {
+			$sqlQuery .= "AND ( pmFullyOptimized.meta_value = '1' ) ";
+		} else {
+			$sqlQuery .= "AND ( pmFullyOptimized.meta_value != '1' OR pmFullyOptimized.meta_value IS NULL ) ";
+		}
+
+		if ($options['altFill'] === AltSpecification::FILL_ONLY_EMPTY) {
+			$sqlQuery .= "AND ( pmAltText.meta_value = '' OR pmAltText.meta_value IS NULL ) ";
+		}
+
 		$sqlQuery .= "GROUP BY {$wpdb->posts}.ID ORDER BY {$wpdb->posts}.post_date ASC ";
 
 		return $sqlQuery;

@@ -72,6 +72,24 @@ class RestApi
 			'callback' => [$this, 'save_property'],
 			'permission_callback' => [$this, 'settings_permissions_check']
 		]);
+
+		register_rest_route($this->namespace, '/optimizer-errors/', [
+			'methods' => 'GET',
+			'callback' => [$this, 'get_optimizer_errors'],
+			'permission_callback' => [$this, 'settings_permissions_check']
+		]);
+
+		register_rest_route($this->namespace, '/debug-info/', [
+			'methods' => 'GET',
+			'callback' => [$this, 'get_debug_info'],
+			'permission_callback' => [$this, 'settings_permissions_check']
+		]);
+
+		register_rest_route($this->namespace, '/image-query/', [
+			'methods' => 'GET',
+			'callback' => [$this, 'image_query'],
+			'permission_callback' => [$this, 'settings_permissions_check']
+		]);
 	}
 
 	public function settings_permissions_check(): bool
@@ -133,7 +151,6 @@ class RestApi
 	public function validate_api_key($request): WP_REST_Response
 	{
 		$data = $request->get_json_params();
-
 		$owner = $this->_validate_api_key($data['apiKey']);
 
 		return new WP_REST_Response($owner, 200);
@@ -197,6 +214,7 @@ class RestApi
 					]
 				);
 				$return = ['filename' => $filename];
+
 				$optimizer->getAndUpdateMeta($data['id'], 'filename', $filename);
 				break;
 			default:
@@ -205,6 +223,27 @@ class RestApi
 		}
 
 		return new WP_REST_Response($return, 200);
+	}
+
+	public function image_query(): WP_REST_Response
+	{
+		$totalImages = imageseo_get_service('QueryImages')->getTotalImages(
+			[
+				'withCache'  => false,
+				'forceQuery' => true
+			]
+		);
+		$totalNoAlt  = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt(
+			[
+				'withCache'  => false,
+				'forceQuery' => true
+			]
+		);
+
+		return new WP_REST_Response([
+			'totalImages' => $totalImages,
+			'totalNoAlt' => $totalNoAlt
+		], 200);
 	}
 
 	public function start_bulk_optimizer(): WP_REST_Response
@@ -227,6 +266,22 @@ class RestApi
 	{
 		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
 		$data = $bulkOptimizer->stop();
+
+		return new WP_REST_Response($data, 200);
+	}
+
+	public function get_optimizer_errors(): WP_REST_Response
+	{
+		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
+		$data = $bulkOptimizer->getErrors();
+
+		return new WP_REST_Response($data, 200);
+	}
+
+	public function get_debug_info(): WP_REST_Response
+	{
+		$bulkOptimizer = imageseo_get_service('BulkOptimizer');
+		$data = $bulkOptimizer->getDebug();
 
 		return new WP_REST_Response($data, 200);
 	}
@@ -316,7 +371,6 @@ class RestApi
 	private function convert_to_camel_case($options): array
 	{
 		$camelCased = [];
-
 		foreach ($options as $key => $value) {
 			if (strpos($key, '_') === -1) {
 				$camelCased[$key] = $value;

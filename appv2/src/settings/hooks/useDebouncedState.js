@@ -25,7 +25,7 @@ export const useDebouncedState = (
 			}
 			leadingRef.current = false;
 		},
-		[options.leading]
+		[options.leading, wait]
 	);
 
 	return [value, debouncedSetValue];

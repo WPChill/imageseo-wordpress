@@ -7,6 +7,7 @@ import {
 } from '@wordpress/components';
 import useSettings from '../../hooks/useSettings';
 import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
 
 export const Form = () => {
 	const { options, global, setOptions } = useSettings();
@@ -29,6 +30,16 @@ export const Form = () => {
 			});
 		}
 	};
+
+	const lang = useMemo(() => {
+		const language =
+			options?.defaultLanguageIa || global?.currentLanguage || 'en';
+		if (language.includes('_')) {
+			return language.split('_')[0];
+		}
+		return language;
+	}, [global?.currentLanguage, options?.defaultLanguageIa]);
+
 	return (
 		<div>
 			<Heading level={4} lineHeight={2}>
@@ -62,11 +73,7 @@ export const Form = () => {
 				onChange={(value) => {
 					setOptions({ defaultLanguageIa: value });
 				}}
-				value={
-					options?.defaultLanguageIa ||
-					global?.currentLanguage ||
-					'en'
-				}
+				value={lang}
 			/>
 			<Divider style={{ marginTop: 15, marginBottom: 15 }} />
 

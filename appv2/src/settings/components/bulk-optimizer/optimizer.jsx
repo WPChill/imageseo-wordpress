@@ -10,10 +10,12 @@ import {
 import useSettings from '../../hooks/useSettings';
 import apiFetch from '@wordpress/api-fetch';
 import { useOptimizerStatus } from '../../hooks/useOptimizerStatus';
+import { useImageQuery } from '../../hooks/useImageQuery';
 
 export const Optimizer = () => {
 	const { global, options, addNotice } = useSettings();
 	const { data, isLoading, error, mutate } = useOptimizerStatus();
+	const { data: imageQuery, mutate: mutateImageQuery } = useImageQuery();
 
 	const optimizeCb = async () => {
 		await apiFetch({
@@ -33,6 +35,7 @@ export const Optimizer = () => {
 			method: 'POST',
 		});
 		mutate();
+		mutateImageQuery();
 		addNotice({
 			status: 'success',
 			content: __('Optimizer stopped', 'imageseo'),
@@ -87,8 +90,8 @@ export const Optimizer = () => {
 									"There are %1$s images in your media library and %2$s don't have an alternative text.",
 									'imageseo'
 								),
-								global.totalImages,
-								global.totalNoAlt
+								imageQuery?.totalImages || 0,
+								imageQuery?.totalNoAlt || 0
 							)}
 						</Text>
 					)}
@@ -116,7 +119,14 @@ export const Optimizer = () => {
 							data?.report?.total
 						)}
 					</Text>
-					<progress value="0" max="100"></progress>
+
+					<progress
+						value={
+							(data?.report?.optimized / data?.report?.total) *
+							100
+						}
+						max={100}
+					/>
 					<Spacer marginY="3" />
 					<Button isPrimary onClick={cancelOptimizerCb}>
 						{__('Stop optimizer', 'imageseo')}

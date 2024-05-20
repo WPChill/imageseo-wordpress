@@ -7,11 +7,12 @@ use ImageSeoWP\Async\WPAsyncRequest;
 use ImageSeoWP\Helpers\AttachmentMeta;
 use ImageSeoWP\Traits\ApiHandler;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit;
 }
 
-class OnUploadImage extends WPAsyncRequest {
+class OnUploadImage extends WPAsyncRequest
+{
 	use ApiHandler;
 
 	protected $prefix = 'imageseo';
@@ -19,18 +20,20 @@ class OnUploadImage extends WPAsyncRequest {
 
 	public static $instance;
 
-	public static function getInstance(): OnUploadImage {
-		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof OnUploadImage ) ) {
+	public static function getInstance(): OnUploadImage
+	{
+		if (!isset(self::$instance) && !(self::$instance instanceof OnUploadImage)) {
 			self::$instance = new OnUploadImage();
 		}
 
 		return self::$instance;
 	}
 
-	protected function handle() {
+	protected function handle()
+	{
 		$this->setServices();
-		
-		if ( imageseo_get_service( 'UserInfo' )->hasLimitExcedeed() ) {
+
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
 			return;
 		}
 
@@ -38,30 +41,39 @@ class OnUploadImage extends WPAsyncRequest {
 		$fillAlt      = $_POST['active_alt_on_upload'];
 		$renameFile   = $_POST['active_rename_on_upload'];
 
-		if ( empty( $attachmentId ) ) {
+		if (empty($attachmentId)) {
 			return;
 		}
 
-		if ( empty( $fillAlt ) && empty( $renameFile ) ) {
+		if (empty($fillAlt) && empty($renameFile)) {
+			return;
+		}
+
+		$extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
+		if (!in_array($extension, ['png', 'jpg', 'jpeg'])) {
 			return;
 		}
 
 		$images = [
-			$this->createApiImage( $attachmentId )
+			$this->createApiImage($attachmentId)
 		];
 
-		$response = $this->sendRequestToApi( $images );
+		$response = $this->sendRequestToApi($images, true);
 
-		if ( $response instanceof Exception ) {
-			error_log( $response->getMessage() );
+		if ($response instanceof Exception) {
+			error_log($response->getMessage());
 
 			return;
 		}
 
+		if (!isset($response['batchId'])) {
+			return;
+		}
+
 		$batchId = $response['batchId'];
-		$items   = $this->getItemsByBatchId( $batchId );
-		if ( $items instanceof Exception ) {
-			error_log( $items->getMessage() );
+		$items   = $this->getItemsByBatchId($batchId);
+		if ($items instanceof Exception) {
+			error_log($items->getMessage());
 
 			return;
 		}
@@ -69,18 +81,18 @@ class OnUploadImage extends WPAsyncRequest {
 		$image        = $items[0];
 		$attachmentId = $image['internalId'];
 
-		if ( $fillAlt ) {
-			$this->altService->updateAlt( $image['internalId'], $image['altText'] );
+		if ($fillAlt) {
+			$this->altService->updateAlt($image['internalId'], $image['altText']);
 		}
 
-		if ( $renameFile ) {
-			$extension = $this->generateFilename->getExtensionFilenameByAttachmentId( $attachmentId );
+		if ($renameFile) {
+			$extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
 			$this->fileService->updateFilename(
 				$image['internalId'],
-				sprintf( '%s.%s', $image['filename'], $extension )
+				sprintf('%s.%s', $image['filename'], $extension)
 			);
 		}
 
-		update_post_meta( $attachmentId, AttachmentMeta::REPORT, $image );
+		update_post_meta($attachmentId, AttachmentMeta::REPORT, $image);
 	}
 }

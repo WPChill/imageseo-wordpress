@@ -3,16 +3,16 @@
 namespace ImageSeoWP\Helpers;
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 abstract class AttachmentMeta
 {
-    /**
-     * @var string
-     */
+	/**
+	 * @var string
+	 */
 
-    const REPORT = '_imageseo_report';
+	const REPORT = '_imageseo_report';
 
-    const LANGUAGE = '_imageseo_language_report';
+	const LANGUAGE = '_imageseo_language_report';
 }

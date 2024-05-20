@@ -5,7 +5,6 @@ import { Previewer } from './social-card/previewer';
 
 export const SocialCard = () => {
 	const { loading } = useSettings();
-
 	return (
 		<Animate type={loading ? 'loading' : ''}>
 			{({ className }) => (
