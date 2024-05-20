@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 
 class RestApi
 {
-	public string $namespace = 'imageseo/v1';
+	public $namespace = 'imageseo/v1';
 
 	public function hooks()
 	{
