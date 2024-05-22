@@ -22,6 +22,7 @@ export const useUser = (apiKey) => {
 						status: 'error',
 						content: successData.message,
 					});
+					return;
 				}
 
 				setOptions({ allowed: true }, true);

@@ -47,6 +47,7 @@ export const Welcome = () => {
 					allowed: false,
 				});
 				setErrorMsg(data?.data?.message);
+				setLoadingRequest(false);
 				addNotice({
 					status: 'error',
 					content: data?.data?.message,
@@ -81,6 +82,17 @@ export const Welcome = () => {
 				data: form,
 			});
 
+			if (
+				Object.prototype.hasOwnProperty.call(response, 'success') &&
+				!response?.success
+			) {
+				throw new Error(
+					Array.isArray(response?.data?.message)
+						? response?.data?.message.join(',')
+						: response?.data?.message
+				);
+			}
+
 			if (response?.message) {
 				addNotice({
 					status: 'error',
@@ -108,7 +120,7 @@ export const Welcome = () => {
 			setLoadingRequest(false);
 			addNotice({
 				status: 'error',
-				content: __('Error registering account', 'imageseo'),
+				content: error.message,
 			});
 			console.error('Error registering account:', error);
 		}

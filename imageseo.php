@@ -5,7 +5,7 @@
  * Plugin URI:               https://imageseo.io
  * Description:              Optimize your images for search engines. Search engine optimization and web marketing strategy often neglect their images.
  * Author:                   WPChill
- * Version:                  3.0.0
+ * Version:                  3.1.0
  * Author URI:               https://www.wpchill.com/
  * License:                  GPLv3 or later
  * License URI:              http://www.gnu.org/licenses/gpl-3.0.html
@@ -53,15 +53,15 @@ use ImageSeoWP\Services\BulkOptimizer;
 define('IMAGESEO_NAME', 'ImageSEO');
 define('IMAGESEO_SLUG', 'imageseo');
 define('IMAGESEO_OPTION_GROUP', 'group-imageseo');
-define('IMAGESEO_VERSION', '3.0.0');
-define('IMAGESEO_PHP_MIN', '7.0');
+define('IMAGESEO_VERSION', '3.1.0');
+define('IMAGESEO_PHP_MIN', '7.4');
 define('IMAGESEO_DEBUG', false);
 define('IMAGESEO_DEBUG_ALT', false);
 define('IMAGESEO_BNAME', plugin_basename(__FILE__));
 define('IMAGESEO_DIR', __DIR__);
 define('IMAGESEO_DIR_LANGUAGES', IMAGESEO_DIR . '/languages');
 define('IMAGESEO_DIR_DIST', IMAGESEO_DIR . '/dist');
-define('IMAGESEO_API_URL', 'https://api.imageseo.com');
+define('IMAGESEO_API_URL', 'https://staging-api.imageseo.com');
 define('IMAGESEO_APP_URL', 'https://app.imageseo.io');
 define('IMAGESEO_SITE_URL', 'https://imageseo.io');
 define('IMAGESEO_LANGUAGES', IMAGESEO_DIR . '/languages/');
