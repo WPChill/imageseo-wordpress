@@ -125,6 +125,10 @@ We are compatible with including Featured Images, WooCommerce, NextGen Photo Gal
 Image SEO works in every language.
 
 == Changelog ==
+= 3.1.0 - 14.03.2024 =
+Changed: Refactored code to integrate new API
+Changed: Updated UI for better user experience ( still needs improvements )
+
 = 3.0.2 - 28.02.2024 =
 Fixed: File Path update
 
