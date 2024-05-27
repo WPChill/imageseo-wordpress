@@ -68,12 +68,6 @@ class ReportImage
 					'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
 				], $query);
 			} catch (\Exception $e) {
-				$result = $reportImages->generateReportFromUrl([
-					'lang'     => $language,
-					'src'      => $storage->get_image_url($attachmentId),
-					'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata[0] : '',
-					'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata[1] : '',
-				], $query);
 			}
 		} else {
 			$result = $reportImages->generateReportFromUrl([
@@ -120,31 +114,14 @@ class ReportImage
 		$language = null === $language ? $this->optionService->getOption('default_language_ia') : $language;
 
 		$reportImages = $this->clientService->getClient()->getResource('ImageReports', $query);
-
-		if (file_exists($filePath)) {
-			try {
-				$result = $reportImages->generateReportFromFile([
-					'lang'     => $language,
-					'filePath' => $filePath,
-					'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : 0,
-					'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : 0,
-				], $query);
-
-			} catch (\Exception $e) {
-				$result = $reportImages->generateReportFromUrl([
-					'lang'     => $language,
-					'src'      => $filePath,
-					'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : 0,
-					'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : 0,
-				], $query);
-			}
-		} else {
+		try {
 			$result = $reportImages->generateReportFromUrl([
 				'lang'     => $language,
-				'src'      => $filePath,
+				'src'      => wp_get_attachment_url($attachmentId),
 				'width'    => (is_array($metadata) && !empty($metadata)) ? $metadata['width'] : 0,
 				'height'   => (is_array($metadata) && !empty($metadata)) ? $metadata['height'] : 0,
 			], $query);
+		} catch (\Exception $e) {
 		}
 
 		if ($result && !isset($result['alts'])) {
