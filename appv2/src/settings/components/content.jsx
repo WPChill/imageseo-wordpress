@@ -13,7 +13,7 @@ import Logo from '../../images/default_logo.png';
 import { __ } from '@wordpress/i18n';
 import { useUser } from '../hooks/useUser';
 import useSettings from '../hooks/useSettings';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useCallback } from '@wordpress/element';
 
 export const Content = ({ heading, children, saveButton }) => {
 	const { options } = useSettings();
@@ -38,6 +38,10 @@ export const Content = ({ heading, children, saveButton }) => {
 		return isNaN(currentLimit) ? 0 : currentLimit;
 	}, [data, isLoading]);
 
+	const headToStore = useCallback(() => {
+		window.open('https://app.imageseo.com/plan/', '_blank');
+	}, []);
+
 	return (
 		<Animate type={isLoading ? 'loading' : ''}>
 			{({ className }) => (
@@ -61,7 +65,10 @@ export const Content = ({ heading, children, saveButton }) => {
 									{limit}
 								</Text>
 								<span>
-									<Button variant="primary">
+									<Button
+										variant="primary"
+										onClick={headToStore}
+									>
 										{__('Buy more!', 'imageseo')}
 									</Button>
 								</span>

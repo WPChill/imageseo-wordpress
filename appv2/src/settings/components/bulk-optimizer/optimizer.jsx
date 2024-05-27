@@ -11,12 +11,11 @@ import useSettings from '../../hooks/useSettings';
 import apiFetch from '@wordpress/api-fetch';
 import { useOptimizerStatus } from '../../hooks/useOptimizerStatus';
 import { useImageQuery } from '../../hooks/useImageQuery';
-
+import { useMemo } from '@wordpress/element';
 export const Optimizer = () => {
 	const { global, options, addNotice } = useSettings();
 	const { data, isLoading, error, mutate } = useOptimizerStatus();
 	const { data: imageQuery, mutate: mutateImageQuery } = useImageQuery();
-
 	const optimizeCb = async () => {
 		await apiFetch({
 			path: '/imageseo/v1/start-bulk-optimizer',
@@ -42,6 +41,17 @@ export const Optimizer = () => {
 		});
 	};
 
+	const limitReached = useMemo(() => {
+		return (
+			data?.report?.errors?.length > 0 &&
+			data?.report?.errors?.find(
+				(err) =>
+					err.trim() ===
+					'You have reached the limit of images to optimize'
+			) !== undefined
+		);
+	}, [data?.report?.errors]);
+
 	if (isLoading) {
 		return (
 			<Placeholder
@@ -64,6 +74,27 @@ export const Optimizer = () => {
 					'imageseo'
 				)}
 			/>
+		);
+	}
+
+	if (data?.status === 'idle' && limitReached) {
+		return (
+			<div className="optimizer">
+				<Text>
+					{__(
+						'You have reached the limit of images to optimize.',
+						'imageseo'
+					)}
+				</Text>
+				<Spacer marginY="5" />
+				<Button
+					isPrimary
+					disabled={data?.status === 'running'}
+					onClick={optimizeCb}
+				>
+					{__('Try again', 'imageseo')}
+				</Button>
+			</div>
 		);
 	}
 
