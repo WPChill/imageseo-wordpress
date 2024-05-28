@@ -9,7 +9,7 @@ module.exports = {
 		"media-upload": "./app/javascripts/media-upload.js",
 		"generate-social-media": "./app/javascripts/generate-social-media.js",
 		"admin-bar": "./app/javascripts/admin-bar.js",
-		"functionality": "./app/javascripts/functionality.js",
+		functionality: "./app/javascripts/functionality.js",
 		"admin-global-css": "./app/styles/admin-global.scss",
 	},
 	output: {

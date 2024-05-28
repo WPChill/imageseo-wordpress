@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 class Support
 {
-	public $renameFileServices;
+	public object $renameFileServices;
     public function __construct()
     {
         $this->renameFileServices = imageseo_get_service('GenerateFilename');

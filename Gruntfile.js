@@ -1,18 +1,18 @@
 /* jshint node:true */
-module.exports = function ( grunt ) {
+module.exports = function (grunt) {
 	'use strict';
 
 	// load all tasks
-	require( 'load-grunt-tasks' )( grunt, { scope: 'devDependencies' } );
+	require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
 
-	grunt.initConfig( {
-		pkg: grunt.file.readJSON( 'package.json' ),
+	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
 		// setting folder templates
 		dirs: {
 			dist: 'dist',
 			src: 'src',
 			lang: 'languages',
-			templates:'templates',
+			templates: 'templates',
 			vendor: 'vendor',
 			thirds: 'thirds',
 		},
@@ -21,7 +21,7 @@ module.exports = function ( grunt ) {
 		checktextdomain: {
 			standard: {
 				options: {
-					text_domain: [ 'imageseo' ], //Specify allowed domain(s)
+					text_domain: ['imageseo'], //Specify allowed domain(s)
 					create_report_file: 'true',
 					keywords: [ //List keyword specifications
 						'__:1,2d',
@@ -69,7 +69,7 @@ module.exports = function ( grunt ) {
 						'tests/.*',
 						'tmp/.*'
 					],
-					processPot: function ( pot ) {
+					processPot: function (pot) {
 						return pot;
 					}
 				}
@@ -85,7 +85,7 @@ module.exports = function ( grunt ) {
 
 		clean: {
 			init: {
-				src: [ 'build/' ]
+				src: ['build/']
 			},
 		},
 		copy: {
@@ -98,6 +98,7 @@ module.exports = function ( grunt ) {
 					'!.vscode/**',
 					'!build/**',
 					'!app/**',
+					'!appv2/**',
 					'!bin/**',
 					'!tests/**',
 					'!readme.md',
@@ -144,6 +145,7 @@ module.exports = function ( grunt ) {
 					'!.vscode/**',
 					'!build/**',
 					'!app/**',
+					'!appv2/**',
 					'!bin/**',
 					'!tests/**',
 					'!readme.md',
@@ -176,25 +178,25 @@ module.exports = function ( grunt ) {
 			}
 		},
 
-	} );
+	});
 
 	// Load NPM tasks to be used here
 	grunt.loadNpmTasks('grunt-wp-i18n');
 	grunt.loadNpmTasks('grunt-checktextdomain');
-	grunt.loadNpmTasks( 'grunt-contrib-clean' );
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	// Just an alias for pot file generation
-	grunt.registerTask( 'pot', [
+	grunt.registerTask('pot', [
 		'makepot'
-	] );
+	]);
 
 	// Build task
-	grunt.registerTask( 'build-archive', [
+	grunt.registerTask('build-archive', [
 		'clean',
 		'copy',
 		'compress:build',
 		'clean'
-	] );
+	]);
 
 	grunt.registerTask('makemo', ['po2mo']);
 

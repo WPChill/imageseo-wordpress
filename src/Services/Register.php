@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 class Register
 {
+	public $optionServices;
 	public function __construct()
 	{
 		$this->optionServices = imageseo_get_service('Option');
@@ -40,8 +41,8 @@ class Register
 		$body = json_decode(wp_remote_retrieve_body($response), true);
 		$responseCode = wp_remote_retrieve_response_code($response);
 		if ($responseCode !== 201) {
-			if ( isset( $body['message'] )  ) {
-				return array( 'success' => false, 'data' => array( 'message' => $body['message'], 'code' => $responseCode ) );
+			if (isset($body['message'])) {
+				return array('success' => false, 'data' => array('message' => $body['message'], 'code' => $responseCode));
 			}
 			return null;
 		}
@@ -51,6 +52,7 @@ class Register
 		$options = $this->optionServices->getOptions();
 
 		$options['api_key'] = $user['projects'][0]['apiKey'];
+		$options['apiKey'] = $user['projects'][0]['apiKey'];
 		$options['allowed'] = true;
 		$this->optionServices->setOptions($options);
 

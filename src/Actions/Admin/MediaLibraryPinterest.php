@@ -15,13 +15,12 @@ class MediaLibraryPinterest
     }
 
     /**
-     * @param array  $formFields
-     * @param object $post
+     * @param array $formFields
+     * @param \WP_Post $post
      *
      * @return array
      */
-    public function fieldsEdit($formFields, $post)
-    {
+    public function fieldsEdit( array $formFields, \WP_Post $post): array {
         global $pagenow;
 
         $formFields['imageseo-data-pin-description'] = [

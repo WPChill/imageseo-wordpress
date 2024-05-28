@@ -1,0 +1,153 @@
+#imageseo-settings-v2 {
+	margin-right: 20px;
+	margin-top: 20px;
+
+	.media-uploader-container {
+		cursor: pointer;
+	}
+	.media-uploader {
+		width: 330px;
+		.components-base-control__field {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			img {
+				max-width: 150px;
+			}
+		}
+	}
+
+	.header-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+	}
+
+	.header {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.logo {
+			width: 35px;
+			margin-right: 10px;
+		}
+
+		.visit-website {
+			margin-left: 10px;
+		}
+	}
+	.cta {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.welcome-screen {
+		display: flex;
+		width: 700px;
+		margin: 0 auto;
+		margin-top: 30px;
+		flex-direction: column;
+	}
+
+	.form-container {
+		margin-top: 30px;
+
+		.components-base-control {
+			margin-bottom: 15px;
+		}
+	}
+
+	.social-card-screen {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 30px;
+		column-gap: 30px;
+
+		.components-base-control {
+			margin-bottom: 15px;
+		}
+
+		.previewer {
+			height: 340px;
+			width: 700px;
+			display: flex;
+			border: 1px solid rgb(148, 148, 148);
+			border-radius: 5px;
+			justify-content: space-between;
+			align-items: center;
+
+			.bg-image {
+				flex-grow: 1;
+				height: 100%;
+				width: 50%;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+			}
+			.content {
+				width: 50%;
+				height: 100%;
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+			.padded {
+				padding: 20px;
+			}
+
+			.logo {
+				max-width: 100px;
+			}
+		}
+	}
+
+	.bulk-optimizer-screen {
+		margin-top: 30px;
+		display: flex;
+		flex-direction: row;
+		column-gap: 30px;
+
+		.form {
+			flex-grow: 1;
+		}
+		.components-base-control {
+			margin-bottom: 15px;
+		}
+
+		.optimizer {
+			width: 45%;
+			border: 1px solid rgb(148, 148, 148);
+			padding: 20px;
+			border-radius: 5px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			.progress {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				progress {
+					margin-top: 15px;
+				}
+			}
+		}
+	}
+
+	.settings-screen {
+		margin-top: 30px;
+		.components-base-control {
+			margin-bottom: 15px;
+		}
+	}
+}

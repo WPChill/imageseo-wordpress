@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 use ImageSeoWP\Context;
@@ -16,7 +16,7 @@ use ImageSeoWP\Context;
  */
 function imageseo_get_service($service)
 {
-    return Context::getContext()->getService($service);
+	return Context::getContext()->getService($service);
 }
 /**
  * Get an action.
@@ -28,7 +28,7 @@ function imageseo_get_service($service)
  */
 function imageseo_get_action($action)
 {
-    return Context::getContext()->getAction($action);
+	return Context::getContext()->getAction($action);
 }
 
 /**
@@ -39,7 +39,7 @@ function imageseo_get_action($action)
  */
 function imageseo_get_options()
 {
-    return Context::getContext()->getService('Option')->getOptions();
+	return Context::getContext()->getService('Option')->getOptions();
 }
 
 /**
@@ -52,7 +52,7 @@ function imageseo_get_options()
  */
 function imageseo_get_option($key)
 {
-    return Context::getContext()->getService('Option')->getOption($key);
+	return Context::getContext()->getService('Option')->getOption($key);
 }
 
 /**
@@ -60,33 +60,33 @@ function imageseo_get_option($key)
  */
 function imageseo_allowed()
 {
-    return imageseo_get_option('allowed');
+	return imageseo_get_option('allowed');
 }
 
 function imageseo_generate_alt_attachment_id($attachmentId)
 {
-    $reportImageService = imageseo_get_service('ReportImage');
-    try {
-        $response = $reportImageServices->generateReportByAttachmentId($attachmentId);
-    } catch (\Exception $e) {
-        return;
-    }
+	$reportImageService = imageseo_get_service('ReportImage');
+	try {
+		$response = $reportImageService->generateReportByAttachmentId($attachmentId);
+	} catch (\Exception $e) {
+		return;
+	}
 
-    if (!$response['success']) {
-        return;
-    }
+	if (!$response['success']) {
+		return;
+	}
 
-    $reportImageServices->updateAltAttachmentWithReport($attachmentId);
+	$reportImageService->updateAltAttachmentWithReport($attachmentId);
 }
 
 function imageseo_rename_file_attachment_id($attachmentId, $metadata = null)
 {
-    _deprecated_function(__FUNCTION__, '1.1', 'imageseo_rename_file_attachment_id()');
+	_deprecated_function(__FUNCTION__, '1.1', 'imageseo_rename_file_attachment_id()');
 
-    return null;
+	return null;
 }
 
 function imageseo_get_api_key()
 {
-    return imageseo_get_option('api_key');
+	return imageseo_get_option('api_key');
 }

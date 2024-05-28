@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 class NoConfiguration
 {
-	public $optionServices;
+	public object $optionServices;
     public function __construct()
     {
         $this->optionServices = imageseo_get_service('Option');
