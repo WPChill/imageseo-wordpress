@@ -10,9 +10,9 @@ use ImageSeoWP\Exception\NoRenameFile;
 
 class MediaLibraryReport
 {
-	public $generateFilename;
-	public $reportImageService;
-	public $altService;
+	public object $generateFilename;
+	public object $reportImageService;
+	public object $altService;
 
     public function __construct()
     {
@@ -33,13 +33,14 @@ class MediaLibraryReport
     /**
      * @return int
      */
-    protected function getAttachmentId()
-    {
+    protected function getAttachmentId(): int {
         if ('GET' === $_SERVER['REQUEST_METHOD']) {
             return (int) $_GET['attachment_id'];
         } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
             return (int) $_POST['attachment_id'];
         }
+
+		return 0;
     }
 
     /**

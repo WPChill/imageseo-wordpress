@@ -9,8 +9,8 @@ use ImageSeoWP\Async\QueryTotalImagesBackgroundProcess;
 
 class Migration
 {
-	protected $processQueryImagesNoAlt;
-	protected $processQueryTotalImages;
+	protected QueryImagesNoAltBackgroundProcess $processQueryImagesNoAlt;
+	protected QueryTotalImagesBackgroundProcess $processQueryTotalImages;
     public function __construct()
     {
         $this->processQueryImagesNoAlt = new QueryImagesNoAltBackgroundProcess();

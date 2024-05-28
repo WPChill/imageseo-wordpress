@@ -9,8 +9,8 @@ use ImageSeoWP\Async\QueryTotalImagesBackgroundProcess;
 
 class Activation
 {
-	public $processQueryImagesNoAlt;
-	public $processQueryTotalImages;
+	public QueryImagesNoAltBackgroundProcess $processQueryImagesNoAlt;
+	public QueryTotalImagesBackgroundProcess $processQueryTotalImages;
 
 	public function __construct()
 	{

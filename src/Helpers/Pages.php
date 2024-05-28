@@ -3,13 +3,13 @@
 namespace ImageSeoWP\Helpers;
 
 if (!defined('ABSPATH')) {
-    exit;
+	exit;
 }
 
 abstract class Pages
 {
-    /**
-     * @var string
-     */
-    const SETTINGS = 'imageseo-settings';
+	/**
+	 * @var string
+	 */
+	const SETTINGS = 'imageseo-settings';
 }

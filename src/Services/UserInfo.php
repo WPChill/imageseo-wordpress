@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 class UserInfo
 {
-    protected $limitExcedeed = null;
+    protected  $limitExcedeed = null;
 
     public function hasLimitExcedeed()
     {
@@ -26,8 +26,9 @@ class UserInfo
 		}
         $imageLeft = ($user['bonusStockImages'] + $user['plan']['limitImages']) - $user['currentRequestImages'];
 
-        $this->limitExcedeed = ($imageLeft <= 0) ? true : false;
+        $this->limitExcedeed = $imageLeft <= 0;
 
         return $this->limitExcedeed;
     }
+
 }

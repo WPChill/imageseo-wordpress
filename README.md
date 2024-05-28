@@ -3,13 +3,14 @@
 > Official WordPress plugin of ImageSEO : https://imageseo.io
 
 ---
+
 Optimize images alternative texts (alt text or alt tag) and names with SEO friendly content. Optimize image html attributes on upload or bulk your library. Save time and improve your accessibility and SEO.
 
 Beside alt tags, image SEO optimizer also generates Social Media preview cards for your posts using the Open Graph protocol (og tag).
 
 ## Requirements
 
--   PHP version 7.0 and later
+-   PHP version 7.4 and later
 -   ImageSEO API Key, starting at [free level](https://imageseo.io/register)
 
 ## Getting Started
@@ -19,9 +20,10 @@ If you're looking to contribute to imageSEO, welcome! We're glad you're here. Pl
 Most of us are using [Local by Flywheel](https://localbyflywheel.com/) to develop on WordPress, which makes set up quick and easy. If you prefer [Docker](https://www.docker.com/), [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV), or another flavor of local development that's cool too!
 
 ## Prerequisites
-* [Node.js](https://nodejs.org/en/) as JavaScript engine.
-* [NPM](https://docs.npmjs.com/) npm command globally available in CLI.
-* [WP CLI](https://wp-cli.org) wp-cli command globally available (Local by Flywheel has this built-in).
+
+-   [Node.js](https://nodejs.org/en/) as JavaScript engine.
+-   [NPM](https://docs.npmjs.com/) npm command globally available in CLI.
+-   [WP CLI](https://wp-cli.org) wp-cli command globally available (Local by Flywheel has this built-in).
 
 ## Local Development
 
@@ -39,7 +41,8 @@ That's it. You're now ready to start development.
 
 **Development Notes**
 
-* Ensure that you have `SCRIPT_DEBUG` enabled within your wp-config.php file. Here's a good example of wp-config.php for debugging:
+-   Ensure that you have `SCRIPT_DEBUG` enabled within your wp-config.php file. Here's a good example of wp-config.php for debugging:
+
     ```
      // Enable WP_DEBUG mode
     define( 'WP_DEBUG', true );
@@ -50,4 +53,5 @@ That's it. You're now ready to start development.
     // Loads unminified core files
     define( 'SCRIPT_DEBUG', true );
     ```
-* Commit the `package.lock` file. Read more about why [here](https://docs.npmjs.com/files/package-lock.json).
+
+-   Commit the `package.lock` file. Read more about why [here](https://docs.npmjs.com/files/package-lock.json).
