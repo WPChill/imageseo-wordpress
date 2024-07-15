@@ -11,7 +11,7 @@ import {
 	Spinner,
 } from '@wordpress/components';
 import Logo from '../../images/default_logo.png';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { useUser } from '../hooks/useUser';
 import useSettings from '../hooks/useSettings';
 import { useMemo, useCallback } from '@wordpress/element';
@@ -60,23 +60,28 @@ export const Content = ({ heading, children, saveButton }) => {
 									{__('Visit website', 'imageseo')}
 								</ExternalLink>
 							</div>
+							<div>
+								<span className="remaining-credits-info">
+									{isLoading ? (
+										<Spinner />
+									) : (
+										sprintf(
+											__(
+												'Remaining credits %d',
+												'imageseo'
+											),
+											limit
+										)
+									)}
+								</span>
+							</div>
 							<div className="cta">
 								<span>
 									<Button
 										variant="primary"
 										onClick={headToStore}
 									>
-										{!isLoading && data ? (
-											sprintf(
-												__(
-													'Remaining credits %d',
-													'imageseo'
-												),
-												limit
-											)
-										) : (
-											<Spinner />
-										)}
+										{__('Buy more credits', 'imageseo')}
 									</Button>
 								</span>
 							</div>

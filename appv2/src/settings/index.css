@@ -38,6 +38,11 @@
 			margin-left: 10px;
 		}
 	}
+	.remaining-credits-info {
+		font-weight: bold;
+		background-color: #ffd958;
+		padding: 9px 12px;
+	}
 	.cta {
 		display: flex;
 		flex-direction: column;
