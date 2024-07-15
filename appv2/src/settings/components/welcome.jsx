@@ -159,7 +159,7 @@ export const Welcome = () => {
 									<FlexItem>
 										<Button
 											disabled={loadingRequest}
-											isPrimary
+											variant="primary"
 											onClick={validateApiKey}
 										>
 											{loadingRequest
@@ -173,7 +173,7 @@ export const Welcome = () => {
 									{!options?.allowed && (
 										<FlexItem>
 											<Button
-												isTertiary
+												variant="secondary"
 												onClick={() =>
 													setAlreadyRegistered(false)
 												}
@@ -279,7 +279,7 @@ export const Welcome = () => {
 								<Flex>
 									<FlexItem>
 										<Button
-											isPrimary
+											variant="primary"
 											disabled={loadingRequest}
 											onClick={registerAccount}
 										>
@@ -288,7 +288,7 @@ export const Welcome = () => {
 									</FlexItem>
 									<FlexItem>
 										<Button
-											isTertiary
+											variant="secondary"
 											disabled={loadingRequest}
 											onClick={() =>
 												setAlreadyRegistered(true)

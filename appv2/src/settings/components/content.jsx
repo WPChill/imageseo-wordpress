@@ -20,6 +20,18 @@ export const Content = ({ heading, children, saveButton }) => {
 	const { options } = useSettings();
 	const { data, isLoading } = useUser(options.apiKey);
 
+	const loggedIn = useMemo(() => {
+		if (isLoading || !data) {
+			return false;
+		}
+
+		if (data?.message === 'Invalid API Key') {
+			return false;
+		}
+
+		return true;
+	}, []);
+
 	const limit = useMemo(() => {
 		if (isLoading || !data) {
 			return 0;
@@ -61,19 +73,21 @@ export const Content = ({ heading, children, saveButton }) => {
 								</ExternalLink>
 							</div>
 							<div>
-								<span className="remaining-credits-info">
-									{isLoading ? (
-										<Spinner />
-									) : (
-										sprintf(
-											__(
-												'Remaining credits %d',
-												'imageseo'
-											),
-											limit
-										)
-									)}
-								</span>
+								{loggedIn && (
+									<span className="remaining-credits-info">
+										{isLoading ? (
+											<Spinner />
+										) : (
+											sprintf(
+												__(
+													'Remaining credits %d',
+													'imageseo'
+												),
+												limit
+											)
+										)}
+									</span>
+								)}
 							</div>
 							<div className="cta">
 								<span>

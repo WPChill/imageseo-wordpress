@@ -97,7 +97,7 @@ export function RenameAlt({ attachmentId, alt }) {
 							margin: '0 6px',
 						}}
 						onClick={saveAlt}
-						isPrimary
+						variant="primary"
 						isBusy={isOptimizing}
 						// icon={requested && done ? 'yes' : undefined}
 					>

@@ -98,7 +98,7 @@ export function RenameFile({ attachmentId, filename }) {
 								margin: '0 6px',
 							}}
 							onClick={saveFilename}
-							isPrimary
+							variant="primary"
 							isBusy={isOptimizing}
 							// icon={requested && done ? 'yes' : undefined}
 						>

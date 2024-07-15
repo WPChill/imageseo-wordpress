@@ -88,7 +88,7 @@ export const Optimizer = () => {
 				</Text>
 				<Spacer marginY="5" />
 				<Button
-					isPrimary
+					variant="primary"
 					disabled={data?.status === 'running'}
 					onClick={optimizeCb}
 				>
@@ -129,7 +129,7 @@ export const Optimizer = () => {
 
 					<Spacer marginY="5" />
 					<Button
-						isPrimary
+						variant="primary"
 						disabled={data?.status === 'running'}
 						onClick={optimizeCb}
 					>
@@ -159,7 +159,7 @@ export const Optimizer = () => {
 						max={100}
 					/>
 					<Spacer marginY="3" />
-					<Button isPrimary onClick={cancelOptimizerCb}>
+					<Button variant="primary" onClick={cancelOptimizerCb}>
 						{__('Stop optimizer', 'imageseo')}
 					</Button>
 				</div>

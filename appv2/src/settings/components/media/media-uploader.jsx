@@ -34,7 +34,7 @@ export const MediaUploader = ({ id, label, help, value, onChange }) => {
 				className="media-uploader"
 			>
 				{!imageUrl && (
-					<Button isPrimary onClick={openMediaLibrary}>
+					<Button variant="primary" onClick={openMediaLibrary}>
 						{__('Select Image', 'imageseo')}
 					</Button>
 				)}
