@@ -1,6 +1,6 @@
 #imageseo-settings-v2 {
-	margin-right: 20px;
-	margin-top: 20px;
+	max-width: 960px;
+	margin: 20px auto;
 
 	.media-uploader-container {
 		cursor: pointer;
