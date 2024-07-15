@@ -8,9 +8,10 @@ import {
 	__experimentalText as Text,
 	__experimentalHeading as Heading,
 	ExternalLink,
+	Spinner,
 } from '@wordpress/components';
 import Logo from '../../images/default_logo.png';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useUser } from '../hooks/useUser';
 import useSettings from '../hooks/useSettings';
 import { useMemo, useCallback } from '@wordpress/element';
@@ -60,16 +61,22 @@ export const Content = ({ heading, children, saveButton }) => {
 								</ExternalLink>
 							</div>
 							<div className="cta">
-								<Text>
-									{__('Remaining credits:', 'imageseo')}{' '}
-									{limit}
-								</Text>
 								<span>
 									<Button
 										variant="primary"
 										onClick={headToStore}
 									>
-										{__('Buy more!', 'imageseo')}
+										{!isLoading && data ? (
+											sprintf(
+												__(
+													'Remaining credits %d',
+													'imageseo'
+												),
+												limit
+											)
+										) : (
+											<Spinner />
+										)}
 									</Button>
 								</span>
 							</div>
