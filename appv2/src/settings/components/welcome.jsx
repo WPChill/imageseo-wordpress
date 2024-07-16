@@ -10,6 +10,7 @@ import {
 	ExternalLink,
 	Icon,
 } from '@wordpress/components';
+import { Markup } from 'interweave';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useSettings from '../hooks/useSettings';
@@ -136,10 +137,16 @@ export const Welcome = () => {
 				{__('Welcome to ImageSEO', 'imageseo')}
 			</Heading>
 			<Text align="center">
-				{__(
-					'We are happy to see you here! ImageSEO is a WordPress plugin that helps you to optimize your images for search engines and social media.',
-					'imageseo'
-				)}
+				<Markup
+					content={sprintf(
+						__(
+							"To get started with ImageSEO you will need your own API key. If you don't have an API key already, you should %s register an account %s to get one.",
+							'imageseo'
+						),
+						'<a href="https://app.imageseo.com/" target="_blank">',
+						'</a>'
+					)}
+				/>
 			</Text>
 			<Animate type={loadingRequest ? 'loading' : ''}>
 				{({ className }) => (
