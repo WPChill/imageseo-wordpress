@@ -30,7 +30,7 @@ export const Content = ({ heading, children, saveButton }) => {
 		}
 
 		return true;
-	}, []);
+	}, [data, isLoading]);
 
 	const limit = useMemo(() => {
 		if (isLoading || !data) {
@@ -54,6 +54,8 @@ export const Content = ({ heading, children, saveButton }) => {
 	const headToStore = useCallback(() => {
 		window.open('https://app.imageseo.com/plan/', '_blank');
 	}, []);
+
+	console.log(loggedIn);
 
 	return (
 		<Animate type={isLoading ? 'loading' : ''}>
