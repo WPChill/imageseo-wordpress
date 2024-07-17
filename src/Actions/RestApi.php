@@ -358,6 +358,12 @@ class RestApi {
 					$options['activeRenameWriteUpload']    = (bool) $value;
 					$options['active_rename_write_upload'] = (bool) $value;
 					break;
+				case 'optimizeTitle':
+				case 'optimizeCaption':
+				case 'activeOptimizeTitle':
+				case 'activeOptimizeCaption':
+					$options[ $key ] = (bool) $value;
+					break;
 				case 'default_language_ia':
 				case 'defaultLanguageIa':
 					$options['default_language_ia'] = sanitize_text_field( $value );

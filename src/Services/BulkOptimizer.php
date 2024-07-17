@@ -332,10 +332,17 @@ class BulkOptimizer {
 		$optimized        = array();
 		$failed           = array();
 
+		$actions = array(
+			'alt'      => $this->optionService->getOption( 'altFill' ),
+			'filename' => $this->optionService->getOption( 'optimizeFile' ),
+			'title'    => $this->optionService->getOption( 'optimizeTitle' ),
+			'caption'  => $this->optionService->getOption( 'optimizeCaption' ),
+		);
+
 		$report = get_option( 'imageseo_bulk_optimizer_last_report' );
 		foreach ( $batchData as $image ) {
 			if ( $image['resolved'] ) {
-				$this->handleResolvedImage( $image, $isNextGen, $optimizeFilename, $optimized );
+				$this->handleResolvedImage( $image, $isNextGen, $actions, $optimized );
 				continue;
 			}
 
@@ -365,7 +372,7 @@ class BulkOptimizer {
 		update_option( 'imageseo_bulk_optimizer_last_report', $report );
 	}
 
-	private function handleResolvedImage( $image, $isNextGen, $optimizeFilename, &$optimized ) {
+	private function handleResolvedImage( $image, $isNextGen, $actions, &$optimized ) {
 		$attachmentId = $isNextGen
 			? imageseo_get_service( 'QueryNextGen' )->getPostIdByNextGenId( $image['internalId'] ) : $image['internalId'];
 
@@ -396,7 +403,7 @@ class BulkOptimizer {
 			$this->writeDebug( $image['internalId'] . ': ' . $image['altText'] );
 		}
 
-		if ( $optimizeFilename && ! $skipFilename ) {
+		if ( in_array( 'filename', $actions ) && ! $skipFilename ) {
 			$extension = $this->extractExtension( $image['imageUrl'] );
 
 			$isNextGen
@@ -409,6 +416,29 @@ class BulkOptimizer {
 					sprintf( '%s.%s', $image['filename'], $extension )
 				);
 			$this->writeDebug( $image['internalId'] . ': ' . $image['filename'] . '.' . $extension );
+		}
+
+		if ( in_array( 'title', $actions ) &&
+			isset( $image['title'] ) &&
+			! empty( $image['title'] )
+		) {
+			$post_data = array(
+				'ID'         => $attachmentId,
+				'post_title' => $image['title'],
+			);
+
+			wp_update_post( $post_data );
+		}
+
+		if ( in_array( 'caption', $actions ) &&
+			isset( $image['caption'] ) &&
+			! empty( $image['caption'] ) ) {
+			$post_data = array(
+				'ID'           => $attachmentId,
+				'post_excerpt' => $image['caption'],
+			);
+
+			wp_update_post( $post_data );
 		}
 
 		$optimized[] = $image['internalId'];

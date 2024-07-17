@@ -55,8 +55,6 @@ export const Content = ({ heading, children, saveButton }) => {
 		window.open('https://app.imageseo.com/plan/', '_blank');
 	}, []);
 
-	console.log(loggedIn);
-
 	return (
 		<Animate type={isLoading ? 'loading' : ''}>
 			{({ className }) => (

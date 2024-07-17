@@ -42,6 +42,20 @@ export const Form = () => {
 				]}
 			/>
 			<ToggleControl
+				checked={options?.optimizeTitle}
+				onChange={(value) => {
+					setOptions({ optimizeTitle: value });
+				}}
+				label={__('Optimize title', 'imageseo')}
+			/>
+			<ToggleControl
+				checked={options?.optimizeCaption}
+				onChange={(value) => {
+					setOptions({ optimizeCaption: value });
+				}}
+				label={__('Optimize caption', 'imageseo')}
+			/>
+			<ToggleControl
 				checked={options?.optimizeFile}
 				onChange={(value) => {
 					setOptions({ optimizeFile: value });

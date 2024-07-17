@@ -5,49 +5,44 @@ namespace ImageSeoWP\Admin;
 use ImageSeoWP\Helpers\Bulk\AltSpecification;
 use ImageSeoWP\Helpers\Pages;
 
-class SettingsPage
-{
+class SettingsPage {
+
 
 	public static $instance;
 
-	public static function get_instance(): SettingsPage
-	{
+	public static function get_instance(): SettingsPage {
 
-		if (!isset(self::$instance) && !(self::$instance instanceof SettingsPage)) {
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof SettingsPage ) ) {
 			self::$instance = new SettingsPage();
 		}
 
 		return self::$instance;
 	}
 
-	private function __construct()
-	{
+	private function __construct() {
 		$this->hooks();
 	}
 
-	private function hooks()
-	{
-		add_action('admin_menu', array($this, 'plugin_menu'));
-		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+	private function hooks() {
+		add_action( 'admin_menu', array( $this, 'plugin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
-	public function plugin_menu()
-	{
+	public function plugin_menu() {
 		add_menu_page(
 			'Image SEO',
 			'Image SEO',
 			'manage_options',
 			Pages::SETTINGS,
-			[
+			array(
 				$this,
-				'imageseo_settings'
-			],
+				'imageseo_settings',
+			),
 			'dashicons-imageseo-logo'
 		);
 	}
 
-	public function imageseo_settings()
-	{
+	public function imageseo_settings() {
 		echo '<div id="imageseo-settings-v2"></div>';
 	}
 
@@ -56,50 +51,48 @@ class SettingsPage
 	 *
 	 * @return string
 	 */
-	public static function get_url()
-	{
-		return admin_url('admin.php?page=imageseo-settings');
+	public static function get_url() {
+		return admin_url( 'admin.php?page=imageseo-settings' );
 	}
 
-	public function enqueue_scripts()
-	{
-		if (!isset($_GET['page']) || $_GET['page'] !== Pages::SETTINGS) {
+	public function enqueue_scripts() {
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== Pages::SETTINGS ) {
 			return;
 		}
 
 		try {
-			$all_post_types     = imageseo_get_service('WordPressData')->getAllPostTypesSocialMedia();
+			$all_post_types     = imageseo_get_service( 'WordPressData' )->getAllPostTypesSocialMedia();
 			$allowed_post_types = array();
-			foreach ($all_post_types as $post_type) {
-				$allowed_post_types[] = [
+			foreach ( $all_post_types as $post_type ) {
+				$allowed_post_types[] = array(
 					'value' => $post_type->name,
-					'label' => $post_type->label
-				];
+					'label' => $post_type->label,
+				);
 			}
 
-			$language_codes = imageseo_get_service('ClientApi')->getLanguages();
+			$language_codes = imageseo_get_service( 'ClientApi' )->getLanguages();
 
-			$totalImages = imageseo_get_service('QueryImages')->getTotalImages(
-				[
-					'withCache'  => false,
-					'forceQuery' => true
-				]
+			$totalImages = imageseo_get_service( 'QueryImages' )->getTotalImages(
+				array(
+					'withCache'  => true,
+					'forceQuery' => true,
+				)
 			);
-			$totalNoAlt  = imageseo_get_service('QueryImages')->getNumberImageNonOptimizeAlt(
-				[
-					'withCache'  => false,
-					'forceQuery' => true
-				]
+			$totalNoAlt  = imageseo_get_service( 'QueryImages' )->getNumberImageNonOptimizeAlt(
+				array(
+					'withCache'  => true,
+					'forceQuery' => true,
+				)
 			);
 
-			$bulkQuery = imageseo_get_service('BulkOptimizerQuery')->getImages();
+			$bulkQuery = imageseo_get_service( 'BulkOptimizerQuery' )->getImages();
 
-			$languages = [];
-			foreach ($language_codes as $language) {
-				$languages[] = [
+			$languages = array();
+			foreach ( $language_codes as $language ) {
+				$languages[] = array(
 					'value' => $language['code'],
-					'label' => $language['name']
-				];
+					'label' => $language['name'],
+				);
 			}
 
 			$options          = imageseo_get_options();
@@ -109,33 +102,33 @@ class SettingsPage
 			$user_info    = array(
 				'email'     => '',
 				'firstName' => '',
-				'lastName'  => ''
+				'lastName'  => '',
 			);
 
-			if (in_array('administrator', $current_user->roles)) {
+			if ( in_array( 'administrator', $current_user->roles ) ) {
 				$user_info['email']     = $current_user->user_email;
 				$user_info['firstName'] = $current_user->user_firstname;
 				$user_info['lastName']  = $current_user->user_lastname;
 			}
 
-			$camelCased = [];
+			$camelCased = array();
 
-			foreach ($options as $key => $value) {
-				if (strpos($key, '_') === -1) {
-					$camelCased[$key] = $value;
+			foreach ( $options as $key => $value ) {
+				if ( strpos( $key, '_' ) === -1 ) {
+					$camelCased[ $key ] = $value;
 					continue;
 				}
 
-				$camelCaseKey                = lcfirst(str_replace('_', '', ucwords($key, '_')));
-				$camelCased[$camelCaseKey] = $value;
+				$camelCaseKey                = lcfirst( str_replace( '_', '', ucwords( $key, '_' ) ) );
+				$camelCased[ $camelCaseKey ] = $value;
 			}
 
 			$camelCased['user'] = $user_info;
 
-			$global = [
+			$global = array(
 				'languages'        => $languages,
-				'nonce'            => wp_create_nonce('wp_rest'),
-				'apiUrl'           => get_rest_url(null, 'imageseo/v1'),
+				'nonce'            => wp_create_nonce( 'wp_rest' ),
+				'apiUrl'           => get_rest_url( null, 'imageseo/v1' ),
 				'user'             => $user_info,
 				'currentLanguage'  => $current_language,
 				'allowedPostTypes' => $allowed_post_types,
@@ -143,18 +136,18 @@ class SettingsPage
 				'totalNoAlt'       => $totalNoAlt,
 				'altSpecification' => AltSpecification::getMetas(),
 				'bulkQuery'        => $bulkQuery,
-			];
+			);
 			wp_add_inline_script(
 				'imageseo-v2',
-				'const imageSeoGlobal = ' . json_encode($global),
+				'const imageSeoGlobal = ' . json_encode( $global ),
 				'before'
 			);
 			wp_add_inline_script(
 				'imageseo-v2',
-				'const imageSeoSettings = ' . json_encode($camelCased),
+				'const imageSeoSettings = ' . json_encode( $camelCased ),
 				'before'
 			);
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			// Do nothing
 		}
 	}

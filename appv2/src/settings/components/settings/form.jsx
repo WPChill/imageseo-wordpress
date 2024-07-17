@@ -57,6 +57,28 @@ export const Form = () => {
 				}
 			/>
 			<ToggleControl
+				checked={options?.activeOptimizeTitle}
+				onChange={(value) => {
+					setOptions({ activeOptimizeTitle: value });
+				}}
+				help={__(
+					'The plugin will automatically rewrite with SEO friendly content the title of the images you will upload.',
+					'imageseo'
+				)}
+				label={__('Optimize title', 'imageseo')}
+			/>
+			<ToggleControl
+				checked={options?.activeOptimizeCaption}
+				onChange={(value) => {
+					setOptions({ activeOptimizeCaption: value });
+				}}
+				help={__(
+					'The plugin will automatically rewrite with SEO friendly content the caption of the images you will upload.',
+					'imageseo'
+				)}
+				label={__('Optimize caption', 'imageseo')}
+			/>
+			<ToggleControl
 				label={__('Rename files', 'imageseo')}
 				help={__(
 					'The plugin will automatically rewrite with SEO friendly content the name of the images you will upload.',
