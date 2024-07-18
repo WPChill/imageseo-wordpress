@@ -11,6 +11,7 @@
  * License URI:              http://www.gnu.org/licenses/gpl-3.0.html
  * Requires PHP:             7.0
  * Text Domain:              imageseo
+ * Tested up to:             6.6
  * Domain Path:              /languages/
  *
  * Copyright 2019-2023        WPUmbrella      aurelio@wp-umbrella.com
