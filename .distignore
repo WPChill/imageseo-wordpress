@@ -6,8 +6,11 @@ tests
 .distignore
 .editorconfig
 .gitignore
+.babelrc
 .php_cs
 .travis.yml
+.wp-env.json
+composer.phar
 composer.json
 composer.lock
 package-lock.json
@@ -18,3 +21,8 @@ postcss.config.js
 README.md
 webpack.config.js
 app
+appv2
+tailwind.config.js
+tsconfig.json
+Gruntfile.js
+.vscode

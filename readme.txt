@@ -4,7 +4,7 @@ Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.8
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,12 @@ We are compatible with including Featured Images, WooCommerce, NextGen Photo Gal
 Image SEO works in every language.
 
 == Changelog ==
+= 3.1.2 - 19.07.2024 =
+Added: Optimize image title
+Added: Optimize image caption
+Changed: UI Changes and wording
+Fixed: Vulnerability issue
+
 = 3.1.1 - 8.07.2024 =
 Added: Filter to know when api key is validated
 
