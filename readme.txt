@@ -2,7 +2,7 @@
 Contributors: wpchill, silkalns
 Tags: seo, alt, alt text, optimize images, alt tag
 Requires at least: 5.8
-Tested up to: 6.4
+Tested up to: 6.6
 Requires PHP: 7.4
 Stable tag: 3.1.2
 License: GPLv3 or later
