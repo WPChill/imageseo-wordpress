@@ -14,9 +14,6 @@ jobs:
 
             - name: Setup PHP composer
               uses: php-actions/composer@v6
-              with:
-                  php_version: "7.1"
-                  version: 1
 
             - name: Build
               run: |
