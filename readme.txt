@@ -1,4 +1,4 @@
-=== ImageSEO images optimization through AI for better SEO ranking  ===
+=== Image SEO - AI-Driven Image SEO Optimizer  ===
 Contributors: wpchill, silkalns
 Tags: seo, ai optimization, optimize images, ranking, social media
 Requires at least: 5.8
