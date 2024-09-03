@@ -26,3 +26,5 @@ tailwind.config.js
 tsconfig.json
 Gruntfile.js
 .vscode
+.github
+.wordpress-org
