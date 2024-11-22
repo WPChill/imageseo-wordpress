@@ -163,7 +163,7 @@ class Optimizer
 	private function _requestOptimization($attachmentId)
 	{
 		$extension = $this->generateFilename->getExtensionFilenameByAttachmentId($attachmentId);
-		if (!in_array($extension, ['png', 'jpg', 'jpeg'])) {
+		if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'])) {
 			return;
 		}
 

@@ -32,7 +32,7 @@ class QueryImages
             pmOnlyEmpty2.post_id IS NULL
             )  ";
 
-		$sqlQuery .= "AND (p.post_mime_type = 'image/jpeg' OR p.post_mime_type = 'image/gif' OR p.post_mime_type = 'image/jpg' OR p.post_mime_type = 'image/png') ";
+		$sqlQuery .= "AND (p.post_mime_type = 'image/jpeg' OR p.post_mime_type = 'image/gif' OR p.post_mime_type = 'image/jpg' OR p.post_mime_type = 'image/png' OR p.post_mime_type = 'image/webp') ";
 		$sqlQuery .= "AND p.post_type = 'attachment' ";
 		$sqlQuery .= "AND ((p.post_status = 'publish' OR p.post_status = 'future' OR p.post_status = 'pending' OR p.post_status = 'inherit' OR p.post_status = 'private')) ";
 		$sqlQuery .= 'GROUP BY p.ID';
@@ -101,7 +101,7 @@ class QueryImages
 			'post_type'      => 'attachment',
 			'posts_per_page' => -1,
 			'post_status'    => ['publish', 'pending', 'future', 'private', 'inherit'],
-			'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png',
+			'post_mime_type' => 'image/jpeg,image/gif,image/jpg,image/png,image/webp',
 		];
 	}
 
@@ -190,7 +190,7 @@ class QueryImages
             LEFT JOIN {$wpdb->postmeta} ON ( {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id )
             LEFT JOIN {$wpdb->postmeta} AS mt1 ON ({$wpdb->posts}.ID = mt1.post_id AND mt1.meta_key = '_wp_attachment_image_alt' )
             WHERE 1=1
-            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png')
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png' OR {$wpdb->posts}.post_mime_type = 'image/webp')
             AND ( ( {$wpdb->postmeta}.meta_key = '_wp_attachment_image_alt' AND {$wpdb->postmeta}.meta_value = '' ) OR mt1.post_id IS NULL )
             AND {$wpdb->posts}.post_type = 'attachment'
             AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit'))";
@@ -233,7 +233,7 @@ class QueryImages
 		$sqlQuery = "SELECT COUNT(DISTINCT {$wpdb->posts}.ID)
             FROM {$wpdb->posts}
             WHERE 1=1
-            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png')
+            AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png' OR {$wpdb->posts}.post_mime_type = 'image/webp')
             AND {$wpdb->posts}.post_type = 'attachment'
             AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'inherit' ))";
 

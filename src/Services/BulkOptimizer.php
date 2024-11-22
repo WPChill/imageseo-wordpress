@@ -562,7 +562,7 @@ class BulkOptimizer {
 
 	private function isValidImageType( $id ) {
 		$extension = $this->generateFilename->getExtensionFilenameByAttachmentId( $id );
-		if ( ! in_array( $extension, array( 'png', 'jpg', 'jpeg' ) ) ) {
+		if ( ! in_array( $extension, array( 'png', 'jpg', 'jpeg', 'webp' ) ) ) {
 			$this->writeDebug( __( 'Unsupported file format:', 'imageseo' ) . ' ' . $extension );
 			return false;
 		}

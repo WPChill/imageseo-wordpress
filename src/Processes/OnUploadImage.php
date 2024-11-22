@@ -54,7 +54,7 @@ class OnUploadImage extends WPAsyncRequest {
 		}
 
 		$extension = $this->generateFilename->getExtensionFilenameByAttachmentId( $attachmentId );
-		if ( ! in_array( $extension, array( 'png', 'jpg', 'jpeg' ) ) ) {
+		if ( ! in_array( $extension, array( 'png', 'jpg', 'jpeg', 'webp' ) ) ) {
 			return;
 		}
 

@@ -4,7 +4,7 @@ Tags: seo, ai optimization, optimize images, ranking, social media
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -109,6 +109,10 @@ Image SEO works in every language.
 7. Social Cards configuration tab
 
 == Changelog ==
+
+= 3.1.3 - 22.11.2024 =
+Added: Support for WebP images
+
 = 3.1.2 - 19.07.2024 =
 Added: Optimize image title
 Added: Optimize image caption
