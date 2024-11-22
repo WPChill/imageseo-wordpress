@@ -40,7 +40,7 @@ class BulkOptimizerQuery
 
 		// == WHERE clause
 		$sqlQuery .= 'WHERE 1=1 ';
-		$sqlQuery .= "AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png') ";
+		$sqlQuery .= "AND ({$wpdb->posts}.post_mime_type = 'image/jpeg' OR {$wpdb->posts}.post_mime_type = 'image/jpg' OR {$wpdb->posts}.post_mime_type = 'image/png' OR {$wpdb->posts}.post_mime_type = 'image/webp') ";
 		$sqlQuery .= "AND {$wpdb->posts}.post_type = 'attachment' ";
 		$sqlQuery .= "AND (({$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'future' OR {$wpdb->posts}.post_status = 'pending' OR {$wpdb->posts}.post_status = 'inherit' OR {$wpdb->posts}.post_status = 'private')) ";
 
