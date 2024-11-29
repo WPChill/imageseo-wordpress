@@ -15,7 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	renameAltApps.forEach((rootApp) => {
 		const root = createRoot(rootApp);
 		const attachmentId = rootApp.getAttribute('data-id');
-		const alt = rootApp.getAttribute('data-alt');
+		const object = window[`mediaColumnImageSeoAlt${attachmentId}`];
+		const alt = object?.alt
+			? new DOMParser().parseFromString(object.alt, 'text/html').body
+					.textContent
+			: '';
 		root.render(<RenameAlt attachmentId={attachmentId} alt={alt} />);
 	});
 

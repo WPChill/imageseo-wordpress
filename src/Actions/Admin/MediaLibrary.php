@@ -133,7 +133,16 @@ class MediaLibrary {
 
 	protected function renderAlt( $attachmentId ) {
 		$alt = wp_strip_all_tags( $this->altService->getAlt( $attachmentId ) ); ?>
-		<div class="media-column-imageseo-alt" data-id="<?php echo absint( $attachmentId ); ?>" data-alt="<?php echo $alt; ?>">
+		<div class="media-column-imageseo-alt" data-id="<?php echo absint( $attachmentId ); ?>">
+			<?php
+			printf(
+				'<script>
+				var mediaColumnImageSeoAlt%d = {"alt":"%s"}
+				</script>',
+				absint( $attachmentId ),
+				esc_js( $alt )
+			);
+			?>
 		</div>
 		<?php
 	}
