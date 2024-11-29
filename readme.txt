@@ -109,6 +109,8 @@ Image SEO works in every language.
 7. Social Cards configuration tab
 
 == Changelog ==
+= 3.1.4 - 29.11.2024 =
+Fixed: Bug with alt text
 
 = 3.1.3 - 22.11.2024 =
 Added: Support for WebP images
