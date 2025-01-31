@@ -14,6 +14,7 @@ class Enqueue
 	{
 		add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 		add_action('admin_enqueue_scripts', [$this, 'adminEnqueueCSS']);
+		add_action('enqueue_block_editor_assets', [$this, 'enqueueBlockEditorAssets']);
 	}
 
 	/**
@@ -35,7 +36,6 @@ class Enqueue
 	 */
 	public function adminEnqueueScripts($page)
 	{
-
 		if ('toplevel_page_imageseo-settings' === $page) {
 			$asset_script_path = IMAGESEO_DIR_DIST . '/settingsv2/index.asset.php';
 			$asset_file = require $asset_script_path;
@@ -58,7 +58,9 @@ class Enqueue
 			'image-seo_page_imageseo-optimization',
 			'upload.php',
 			'post.php',
-			'image-seo_page_imageseo-options', 'image-seo_page_imageseo-settings', 'image-seo_page_imageseo-social-media'
+			'image-seo_page_imageseo-options',
+			'image-seo_page_imageseo-settings',
+			'image-seo_page_imageseo-social-media'
 		], true)) {
 			return;
 		}
@@ -72,5 +74,24 @@ class Enqueue
 			wp_enqueue_script('imageseo-admin-generate-social-media-js', IMAGESEO_URL_DIST . '/generate-social-media.js', ['jquery'], IMAGESEO_VERSION, true);
 			wp_add_inline_script('imageseo-admin-js', 'const imageseo_ajax_nonce = "' . wp_create_nonce(IMAGESEO_OPTION_GROUP . '-options') . '";', 'before');
 		}
+	}
+
+	public function enqueueBlockEditorAssets()
+	{
+		$asset_path = IMAGESEO_DIR_DIST . '/gutenberg/image-block/index.asset.php';
+		$asset_file = require $asset_path;
+		wp_enqueue_script(
+			'imageseo-gutenberg-image-block',
+			IMAGESEO_URL_DIST . '/gutenberg/image-block/index.js',
+			$asset_file['dependencies'],
+			$asset_file['version'],
+			true
+		);
+		wp_enqueue_style(
+			'imageseo-gutenberg-image-block',
+			IMAGESEO_URL_DIST . '/gutenberg/image-block/index.css',
+			['wp-block-editor'],
+			$asset_file['version'],
+		);
 	}
 }
