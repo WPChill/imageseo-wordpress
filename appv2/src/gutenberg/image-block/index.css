@@ -1,0 +1,36 @@
+.imageseo-panel-content {
+    padding: 8px 0;
+}
+
+.imageseo-panel-content .description {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #757575;
+}
+
+.imageseo-panel-content .alt-text-stats {
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.imageseo-panel-content .alt-text-stats p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.imageseo-panel-content .components-checkbox-control {
+    margin-bottom: 8px;
+}
+
+.imageseo-panel-content .refresh-alt-text-button {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+}
+
+.imageseo-panel-content .error {
+    color: red;
+    font-size: 13px;
+}

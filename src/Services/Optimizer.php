@@ -28,6 +28,54 @@ class Optimizer
 		$this->setServices();
 	}
 
+	public function generateAltText($attachmentId)
+	{
+		$imageMeta = get_post_meta($attachmentId, AttachmentMeta::REPORT, true);
+		// 86400 = 1 day
+		if (
+			!empty($imageMeta)
+			&& isset($imageMeta['timestamp'])
+			&& (time() - $imageMeta['timestamp']) < 86400
+		) {
+			$this->setOptimizationFlag($attachmentId, 'altText');
+
+			return $imageMeta;
+		}
+
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
+			return ['error' => 'limit exceeded'];
+		}
+
+		$image = $this->_requestOptimization($attachmentId);
+
+		if ($image === null || $image['failed']) {
+			return ['error' => 'error', 'message' => isset($image['failureDetails']) ? $image['failureDetails'] : ''];
+		}
+
+		if (isset($imageMeta['forced_altText'])) {
+			$imageMeta['forced_altText'] = false;
+		}
+
+		update_post_meta($attachmentId, AttachmentMeta::REPORT, $image);
+
+		return $image;
+	}
+
+	public function generateAltTextForUrl($url)
+	{
+		if (imageseo_get_service('UserInfo')->hasLimitExcedeed()) {
+			return ['error' => 'limit exceeded'];
+		}
+
+		$image = $this->_requestOptimizationForUrl($url);
+
+		if ($image === null || $image['failed']) {
+			return ['error' => 'error', 'message' => isset($image['failureDetails']) ? $image['failureDetails'] : ''];
+		}
+
+		return $image;
+	}
+
 	public function getAndSetAlt($attachmentId)
 	{
 		$imageMeta = get_post_meta($attachmentId, AttachmentMeta::REPORT, true);
@@ -185,6 +233,42 @@ class Optimizer
 
 		if ($response['failed']) {
 			error_log($response['failureDetails']);
+		}
+
+		$batchId = $response['batchId'];
+		$items   = $this->getItemsByBatchId($batchId);
+		if ($items instanceof Exception) {
+			error_log($items->getMessage());
+
+			return;
+		}
+
+		$image              = $items[0];
+		$image['timestamp'] = time();
+
+		return $image;
+	}
+
+	private function _requestOptimizationForUrl($url)
+	{
+		$images = [
+			[
+				'internalId' => 0,
+				'url'        => $url,
+				'requestUrl' => get_site_url(),
+			]
+		];
+
+		$response = $this->sendRequestToApi($images, true);
+
+		if ($response instanceof Exception) {
+			error_log($response->getMessage());
+
+			return;
+		}
+
+		if (!isset($response['batchId'])) {
+			return;
 		}
 
 		$batchId = $response['batchId'];
