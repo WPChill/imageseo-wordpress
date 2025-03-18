@@ -1,4 +1,7 @@
 == Changelog ==
+= 3.2.1 - 18.03.2025 =
+Fixed: Issue with optimization on image upload and gutenberg editor
+
 = 3.2.0 - 31.01.2025 =
 Added: Gutenberg functionality
 

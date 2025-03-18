@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { Button, CheckboxControl } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { fetchAltText } from '../utils/fetch-alt';
+import { checkImageUrl } from '../utils/check-image-url';
 
 export const UpdateAltTextForAllImages = () => {
 	const { updateBlockAttributes } = useDispatch('core/block-editor');
@@ -89,10 +90,75 @@ export const UpdateAltTextForAllImages = () => {
 					})
 				);
 			}
-			// Your alt text update logic here using the settings
 		} catch (err) {
 			setError(err);
 			console.error('Error updating alt text:', err);
+		} finally {
+			setUpdating(false);
+		}
+	};
+
+	const handleCheckUrls = async () => {
+		setUpdating(true);
+
+		try {
+			// Process images in batches of 2 to avoid too many simultaneous requests
+			const batchSize = 2;
+
+			for (let i = 0; i < imageBlocks.length; i += batchSize) {
+				const batch = imageBlocks.slice(i, i + batchSize);
+
+				// Process batch in parallel
+				await Promise.all(
+					batch.map(async (block) => {
+						const { id, url } = block.attributes;
+
+						if (!url) return;
+
+						console.log('Checking image:', { id, url });
+						const result = await checkImageUrl({ id, url });
+						console.log('Check result:', result);
+
+						if (result.error) {
+							console.warn(
+								`Error checking image ${id || url}:`,
+								result.error
+							);
+							return;
+						}
+
+						if (result.url || result.alt) {
+							const updates = {};
+
+							if (
+								result.url &&
+								result.url !== block.attributes.url
+							) {
+								updates.url = result.url;
+							}
+
+							if (
+								result.alt &&
+								result.alt !== block.attributes.alt
+							) {
+								updates.alt = result.alt;
+							}
+
+							if (Object.keys(updates).length > 0) {
+								console.log(
+									'Updating block:',
+									block.clientId,
+									updates
+								);
+								updateBlockAttributes(block.clientId, updates);
+							}
+						}
+					})
+				);
+			}
+		} catch (err) {
+			setError(err);
+			console.error('Error checking URLs:', err);
 		} finally {
 			setUpdating(false);
 		}
@@ -144,18 +210,33 @@ export const UpdateAltTextForAllImages = () => {
 			{error ? (
 				<div className="error">ImageSEO Error: {error}</div>
 			) : (
-				<Button
-					variant="secondary"
-					className="refresh-alt-text-button"
-					onClick={handleUpdateAltText}
-					isBusy={isUpdating}
-					disabled={isUpdating}
-					icon="update"
-				>
-					{isUpdating
-						? __('Updating all alts…', 'imageseo')
-						: __('Update all alts', 'imageseo')}
-				</Button>
+				<div className="imageseo-buttons">
+					<Button
+						variant="secondary"
+						className="refresh-alt-text-button"
+						onClick={handleUpdateAltText}
+						isBusy={isUpdating}
+						disabled={isUpdating}
+						icon="update"
+					>
+						{isUpdating
+							? __('Updating all alts…', 'imageseo')
+							: __('Update all alts', 'imageseo')}
+					</Button>
+
+					<Button
+						variant="secondary"
+						className="check-urls-button"
+						onClick={handleCheckUrls}
+						isBusy={isUpdating}
+						disabled={isUpdating}
+						icon="search"
+					>
+						{isUpdating
+							? __('Checking URLs…', 'imageseo')
+							: __('Check & Fix URLs', 'imageseo')}
+					</Button>
+				</div>
 			)}
 		</div>
 	);

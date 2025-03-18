@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: seo, ai optimization, optimize images, ranking, social media
 Requires at least: 5.8
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -109,6 +109,9 @@ Image SEO works in every language.
 7. Social Cards configuration tab
 
 == Changelog ==
+= 3.2.1 - 18.03.2025 =
+Fixed: Issue with optimization on image upload and gutenberg editor
+
 = 3.2.0 - 31.01.2025 =
 Added: Gutenberg functionality
 
